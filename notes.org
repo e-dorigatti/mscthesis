@@ -1,0 +1,75 @@
+* basics
+** what is climate science?
+long term (years/decades/centuries) evolution of boundary conditions for weather (e.g. min/max/avg temperature)
+
+** what is radiative transfer?
+transfer of energy from electromagnetic radiation (i.e. photons) to molecules in the atmosphere
+ - absorption: molecule eats photon, increasing internal (rotation/vibration/speed) energy
+       this results in the molecule colliding more with other molecules, spreading photon's energy => gas increases in temperature/pressure
+ - emission: molecule spawns photon, decreasing internal energy
+       results in the gas cooling down/less pressure, provided the photon isnt absorbed by another molecule
+       can be neglected because the athmospheric temperature is too low
+ - scattering: photon bounces off the molecule, no energy transfer
+       photons have very low momentum compared to molecules, thus bounces do not significantly affect the gas temperature/pressure
+       scattering cannot be neglected in clouds!
+
+remember PV=nRT
+depends on the specific molecule (ozone, carbo dioxyde, oxygen, water vapor, ch4, ...)
+absorption and emission happen at discrete energies (with high probability), affected by temperature and pressure
+can deal separately with solar radiation (short wave/high energy) and radiation from earth (long wave/low energy)
+obviously very related to greenhouse effect
+
+** research methodology
+CRISP-DM (cross industry standard process for data mining)
+
+* dataset
+https://www.youtube.com/watch?v=0RLfDVVcfIQ
+ERA interim
+   predecessor of ERA5
+   reanalysis => for consistency over time and space
+       correct bias in observations
+       atmospheric, land, ocean, sea ice
+       4D-VAR
+   frequency: 79 km global, 60 levels, every 6 hours from 1979
+   they actually have cloud coverage!!!
+   makes me think we can get more fields....
+       must be careful not to use fields that are computed after radiative transfer (for the current time sample)
+       can use all features from previous time samples (if useful)
+
+
+ERA5
+    30 km horizontal resolution, =137 vertical levels (dont have to do interpolation)=, hourly output
+    improved radiation scheme (=> better for us?)
+    uncertainty estimates (=> better for data augmentation?)
+
+3d grid with horizontal resolution in the order of kms, and 96 vertical levels (below 80km, so each level is ~5/10 km)
+    they (thesis) actually interpolated the 96 levels from the 16 levels present in the ERA dataset
+temperature of surface, temperature and humidity available for every point, not clear if co2 only at surface level
+big problem: does not include clouds (says the thesis...)
+
+=evaluation of radiative transfer?=
+    can we just assume its good and we want to model the model?
+
+* network input
+NxN matrix by concatenating T/H for every level
+    doesnt make sense ?!
+tried with 4x96 (T+H+surface co2+surface temp x 96 levels)
+    say it didnt work, not very convincing on why
+    gradient explosions
+        why didnt they use gradient clipping?
+=!= didnt mention using data from the neighborhood of the point
+    i.e. have a 4d tensor of size 4xDxDx96 or 4xDxDxH
+        maybe 5d if time is available
+    note that appreciable changes in T/P horizontally happen in the scale of 100/1000 km
+        assuming no clouds (which we dont have anyways)
+        but radiance affected at most by 10 km neighboring conditions
+            basically, horizontal neighboring data points have no effect
+        from physics of the atmosphere page 5-20
+
+=QUESTION:= is this data enough to predict radiative transfer (i.e. does it allow to generalize)
+how to answer: research on radiation models
+tentative answer: apparently cloud coverage has a sizeable effect, but it was not included in the thesis
+
+idea: pre-compute stuff and feed it as input to the network
+    data augmentation such as log(x)
+    relevant physical constants (nah, im sure the network can learn those, if necessary)
