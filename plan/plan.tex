@@ -1,0 +1,91 @@
+% Created 2017-12-10 Sun 14:45
+% Intended LaTeX compiler: pdflatex
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{grffile}
+\usepackage{longtable}
+\usepackage{wrapfig}
+\usepackage{rotating}
+\usepackage[normalem]{ulem}
+\usepackage{amsmath}
+\usepackage{textcomp}
+\usepackage{amssymb}
+\usepackage{capt-of}
+\usepackage{hyperref}
+\author{Emilio Dorigatti}
+\date{\today}
+\title{Project Proposal - Master Degree Project}
+\hypersetup{
+ pdfauthor={Emilio Dorigatti},
+ pdftitle={Project Proposal - Master Degree Project},
+ pdfkeywords={},
+ pdfsubject={},
+ pdfcreator={Emacs 25.3.1 (Org mode 9.1.2)}, 
+ pdflang={English}}
+\begin{document}
+
+\maketitle
+
+\section{Preliminary Information}
+\label{sec:org2dc2040}
+\textbf{\textbf{Project Title:}} Speeding up the computation of radiative transfer in climate simulations \\
+\textbf{\textbf{Author:}} Emilio Dorigatti - emiliod [at] kth.se \\
+\textbf{\textbf{Organization:}} RISE SICS - \url{https://www.sics.se/} \\
+\textbf{\textbf{Supervisor:}} Ying Liu - yinliu [at] kth.se
+
+\section{Summary}
+\label{sec:org25b2646}
+Climate scientists make heavy use of quantitative simulations in their work. Almost half of the computational time of these simulations is devoted to a single task: computing the radiadive transfer. In this project, we investigate whether deep learning can be used to speed up this computation while providing results of acceptable accuracy.
+
+\section{Background}
+\label{sec:org24bf353}
+Climate science studies the long-term evolution of climate on Earth by using quantitative methods based on simulations. Simulating the global climate in fine granularity is essential in climate science research. Current algorithms for computing climate models are based on mathematical models that are computationally expensive. Climate simulations runs can take days, weeks or even months to execute on High Performance Computing (HPC) platforms. As such, the amount of computational resources determines the level of resolution for the simulations. If simulation time could be reduced without comporomising model fidelity, higher resolution simulations would be possible, leading to potentially new insights in climate science research.
+Deep neural networks can learn to approximate any function to any desired level of accuracy, given enough training data.
+
+\section{Problem Statement}
+\label{sec:org17e84f8}
+The most computationally expensive operation in global climate simulations is computing the diffusion of radiative transfer, which takes between 30\% and 50\% of the total computation time.
+
+\subsection{Problem}
+\label{sec:orgc3c4ae9}
+Improving the computation time of this phenomena can be tackled in many different ways, using approaches from different fields. In this project, we apply deep learning to this problem, leading to the following \\
+
+\textbf{\textbf{Research Question:}} Is it possible to use deep learning to compute ratiative transfer faster than current methods, and with sufficient accuracy?
+
+\subsection{Purpose}
+\label{sec:orgaf17169}
+Climate scientists would greatly benefit from a faster method of computing radiative transfer: this would allow them to run a larger number of experiments, thereby inreasing their productivity and shortening the interval between innovations.
+
+\subsection{Goals}
+\label{sec:org66d6079}
+The goal of this project is to understand if, and to which extent, deep learning can be used to speed-up computation of radiative transfer.
+
+\subsection{Expected outcomes}
+\label{sec:orga3c0cbe}
+The outcome of this project is a series of neural networks that can perform the required computation, and a series of benchmarks comparing their accuracy and computation time with traditional simulation algorithms.
+
+\subsection{Tasks}
+\label{sec:org665a0ea}
+Training data is not a concern, since 38 years of historical data is already available, and more can be generated using simulations. Instead, the project will follow a cycle composed of the following tasks:
+
+\begin{enumerate}
+\item Research (in order to propose the architecture of a neural network and a training procedure)
+\item Implementation
+\item Training
+\item Evaluation
+\end{enumerate}
+
+\section{Research Methods}
+\label{sec:org9b365ad}
+In this project we will conduct a number of experiments in order to collect quantitative data about the performance of deep learning models.
+
+\section{Milestones}
+\label{sec:orge8aaada}
+The project will last 20 weeks, from 15/1/2018 to 15/6/2018. The first month will be allocated to research on background information from climate science and previous approaches to this problem. In the subsequent months we will perform experiments, guided both from research on the topic and the insights we will gain in the process. 
+
+\section{Risks, Consequences and Ethics}
+\label{sec:org9b5d6c7}
+Being entirely based on software, there is little room for this project to cause harm. Deep neural networks are known to be very computationally intensive, but hopefully the resources used in this project will be offset by the savings that a successful outcome would provide.
+\end{document}

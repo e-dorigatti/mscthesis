@@ -1,0 +1,52 @@
+#+TITLE: Project Proposal - Master Degree Project
+#+AUTHOR: Emilio Dorigatti
+#+OPTIONS: toc:nil
+
+* Preliminary Information
+**Project Title:** Speeding up the computation of radiative transfer in climate simulations \\
+**Author:** Emilio Dorigatti - emiliod [at] kth.se \\
+**Organization:** RISE SICS - https://www.sics.se/ \\
+**Supervisor:** Ying Liu - yinliu [at] kth.se
+
+speeding-up-the-computation-of-radiative-transfer-in-climate-simulations
+
+* Summary
+Climate scientists make heavy use of quantitative simulations in their work. Almost half of the computational time of these simulations is devoted to a single task: computing the radiadive transfer. In this project, we investigate whether deep learning can be used to speed up this computation while providing results of acceptable accuracy.
+
+* Background
+Climate science studies the long-term evolution of climate on Earth by using quantitative methods based on simulations. Simulating the global climate in fine granularity is essential in climate science research. Current algorithms for computing climate models are based on mathematical models that are computationally expensive. Climate simulations runs can take days, weeks or even months to execute on High Performance Computing (HPC) platforms. As such, the amount of computational resources determines the level of resolution for the simulations. If simulation time could be reduced without comporomising model fidelity, higher resolution simulations would be possible, leading to potentially new insights in climate science research.
+Deep neural networks can learn to approximate any function to any desired level of accuracy, given enough training data.
+
+* Problem Statement
+The most computationally expensive operation in global climate simulations is computing the diffusion of radiative transfer, which takes between 30% and 50% of the total computation time.
+
+** Problem
+Improving the computation time of this phenomena can be tackled in many different ways, using approaches from different fields. In this project, we apply deep learning to this problem, leading to the following \\
+
+**Research Question:** Is it possible to use deep learning to compute radiative transfer faster than current methods, and with sufficient accuracy?
+
+** Purpose
+Climate scientists would greatly benefit from a faster method of computing radiative transfer: this would allow them to run a larger number of experiments, thereby inreasing their productivity and shortening the interval between innovations.
+
+** Goals
+The goal of this project is to understand if, and to which extent, deep learning can be used to speed-up computation of radiative transfer.
+
+** Expected outcomes
+The outcome of this project is a series of neural networks that can perform the required computation, and a series of benchmarks comparing their accuracy and computation time with traditional simulation algorithms.
+
+** Tasks
+Training data is not a concern, since 38 years of historical data is already available, and more can be generated using simulations. Instead, the project will follow a cycle composed of the following tasks:
+
+1. Research (in order to propose the architecture of a neural network and a training procedure)
+2. Implementation
+3. Training
+4. Evaluation
+
+* Research Methods
+In this project we will conduct a number of experiments in order to collect quantitative data about the performance of deep learning models.
+
+* Milestones
+The project will last 20 weeks, from 15/1/2018 to 15/6/2018. The first month will be allocated to research on background information from climate science and previous approaches to this problem. In the subsequent months we will perform experiments, guided both from research on the topic and the insights we will gain in the process. 
+
+* Risks, Consequences and Ethics
+Being entirely based on software, there is little room for this project to cause harm. Deep neural networks are known to be very computationally intensive, but hopefully the resources used in this project will be offset by the savings that a successful outcome would provide.
