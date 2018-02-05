@@ -253,7 +253,6 @@ intuition is that you can get any distribution by applying a function to a norma
 and we can sample from a normal distribution, therefore we know how to generate new samples
 that auto-magically follow the distribution of the latent variables
 
-
 ** TODO use the RRTM model to perform simulations and produce new samples
 should find realistic initial conditions first
     +use historical data?+
@@ -275,6 +274,16 @@ other cases are quite static
     
 ** TODO define a set of transformations to apply to existing samples?
 e.g. locally smooth changes in pressure/temperature scale
+question: if we always use the same transformation (with different coefficients), won't the network "overfit" it, e.g. by learning how to "undo" it
+
+humidity has a sizeable effect on climate and radiation, thus it's important to get right
+    https://users.physics.ox.ac.uk/~pierrehumbert/papers/CaltechWater.pdf
+        says water vapor is the most important greenhouse gas
+    one possibility is to convert from relative humidity to absolute humidity
+        https://carnotcycle.wordpress.com/2012/08/04/how-to-convert-relative-humidity-to-absolute-humidity/
+            can find maximum absolute humidity for a given temperature using eq. 10 in
+                https://journals.ametsoc.org/doi/pdf/10.1175/1520-0493%281980%29108%3C1046%3ATCOEPT%3E2.0.CO%3B2
+                quite inaccurate (>1%) with extremely low/high temperatures, but should be good enough for our purposes
 
 * work to do
 MY GOAL: improve data augmentation so that model works on arbitrary inputs
