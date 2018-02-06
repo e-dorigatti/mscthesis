@@ -4,6 +4,9 @@ https://www.youtube.com/watch?v=-bvwS0mP7xw
 
 long term (years/decades/centuries) evolution of boundary conditions for weather (e.g. min/max/avg temperature)
 
+good book about physics
+http://danida.vnu.edu.vn/cpis/files/Books/Atmospheric%20Science%20-%20An%20Introductory%20Survey%20-%20J.%20Wallace,%20P.%20Hobbs%20(Elsevier,%202006)%20WW.pdf
+
 *** what is radiative transfer?
 http://iopscience.iop.org/chapter/978-0-7503-1052-9/bk978-0-7503-1052-9ch5.pdf
 transfer of energy from electromagnetic radiation (i.e. photons) to molecules in the atmosphere
@@ -120,6 +123,7 @@ discussion in the thesis on the benefits of faster computing
     even though network is trained with coarse grid :(
         not sure it would be able to generalize to finer grids
             probably not
+ 
 
 ** research methodology
 CRISP-DM (cross industry standard process for data mining)
@@ -284,6 +288,15 @@ humidity has a sizeable effect on climate and radiation, thus it's important to 
             can find maximum absolute humidity for a given temperature using eq. 10 in
                 https://journals.ametsoc.org/doi/pdf/10.1175/1520-0493%281980%29108%3C1046%3ATCOEPT%3E2.0.CO%3B2
                 quite inaccurate (>1%) with extremely low/high temperatures, but should be good enough for our purposes
+    the problem of computing humidity is to compute accurately the vapor pressure of water
+        vapor pressure of water = pressure at which evaporation equals condensation
+            corresponds to 100% relative humidity
+        many approximate formulas exist
+            https://en.wikipedia.org/wiki/Vapour_pressure_of_water
+        absolute humidity can be computed easily given the vapor pressure of water and relative humidity
+    Q: how does relative humidity vary with altitude?
+        A: it's a very complicated pattern, starts at ~ 80% and drops to 0%, but seemingly random in between
+            got away with regressing random points with an SVR
 
 * work to do
 MY GOAL: improve data augmentation so that model works on arbitrary inputs

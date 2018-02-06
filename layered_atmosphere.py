@@ -1,4 +1,5 @@
 import math
+from scipy.stats import norm
 import numpy as np
 
 
@@ -43,6 +44,7 @@ class AtmosphericLayer:
     def get_temperature_by_pressure(self, pressure):
         altitude = self.get_altitude_by_pressure(pressure)
         return self.get_temperature_by_altitude(altitude)
+
 
 class LayeredAtmosphere:
     ''' atmospheric models made by a sequence of layers
@@ -112,6 +114,122 @@ class LayeredAtmosphere:
             else:
                 break
         return alt
+
+
+def UniformSampler(a, b):
+    def sampler():
+        return a + (b - a) *  np.random.random()
+    return sampler
+
+
+def GaussianSampler(mean, std):
+    def sampler():
+        return norm.rvs(mean, std)
+    return sampler
+
+
+def GaussianSamplerBetween(a, b):
+    mean = (a + b) / 2
+    std = (b - a) / 8
+    return GaussianSampler(mean, std)
+
+
+def ConstantSampler(const):
+    def sampler():
+        return const
+    return sampler
+
+
+class RandomLayer:
+    def __init__(self, height_sampler, lapse_rate_sampler, gas_const_sampler):
+        self.height_sampler = height_sampler
+        self.lapse_rate_sampler = lapse_rate_sampler
+        self.gas_const_sampler = gas_const_sampler
+
+
+class RandomAtmosphere:
+    def __init__(self, surface_temp_sampler, surface_press_sampler, *layer_samplers):
+        self.surface_temp_sampler = surface_temp_sampler
+        self.surface_press_sampler = surface_press_sampler
+        self.layer_samplers = layer_samplers
+
+    def sample(self):
+        atm = LayeredAtmosphere()
+
+        for i, sampler in enumerate(self.layer_samplers):
+            if i == 0:
+                temp = self.surface_temp_sampler()
+                press = self.surface_press_sampler()
+            else:
+                temp = press = None
+
+            try:
+                atm.add_layer(sampler.height_sampler(), sampler.lapse_rate_sampler(),
+                              temp, press, sampler.gas_const_sampler())
+            except (OverflowError, ValueError):  # retry if conditions are too extreme
+                return self.sample()             # eventually explode if parameters are really TOO extreme
+
+        return atm
+
+
+def CompositionalInheritance(parent_slot='base'):
+    """ kinda like the decorator parttern, without all the BS
+    """
+    def decorator(cls):
+        def geta(inst, attr):
+            parent = inst.__dict__.get(parent_slot, None)
+            if parent is not None and hasattr(parent, attr):
+                return getattr(parent, attr)
+            else:
+                raise AttributeError(attr)
+
+        def seta(inst, attr, val):
+            parent = inst.__dict__.get(parent_slot, None)
+
+            if attr not in dir(inst) and parent is not None and attr in dir(parent):
+                setattr(parent, attr, val)
+            else:
+                inst.__dict__[attr] = val
+
+        cls.__getattr__ = geta
+        cls.__setattr__ = seta
+        return cls
+    return decorator
+
+
+@CompositionalInheritance('atmosphere')
+class NoisyLayeredAtmosphere:
+    def __init__(self, atmosphere, a, b, c):
+        self.atmosphere = atmosphere
+        self.a, self.b, self.c = a, b, c
+
+    def get_noise_by_altitude(self, altitude):
+        assert altitude + self.c > 0, (altitude, self.c)
+        return self.a * np.sin(altitude + self.b) / np.sqrt(altitude + self.c)
+
+    def get_temperature_by_altitude(self, altitude):
+        temp = self.atmosphere.get_temperature_by_altitude(altitude)
+        noise = self.get_noise_by_altitude(altitude)
+        return temp + noise
+
+    def get_temperature_by_pressure(self, pressure):
+        altitude = self.get_altitude_by_pressure(pressure)
+        return self.get_temperature_by_altitude(altitude)
+
+
+@CompositionalInheritance('random_atmosphere')
+class RandomNoisyAtmosphere:
+    def __init__(self, random_atmosphere, a_sampler, b_sampler, c_sampler):
+        self.random_atmosphere = random_atmosphere
+        self.a_sampler = a_sampler
+        self.b_sampler = b_sampler
+        self.c_sampler = c_sampler
+
+    def sample(self):
+        atmosphere = self.random_atmosphere.sample()
+        a, b, c = self.a_sampler(), self.b_sampler(), self.c_sampler()
+        return NoisyLayeredAtmosphere(atmosphere, a, b, c)
+
 
 
 if __name__ == '__main__':
