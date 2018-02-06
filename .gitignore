@@ -1,2 +1,4 @@
 *.pdf
 radiation/
+.ipynb_checkpoints/
+__pycache__/

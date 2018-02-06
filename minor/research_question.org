@@ -1,0 +1,21 @@
+#+TITLE: Maximizing the Reach of Innovation
+#+AUTHOR: Emilio Dorigatti
+#+OPTIONS: toc:nil
+
+# stupid word noobs
+#+LATEX_HEADER: \usepackage[margin=2.5cm]{geometry}
+#+LATEX_CLASS_OPTIONS: [12pt]
+#+LATEX_HEADER: \usepackage[doublespacing]{setspace} 
+#+LATEX_HEADER: \usepackage{mathptmx}
+#+LATEX_HEADER: \usepackage{titling}
+#+LATEX_HEADER: \setlength{\droptitle}{-1.0in}
+
+* Background
+The goal of my master thesis at RISE SICS is to employ deep learning to speed up certain computations commonly performed in climate science simulations. An important part of climate models is the computation of radiative transfer, which is the exchange of heat between the atmosphere and the electromagnetic radiation coming from the sun and leaving from Earth. This computation alone is responsible for almost half of the total computation time needed for a single simulation, which usually spans weeks or even months on powerful supercomputers. Thus, reducing the time needed to compute radiative transfer would allow climate scientists to run more simulations, thereby enhancing their productivity, and the rate at which we understand the climate of our planet and the effects of our activities on it.
+
+* Goal of the Study
+Works of this kind have the potential to impact humankind for the centuries to follow, as it is now widely accepted that many current human activities are not sustainable, and harming the planet at an alarming pace. It is of utmost importance that, after a successful outcome, the results are made available to the largest number of people possible, so as to maximize its impact on our understanding of climate. Therefore, we pose the following \\
+
+*Research Question:* Which steps should be taken to make an innovation or breakthrough reach the greatest number of people, so that they can make active use of it? \\
+
+This question will be answered by a literature study on the topic of innovation, and case studies on past innovations to showcase good and bad ways to approach this issue. Among possible candidates in the digital world there are the Open Source movement on one side, and patents and the Digital Rights Management (DRM) system on the other.
