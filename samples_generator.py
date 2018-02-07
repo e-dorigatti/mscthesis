@@ -67,17 +67,20 @@ def compute_absolute_humidity(relative_humidity, temperature, pressure):
     return np.where(abs_humidity < 0, 0, abs_humidity)
 
 
-def make_sample(random_atmosphere=None):
+def make_sample(random_atmosphere=None, pressure_levels=None):
     rnd = random_atmosphere or default_random_atmosphere()
     ratm = rnd.sample()
-    max_ps = ratm.get_pressure_by_altitude(0.1) * 0.9999
-    min_ps = ratm.get_pressure_by_altitude(ratm.height) * 1.0001
 
-    press = np.arange(min_ps, max_ps, (max_ps - min_ps) / 100)
+    if not pressure_levels:
+        max_ps = ratm.get_pressure_by_altitude(0.1) * 0.9999
+        min_ps = ratm.get_pressure_by_altitude(ratm.height) * 1.0001
+        press = np.arange(min_ps, max_ps, (max_ps - min_ps) / 100)
+    else:
+        max_ps, min_ps = max(pressure_levels), min(pressure_levels)
+        press = pressure_levels
+
     temps = np.array([ratm.get_temperature_by_pressure(p) for p in press])
-
     _, relhum = random_relative_humidity(min_ps, max_ps, samples_x=press)
-
     abshum = compute_absolute_humidity(relhum, temps, press)
 
     return press, temps, abshum, relhum, ratm
@@ -89,16 +92,16 @@ if __name__ == '__main__':
     press, temps, abshum, relhum, ratm = make_sample()
 
     plt.figure(figsize=(15, 5))
-    plt.subplot(1, 4, 1)
+    plt.subplot(1, 3, 1)
     plt.plot(temps, press)
     plt.ylabel('Pressure (Pa)')
     plt.xlabel('Temperature (K)')
     plt.gca().invert_yaxis()
-    plt.subplot(1, 4, 2)
+    plt.subplot(1, 3, 2)
     plt.plot(abshum, press)
     plt.gca().invert_yaxis()
     plt.xlabel('Abs. humidity (g/g)')
-    plt.subplot(1, 4, 3)
+    plt.subplot(1, 3, 3)
     plt.plot(relhum, press)
     plt.gca().invert_yaxis()
     plt.xlabel('Rel. humidity')
