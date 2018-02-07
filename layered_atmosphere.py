@@ -25,6 +25,10 @@ class AtmosphericLayer:
         if self.ttop < 0:
             raise ValueError('top temperature cannot be below 0 deg. kelvin')
 
+    @property
+    def lapse_rate(self):
+        return (self.ttop - self.tbot) / self.height
+
     def get_temperature_by_altitude(self, altitude):
         # allow some slack due to numerical errors when computing alt. from pressure
         slack = 1e-10
