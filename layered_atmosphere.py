@@ -1,4 +1,5 @@
 import math
+from sklearn.svm import SVR
 from scipy.stats import norm
 import numpy as np
 
@@ -201,15 +202,51 @@ def CompositionalInheritance(parent_slot='base'):
     return decorator
 
 
+
+def random_noise(samples_x=None, num_samples=None, num_support_vectors=10,
+                 svr_c=2, svr_gamma=100, do_predictions=True):
+
+    # basically generate random points and fit an RBF SVR to them, then predict some samples
+    # predictions between x 0/1 (samples_x will be scaled) and y -1/1
+
+    sv_x = np.array([0] + sorted(
+        np.random.random(size=num_support_vectors)
+    ) + [1]).reshape(-1, 1)
+    sv_y = 2 * np.random.random(size=len(sv_x)) - 1
+
+    svr = SVR(C=svr_c, gamma=svr_gamma).fit(sv_x, sv_y)
+    if not do_predictions:
+        return svr
+
+    if samples_x is None:
+        fn_x = np.arange(0, 1, 1 / num_samples)
+    elif isinstance(samples_x, list):
+        fn_x = np.array(samples_x)
+    elif isinstance(samples_x, np.ndarray):
+        fn_x = samples_x
+    else:
+        raise ValueError('samples_x must be a list or numpy array')
+
+    fn_x = (fn_x - fn_x.min()) / (fn_x.max() - fn_x.min())
+    fn_y = svr.predict(fn_x.reshape((-1, 1)))
+
+    return fn_x, fn_y, svr
+
+
 @CompositionalInheritance('atmosphere')
 class NoisyLayeredAtmosphere:
-    def __init__(self, atmosphere, a, b, c):
+    def __init__(self, atmosphere, gamma, c, num_sv, mag):
         self.atmosphere = atmosphere
-        self.a, self.b, self.c = a, b, c
+        self.gamma = gamma
+        self.c = c
+        self.num_sv = num_sv
+        self.mag = mag
+        self.svr = random_noise(num_support_vectors=int(num_sv), svr_c=c,
+                                svr_gamma=gamma, do_predictions=False)
 
     def get_noise_by_altitude(self, altitude):
-        assert altitude + self.c > 0, (altitude, self.c)
-        return self.a * np.sin(altitude + self.b) / np.sqrt(altitude + self.c)
+        scaled = altitude / self.height
+        return self.mag * self.svr.predict([[scaled]])[0]
 
     def get_temperature_by_altitude(self, altitude):
         temp = self.atmosphere.get_temperature_by_altitude(altitude)
@@ -223,17 +260,19 @@ class NoisyLayeredAtmosphere:
 
 @CompositionalInheritance('random_atmosphere')
 class RandomNoisyAtmosphere:
-    def __init__(self, random_atmosphere, a_sampler, b_sampler, c_sampler):
+    def __init__(self, random_atmosphere, gamma_sampler, c_sampler, num_sv_sampler, mag_sampler):
         self.random_atmosphere = random_atmosphere
-        self.a_sampler = a_sampler
-        self.b_sampler = b_sampler
+        self.gamma_sampler = gamma_sampler
         self.c_sampler = c_sampler
+        self.num_sv_sampler = num_sv_sampler
+        self.mag_sampler = mag_sampler
 
     def sample(self):
         atmosphere = self.random_atmosphere.sample()
-        a, b, c = self.a_sampler(), self.b_sampler(), self.c_sampler()
-        return NoisyLayeredAtmosphere(atmosphere, a, b, c)
-
+        return NoisyLayeredAtmosphere(
+            atmosphere, self.gamma_sampler(), self.c_sampler(),
+            self.num_sv_sampler(), self.mag_sampler()
+        )
 
 
 if __name__ == '__main__':

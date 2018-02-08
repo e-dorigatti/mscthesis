@@ -1,6 +1,6 @@
 from layered_atmosphere import (RandomAtmosphere, RandomNoisyAtmosphere, RandomLayer,
-                                UniformSampler, GaussianSamplerBetween, ConstantSampler)
-from sklearn.svm import SVR
+                                UniformSampler, GaussianSamplerBetween, ConstantSampler,
+                                random_noise)
 import numpy as np
 
 
@@ -18,36 +18,29 @@ def default_random_atmosphere():
             RandomLayer(UniformSampler(15, 25), UniformSampler(-5, -0.1), gas_const),
             RandomLayer(UniformSampler(10, 20), UniformSampler(-5, -0.1), gas_const),
         ),
-        GaussianSamplerBetween(5, 25),
-        GaussianSamplerBetween(-5, 5),
-        GaussianSamplerBetween(1, 5),
+        GaussianSamplerBetween(50, 250),
+        GaussianSamplerBetween(1, 3),
+        GaussianSamplerBetween(50, 150),
+        GaussianSamplerBetween(25, 75),
     )
 
 
-def random_relative_humidity(pmin, pmax, num_support_vectors=10, num_samples=100,
-                             samples_x=None, svr_c=2, svr_gamma=1e-8):
 
-    # basically generate random points and fit an SVR to them, then predict some samples
-    # and scale the output so that it shows a decreasing trend, with  0% RH at the top of the atmosphere
+def random_relative_humidity(samples_x=None, num_samples=None, pmin=10, pmax=100000,
+                             num_support_vectors=10, svr_c=2, svr_gamma_norm=100):
 
-    pts_x = np.array([pmin] + sorted(
-        pmin + np.random.random(size=num_support_vectors) * (pmax - pmin)
-    ) + [pmax])
-    pts_y = np.random.random(size=len(pts_x))
+    fn_x, fn_y, _ = random_noise(samples_x, num_samples, num_support_vectors,
+                                 svr_c, svr_gamma_norm)
 
-    if samples_x is None:
-        fn_x = np.arange(pmin, pmax, (pmax - pmin) / num_samples)
-    else:
-        fn_x = samples_x
-
-    sx = (fn_x - fn_x.min()) / (fn_x.max() - fn_x.min())
+    # scale random noise so that it shows a decreasing trend
+    # with  0% RH at the top of the atmosphere
     of = 0.2 +  np.random.random() * 0.3
-    btop = 1 / (1 + np.exp(-(sx - of) * 25))
-
+    btop = 1 / (1 + np.exp(-(fn_x - of) * 25))
     bbot = fn_x / pmax * 0.1
 
-    svr = SVR(C=svr_c, gamma=svr_gamma).fit(pts_x.reshape((-1, 1)), pts_y)
-    fn_y = svr.predict(fn_x.reshape((-1, 1)))
+    fn_x = pmin + fn_x * (pmax - pmin)
+    fn_y = (fn_y + 1) / 2
+
     fn_y = np.where(fn_y < 0.01, 0.01, fn_y)
     fn_y = np.where(fn_y > 0.99, 0.99, fn_y)
     fn_y = bbot + fn_y * (btop - bbot)
@@ -80,7 +73,7 @@ def make_sample(random_atmosphere=None, pressure_levels=None):
         press = pressure_levels
 
     temps = np.array([ratm.get_temperature_by_pressure(p) for p in press])
-    _, relhum = random_relative_humidity(min_ps, max_ps, samples_x=press)
+    _, relhum = random_relative_humidity(pmin=min_ps, pmax=max_ps, samples_x=press)
     abshum = compute_absolute_humidity(relhum, temps, press)
 
     return press, temps, abshum, relhum, ratm
