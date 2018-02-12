@@ -422,10 +422,12 @@ turbulent fluxes: due to wind speed and difference between temperature/vapor pre
     sensible heat flux H
         sensible heat = heat exchanged when the temperature of the system changes
         caused by conduction and convection
+        aka kinematic heat flux
     latent heat flux LE
         latent heat = heat exchanged when the temperature of the system stays constant
             for example, during phase transition (e.g. water boiling)
         in the context of surface fluxes, LE flux is caused by water movements (condensation and evaporation)
+        aka kinematic flux of water vapor/moisture
 
 soil heat flux G
     apparently quite hard to measure, see document above

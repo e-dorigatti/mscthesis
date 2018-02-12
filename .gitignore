@@ -3,3 +3,4 @@ radiation/
 .ipynb_checkpoints/
 __pycache__/
 *.pyc
+data/
