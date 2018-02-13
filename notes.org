@@ -334,6 +334,54 @@
  then even small mistakes will be propagated and eventually the output will diverge from what would be computed by a single climate model
 
 * atmospheric boundary layer
+** boundary layer in fluid dynamics
+http://www.mit.edu/course/1/1.061/www/dream/SEVEN/SEVENTHEORY.PDF
+boundary layer: region of a (moving) fluid close to a stationary surface, where the velocity is lower
+    fluid within the boundary layer moves more slowly
+        no slip condition: velocity must be 0 on the surface
+            because of viscosity, the fluid "sticks" to the surface
+        velocity changes continuously from upstream velocity to 0
+            height of boundary layer is when fluid velocity is 99% of free stream velocity
+            spatial variation of velocity d\bar{u}/dz is called shear
+                shear decreases with height above surface d(d\bar{u}/dz)/dz<0 (~logarithmic profile)
+    friction with the surface generates turbulence according to the viscosity
+    viscosity is irrelevant outside of the boundary layer
+        aka prandtl’s hypothesis
+
+in the boundary layer, turbulence is caused by shear (higher shear = higher turbulence)
+    except close to the surface, where there is no turbulence
+        viscosity prevents the formation of turbulence
+            because of the no slip condition
+        this region is called laminar sub-layer
+    turbulence strength measured by u_rms = sqrt(\bar{u'^2}) \propto d\bar{u}/dz
+        0 on the surface
+        increases in the laminar sub-layer
+        decreases to 0 at the end of the boundary layer
+    shear velocity / friction velocity
+        expresses the shear strength as a velocity
+        determines the height of the laminar sub-layer
+            higher friction velocity => thinner laminar sub-layer, more turbulence
+    velocity as a function of distance to the surface
+        increases linearly in the laminar sub-layer
+        then increases logarithmically until the end of the boundary layer
+            this area is called logarithmic sub-layer
+            affected by the characteristic roughness of the surface
+                depends on the relationship between the real roughness and the height of the laminar sub-layer
+                    characteristic roughness does not depend on real roughness if real roughness is smaller than laminar sub-layer
+                        smooth turbulent flow vs rough turbulent flow
+            von Karman's constant
+
+*** laminar/turbulent flow
+laminar flow: neat and tidy, all particles move in the same direction
+turbulent flow: movement of particles is highly chaotic
+    best studied through averages
+
+high viscosity tends to give laminar flow, low viscosity turbolent flow
+    viscosity: how much the molecules of the fluid "stick" together
+
+Reynolds number can differentiate between the two flows
+    Re = inertia forces / viscosity forces
+
 ** boundary layer meteorology
 https://atmos.washington.edu/~breth/classes/AS547/
 https://www.youtube.com/watch?v=EMhGTDVuE-4
@@ -341,7 +389,7 @@ https://www.youtube.com/watch?v=EMhGTDVuE-4
 studies conditions close to the surface => how the surface affects the atmosphere
     based on boundary layer in fluid dynamics, plus some additional complications such as
         - surface temperature, causing air to heat (unstable, more turbulence, daytime) or cool (stable, less turbulence, nighttime)
-        - rotation of the earth, roughness of the surface, earth's rotation, etc.
+        - rotation of the earth, roughness of the surface, etc.
     height varies between ~100m to ~1km, highly depending on time of day
         surface layer: first ~50m, coriolis force is irrelevant
         air density can be assumed constant (varies in ~10km length scale)
@@ -357,67 +405,49 @@ studies conditions close to the surface => how the surface affects the atmospher
             aka parametrization
         e.g. in global circulation models
     study is conducted with respect to statistical properties of physical quantities
-        decompose quantity a into sum of ensemble mean plus variation due to turbulence: $a=\bar{a}+a'$
-            e.g. \bar{a'a'} = variance of a, \bar{a'b'} = covariance between a and b
+        because fluctuations are assumed to be random
+        reynolds averaging: decompose quantity a into sum of ensemble mean plus variation due to turbulence: $a=\bar{a}+a'$
+            e.g. \bar{a'a'} = variance of a, \bar{a'b'} = covariance between a and b, sqrt(\bar{a'^2}) = turbulence strength
             quantities depend on position and time, but indices are dropped to confuse people
-        coordinate system is x = parallel to horizontal wind, y = orthogonal to horizontal wind, z = altitude
+            averages are taken over periods of ~10 minutes/1 hour, to separate fluctuations due to turbulence and non turbulence
+                see temporal spectrum of atmospheric kinetic energy
+        coordinate system is x = parallel to (average) horizontal wind, y = orthogonal to (avg.) horizontal wind, z = altitude
         u/w/v denote the wind velocity along the axes x/y/z
-        (monin/Obukhov) similarity theory: under homogeneous and stationary conditions, every dimensionless group is an universal function of z/L
-            sentence from "Exploring Self-Correlation in Flux–Gradient Relationships for Stably Stratified Conditions", Baas et al 2005
-            L is a length scale that depends on the local conditions
-            https://link.springer.com/article/10.1007/s10546-006-9048-6
-    *objectives*
-        want to get wind/temperature/humidity profiles (profile=value as a function of altitude)
-            e.g. in neutral (calm) conditions, wind profile is logarithmic
-            either actual profile or change with respect to altitude
-        want to get (turbulent) fluxes of ... , ... and ... ?
-            roughly constant with altitude in the surface layer
-            flux depends on vertical wind (because wind moves air duh)
-            flux of a = \bar{w'a'} = covariance between variation in vertical wind speed and variation of quantity a
-                legit to assume a causal relationship (?)
-                aka eddy covariance, eddy correlation and eddy flux
-        want to get relationship between profile (easy to measure) and flux (important for weather/climate)
-            can be obtained via dimensional analysis (= combine things such that units of measurements match)
-                then do experiments to find coefficients so that things match
-                    obviously, experimental results disagree (in some circumstances)...
-                        *hypothesis* variations depend on factors that were not considered
-            see e.g. Businger et al 1971, "Flux-profile relationship in the atmospheric surface layer"
-                https://journals.ametsoc.org/doi/abs/10.1175/1520-0469%281971%29028%3C0181%3AFPRITA%3E2.0.CO%3B2
-
-entrainment zone
-    separation between atmospheric boundary layer (turbulent) and upper atmosphere (calmer, non-turbulent)
-    a few 100s meters high
-
-*** laminar/turbulent flow
-laminar flow: neat and tidy, all particles move in the same direction
-turbulent flow: movement of particles is highly chaotic
-    best studied through averages
-
-high viscosity tends to give laminar flow, low viscosity turbolent flow
-    viscosity: how much the molecules of the fluid "stick" together
-
-Reynolds number can differentiate between the two flows
-    Re = inertia forces / viscosity forces
-
-*** boundary layer in fluid dynamics
-boundary layer: region of a (moving) fluid close to a stationary surface, where the velocity is lower
-    fluid within the boundary layer moves more slowly (velocity must be 0 on the surface / no slip condition)
-        velocity changes uniformly from upstream velocity to 0
-    friction with the surface generates turbulence according to the viscosity
-    viscosity is irrelevant outside of the boundary layer
-        aka prandtl’s hypothesis
-
-want to get shear stress on the surface, drag forces, etc.
+ 
+*** turbulence kinetic energy budget
+http://mafija.fmf.uni-lj.si/seminar/files/2011_2012/MaticSavli_2.pdf
+how kinetic energy moves around due to turbulence, forcing conservation of momentum
+use reynolds averaging to decompose wind velocity into mean velocity plus variation
+    then total kinetic energy = mean kinetic energy + turbulent kinetic energy
+budget (=variation over time) composed of
+    shear production: due to the mean flow
+        drag between fast and slow layers of air (moving horizontally)
+    buoyancy flux/production: due to gravitational potential energy
+        related to sensible and latent heat fluxes
+            they change the mass of a parcel of air, thus its potential energy
+        production in unstable conditions, consumption in stable conditions
+    transport due to pressure gradient
+        air moves from high pressure regions to low pressure regions
+    transport due to turbulence/eddies
+    dissipation
+        turbulence decreases and tends to disappear with time due to viscosity
+spectral decomposition: allows to see the difference in terms of eddy size
+    large eddies = low frequency, small eddies = high frequency
+    large eddies produce energy, small eddies dissipate it
+        shear from large eddies produce smaller eddies, transferring energy from the "parent" eddy
 
 *** surface fluxes
 https://digitalcommons.unl.edu/cgi/viewcontent.cgi?article=2407&context=usdaarsfacpub
 https://scienceofdoom.com/2010/04/09/sensible-heat-latent-heat-and-radiation/
+http://twister.caps.ou.edu/MM2015/docs/chapter3/chapter3_c.pdf
 
 flux: quantity passing through a surface
 surface flux: exchange of ... with the atmosphere through the surface
     mostly energy in different forms, then the flux is measured in watts per square meter
 
 radiative fluxes R: due to longwave and shortwave radiation
+    positive when surface receives more energy than it irradiates (e.g. during hot days)
+
 turbulent fluxes: due to wind speed and difference between temperature/vapor pressure of air and surface
     sensible heat flux H
         sensible heat = heat exchanged when the temperature of the system changes
@@ -426,15 +456,16 @@ turbulent fluxes: due to wind speed and difference between temperature/vapor pre
     latent heat flux LE
         latent heat = heat exchanged when the temperature of the system stays constant
             for example, during phase transition (e.g. water boiling)
-        in the context of surface fluxes, LE flux is caused by water movements (condensation and evaporation)
+        in the context of surface fluxes, LE flux is caused by water movements (condensation, evaporation, melting, etc.)
         aka kinematic flux of water vapor/moisture
 
 soil heat flux G
+    heat that is absorbed by surface (i.e. "moves" downwards inside earth)
     apparently quite hard to measure, see document above
-    G = R - (H + LE)
-        radiative flux R is positive when surface receives heat from long/short wave radiation
-        H + L is the total outgoing heat flux
-        aka surface energy balance
+
+surface energy balance
+    R = G + H + LE
+    incoming energy = outgoing energy
 
 other fluxes of interest:
     momentum flux
@@ -446,6 +477,41 @@ G - R = H + LE
 observations do not add up, so there is an imbalance (between 15%/100% at cabauw) 
     see this document, section 15.1
     http://projects.knmi.nl/cabauw/insitu/observations/documentation/Cabauw_TR/Cabauw_TR.pdf
+
+*** Monin-Obukhov similarity theory
+under homogeneous and stationary conditions, every dimensionless group is an universal function of z/L
+    sentence from "Exploring Self-Correlation in Flux–Gradient Relationships for Stably Stratified Conditions", Baas et al 2005
+    https://link.springer.com/article/10.1007/s10546-006-9048-6
+L is a length scale that depends on the local conditions
+    determines the relative roles of shear and buoyancy in the production/consumption of turbulence kinetic energy
+    sentence from http://glossary.ametsoc.org/wiki/Obukhov_length
+    when z << L, shear dominates
+        we have the traditional log profile of wind
+        conditions are stable, L positive
+    when z >> L, buoyancy dominates
+        main source of energy is convection
+        unstable conditions, L negative
+    actually, z/L is the production of turbulent kinetic energy due to buoyancy (hogstrom 1996, sec. 5.1)
+        only true in stable conditions?
+
+*** objectives of boundary layer meteorology
+want to get wind/temperature/humidity profiles (profile=value as a function of altitude)
+    e.g. in neutral (calm) conditions, wind profile is logarithmic
+    either actual profile or change with respect to altitude
+want to get turbulent fluxes of shear and temperature
+    those that appear in the turbulent kinetic energy budget, and have the largest impact on it
+    roughly constant with altitude in the surface layer
+    flux depends on vertical wind (because wind moves air duh)
+    flux of a = \bar{w'a'} = covariance between variation in vertical wind speed and variation of quantity a
+    legit to assume a causal relationship (?)
+        aka eddy covariance, eddy correlation and eddy flux
+want to get relationship between profile (easy to measure) and flux (important for weather/climate)
+    can be obtained via dimensional analysis (= combine things such that units of measurements match)
+        then do experiments to find coefficients so that things match
+            obviously, experimental results disagree (in some circumstances)...
+                *hypothesis* variations depend on factors that were not considered
+    see e.g. Businger et al 1971, "Flux-profile relationship in the atmospheric surface layer"
+        https://journals.ametsoc.org/doi/abs/10.1175/1520-0469%281971%29028%3C0181%3AFPRITA%3E2.0.CO%3B2
 
 ** data collection
 cabauw observatory
