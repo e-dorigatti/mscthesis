@@ -414,28 +414,6 @@ studies conditions close to the surface => how the surface affects the atmospher
         coordinate system is x = parallel to (average) horizontal wind, y = orthogonal to (avg.) horizontal wind, z = altitude
         u/w/v denote the wind velocity along the axes x/y/z
  
-*** turbulence kinetic energy budget
-http://mafija.fmf.uni-lj.si/seminar/files/2011_2012/MaticSavli_2.pdf
-how kinetic energy moves around due to turbulence, forcing conservation of momentum
-use reynolds averaging to decompose wind velocity into mean velocity plus variation
-    then total kinetic energy = mean kinetic energy + turbulent kinetic energy
-budget (=variation over time) composed of
-    shear production: due to the mean flow
-        drag between fast and slow layers of air (moving horizontally)
-    buoyancy flux/production: due to gravitational potential energy
-        related to sensible and latent heat fluxes
-            they change the mass of a parcel of air, thus its potential energy
-        production in unstable conditions, consumption in stable conditions
-    transport due to pressure gradient
-        air moves from high pressure regions to low pressure regions
-    transport due to turbulence/eddies
-    dissipation
-        turbulence decreases and tends to disappear with time due to viscosity
-spectral decomposition: allows to see the difference in terms of eddy size
-    large eddies = low frequency, small eddies = high frequency
-    large eddies produce energy, small eddies dissipate it
-        shear from large eddies produce smaller eddies, transferring energy from the "parent" eddy
-
 *** surface fluxes
 https://digitalcommons.unl.edu/cgi/viewcontent.cgi?article=2407&context=usdaarsfacpub
 https://scienceofdoom.com/2010/04/09/sensible-heat-latent-heat-and-radiation/
@@ -477,6 +455,28 @@ G - R = H + LE
 observations do not add up, so there is an imbalance (between 15%/100% at cabauw) 
     see this document, section 15.1
     http://projects.knmi.nl/cabauw/insitu/observations/documentation/Cabauw_TR/Cabauw_TR.pdf
+
+*** turbulence kinetic energy budget
+http://mafija.fmf.uni-lj.si/seminar/files/2011_2012/MaticSavli_2.pdf
+how kinetic energy moves around due to turbulence, forcing conservation of momentum
+use reynolds averaging to decompose wind velocity into mean velocity plus variation
+    then total kinetic energy = mean kinetic energy + turbulent kinetic energy
+budget (=variation over time) composed of
+    shear production: due to the mean flow
+        drag between fast and slow layers of air (moving horizontally)
+    buoyancy flux/production: due to gravitational potential energy
+        related to sensible and latent heat fluxes
+            they change the mass of a parcel of air, thus its potential energy
+        production in unstable conditions, consumption in stable conditions
+    transport due to pressure gradient
+        air moves from high pressure regions to low pressure regions
+    transport due to turbulence/eddies
+    dissipation
+        turbulence decreases and tends to disappear with time due to viscosity
+spectral decomposition: allows to see the difference in terms of eddy size
+    large eddies = low frequency, small eddies = high frequency
+    large eddies produce energy, small eddies dissipate it
+        shear from large eddies produce smaller eddies, transferring energy from the "parent" eddy
 
 *** Monin-Obukhov similarity theory
 under homogeneous and stationary conditions, every dimensionless group is an universal function of z/L

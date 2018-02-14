@@ -1,12 +1,11 @@
-\documentclass[12pt,twoside]{article}
+\documentclass[12pt]{article}
 \usepackage{graphicx}
 \usepackage[a4paper,inner=36mm,outer=18mm,top=30mm,]{geometry}
 %\usepackage[doublespacing]{setspace} 
 \usepackage{mathptmx}
+\usepackage{siunitx}
 \usepackage{titling}
-\usepackage{lipsum}
-
-
+	
 \begin{document}
 
 \title{Thesis}
@@ -22,18 +21,47 @@ todo
 
 \section{Introduction}
 todo
-
+1
 \section{Background}
-This section introduces the basic concepts the reader should be qualitatively familiar with, in order to understand the content of this thesis. It is assumed readers are already knowledgeable of simple mathematical concepts, such as calculus and linear algebra. Readers acquainted with the material should feel free to skip this chapter.
+This section introduces the basic concepts the reader should be qualitatively familiar with, in order to understand the content of this thesis. It is assumed readers are already knowledgeable of simple mathematical concepts, such as calculus, linear algebra, statistics, and probability theory. Readers acquainted with the material should feel free to skip this chapter.
 
 \subsection{Fluid Dynamics and the Boundary Layer}
 Fluid dynamics is the discipline that studies the flow of fluids; it has several branches that study different fluids, such as aerodynamics (the study of air motion) and hydrodynamics (the study of water motion). These disciplines are routinely applied when designing cars, airplanes, ships, pipelines, etc.
 
 \subsubsection{Laminar and Turbulent flow}
-todo
+There are two distinct ways in which particles in a fluid can move: laminar flow and turbulent flow. In the former, all the particles move orderly, perhaps with a different speed, but all in the same direction, whereas in the latter the movement of particles is highly chaotic and unpredictable, and tends to dive rise to eddies of varying sizes. People are most familiar with the distinction between the two through the smoke rising from a cigarette, which starts smooth and becomes turbulent shortly thereafter, as in figure \ref{fig:smoke}. The kind of flow in under specific conditions can be predicted using the Reynolds number $Re$, which is the ratio between inertia forces, favoring turbulent flow, and viscosity forces, stabilizing the fluid towards laminar motion:
+
+$$
+Re=\frac{\rho u L}{\mu}=\frac{uL}{\nu}
+$$
+
+With $\rho$ the density of the fluid, $u$ its velocity, $L$ a characteristic linear dimension of the system under consideration, $\mu$ and $\nu$ the kinematic and dynamic viscosity of the fluid. The viscosity describes, intuitively, how much the molecules of the fluid tend to stick together and resist motion by generating drag. For example, water has low viscosity, and honey has high viscosity.
+
+Since turbulence is random, it is usually studied in terms of the statistical properties of physical quantities through the Reynolds decomposition; given a quantity $a(s,t)$ which varies in space and time, we can compute its average
+
+$$
+\overline{a}(s)=\frac{1}{T}\int_{T_0}^{T_0+T}a(s,t)dt
+$$
+
+and the deviation from the average
+
+$$
+a'(s,t)=a(s,t)-\overline{a}(s)
+$$
+
+By definition, $\overline{a'}=0$, which means that all the effects of turbulence are contained in $a'$. Common statistical properties such as variance and covariance are expressed respectively as $\overline{a'a'}$ and $\overline{a'b'}$.
+
+\begin{figure}
+\caption{Smoke from a cigarette, and the transition from laminar to turbulent flow.}
+\label{fig:smoke}
+\centering
+\includegraphics[width=0.5\textwidth]{images/smoke}
+%https://www.google.se/search?client=ubuntu&q=cb+edits+smoke+png&tbm=isch&tbs=simg:CAQSlAEJkNL0D0I-7I0aiAELEKjU2AQaBAgVCAAMCxCwjKcIGl8KXQgDEiWoGUHnAegBsQw9sgxAlgawDIYnhSCHJ4okqzemIYgksCiVIKw3GjDJWGns8ZAx_17dvQFajhuRydFWdlJwDNo3VGI7iBUyNViewQZEJmiaYWGUhTUgxQOUgBAwLEI6u_1ggaCgoICAESBLt5JWoM&sa=X&ved=0ahUKEwiit7jKxKXZAhUBiCwKHTapCLQQ2A4IJygB&biw=1916&bih=948
+\end{figure}
+
 
 \subsubsection{The Boundary Layer}
-In the context of fluid dynamics, the boundary layer studies the behavior of a fluid when it is flowing close to a solid surface. Fluids are characterized by their viscosity, which describes, intuitively, how much the molecules of the fluid tend to stick together and resist motion by generating drag. For example, water has low viscosity, and honey has high viscosity. Imagine a laminar flow close to a solid surface; because of viscosity, the molecules flowing near the surface move slower, and, in the limit, the velocity of the molecules in direct contact with the surface is 0 (this is called the \emph{non-slip condition}). Thus, the velocity of the fluid increases smoothly, continuously and monotonously with the distance from the solid, until it reaches the \emph{free-flow} velocity, after which it stays constant. The region close to the surface, where the fluid moves slower, is called the \emph{boundary layer}, and is the region where the viscosity of the fluid influences its motion. Its height $\delta$ can be defined when the local velocity surpasses a certain threshold, such as 99\% of the free-flow velocity.
+In the context of fluid dynamics, the boundary layer studies the behavior of a fluid when it is flowing close to a solid surface. Imagine a laminar flow close to a solid surface; because of viscosity, the molecules flowing near the surface move slower, and, in the limit, the velocity of the molecules in direct contact with the surface is 0 (this is called the \emph{non-slip condition}). Thus, the velocity of the fluid increases smoothly, continuously and monotonously with the distance from the solid, until it reaches the \emph{free-flow} velocity, after which it stays constant. The region close to the surface, where the fluid moves slower, is called the \emph{boundary layer}, and is the region where the viscosity of the fluid influences its motion. Its height $\delta$ can be defined when the local velocity surpasses a certain threshold, such as 99\% of the free-flow velocity.
 
 The variation of velocity with distance from the surface, $\partial\overline{u}/\partial z$, is called \emph{shear}, and, together with viscosity, determines the materialization of turbulence in the flow. Every layer of fluid is squeezed between a faster moving layer above and a slower moving below; in high shear conditions, this causes high stress on the particles, and prevents them from moving orderly, thus leading to turbulent motion. Viscosity and the no-slip condition prevent this phenomenon to arise in a region very close to the solid surface, called the \emph{laminar sub-layer}, where we still find laminar motion.
 
@@ -41,17 +69,65 @@ The strength of the turbulence is proportional to $u_{rms}=(\overline{u'^2})^{1/
 
 The mean velocity $\overline{u}$ increases linearly within the laminar sub-layer, then logarithmically until the end of the boundary layer, thus the shear decreases further away from the surface. In the logarithmic sub-layer, the velocity is computed as $\overline{u}(z)=u_*(\log z - \log z_0)/\kappa$, where $z_0$ is the characteristic roughness of the surface, and $\kappa$ is the von Karman's constant, whose value is around 0.4 [citation needed]. The characteristic roughness depends on the texture of the surface, and its relationship with the height $\delta_s$ of the laminar sub-layer; if the roughness scale is smaller than $\delta_s$, the logarithmic velocity profile is not affected by the texture, because the laminar sub-layer completely covers the variations on the surface, and we have the so-called smooth turbulent flow. If, on the contrary, the bumps in the surface are larger than $\delta_s$, the laminar sub-layer follow the profile of the surface, and the logarithmic velocity profile is altered depending on the texture, a regime called rough turbulent flow.
 
-
 \subsection{The Atmospheric Boundary Layer}
-\lipsum
+The atmosphere is composed by air, which is behaves like fluid. Therefore, close to the Earth's surface, in the region called \emph{atmospheric boundary layer}, we find the same effects described in the previous section. Additionally, there are other phenomena that complicate things further, such as the temperature of the surface, which changes widely from day to night and from Summer to Winter, the rotation of the Earth, the varying roughness of the surface, due to cities and mountains, etc. The effect of the surface on the first few hundred meters of the atmosphere is the main focus of \emph{boundary layer meteorology}. 
 
-\subsubsection{The Turbulence Kinetic Energy Budged}
-\lipsum
+The height of the atmospheric boundary layer (hereafter abbreviated as ABL) typically varies between 100 and 1000 meters, highly depending on the conditions, and it is always turbulent. There are three main instabilities driving turbulence in the ABL:
+
+\begin{itemize}
+\item Shear instability: caused by shear, the mechanism described in the previous section. This happens at high Reynolds number, and, by using typical values for the ABL, we find $Re$ well above $10^6$.
+\item Kelvin-Helmholtz instability: occurs when there is a difference of density and velocity in different layers of flow. This is the mechanism that generates, for example, waves in ponds, lakes, and oceans.
+\item Rayleigh-Bernard instability: is caused by the decrease of potential density\footnote{the potential density is the density that a parcel of air would attain if brought at a standard reference pressure adiabatically, i.e. disallowing exchanges of heat with its surroundings. Potential density is useful to compare densities irrespectively of pressure.} with height, or, in other words, when warm fluid is below cold fluid; the warm fluid will rise, and the cold fluid will drop, a phenomenon called \emph{convection}. During hot Summer days, the surface is much warmer than the air, thus the air close to the surface will heat and tend to rise.
+\end{itemize}
+
+Turbulence has the very important role of transport and mix of air properties, such as temperature and humidity.
+
+It is very important to have a macroscopic understanding of the processes in the ABL, because they happen at length and time scales too small to be simulated in global climate models. The process of expressing the result of processes as a function of large scale parameters is called parametrization, and having realistic models is essential in order to conduct precise simulations of the global climate in the scale of tens or hundreds of years, because errors tend to accumulate and amplificate as the simulation goes on.
 
 \subsubsection{Surface Fluxes}
-\lipsum
+A flux measures the amount of a physical quantity that flows through a surface. In the context of boundary layer meteorology, we are interested in the flows through the surface of earth, because, through them, the surface and the atmosphere exchange energy; these fluxes are thus measured in \si{\watt\per\square\meter}. The main source of energy for the surface is long-wave radiation coming from the sun, and short-wave radiation coming from the atmosphere and the clouds. A small amount of long-wave radiation is emitted from the surface, therefore let the net radiative flux be $R$, positive when the surface gains energy.
+
+The main fluxes by which the surface loses energy to the atmosphere are called the turbulent flux of \emph{sensible heat} $H$, also called kinematic heat flux, and the turbulent flux of \emph{latent heat} $LH$, also called kinematic flux of water vapor/moisture. The difference between the two is that the former causes an actual change of temperature, whereas the latter does not affect temperature\footnote{imagine a pot of boiling water; selecting a higher temperature on the stove will not increase the temperature of water above \SI{100}{\celsius}, but will make it boil faster. The additional heat introduced in the system is dissipated through increased evaporation}. The main causes of sensible heat fluxes are conduction and convection, whereas the main cause of latent heat fluxes is water movement: condensation, evaporation, melting, etc. 
+
+The final flux of interest is the soil heat flux $G$, which is simply the heat "absorbed" by the surface and not given to the atmosphere. These four fluxes are linked by the surface energy balance equation:
+
+$$
+R=H+LE+G
+$$
+
+which states that the total incoming energy $R$ must be equal to the energy given back to the atmosphere $H+LE$ (not counting long-wave radiation, which is accounted to in $R$) plus the energy absorbed by the surface $G$.
+
+\subsubsection{The Turbulence Kinetic Energy Budged}
+Kinetic energy is energy stored in form of movement: faster or heavier objects have more kinetic energy than slower or lighter ones. The Reynolds decomposition allows us to decompose the kinetic energy of turbulent flows in two terms: one caused by the mean flow, and one caused by turbulence. This decomposition can be justified by examining the temporal spectrum of kinetic energy, shown in figure \ref{fig:tkespectrum}. Four peaks are visible, corresponding to different sources of kinetic energy: turbulence, day-night cycle, westerlies\footnote{winds blowing from the east towards the west in the mid-latitudes}, and seasons. Importantly, there are few sources of kinetic energy in the 30 minutes to one hour time scale; this so-called spectral gap allows us to separate between turbulence and other sources of fluctuations in the atmosphere.
+
+\begin{figure}
+\caption{Change of atmospheric kinetic energy at different time-scales. The peaks in the scale of days and months and years are due to the day-night and Summer-Winter cycles, the peaks in the monthly scale are due to baroclinic instability in the mid-latitude westerlies, and the peaks at one minute are due to convection and atmospheric turbulence \cite{tkespectrumsrc,tkespectrumorig}}
+\label{fig:tkespectrum}
+\centering
+\includegraphics[width=0.5\textwidth]{images/kinetic_energy_spectrum}
+\end{figure}
+
+From now on, we will use a coordinate system with the $x$ axis aligned to the average horizontal wind direction, the $y$ axis perpendicular to it, and the $z$ axis pointing away from the surface. Then, we will use the letters $u$, $v$ and $w$ to denote the components of the wind along the axes $x$, $y$ and $z$ respectively; clearly, $\overline{v}=0$. Eddy fluxes can then be described in terms of covariances: let $\theta$ denote the potential temperature\footnote{the potential temperature is final temperature after bringing a parcel of air to a standard pressure adiabatically, i.e. not allowing exchange of temperature with the surroundings. It is a useful mean to compare temperatures irrespectively of pressure}, then $\overline{w'\theta'}$ is the turbulent heat flux, i.e. the sensible heat flux in the vertical due to wind. Usually, the ABL is studied assuming homogeneous horizontal conditions, because they vary on a length scale larger than the height of the ABL.
+
+It is important to notice that turbulence is dissipative in nature. Consider a hot Summer day, where air is warmer close to the surface, and a circular eddy moving some air up and some down, so that the average motion is zero. The parcel of air moving up ($w'>0$) ends up being warmer than its surroundings ($\theta'>0$), while the one moving down ($w'<0$) will be colder ($\theta'<0$); the result is a new transport of heat through the eddy: $\overline{w'\theta'}>0$. On the contrary, imagine a cold night, where the air close to the surface is colder; the same eddy would transport a colder parcel of air upwards, and a warmer one downwards. In both cases, the end result would be a net transport of heat without transport of mass. Because of the ??? law, the eddy must lose energy, and thus dissipate over time.
+
+Since turbulence changes over time, we are more interested in the change of kinetic energy, the turbulent kinetic energy budget. A full derivation is out of the scope of this work, but its final form \cite{basicatm} can be derived from prime physical principles, resulting in
+
+$$
+\frac{\partial\overline{{e'}^2}}{\partial t}
+=\underbrace{\overline{u'w'}\frac{\partial u}{\partial z}}_P
+-\underbrace{\frac{g}{T}\overline{w'\theta'}}_B
++\underbrace{\frac{\partial}{\partial z}\frac{\overline{w'{e'}^2}}{2}}_{T_t}
++\underbrace{\frac{1}{\rho}\frac{\partial\overline{p'w'}}{\partial z}}_{T_p}
++\epsilon
+$$
+
+Where ${e'}^2={u'}^2+{v'}^2+{w'}^2$. The $P$ term is the production due to shear, $B$ is the production due to buoyancy (TODO why the negative sign?), $T_t$ is the turbulent transport of TKE (???), $T_p$ is the transport due to pressure, and $\epsilon$ is molecular dissipation due to viscosity.
 
 \subsubsection{Monin-Obukhov Similarity Theory}
-\lipsum
+todo
+
+\bibliographystyle{unsrt}
+\bibliography{thesis}
 
 \end{document}
