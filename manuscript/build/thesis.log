@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2018.2.14)  14 FEB 2018 19:04
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2018.2.14)  15 FEB 2018 16:10
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -658,11 +658,11 @@ Package pdftex.def Info: images/kinetic_energy_spectrum.png  used on input line
 Package pdftex.def Info: Requested size: 221.9315pt x 205.6658pt on input line 
 107.
  [5]
-(build/thesis.bbl
+(build/thesis.bbl [6 <./images/kinetic_energy_spectrum.png>]
 Missing character: There is no â in font ptmr7t!
 Missing character: There is no € in font ptmr7t!
 Missing character: There is no ” in font ptmr7t!
- [6 <./images/kinetic_energy_spectrum.png>]) [7]
+) [7]
 (build/thesis.aux) ) 
 Here is how much of TeX's memory you used:
  12627 strings out of 492990
@@ -680,7 +680,7 @@ texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive
 -dist/fonts/type1/urw/symbol/usyr.pfb></usr/share/texlive/texmf-dist/fonts/type
 1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utm
 r8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on build/thesis.pdf (7 pages, 190372 bytes).
+Output written on build/thesis.pdf (7 pages, 191734 bytes).
 PDF statistics:
  63 PDF objects out of 1000 (max. 8388607)
  43 compressed objects within 1 object stream

@@ -483,16 +483,20 @@ under homogeneous and stationary conditions, every dimensionless group is an uni
     sentence from "Exploring Self-Correlation in Flux–Gradient Relationships for Stably Stratified Conditions", Baas et al 2005
     https://link.springer.com/article/10.1007/s10546-006-9048-6
 L is a length scale that depends on the local conditions
-    determines the relative roles of shear and buoyancy in the production/consumption of turbulence kinetic energy
-    sentence from http://glossary.ametsoc.org/wiki/Obukhov_length
-    when z << L, shear dominates
+    interpretations
+        determines the relative roles of shear and buoyancy in the production/consumption of turbulence kinetic energy
+            sentence from http://glossary.ametsoc.org/wiki/Obukhov_length
+        z/L is the production of turbulent kinetic energy due to buoyancy (hogstrom 1996, sec. 5.1)
+            only true in stable conditions?
+        proportional to the characteristic scale for the thickness of the dynamical sub-layer
+            layer where the influence of stratification is negligible
+            see 50 years, foken 2006
+    when z/L >> 1, shear dominates
         we have the traditional log profile of wind
-        conditions are stable, L positive
-    when z >> L, buoyancy dominates
+        conditions are stable, L positive, approaches infinity in the limit of neutral stratification
+    when z/L << -1, buoyancy dominates
         main source of energy is convection
         unstable conditions, L negative
-    actually, z/L is the production of turbulent kinetic energy due to buoyancy (hogstrom 1996, sec. 5.1)
-        only true in stable conditions?
 
 *** objectives of boundary layer meteorology
 want to get wind/temperature/humidity profiles (profile=value as a function of altitude)
@@ -519,14 +523,43 @@ cabauw observatory
 
 data documentation:
     http://projects.knmi.nl/cabauw/insitu/index2.htm
+        observations -> documentation -> technical description
     gapfilling method
         http://projects.knmi.nl/cabauw/insitu/observations/documentation/gapfilling/cabcon_gapfilling.pdf
 
-** what I have to do
+** what I have to do / research question
 use data to improve current flux-profile relationships, by incorporating more predictors
     specifically, predict wind shear and temperature gradient (aka lapse rate)
+    errors reported in hogstrom 1996 are of a few tens percent
     main hypothesis: discrepancies found in experiments are due to factors that were not considered
 
+*research question:* phi_m and phi_h can be computed more accurately by incorporating new predictors,
+i.e. monin-obukhov similarity theory is not powerful enough
+
+hogstrom 1996 dismisses this option as unlikely, except in very stable conditions
+
+
 *** TODO apparently the eddy correlation method to get flux intensity is quite inaccurate, do we bother?
-    alternatively, the surface energy budget is imbalanced
+alternatively, the surface energy budget is imbalanced
     will this cause problems?
+maybe that's what she was referring to, when she mentioned imprecise measurement of u*
+apparently this is not a significant factor (foken 2006, 50 years)
+
+*** TODO investigate approaches not using similarity theory
+obukhov himself derived the phi functions outside of the similarity theory
+    structure of the temp and vel. fields under conditions of free convection, 1960
+
+*** TODO find additional predictors
+**** humidity
+most works focus on dry air, although influences due to moisture are likely very small (foken 2006, 50 years)
+
+* meetings
+** 16/2
+look at measurements, some values are unrealistic, bad data points
+u* small = no turbulence = formulas shouldnt work
+
+USE THRESHOLDS !!! small values are hard to measure (eg low u* = no turbulence, hard to measure)
+
+derivative of wind is speed@10 / 10m (because speed at surface is 0)
+
+research question is good

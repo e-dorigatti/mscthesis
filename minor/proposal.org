@@ -1,0 +1,37 @@
+#+TITLE: Maximizing the Reach of Innovation
+#+AUTHOR: Emilio Dorigatti
+#+OPTIONS: toc:nil
+
+# stupid word noobs
+#+LATEX_HEADER: \usepackage[margin=2.5cm]{geometry}
+#+LATEX_CLASS_OPTIONS: [12pt]
+#+LATEX_HEADER: \usepackage[doublespacing]{setspace} 
+#+LATEX_HEADER: \usepackage{mathptmx}
+#+LATEX_HEADER: \usepackage{titling}
+#+LATEX_HEADER: \setlength{\droptitle}{-1.0in}
+
+* Background
+Software products are ubiquitous and play an important role in most aspects of
+people's lives. This hyper-connected world gives incredible visibility to
+digital creators, and allows their works to reach a large part of the world's
+population. In turn, everyone has the possibility to pick up a digital work
+and add her personal touch on it, be it by adding new features, making it more
+accessible, or fixing existing flaws. All of this gives every product the
+potential  of becoming a global phenomenon, provided the original author allows it.
+
+* Goal of the Study
+  
+
+*Research Question:* Which steps should be taken to make a new software artifact
+reach the greatest number of people, and maximize its innovation potential? \\
+
+A successful answer to this question would guide new entrepreneurs with
+innovative ideas follow the best path to make their work benefit users the
+most, and raise awareness on toxic business models which actively harm society
+in their relentless pursuit of profit.
+
+This question will be answered by a literature study on the topic of innovation,
+and case studies on past innovations to showcase good and bad ways to approach
+this issue. Among possible candidates in the digital world there are the Open
+Source movement on one side, and patents and the Digital Rights Management (DRM)
+system on the other.
