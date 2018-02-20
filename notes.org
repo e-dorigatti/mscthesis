@@ -555,6 +555,8 @@ most works focus on dry air, although influences due to moisture are likely very
 
 * meetings
 ** 16/2
+*my issue:* tried to compute phi vs z/L with cabauw data, but failed
+
 look at measurements, some values are unrealistic, bad data points
 u* small = no turbulence = formulas shouldnt work
 
@@ -563,3 +565,6 @@ USE THRESHOLDS !!! small values are hard to measure (eg low u* = no turbulence, 
 derivative of wind is speed@10 / 10m (because speed at surface is 0)
 
 research question is good
+
+*** post meeting
+not sure the problem is bad data: if it were, there should be some good points among all the bad ones
