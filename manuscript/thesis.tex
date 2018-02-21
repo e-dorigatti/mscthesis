@@ -5,6 +5,7 @@
 \usepackage{mathptmx}
 \usepackage{siunitx}
 \usepackage{titling}
+\usepackage{amsmath}
 	
 \begin{document}
 
@@ -82,6 +83,8 @@ The height of the atmospheric boundary layer (hereafter abbreviated as ABL) typi
 
 Turbulence has the very important role of transport and mix of air properties, such as heat, moisture, particles, aerosols, etc. This is especially true in \emph{unstable} conditions, when the air moving upwards (e.g. because it is warmer) is less dense than the air moving downwards; when the contrary happens, the ABL is called \emph{stable}.
 
+The ABL can be divided in two main sub-layers: the inner surface layer and the outer Ekmann layer. This distinction is mainly done based on the scale of the dominating turbulent eddies: they are much smaller than the height of the ABL in the surface layer, and of comparable size in the outer layer.
+
 It is very important to have a macroscopic understanding of the turbulent processes in the ABL, because they happen at length and time scales too small to be simulated in global climate models. The process of expressing the result of turbulence as a function of large scale parameters is called parametrization; having realistic models is essential in order to conduct precise simulations of the global climate in the scale of tens or hundreds of years, because errors tend to accumulate and amplificate as the simulation goes on. Other fields that benefit from the study of the ABL are urban meteorology (interested in the dispersion of pollutants), agricultural meteorology (interested in the formation of frost and dew, the temperature of the soil, etc.), aviation (predict fog and strong winds), and so on.
 
 \subsubsection{Surface Fluxes}
@@ -96,6 +99,8 @@ R=H+LE+G
 $$
 
 which states that the total incoming energy $R$ must be equal to the energy given back to the atmosphere $H+LE$ (not counting long-wave radiation, which is accounted to in $R$) plus the energy absorbed by the surface $G$.
+
+The turbulent fluxes are constant in the surface layer TODO add citation
 
 \subsubsection{The Turbulence Kinetic Energy Budged}
 Kinetic energy is energy stored in form of movement: faster or heavier objects have more kinetic energy than slower or lighter ones. The Reynolds decomposition allows us to decompose the kinetic energy of turbulent flows in two terms: one caused by the mean flow, and one caused by turbulence. This decomposition can be justified by examining the temporal spectrum of kinetic energy, shown in figure \ref{fig:tkespectrum}. Four peaks are visible, corresponding to different sources of kinetic energy: turbulence, day-night cycle, westerlies\footnote{winds blowing from the east towards the west in the mid-latitudes}, and seasons. Importantly, there are few sources of kinetic energy in the 30 minutes to one hour time scale; this so-called spectral gap allows us to separate between turbulence and other sources of fluctuations in the atmosphere.
@@ -127,7 +132,51 @@ Where ${e'}^2={u'}^2+{v'}^2+{w'}^2$. The $P$ term is the production due to shear
 TODO elaborate on 3.4, 3.5 (reason why P and B have opposite sign), 3.6, 
 
 \subsubsection{Monin-Obukhov Similarity Theory}
-todo
+One of the factors to distinguish laminar from turbulent flow is the length scale $L$ of the system. This length scale for the ABL was derived by A. M. Obukhov in 1946, and forms the basis of the similarity theory. According to this theory, the normalized wind and temperature profiles can be expressed as an unique function of $\xi=z/L$:
+
+$$
+\frac{\partial\overline{u}}{\partial z}\frac{kz}{u_*}=\phi_m(\xi)
+$$
+
+$$
+\frac{\partial\overline{\theta}}{\partial z}\frac{kz}{T_*}=\phi_h(\xi)
+$$
+
+$$
+L=-\frac{u_*^3 T_0}{kg\overline{w'\theta_v}}
+$$
+
+With
+
+\begin{itemize}
+\item $T_0$ and $\rho_0$ surface temperature and pressure
+\item $c_p$ specific heat of air
+\item $\overline{w'\theta}=-H/\rho_0 c_p$ the flux of potential temperature (positive downwards)
+\item $\overline{w'\theta_v}=\overline{w'\theta}(1+0.07\cdot E\lambda/H)$ the flux of virtual potential temperature\footnote{potential temperature of dry air if it had the same density as moist air. It allows to use formulas for dry air when the air is not dry.}
+\item $T_*=-\overline{w'\theta}/u_*$
+\end{itemize}
+
+The stability parameter $\xi$ is positive for stable conditions, where wind shear dominates the production of TKE, and negative for unstable conditions, where buoyancy is the main contributor to turbulence. It approaches 0 in the limit of neutral stratification (i.e. $\partial\overline{\theta}/\partial z=0$), because the temperature flux goes to 0 causing $L$ go to infinity.
+
+TODO really?? L > 0 => w'theta < 0 => H > 0
+
+The universal functions $\phi_m$ and $\phi_h$ must be determined experimentally. This is no easy task, and considerable effort has been devoted to it; one of the greatest difficulties lies in obtaining accurate and unbiased measurements. [hogstrom 1988] is a meta-study that aggregates and improves many previous results, and suggests the following expressions:
+
+$$
+\phi_m(\xi)=\begin{cases}
+(1-19.3\xi)^{-1/4} & -2<\xi<0 \\
+1+6\xi & 0<\xi<1\\
+\end{cases}
+$$
+
+$$
+\phi_h(\xi)=\begin{cases}
+0.95(1-11.6\xi)^{-1/2} & -2<\xi<0 \\
+0.95+8\xi & 0<\xi<1
+\end{cases}
+$$
+
+In spite of decades of studies, the Monin-Obukhov similarity theory is only applicable in the surface layer, over homogeneous surfaces, and with $\vert\xi\vert<2$; even under ideal conditions, the predictions of this theory are accurate up to 10-20\% [foken 2006].
 
 \section{Limitations and Future Work}
 measures on land, but oceanic BL is quite different
