@@ -1,340 +1,4 @@
-* predicting solar radiation
-** basics
-*** what is climate science?
- https://www.youtube.com/watch?v=-bvwS0mP7xw
-
- long term (years/decades/centuries) evolution of boundary conditions for weather (e.g. min/max/avg temperature)
-
- good book about physics
- http://danida.vnu.edu.vn/cpis/files/Books/Atmospheric%20Science%20-%20An%20Introductory%20Survey%20-%20J.%20Wallace,%20P.%20Hobbs%20(Elsevier,%202006)%20WW.pdf
-
-**** what is radiative transfer?
- http://iopscience.iop.org/chapter/978-0-7503-1052-9/bk978-0-7503-1052-9ch5.pdf
- transfer of energy from electromagnetic radiation (i.e. photons) to molecules in the atmosphere
- resulting in earth's temperature increasing or decreasing
-
-  - absorption: molecule eats photon, increasing internal (rotation/vibration/speed) energy
-        this results in the molecule colliding more with other molecules, spreading photon's energy => gas increases in temperature/pressure
-        both radiation coming from sun, and radiation coming from earth
-  - emission: molecule spawns photon, decreasing internal energy
-        results in the gas cooling down/less pressure, provided the photon isnt absorbed by another molecule
-        can be neglected because the athmospheric temperature is too low
-  - scattering: photon bounces off the molecule, no energy transfer
-        photons have very low momentum compared to molecules, thus bounces do not significantly affect the gas temperature/pressure
-        scattering cannot be neglected in clouds!
-
- remember PV=nRT
- depends on the specific molecule (ozone, carbo dioxyde, oxygen, water vapor, ch4, ...)
- absorption and emission happen at discrete energies (with high probability), affected by temperature and pressure
- can deal separately with solar radiation (short wave/high energy) and radiation from earth (long wave/low energy)
- obviously very related to greenhouse effect
-
- earth gains energy at low latitudes (close to the equator), loses energy at high latitudes (close to the poles)
- atmosphere and oceans transports energy from low latitudes to high latitudes (general circulation)
- differential heating leads to motion: pressure gradient will push particles towards colder areas
- then earth rotation messes everything up but in general this is what happens
-
-**** crash course on atmosphere
- first layer is troposphere (0 to 10/15 km ~ 1bar to 250 mbar)
-     temperature decreases with height
-         determined by lapse rate, typically 10 K/km
-     contains most clouds, and therefore weather effects
-     hot air (low altitude) goes up, cold air (high altitude) goes down
-         creates good air circulation
- tropopause: separates troposphere and stratosphere, 10/20 km thick
- second layer is stratosphere (until 50 km)
-     temperature increases with altitude
-         not much air circulation
-             one of the reasons why commercial airlines fly here
- mesosphere
-     contains most oxygen and ozone
-
- temperature varies according to the gases (they absorb different amount of radiation)
-
-**** very simple climate model for radiation
- incoming radiation (from sun) = outgoing radiation (from earth)
-     in the long term
-     otherwise earth would freeze/burn
- earth surface, then one layer atmosphere
- atmosphere absorbs a fraction of the radiation both from earth and sun
- predicted surface temperature : 11 degrees
-
-**** slightly more complicated model for radiation
- subdivide atmosphere in cubes, do computations for each cube
-     differential equations describing change in wind/temperature/humidity/etc. over time
-     also based on their interactions
-     tradeoff between computational time and granularity
-         obviously cubic scaling
-**** international standard atmosphere
- https://en.wikipedia.org/wiki/International_Standard_Atmosphere
- works "vertically", atmosphere is divided in layers, temperature varies linearly within each layer
-
- https://www.google.com/search?client=ubuntu&channel=fs&q=international+standard+atmosphere&ie=utf-8&oe=utf-8
-     contains basic formulas to compute pressure within a layer
-
-**** how is radiative transfer it computed?
- RRTM-G (faster and approximated version of RRTM)
-     G = GFS physics, software platform for computations
-     it's basically computing integrals
-
-
- RRTM: models the flow of electromagnetic radiation in the atmosphere
- http://climatemodels.uchicago.edu/rrtm/
-     both incoming from sun and outgoing from earth
-     parameters:
-         direct sunlight (W/m^2)
-             typically around 1360 W/m2
-         albedo (=diffusive reflection of radiation by earth's surface) (0/1)
-             global average 30% (incl. clouds)
-         surface temperature (K)
-         lapse rate (=decrease of temperature with altitude) (K/km)
-         stratospheric height (km)
-         co2/ch4 (ppm)
-         relative humidity %
-         low/high clouds % (I assume low/high refers to troposphere/stratosphere)
-         drop radius (in the clouds) (micro-m)
-         aerosols
-
- http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.574.1435&rep=rep1&type=pdf
- contains basic, high level formulas to compute radiation
-
-**** approximations
- clearly, the atmospheric mechanics are very complicated and affected by many factors, most of which cannot be measured
-     e.g. ships in the sea release particles that modify the albedo of the clouds
-     e.g. clouds are much smaller than the grid used for the computations, thus their effect must be approximated somehow
- reanalysis: merge observations and fill gaps prediction from models to provide global coverage
-**** evaluation
- compare with empirical data
-     problem: not much data available (not far back in time, and on a quite coarse, non homogenuous grid)
- predict future and see if it's reasonable/if predictions match with past
-
-**** problems
- small features are not captured by global climate models
- grid is very coarse, can only have averages
-     e.g. land/sea change, height change due to mountains
-     precipitations, winds, cyclones (number of)
-         both intensity and duration
-     can be refined by regional climate models
-         i.e. smaller grid in certain areas, using conditions at border from global model
-
- discussion in the thesis on the benefits of faster computing
-     https://youtu.be/-bvwS0mP7xw?t=8037
-     e.g. emergence of high intensity & short duration precipitations
-         underestimated (too long & too weak) by coarse grid models
-     even though network is trained with coarse grid :(
-         not sure it would be able to generalize to finer grids
-             probably not
- 
-*** research methodology
- CRISP-DM (cross industry standard process for data mining)
-
-** dataset
- https://www.youtube.com/watch?v=0RLfDVVcfIQ
-*** ERA interim
- http://onlinelibrary.wiley.com/doi/10.1002/qj.828/full
-    predecessor of ERA5
-    reanalysis => for consistency over time and space
-        correct bias in observations
-        atmospheric, land, ocean, sea ice
-        4D-VAR
-    frequency: 79 km global, 60 levels, every 6 hours from 1979
-    they actually have cloud coverage!!!
-    makes me think we can get more fields....
-        must be careful not to use fields that are computed after radiative transfer (for the current time sample)
-        can use all features from previous time samples (if useful)
-
-*** ERA5
- https://software.ecmwf.int/wiki/display/CKB/What+is+ERA5
- https://software.ecmwf.int/wiki/display/CKB/ERA5+data+documentation
- 30 km horizontal resolution, =137 vertical levels (dont have to do interpolation)=, hourly output
-     improved radiation scheme (=> better for us?)
-     uncertainty estimates (=> better for data augmentation?)
-
- 3d grid with horizontal resolution in the order of kms, and 96 vertical levels (below 80km, so each level is ~5/10 km)
-     they (thesis) actually interpolated the 96 levels from the 16 levels present in the ERA dataset
- temperature of surface, temperature and humidity available for every point, not clear if co2 only at surface level
- big problem: does not include clouds (says the thesis...)
-
-*** on using pressure instead of altitude to define levels
- in the atmosphere, the relationship between pressure and altitude is something like a=1-p^b with 0<b<1
-     roughly linear until 10 km
-     which means that, as pressure decreases, the altitude difference of evenly spaced (in pressure) samples increases
-         to give an idea
-             the troposphere goes from 0 to 12 km = 1000 to 250 mbar
-             the stratosphere goes from 12 to 55 km = 250 to 1 mbar
-         in the stratosphere, temperature increases faster with altitude (from -50 to 0, more or less)
-             this means that when stratifying by pressure the temperature increases _very_ quickly 
-
- we use pressure because radiation depends on pressure and not on altitude
-
-*** TODO evaluation of radiative transfer?
- can we just assume data is good i.e. model is correct?
-     also related to reanalysis
- probably yes, that is the job of climate scientists
-
-** network input
- NxN matrix by concatenating T/H for every level
-     doesnt make sense ?!
- tried with 4x96 (T+H+surface co2+surface temp x 96 levels)
-     say it didnt work, not very convincing on why
-     gradient explosions
-         why didnt they use gradient clipping?
-
-*** DONE didnt mention using data from the neighborhood of the point
-     i.e. have a 4d tensor of size 4xDxDx96 or 4xDxDxH
-         maybe 5d if time is available
-     note that appreciable changes in T/P horizontally happen in the scale of 100/1000 km
-         assuming no clouds (which we dont have anyways)
-         but radiance affected at most by 10 km neighboring conditions
-             =basically, horizontal neighboring data points have no effect=
-         from physics of the atmosphere page 5-20
-
-*** DONE is this data enough to predict radiative transfer
- i.e. does it allow to generalize
- how to answer: research on radiation models
- tentative answer: apparently cloud coverage has a sizeable effect
-     but it was not included in the thesis
- since they compute radiative transfer with formulas, data must be enough
-     and we are not concerned with the correctness of the model
-         clearly, new model implies retraining of the network
-
-**** TODO input augmentation
- idea: pre-compute stuff and feed it as input to the network
-     data augmentation such as log(x)
-     relevant physical constants (nah, im sure the network can learn those, if necessary)
-     other physical quantities computed by simulations (that do not depend on radiative transfer)
-
- physical parameters that are used by the traditional RRTM model and depend on location
-     eg albedo, stratosphere altitude, lapse rate, cloud coverage, wind, aerosols
-         season averages should be easy to get
-     problem: they might change over time
-     _for now_ these are held fixed, and we train the network only on temperature/humidity
-
-*** TODO use relative humidity instead of/together with humidity?
-
-** network output
- target: compute heating in K/day for each altitude level (only from long wave radiation)
-
-*** TODO can we get CI with a neural network, with a single forward pass?
- usually, climate simulations are run many times by slightly perturbing input conditions
-     to get confidence intervals on output
-
- would produce an even bigger advantage relative to current methods
-     must do literature research
-     probably too advanced for this project anyways, but good future work
-
-** network architecture
-*** TODO use a RNN?
- bidirectional, process data top->bot and bot->top
- a la sequence-to-sequence
-
-*** TODO use deconvolutions instead of FC?
- output should be self-similar
-
-*** TODO or maybe use the same weights for every altitude level?
-
-** data augmentation
- keeping in mind that climate simulations could span many 1000s years, so parameters might vary considerably
-
-*** current situation
- currently, samples are generated by modifying historical samples as follows
-     file test_radnet_2.py, function generate_new_profile
-     for the temperature: tnew(p) = t(p) + slope * p + shift
-         basically a linear increase/decrease with pressure (=altitude)
-         note that pressure is low at high altitude, so the biggest change is at ground level
-     the humidity is recomputed so that the relative humidity is the same
-         temperature affects the saturation (=maximum) humidity
-     the radiation is recomputed using the model
-
-*** problem with using historical data
- some configurations are unstable and the simulation diverges (=explodes) after few time steps
-     for example (seq. id in radiation_1980_m02_c69_43_v2.nc) : 1693, 480, 1927, ...
- other cases are quite static
-     radiation stabilizes at the very top (last 4/5 samples) to around -40
-     does not change much everywhere else
-    
-*** DONE use a variational autoencoder to generate new examples?
- a variational autoencoder seems good because we know how to sample from the latent features to generate new samples
- I guess it would only generate samples close to what is already in the training set, so not very useful for our purposes
-
-**** variational autoencoders in a nutshell
- https://arxiv.org/pdf/1606.05908.pdf
- basically, map the latent features to a multivariate normal with isotropic variance
- intuition is that you can get any distribution by applying a function to a normal distribution
- and we can sample from a normal distribution, therefore we know how to generate new samples
- that auto-magically follow the distribution of the latent variables
-
-*** TODO use the RRTM model to perform simulations and produce new samples
- should find realistic initial conditions first
-     +use historical data?+
-         use the output from the VAE?
-     research for typical conditions and ranges?
-         can define distributions instead of ranges
-
-*** DONE define a set of transformations to apply to existing samples?
- e.g. locally smooth changes in pressure/temperature scale
- question: if we always use the same transformation (with different coefficients), won't the network "overfit" it, e.g. by learning how to "undo" it
-
-
-**** identify parameters and their distribution
- based on current best estimates
- https://en.wikipedia.org/wiki/International_Standard_Atmosphere
-
-
-**** humidity
- humidity has a sizeable effect on climate and radiation, thus it's important to get right
-     https://users.physics.ox.ac.uk/~pierrehumbert/papers/CaltechWater.pdf
-         says water vapor is the most important greenhouse gas
-     one possibility is to convert from relative humidity to absolute humidity
-         https://carnotcycle.wordpress.com/2012/08/04/how-to-convert-relative-humidity-to-absolute-humidity/
-             can find maximum absolute humidity for a given temperature using eq. 10 in
-                 https://journals.ametsoc.org/doi/pdf/10.1175/1520-0493%281980%29108%3C1046%3ATCOEPT%3E2.0.CO%3B2
-                 quite inaccurate (>1%) with extremely low/high temperatures, but should be good enough for our purposes
-     the problem of computing humidity is to compute accurately the vapor pressure of water
-         vapor pressure of water = pressure at which evaporation equals condensation
-             corresponds to 100% relative humidity
-         many approximate formulas exist
-             https://en.wikipedia.org/wiki/Vapour_pressure_of_water
-             seems like metpy uses Buck's formula to compute saturation pressure, so we will go for that as well
-         absolute humidity can be computed easily given the vapor pressure of water and relative humidity
-     Q: how does relative humidity vary with altitude?
-         A: it's a very complicated pattern, starts at ~ 80% and drops to 0%, but seemingly random in between
-             got away with regressing random points with an SVR, and scaling so that the RH goes to 0 at the top
-
-**** TODO outcome
- the samples seem to have a very interesting long wave radiation profile, much more "curvy" than the one presented by historical samples, and it still features some swift variations
-
-** work to do
- MY GOAL: improve data augmentation so that model works on arbitrary inputs
-     why do this? why should the model work with non-realistic samples??
- and add clouds, later
-
- model cannot predict well conditions that are far from historical data
-
- problem: extrapolation of humidity/temperature near boundary (top of atmosphere)
-     I see a pattern in the data: temperature sharply rising at the top, and radiance decreasing just as sharply
-         but the network simply doesn't care, and predicts a smooth radiance that follows the trend
-     NB: the drop seems to be caused by the sudden end of the ozone layer (ozone absorbs a lot of radiation => has high temperature)
-
- actually, the network cannot predict (most of the times) extremely low values of radiance, regardless of altitude
-     so the boundary problem is for historical data just because it contains that condition at the boundary
-     that is fundamentally the most important part of the simulation, because it makes the sharp increase in temperature increase altitude as time goes by
-         so the *mean* squared error is deceiving, because the most important part is just a single sample
-     idea: add another input column, with the difference in t(h)-t(h-1)
-         could be learned by a convolution...
-
-** other questions and issues
-*** feedback loop in the output?
- how is the network going to be used? suppose it's used like this
-
- while true:
-     radiation = network(temperature, humidity, ...)
-     temperature, humidity, ... = climate_model(radiation)
-
- then even small mistakes will be propagated and eventually the output will diverge from what would be computed by a single climate model
-
-* atmospheric boundary layer
-** boundary layer in fluid dynamics
+* boundary layer in fluid dynamics
 http://www.mit.edu/course/1/1.061/www/dream/SEVEN/SEVENTHEORY.PDF
 boundary layer: region of a (moving) fluid close to a stationary surface, where the velocity is lower
     fluid within the boundary layer moves more slowly
@@ -371,7 +35,7 @@ in the boundary layer, turbulence is caused by shear (higher shear = higher turb
                         smooth turbulent flow vs rough turbulent flow
             von Karman's constant
 
-*** laminar/turbulent flow
+** laminar/turbulent flow
 laminar flow: neat and tidy, all particles move in the same direction
 turbulent flow: movement of particles is highly chaotic
     best studied through averages
@@ -382,7 +46,7 @@ high viscosity tends to give laminar flow, low viscosity turbolent flow
 Reynolds number can differentiate between the two flows
     Re = inertia forces / viscosity forces
 
-** boundary layer meteorology
+* boundary layer meteorology
 https://atmos.washington.edu/~breth/classes/AS547/
 https://www.youtube.com/watch?v=EMhGTDVuE-4
 
@@ -414,7 +78,7 @@ studies conditions close to the surface => how the surface affects the atmospher
         coordinate system is x = parallel to (average) horizontal wind, y = orthogonal to (avg.) horizontal wind, z = altitude
         u/w/v denote the wind velocity along the axes x/y/z
  
-*** surface fluxes
+** surface fluxes
 https://digitalcommons.unl.edu/cgi/viewcontent.cgi?article=2407&context=usdaarsfacpub
 https://scienceofdoom.com/2010/04/09/sensible-heat-latent-heat-and-radiation/
 http://twister.caps.ou.edu/MM2015/docs/chapter3/chapter3_c.pdf
@@ -450,13 +114,13 @@ other fluxes of interest:
     CO2 flux
     surface evaporation flux (difference with latent heat flux???)
 
-**** surface energy budged
+*** surface energy budged
 G - R = H + LE
 observations do not add up, so there is an imbalance (between 15%/100% at cabauw) 
     see this document, section 15.1
     http://projects.knmi.nl/cabauw/insitu/observations/documentation/Cabauw_TR/Cabauw_TR.pdf
 
-*** turbulence kinetic energy budget
+** turbulence kinetic energy budget
 http://mafija.fmf.uni-lj.si/seminar/files/2011_2012/MaticSavli_2.pdf
 how kinetic energy moves around due to turbulence, forcing conservation of momentum
 use reynolds averaging to decompose wind velocity into mean velocity plus variation
@@ -478,7 +142,7 @@ spectral decomposition: allows to see the difference in terms of eddy size
     large eddies produce energy, small eddies dissipate it
         shear from large eddies produce smaller eddies, transferring energy from the "parent" eddy
 
-*** Monin-Obukhov similarity theory
+** Monin-Obukhov similarity theory
 under homogeneous and stationary conditions, every dimensionless group is an universal function of z/L
     sentence from "Exploring Self-Correlation in Flux–Gradient Relationships for Stably Stratified Conditions", Baas et al 2005
     https://link.springer.com/article/10.1007/s10546-006-9048-6
@@ -498,7 +162,7 @@ L is a length scale that depends on the local conditions
         main source of energy is convection
         unstable conditions, L negative
 
-*** objectives of boundary layer meteorology
+** objectives of boundary layer meteorology
 want to get wind/temperature/humidity profiles (profile=value as a function of altitude)
     e.g. in neutral (calm) conditions, wind profile is logarithmic
     either actual profile or change with respect to altitude
@@ -517,7 +181,8 @@ want to get relationship between profile (easy to measure) and flux (important f
     see e.g. Businger et al 1971, "Flux-profile relationship in the atmospheric surface layer"
         https://journals.ametsoc.org/doi/abs/10.1175/1520-0469%281971%29028%3C0181%3AFPRITA%3E2.0.CO%3B2
 
-** data collection
+* data collection
+** cabauw
 cabauw observatory
     http://www.cesar-database.nl
 
@@ -527,31 +192,74 @@ data documentation:
     gapfilling method
         http://projects.knmi.nl/cabauw/insitu/observations/documentation/gapfilling/cabcon_gapfilling.pdf
 
-** what I have to do / research question
+** arm
+sgp30qcecor // Quality Controlled Eddy Correlation Flux Measurement- 30 min avg
+thwaps // Temperature, humidity, winds and pressure system (THWAPS): meterological data 
+
+* what I have to do / research question
 use data to improve current flux-profile relationships, by incorporating more predictors
     specifically, predict wind shear and temperature gradient (aka lapse rate)
     errors reported in hogstrom 1996 are of a few tens percent
     main hypothesis: discrepancies found in experiments are due to factors that were not considered
 
-*research question:* phi_m and phi_h can be computed more accurately by incorporating new predictors,
+*research question:* +phi_m and phi_h can be computed more accurately by incorporating new predictors+
+can phi_m and phi_h, computed on the data from cabauw, be predicted more accurately by incorporating new predictors?
+
 i.e. monin-obukhov similarity theory is not powerful enough
 
 hogstrom 1996 dismisses this option as unlikely, except in very stable conditions
 
 
-*** TODO apparently the eddy correlation method to get flux intensity is quite inaccurate, do we bother?
+** TODO apparently the eddy correlation method to get flux intensity is quite inaccurate, do we bother?
 alternatively, the surface energy budget is imbalanced
     will this cause problems?
 maybe that's what she was referring to, when she mentioned imprecise measurement of u*
 apparently this is not a significant factor (foken 2006, 50 years)
 
-*** TODO investigate approaches not using similarity theory
+** TODO investigate approaches not using similarity theory
 obukhov himself derived the phi functions outside of the similarity theory
     structure of the temp and vel. fields under conditions of free convection, 1960
 
-*** TODO find additional predictors
-**** humidity
+** TODO find additional predictors
+*** humidity
 most works focus on dry air, although influences due to moisture are likely very small (foken 2006, 50 years)
+
+** prediction
+we have a data point every 10 minutes, which means that points close in time are very similar one another
+therefore we cannot assume that data is iid and make random splits
+for example, nearest neighbors works incredibly well with k=1 (mse < 1e-3)
+    and I assume methods based on kernel similarity would fare quite similarly
+actually, every sample in the test set is almost guaranteed to have an almost identical sample in the training set
+
+we should split data by time, e.g. by year/month/day
+    for example, alternate one period train and one period test
+        so that there are similar conditions in the training set
+    DO NOT use data every 3/6/9/12/... days to test
+        remember the 6 days cycle in wind/temperature measurements 
+    cross-validation by year/month?
+    note: just as samples close to any given test sample should not be in the training set, they shouldn't be in the test set either
+        because errors are correlated
+    also see https://stats.stackexchange.com/questions/14099/using-k-fold-cross-validation-for-time-series-model-selection
+
+possible approach: h-block cross-validation
+    https://www.ssc.wisc.edu/~bhansen/718/BurmanChowNolan1994.pdf
+    basically, remove the h observation preceding and following each observation in the test set
+    problem: how to choose h?
+        we could side-step this and select a time interval using domain knowledge
+    possible complication: assumes data is stationary, ours might not be
+        stationary: unconditional joint distribution does not change over time
+        we can verify it with some statistical tests
+            which are gonna fail, remember the weird 6 days seasonality in wind/temperature measurements
+        but is it a reasonable assumption?
+    works for short-range dependencies (good for us)
+    NB: shown to be inconsistent/not asymptotically optimal
+        =use hv-block cross-validation instead=
+
+moar paperz
+   https://projecteuclid.org/download/pdfview_1/euclid.ssu/1268143839
+   https://www.jstor.org/stable/2241910?seq=1#page_scan_tab_contents
+   https://www.sciencedirect.com/science/article/pii/S0304407600000300
+   https://ideas.repec.org/p/msh/ebswps/2015-10.html
 
 * meetings
 ** 16/2
@@ -568,3 +276,10 @@ research question is good
 
 *** post meeting
 not sure the problem is bad data: if it were, there should be some good points among all the bad ones
+** questions for next one
+
+according to formulas, phi is always > 0, how can you have decreasing profiles then??
+    e.g. temperature in unstable stratification decreases with height
+
+used fluxes from eddy correlation, but we also have the bowen ratio, which should be used
+    https://link.springer.com/content/pdf/10.1007/BF00709218.pdf
