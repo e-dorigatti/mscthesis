@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2018.2.14)  22 FEB 2018 15:47
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2018.2.14)  25 FEB 2018 21:36
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -6,19 +6,20 @@ entering extended mode
 (./thesis.tex
 LaTeX2e <2017-04-15>
 Babel <3.12> and hyphenation patterns for 84 language(s) loaded.
-(/usr/share/texlive/texmf-dist/tex/latex/base/article.cls
-Document Class: article 2014/09/29 v1.4h Standard LaTeX document class
-(/usr/share/texlive/texmf-dist/tex/latex/base/size12.clo
-File: size12.clo 2014/09/29 v1.4h Standard LaTeX file (size option)
+(/usr/share/texlive/texmf-dist/tex/latex/base/book.cls
+Document Class: book 2014/09/29 v1.4h Standard LaTeX document class
+(/usr/share/texlive/texmf-dist/tex/latex/base/bk12.clo
+File: bk12.clo 2014/09/29 v1.4h Standard LaTeX file (size option)
 )
 \c@part=\count79
-\c@section=\count80
-\c@subsection=\count81
-\c@subsubsection=\count82
-\c@paragraph=\count83
-\c@subparagraph=\count84
-\c@figure=\count85
-\c@table=\count86
+\c@chapter=\count80
+\c@section=\count81
+\c@subsection=\count82
+\c@subsubsection=\count83
+\c@paragraph=\count84
+\c@subparagraph=\count85
+\c@figure=\count86
+\c@table=\count87
 \abovecaptionskip=\skip41
 \belowcaptionskip=\skip42
 \bibindent=\dimen102
@@ -60,9 +61,9 @@ Package ifvtex Info: VTeX not detected.
 (/usr/share/texlive/texmf-dist/tex/generic/ifxetex/ifxetex.sty
 Package: ifxetex 2010/09/12 v0.6 Provides ifxetex conditional
 )
-\Gm@cnth=\count87
-\Gm@cntv=\count88
-\c@Gm@tempcnt=\count89
+\Gm@cnth=\count88
+\Gm@cntv=\count89
+\c@Gm@tempcnt=\count90
 \Gm@bindingoffset=\dimen105
 \Gm@wd@mp=\dimen106
 \Gm@odd@mp=\dimen107
@@ -115,18 +116,18 @@ Package: expl3 2017/07/19 L3 programming layer (loader)
 
 (/usr/share/texlive/texmf-dist/tex/latex/l3kernel/expl3-code.tex
 Package: expl3 2017/07/19 L3 programming layer (code)
-\c_max_int=\count90
-\l_tmpa_int=\count91
-\l_tmpb_int=\count92
-\g_tmpa_int=\count93
-\g_tmpb_int=\count94
-\g__intarray_font_int=\count95
-\g__prg_map_int=\count96
-\c_log_iow=\count97
-\l_iow_line_count_int=\count98
-\l__iow_line_target_int=\count99
-\l__iow_one_indent_int=\count100
-\l__iow_indent_int=\count101
+\c_max_int=\count91
+\l_tmpa_int=\count92
+\l_tmpb_int=\count93
+\g_tmpa_int=\count94
+\g_tmpb_int=\count95
+\g__intarray_font_int=\count96
+\g__prg_map_int=\count97
+\c_log_iow=\count98
+\l_iow_line_count_int=\count99
+\l__iow_line_target_int=\count100
+\l__iow_one_indent_int=\count101
+\l__iow_indent_int=\count102
 \c_zero_dim=\dimen113
 \c_max_dim=\dimen114
 \l_tmpa_dim=\dimen115
@@ -145,77 +146,77 @@ Package: expl3 2017/07/19 L3 programming layer (code)
 \l_tmpb_muskip=\muskip13
 \g_tmpa_muskip=\muskip14
 \g_tmpb_muskip=\muskip15
-\l_keys_choice_int=\count102
-\c__fp_leading_shift_int=\count103
-\c__fp_middle_shift_int=\count104
-\c__fp_trailing_shift_int=\count105
-\c__fp_big_leading_shift_int=\count106
-\c__fp_big_middle_shift_int=\count107
-\c__fp_big_trailing_shift_int=\count108
-\c__fp_Bigg_leading_shift_int=\count109
-\c__fp_Bigg_middle_shift_int=\count110
-\c__fp_Bigg_trailing_shift_int=\count111
-\c__fp_rand_size_int=\count112
-\c__fp_rand_four_int=\count113
-\c__fp_rand_eight_int=\count114
-\l__sort_length_int=\count115
-\l__sort_min_int=\count116
-\l__sort_top_int=\count117
-\l__sort_max_int=\count118
-\l__sort_true_max_int=\count119
-\l__sort_block_int=\count120
-\l__sort_begin_int=\count121
-\l__sort_end_int=\count122
-\l__sort_A_int=\count123
-\l__sort_B_int=\count124
-\l__sort_C_int=\count125
-\l__tl_build_start_index_int=\count126
-\l__tl_build_index_int=\count127
-\l__tl_analysis_normal_int=\count128
-\l__tl_analysis_index_int=\count129
-\l__tl_analysis_nesting_int=\count130
-\l__tl_analysis_type_int=\count131
-\l__regex_internal_a_int=\count132
-\l__regex_internal_b_int=\count133
-\l__regex_internal_c_int=\count134
-\l__regex_balance_int=\count135
-\l__regex_group_level_int=\count136
-\l__regex_mode_int=\count137
-\c__regex_cs_in_class_mode_int=\count138
-\c__regex_cs_mode_int=\count139
-\l__regex_catcodes_int=\count140
-\l__regex_default_catcodes_int=\count141
-\c__regex_catcode_D_int=\count142
-\c__regex_catcode_S_int=\count143
-\c__regex_catcode_L_int=\count144
-\c__regex_catcode_O_int=\count145
-\c__regex_catcode_A_int=\count146
-\c__regex_all_catcodes_int=\count147
-\l__regex_show_lines_int=\count148
-\l__regex_min_state_int=\count149
-\l__regex_max_state_int=\count150
-\l__regex_left_state_int=\count151
-\l__regex_right_state_int=\count152
-\l__regex_capturing_group_int=\count153
-\l__regex_min_pos_int=\count154
-\l__regex_max_pos_int=\count155
-\l__regex_curr_pos_int=\count156
-\l__regex_start_pos_int=\count157
-\l__regex_success_pos_int=\count158
-\l__regex_curr_char_int=\count159
-\l__regex_curr_catcode_int=\count160
-\l__regex_last_char_int=\count161
-\l__regex_case_changed_char_int=\count162
-\l__regex_curr_state_int=\count163
-\l__regex_step_int=\count164
-\l__regex_min_active_int=\count165
-\l__regex_max_active_int=\count166
-\l__regex_replacement_csnames_int=\count167
-\l__regex_match_count_int=\count168
-\l__regex_min_submatch_int=\count169
-\l__regex_submatch_int=\count170
-\l__regex_zeroth_submatch_int=\count171
-\g__debug_trace_regex_int=\count172
+\l_keys_choice_int=\count103
+\c__fp_leading_shift_int=\count104
+\c__fp_middle_shift_int=\count105
+\c__fp_trailing_shift_int=\count106
+\c__fp_big_leading_shift_int=\count107
+\c__fp_big_middle_shift_int=\count108
+\c__fp_big_trailing_shift_int=\count109
+\c__fp_Bigg_leading_shift_int=\count110
+\c__fp_Bigg_middle_shift_int=\count111
+\c__fp_Bigg_trailing_shift_int=\count112
+\c__fp_rand_size_int=\count113
+\c__fp_rand_four_int=\count114
+\c__fp_rand_eight_int=\count115
+\l__sort_length_int=\count116
+\l__sort_min_int=\count117
+\l__sort_top_int=\count118
+\l__sort_max_int=\count119
+\l__sort_true_max_int=\count120
+\l__sort_block_int=\count121
+\l__sort_begin_int=\count122
+\l__sort_end_int=\count123
+\l__sort_A_int=\count124
+\l__sort_B_int=\count125
+\l__sort_C_int=\count126
+\l__tl_build_start_index_int=\count127
+\l__tl_build_index_int=\count128
+\l__tl_analysis_normal_int=\count129
+\l__tl_analysis_index_int=\count130
+\l__tl_analysis_nesting_int=\count131
+\l__tl_analysis_type_int=\count132
+\l__regex_internal_a_int=\count133
+\l__regex_internal_b_int=\count134
+\l__regex_internal_c_int=\count135
+\l__regex_balance_int=\count136
+\l__regex_group_level_int=\count137
+\l__regex_mode_int=\count138
+\c__regex_cs_in_class_mode_int=\count139
+\c__regex_cs_mode_int=\count140
+\l__regex_catcodes_int=\count141
+\l__regex_default_catcodes_int=\count142
+\c__regex_catcode_D_int=\count143
+\c__regex_catcode_S_int=\count144
+\c__regex_catcode_L_int=\count145
+\c__regex_catcode_O_int=\count146
+\c__regex_catcode_A_int=\count147
+\c__regex_all_catcodes_int=\count148
+\l__regex_show_lines_int=\count149
+\l__regex_min_state_int=\count150
+\l__regex_max_state_int=\count151
+\l__regex_left_state_int=\count152
+\l__regex_right_state_int=\count153
+\l__regex_capturing_group_int=\count154
+\l__regex_min_pos_int=\count155
+\l__regex_max_pos_int=\count156
+\l__regex_curr_pos_int=\count157
+\l__regex_start_pos_int=\count158
+\l__regex_success_pos_int=\count159
+\l__regex_curr_char_int=\count160
+\l__regex_curr_catcode_int=\count161
+\l__regex_last_char_int=\count162
+\l__regex_case_changed_char_int=\count163
+\l__regex_curr_state_int=\count164
+\l__regex_step_int=\count165
+\l__regex_min_active_int=\count166
+\l__regex_max_active_int=\count167
+\l__regex_replacement_csnames_int=\count168
+\l__regex_match_count_int=\count169
+\l__regex_min_submatch_int=\count170
+\l__regex_submatch_int=\count171
+\l__regex_zeroth_submatch_int=\count172
+\g__debug_trace_regex_int=\count173
 \c_empty_box=\box26
 \l_tmpa_box=\box27
 \l_tmpb_box=\box28
@@ -259,16 +260,16 @@ Package: expl3 2017/07/19 L3 programming layer (code)
 )
 (/usr/share/texlive/texmf-dist/tex/latex/l3kernel/l3pdfmode.def
 File: l3pdfmode.def 2017/03/18 v L3 Experimental driver: PDF mode
-\l__driver_color_stack_int=\count173
+\l__driver_color_stack_int=\count174
 \l__driver_tmp_box=\box41
 ))
 (/usr/share/texlive/texmf-dist/tex/latex/l3packages/xparse/xparse.sty
 Package: xparse 2017/07/19 L3 Experimental document command parser
-\l__xparse_current_arg_int=\count174
-\g__xparse_grabber_int=\count175
-\l__xparse_m_args_int=\count176
-\l__xparse_mandatory_args_int=\count177
-\l__xparse_v_nesting_int=\count178
+\l__xparse_current_arg_int=\count175
+\g__xparse_grabber_int=\count176
+\l__xparse_m_args_int=\count177
+\l__xparse_mandatory_args_int=\count178
+\l__xparse_v_nesting_int=\count179
 )
 Package: siunitx 2017/08/02 v2.7j A comprehensive (SI) units package
 
@@ -293,27 +294,27 @@ Package: l3keys2e 2017/07/19 LaTeX2e option processing using LaTeX3 keys
 )
 \l__siunitx_tmp_box=\box42
 \l__siunitx_tmp_dim=\dimen147
-\l__siunitx_tmp_int=\count179
-\l__siunitx_number_mantissa_length_int=\count180
-\l__siunitx_number_uncert_length_int=\count181
-\l__siunitx_round_int=\count182
-\l__siunitx_process_decimal_int=\count183
-\l__siunitx_process_uncertainty_int=\count184
-\l__siunitx_process_fixed_int=\count185
-\l__siunitx_process_integer_min_int=\count186
-\l__siunitx_process_precision_int=\count187
-\l__siunitx_group_min_int=\count188
+\l__siunitx_tmp_int=\count180
+\l__siunitx_number_mantissa_length_int=\count181
+\l__siunitx_number_uncert_length_int=\count182
+\l__siunitx_round_int=\count183
+\l__siunitx_process_decimal_int=\count184
+\l__siunitx_process_uncertainty_int=\count185
+\l__siunitx_process_fixed_int=\count186
+\l__siunitx_process_integer_min_int=\count187
+\l__siunitx_process_precision_int=\count188
+\l__siunitx_group_min_int=\count189
 \l__siunitx_angle_marker_box=\box43
 \l__siunitx_angle_unit_box=\box44
 \l__siunitx_angle_marker_dim=\dimen148
 \l__siunitx_angle_unit_dim=\dimen149
-\l__siunitx_unit_int=\count189
-\l__siunitx_unit_denominator_int=\count190
-\l__siunitx_unit_numerator_int=\count191
-\l__siunitx_unit_prefix_int=\count192
-\l__siunitx_unit_prefix_base_int=\count193
-\l__siunitx_unit_prefix_gram_int=\count194
-\l__siunitx_number_product_int=\count195
+\l__siunitx_unit_int=\count190
+\l__siunitx_unit_denominator_int=\count191
+\l__siunitx_unit_numerator_int=\count192
+\l__siunitx_unit_prefix_int=\count193
+\l__siunitx_unit_prefix_base_int=\count194
+\l__siunitx_unit_prefix_gram_int=\count195
+\l__siunitx_number_product_int=\count196
 \c__siunitx_one_fill_skip=\skip51
 \l__siunitx_table_unit_align_skip=\skip52
 \l__siunitx_table_exponent_dim=\dimen150
@@ -470,13 +471,13 @@ Package: amsbsy 1999/11/29 v1.2d Bold Symbols
 (/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsopn.sty
 Package: amsopn 2016/03/08 v2.02 operator names
 )
-\inf@bad=\count196
+\inf@bad=\count197
 LaTeX Info: Redefining \frac on input line 213.
-\uproot@=\count197
-\leftroot@=\count198
+\uproot@=\count198
+\leftroot@=\count199
 LaTeX Info: Redefining \overline on input line 375.
-\classnum@=\count199
-\DOTSCASE@=\count266
+\classnum@=\count266
+\DOTSCASE@=\count267
 LaTeX Info: Redefining \ldots on input line 472.
 LaTeX Info: Redefining \dots on input line 475.
 LaTeX Info: Redefining \cdots on input line 596.
@@ -485,15 +486,15 @@ LaTeX Info: Redefining \cdots on input line 596.
 \big@size=\dimen160
 LaTeX Font Info:    Redeclaring font encoding OML on input line 712.
 LaTeX Font Info:    Redeclaring font encoding OMS on input line 713.
-\macc@depth=\count267
-\c@MaxMatrixCols=\count268
+\macc@depth=\count268
+\c@MaxMatrixCols=\count269
 \dotsspace@=\muskip16
-\c@parentequation=\count269
-\dspbrk@lvl=\count270
+\c@parentequation=\count270
+\dspbrk@lvl=\count271
 \tag@help=\toks18
-\row@=\count271
-\column@=\count272
-\maxfields@=\count273
+\row@=\count272
+\column@=\count273
+\maxfields@=\count274
 \andhelp@=\toks19
 \eqnshift@=\dimen161
 \alignsep@=\dimen162
@@ -528,16 +529,16 @@ File: ot1ptm.fd 2001/06/04 font definitions for OT1/ptm.
 )
 (/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count274
+\scratchcounter=\count275
 \scratchdimen=\dimen167
 \scratchbox=\box51
-\nofMPsegments=\count275
-\nofMParguments=\count276
+\nofMPsegments=\count276
+\nofMParguments=\count277
 \everyMPshowfont=\toks22
-\MPscratchCnt=\count277
+\MPscratchCnt=\count278
 \MPscratchDim=\dimen168
-\MPnumerator=\count278
-\makeMPintoPDFobject=\count279
+\MPnumerator=\count279
+\makeMPintoPDFobject=\count280
 \everyMPtoPDFconversion=\toks23
 ) (/usr/share/texlive/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
 Package: epstopdf-base 2016/05/15 v2.6 Base part for package epstopdf
@@ -598,7 +599,7 @@ e
 * paper: a4paper
 * layout: <same size as paper>
 * layoutoffset:(h,v)=(0.0pt,0.0pt)
-* modes: 
+* modes: twoside 
 * h-part:(L,W,R)=(102.42992pt, 443.863pt, 51.21495pt)
 * v-part:(T,H,B)=(85.35826pt, 658.28194pt, 101.40665pt)
 * \paperwidth=597.50787pt
@@ -606,22 +607,22 @@ e
 * \textwidth=443.863pt
 * \textheight=658.28194pt
 * \oddsidemargin=30.15993pt
-* \evensidemargin=30.15993pt
-* \topmargin=-23.91173pt
+* \evensidemargin=-21.05504pt
+* \topmargin=-18.78552pt
 * \headheight=12.0pt
-* \headsep=25.0pt
+* \headsep=19.8738pt
 * \topskip=12.0pt
 * \footskip=30.0pt
-* \marginparwidth=44.0pt
-* \marginparsep=10.0pt
+* \marginparwidth=98.0pt
+* \marginparsep=7.0pt
 * \columnsep=10.0pt
 * \skip\footins=10.8pt plus 4.0pt minus 2.0pt
 * \hoffset=0.0pt
 * \voffset=0.0pt
 * \mag=1000
 * \@twocolumnfalse
-* \@twosidefalse
-* \@mparswitchfalse
+* \@twosidetrue
+* \@mparswitchtrue
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
@@ -633,7 +634,7 @@ Dictionary: translator-basic-dictionary, Language: English
 (/usr/share/texlive/texmf-dist/tex/latex/siunitx/siunitx-abbreviations.cfg
 File: siunitx-abbreviations.cfg 2017/08/02 v2.7j siunitx: Abbreviated units
 )
-\c__siunitx_mathsf_int=\count280
+\c__siunitx_mathsf_int=\count281
 LaTeX Font Info:    Try loading font information for OT1+ztmcm on input line 10
 .
 
@@ -664,73 +665,117 @@ LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <9> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 10.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <7> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 10.
-\c__siunitx_mathtt_int=\count281
+\c__siunitx_mathtt_int=\count282
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <14.4> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 15.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10.95> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 15.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <8> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 15.
-LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <17.28> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 17.
  [1
 
+
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
-<images/smoke.jpg, id=8, 807.015pt x 605.26125pt>
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <17.28> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 17.
+ [2]
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <24.88> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 20.
+ (build/thesis.toc)
+\tf@toc=\write3
+\openout3 = `thesis.toc'.
+
+ [3
+
+] [4
+
+]
+Chapter 1.
+[5] [6]
+Chapter 2.
+[7
+
+]
+<images/smoke.jpg, id=31, 807.015pt x 605.26125pt>
 File: images/smoke.jpg Graphic file (type jpg)
 <use images/smoke.jpg>
-Package pdftex.def Info: images/smoke.jpg  used on input line 59. on input line
- 59.
+Package pdftex.def Info: images/smoke.jpg  used on input line 76. on input line
+ 76.
 Package pdftex.def Info: Requested size: 221.9315pt x 166.44273pt on input line
- 59.
- [2 <./images/smoke.jpg>] [3]
-LaTeX Font Info:    Try loading font information for OMS+ptm on input line 79.
+ 76.
+<images/bl.jpg, id=32, 2421.045pt x 412.54124pt>
+File: images/bl.jpg Graphic file (type jpg)
+<use images/bl.jpg>
+Package pdftex.def Info: images/bl.jpg  used on input line 88. on input line 88
+.
+Package pdftex.def Info: Requested size: 443.863pt x 75.63278pt on input line 8
+8.
+ [8 <./images/smoke.jpg>] [9 <./images/bl.jpg>]
+LaTeX Font Info:    Try loading font information for OMS+ptm on input line 103.
+
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/omsptm.fd
 File: omsptm.fd 
 )
 LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <12> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 79.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 103.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 81.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 105.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <7.4> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 81.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 105.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <6> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 81.
- [4]
-<images/kinetic_energy_spectrum.png, id=24, 890.32625pt x 825.0825pt>
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 105.
+ [10]
+<images/kinetic_energy_spectrum.png, id=45, 890.32625pt x 825.0825pt>
 File: images/kinetic_energy_spectrum.png Graphic file (type png)
 <use images/kinetic_energy_spectrum.png>
 Package pdftex.def Info: images/kinetic_energy_spectrum.png  used on input line
- 112. on input line 112.
+ 136. on input line 136.
 Package pdftex.def Info: Requested size: 221.9315pt x 205.6658pt on input line 
-112.
- [5] [6 <./images/kinetic_energy_spectrum.png>] (build/thesis.bbl [7]
+136.
+ [11]
+Underfull \vbox (badness 2020) has occurred while \output is active []
+
+ [12 <./images/kinetic_energy_spectrum.png>] [13] [14]
+Chapter 3.
+[15
+
+] [16
+
+]
+Chapter 4.
+[17] [18
+
+]
+Chapter 5.
+(build/thesis.bbl [19] [20
+
+]
 Missing character: There is no â in font ptmr7t!
 Missing character: There is no € in font ptmr7t!
 Missing character: There is no ” in font ptmr7t!
-) [8] (build/thesis.aux) ) 
+) [21] (build/thesis.aux) ) 
 Here is how much of TeX's memory you used:
- 13168 strings out of 492990
- 272595 string characters out of 6135005
- 297365 words of memory out of 5000000
- 16589 multiletter control sequences out of 15000+600000
- 587541 words of font info for 146 fonts, out of 8000000 for 9000
+ 13207 strings out of 492990
+ 273032 string characters out of 6135005
+ 297862 words of memory out of 5000000
+ 16621 multiletter control sequences out of 15000+600000
+ 591316 words of font info for 151 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  41i,11n,33p,10377b,844s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8
-r.enc}</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb>
-</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/
-share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/t
-exlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive
-/texmf-dist/fonts/type1/urw/symbol/usyr.pfb></usr/share/texlive/texmf-dist/font
-s/type1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/tim
-es/utmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-
-Output written on build/thesis.pdf (8 pages, 196652 bytes).
+{/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/
+8r.enc}</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb
+></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr
+/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/
+texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texliv
+e/texmf-dist/fonts/type1/urw/symbol/usyr.pfb></usr/share/texlive/texmf-dist/fon
+ts/type1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/ti
+mes/utmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb>
+</usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
+Output written on build/thesis.pdf (21 pages, 849351 bytes).
 PDF statistics:
- 66 PDF objects out of 1000 (max. 8388607)
- 45 compressed objects within 1 object stream
+ 112 PDF objects out of 1000 (max. 8388607)
+ 76 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 11 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 16 words of extra memory for PDF output out of 10000 (max. 10000000)
 
