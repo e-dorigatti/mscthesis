@@ -4,3 +4,4 @@ literature/
 __pycache__/
 *.pyc
 data/
+*.h5
