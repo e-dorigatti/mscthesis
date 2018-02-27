@@ -5,3 +5,4 @@ __pycache__/
 *.pyc
 data/
 *.h5
+dev/
