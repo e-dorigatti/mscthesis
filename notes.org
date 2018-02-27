@@ -210,12 +210,13 @@ i.e. monin-obukhov similarity theory is not powerful enough
 hogstrom 1996 dismisses this option as unlikely, except in very stable conditions
 
 
-** TODO apparently the eddy correlation method to get flux intensity is quite inaccurate, do we bother?
+** DONE apparently the eddy correlation method to get flux intensity is quite inaccurate, do we bother?
 alternatively, the surface energy budget is imbalanced
     will this cause problems?
 maybe that's what she was referring to, when she mentioned imprecise measurement of u*
 apparently this is not a significant factor (foken 2006, 50 years)
 anyways, we will be able to integrate better methods to measure fluxes into our work pretty easily
+*answer* nope
 
 ** TODO investigate approaches not using similarity theory
 obukhov himself derived the phi functions outside of the similarity theory
@@ -292,6 +293,9 @@ our fluxes are obtained using eddy correlation technique, which is known to be n
 we used data collected with smooth surface, but flux-profile relationships are not valid above very rough surface
     see https://link.springer.com/article/10.1007/BF00118340
 
+the model does not explain its predictions, so it cannot be used to understand the physical laws, unlike formulas
+    but it can be used in large scale climate models
+
 * meetings
 ** 16/2
 *my issue:* tried to compute phi vs z/L with cabauw data, but failed
@@ -311,6 +315,9 @@ not sure the problem is bad data: if it were, there should be some good points a
 
 according to formulas, phi is always > 0, how can you have decreasing profiles then??
     e.g. temperature in unstable stratification decreases with height
+
+when computing L, should I use temperature at 2m or soil temperature?
+    actually, I am computing L for every z, is it correct?
 
 in order to have phi_m close to 0 when z/L is negative, you would need no wind or large u*, none of which is true
     is it a problem?

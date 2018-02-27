@@ -23,16 +23,18 @@ todo
 
 \section{Problem}
 
-Climatology, or climate science, studies the long-term average weather conditions. In the last few decades, climate scientists found solid evidence of ongoing changes in Earth's climate, most notably, a general increase in average temperature; in the long run, this and other changes can have a devastating impact on life on our planet. Regardless of the causal effect of human activities on it, having a solid understanding of the climate allows us to find the best way to mitigate its change, and possibly prevent it completely.
+Climatology, or climate science, studies the long-term average weather conditions. In the last few decades, climate scientists found solid evidence of ongoing changes in Earth's climate, most notably, a general increase in average temperature; in the long run, this and other changes can potentially have a devastating impact on life on our planet. Regardless of the causal effect of human activities on it, having a solid understanding of the climate allows us to find the best way to mitigate its change, and possibly prevent it completely.
 
 Climate science is an extremely difficult field, for a number of reasons. First, climate is evident, by definition, only over long periods of time and large distances, making the usual scientific approach of testing hypotheses by conducting experiments inapplicable; instead, climate scientists have to rely on historical data. Second, the atmosphere is a complex and chaotic system, which must be described through systems of nonlinear differential equation. They can be used to create numerical simulations, and the resulting predictions compared to historical data to assess the accuracy of the theory. Furthermore, the chaotic character of the atmosphere makes it impossible to study parts of it in isolation from others, as small scale phenomena affect large scale ones, and vice versa. In spite of this, it is useful to split the atmosphere in vertical layers and horizontal zones, in order to differentiate among conditions and phenomena typically occurring in one area or the other.
 
-Usually, the troposphere is referred to as the lowest layer of the atmosphere, but it can actually be subdivided in more sub-layers, the lowest of which is the \emph{atmospheric boundary layer}: is defined as the area of the atmosphere affected by the conditions at the surface. Most human activities happen in this layer, and it is responsible for a large part of the diffusion and transport of aerosol such as, among others, pollutants. Yet, the physics governing the atmospheric boundary layer is not fully understood, and the theory is lacking.
+Usually, the troposphere is referred to as the lowest layer of the atmosphere, but it can actually be subdivided in more sub-layers, the lowest of which is the \emph{atmospheric boundary layer}: it is the region of the atmosphere that is affected by the conditions of the surface. Most human activities happen in this layer, and it is responsible for a large part of the diffusion and transport of aerosol such as, among others, pollutants. Yet, the physics governing the atmospheric boundary layer is not fully understood, and the theory is lacking. One important issues in the study of the atmospheric boundary layer is the derivation of flux-profile relationships for wind and temperature: they essentially relate the transport of momentum and heat by the wind (flux) with the  change of wind speed/temperature with altitude (profile). The state of the art relationships are defined by the Monin-Obukhov Similarity theory in terms of the height above surface scaled by turbulence due to horizontal wind and vertical air movement due to variations in heat. Difficulties in measurements of relevant quantities make this theory accurate only up to 10-20\%, and applicable in a restricted set of conditions. 
 
 In stark contrast to the traditional, top-down approach of science, recent developments in information technology made bottom-up approaches possible. In this new way of thinking, existing data is used to automatically infer the "best" explanation for the measurements at hand, the underlying laws that originated that data. The field that makes this possible is called Machine Learning: it takes advantage of several methods coming from statistics, information theory, optimization theory, etc., to make computers learn from examples. Together with Natural Language Processing and Automated Planning, it is one of the three main branches of Artificial Intelligence, the sub-field of Computer Science that studies ways of making machines behave intelligently.
 
+todo more fluff about ml
+
 \section{Research Question}
-todo
+With the growing awareness of the shortcomings of the Monin-Obukhov similarity theory, and the recent availability of micro-meteorological data from specialized observation sites such as Cabauw, one naturally wonders whether the 
 
 \section{Ethics and Sustainability}
 todo
@@ -82,7 +84,7 @@ By definition, $\overline{a'}=0$, which means that all the effects of turbulence
 In the context of fluid dynamics, the boundary layer studies the behavior of a fluid when it is flowing close to a solid surface. Imagine a laminar flow close to a solid surface; because of viscosity, the molecules flowing near the surface move slower, and, in the limit, the velocity of the molecules in direct contact with the surface is 0 (this is called the \emph{non-slip condition}). Thus, the velocity of the fluid increases smoothly, continuously and monotonously with the distance from the solid, until it reaches the \emph{free-flow} velocity, after which it stays constant. The region close to the surface, where the fluid moves slower, is called the \emph{boundary layer}, and is the region where the viscosity of the fluid influences its motion. Its height $\delta$ can be defined when the local velocity surpasses a certain threshold, such as 99\% of the free-flow velocity.
 
 \begin{figure}
-\caption{Turbulent boundary layer at the edge of a canal; the end of the BL is clearly visible, where the flow transitions from turbulent to laminar. Water flows right to left.}
+\caption{Turbulent boundary layer at the edge of a canal; the end of the BL is clearly visible, where the flow transitions from turbulent to laminar. Water flows from right to left.}
 \label{fig:bl}
 \centering
 \includegraphics[width=\textwidth]{images/bl}
@@ -124,7 +126,7 @@ $$
 
 which states that the total incoming energy $R$ must be equal to the energy given back to the atmosphere $H+\lambda E$ (not counting long-wave radiation, which is accounted to in $R$) plus the energy absorbed by the surface $G$.
 
-The turbulent fluxes are constant in the surface layer TODO add citation
+The turbulent fluxes $H$ and $\lambda E$ are constant in the surface layer [todo add citation]. Experimentally, the energy balance is not always achieved [todo cite from cabauw] due to difficulty in measuring fluxes due to eddy correlation being inaccurate (verify this)
 
 \subsection{The Turbulence Kinetic Energy Budged}
 Kinetic energy is energy stored in form of movement: faster or heavier objects have more kinetic energy than slower or lighter ones. The Reynolds decomposition allows us to decompose the kinetic energy of turbulent flows in two terms: one caused by the mean flow, and one caused by turbulence. This decomposition can be justified by examining the temporal spectrum of kinetic energy, shown in figure \ref{fig:tkespectrum}. Four peaks are visible, corresponding to different sources of kinetic energy: turbulence, day-night cycle, westerlies\footnote{winds blowing from the east towards the west in the mid-latitudes}, and seasons. Importantly, there are few sources of kinetic energy in the 30 minutes to one hour time scale; this so-called spectral gap allows us to separate between turbulence and other sources of fluctuations in the atmosphere.
@@ -159,6 +161,11 @@ TODO elaborate on 3.4, 3.5 (reason why P and B have opposite sign), 3.6,
 One of the factors to distinguish laminar from turbulent flow is the length scale $L$ of the system. This length scale for the ABL was derived by A. M. Obukhov in 1946, and forms the basis of the similarity theory. According to this theory, the normalized wind and temperature profiles can be expressed as an unique function of $\xi=z/L$:
 
 $$
+L=-\frac{u_*^3}{\kappa\frac{g}{T_v}\frac{Q}{\rho c_\rho}}
+=-\frac{u_*^3 T_v}{\kappa g \overline{w'\theta_v}}
+$$
+
+$$
 \frac{\partial\overline{u}}{\partial z}\frac{kz}{u_*}=\phi_m(\xi)
 $$
 
@@ -166,23 +173,36 @@ $$
 \frac{\partial\overline{\theta}}{\partial z}\frac{kz}{T_*}=\phi_h(\xi)
 $$
 
-$$
-L=-\frac{u_*^3 T_0}{kg\overline{w'\theta_v}}
-$$
-
 With
 
 \begin{itemize}
-\item $T_0$ and $\rho_0$ surface temperature and pressure
-\item $c_p$ specific heat of air
-\item $\overline{w'\theta}=-H/\rho_0 c_p$ the flux of potential temperature (positive downwards)
-\item $\overline{w'\theta_v}=\overline{w'\theta}(1+0.07\cdot E\lambda/H)$ the flux of virtual potential temperature\footnote{potential temperature of dry air if it had the same density as moist air. It allows to use formulas for dry air when the air is not dry.}
+\item $g=\SI{9.81}{\meter\per\square\second}$ the acceleration due to Earth's gravity
+\item $\kappa=0.4$ the von Karman constant
+
+\item $T_v$ virtual temperature\footnote{potential temperature of dry air if it had the same density as moist air. It allows to use formulas for dry air when the air is not dry.}, obtained as
+
+$$
+T_v=T\frac{1+r_v/\epsilon}{1+r_v}=T(1+0.61\cdot q)
+$$
+
+Where $r_v$ is the mixing ratio, $q=r_v/(1+r_v)$ the specific humidity, and $\epsilon$ is the ratio of the gas constants of dry air and water vapor, roughly 0.622.
+
+\item $\rho$ the air density, computed from the pressure $P$ and the specific gas constant for dry air $R=\SI{287.058}{\joule\per\kilo\gram\kelvin}$ as
+
+$$
+\rho=\frac{P_0}{RT_v}
+$$
+
+
+\item $c_\rho$ specific heat of dry air, \SI{1005}{\joule\per\kilo\gram\per\kelvin} at \SI{300}{\kelvin}
+\item $Q$ the buoyancy flux, approximated by $H+0.07\lambda E$ and measured in \si{\watt\per\square\meter}
+\item $\overline{w'\theta_v}=Q/\rho c_\rho$ the flux of virtual potential temperature, measured in \si{\kelvin\meter\per\second}
 \item $T_*=-\overline{w'\theta}/u_*$
 \end{itemize}
 
 The stability parameter $\xi$ is positive for stable conditions, where wind shear dominates the production of TKE, and negative for unstable conditions, where buoyancy is the main contributor to turbulence. It approaches 0 in the limit of neutral stratification (i.e. $\partial\overline{\theta}/\partial z=0$), because the temperature flux goes to 0 causing $L$ go to infinity.
 
-The universal functions $\phi_m$ and $\phi_h$ must be determined experimentally. This is no easy task, and considerable effort has been devoted to it; one of the greatest difficulties lies in obtaining accurate and unbiased measurements. [hogstrom 1988] is a meta-study that aggregates and improves many previous results, and suggests the following expressions:
+The universal functions $\phi_m$ and $\phi_h$ must be determined experimentally. This is no easy task, and considerable effort has been devoted to it; one of the greatest difficulties lies in obtaining accurate and unbiased measurements, especially the fluxes. [hogstrom 1988] is a meta-study that aggregates and improves many previous results, and suggests the following expressions:
 
 $$
 \phi_m(\xi)=\begin{cases}
@@ -198,7 +218,7 @@ $$
 \end{cases}
 $$
 
-In spite of decades of studies, the Monin-Obukhov similarity theory is only applicable in the surface layer, over homogeneous surfaces, and with $\vert\xi\vert<2$; even under ideal conditions, the predictions of this theory are accurate up to 10-20\% [foken 2006].
+The Monin-Obukhov similarity theory is only applicable in the surface layer, at heights much larger than the aerodynamic roughness length, and with $\vert\xi\vert<2$; even under ideal conditions, the predictions of this theory are accurate up to 10-20\% [foken 2006].
 
 \section{ML stuff}
 todo
@@ -206,6 +226,9 @@ todo
 
 \chapter{Method}
 todo
+
+\subsection{Monin-Obukhov Similarity Theory}
+talk about recreating MOST with data from cabauw (and possibly arm)
 
 \chapter{Results}
 todo
