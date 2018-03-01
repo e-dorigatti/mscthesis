@@ -19,4 +19,22 @@ Ulf H{\"o}gstr{\"o}m.
   layer.
 \newblock {\em Boundary-Layer Meteorology}, 78(3):215--246, Mar 1996.
 
+\bibitem{windinstr}
+W.A.A. Monna.
+\newblock Comparative investigation of dynamic properties of some propeller
+  vanes.
+\newblock Technical report, Koninklijk Nederlands Meteorologisch Instituut,
+  1978.
+
+\bibitem{winddistortion}
+H.R.A. Wessels.
+\newblock Distortion of the wind field by the cabauw meteorological tower.
+\newblock Technical report, Koninklijk Nederlands Meteorologisch Instituut,
+  1983.
+
+\bibitem{microhandbook}
+{\em Handbook of Micrometeorology: A Guide for Surface Flux Measurement and
+  Analysis}.
+\newblock Kluwer Academic Publishers, 2004.
+
 \end{thebibliography}

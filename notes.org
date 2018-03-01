@@ -283,6 +283,15 @@ F1 are very good predictors, using F1+F2 decreases MSE by ~5%, using F2 only MSE
     18 mean percent error on average
         =just as good as similarity theory= 
 
+*** neural network
+
+validation data affects performance:
+    - random months (even with just one): cannot go below 0.4
+    - hk-fold and random samples: can go below 0.01 (with roughly the same samples in one month)
+
+not sure using data from one full month is fair, because test samples are not independent
+OTOH, if the model was actually good, it shouldn't have troubles, but instead it overfits (badly)
+   
 
 * limitations and future work
 measures on land, but oceanic BL is quite different
