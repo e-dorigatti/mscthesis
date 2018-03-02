@@ -187,7 +187,7 @@ cabauw observatory
     http://www.cesar-database.nl
 
 data documentation:
-    http://projects.knmi.nl/cabauw/insitu/index2.htm
+    http://projects.knmi.nlcabauw/insitu/index2.htm
         observations -> documentation -> technical description
     gapfilling method
         http://projects.knmi.nl/cabauw/insitu/observations/documentation/gapfilling/cabcon_gapfilling.pdf
@@ -289,9 +289,12 @@ validation data affects performance:
     - random months (even with just one): cannot go below 0.4
     - hk-fold and random samples: can go below 0.01 (with roughly the same samples in one month)
 
-not sure using data from one full month is fair, because test samples are not independent
+not sure using data from one full month is fair, because test samples are not independent between each other
 OTOH, if the model was actually good, it shouldn't have troubles, but instead it overfits (badly)
-   
+
+experiment: change validation data and see how performance is affected
+    use a different number of months
+    use a wider interval for hk-fold CV
 
 * limitations and future work
 measures on land, but oceanic BL is quite different
@@ -324,11 +327,16 @@ not sure the problem is bad data: if it were, there should be some good points a
 
 according to formulas, phi is always > 0, how can you have decreasing profiles then??
     e.g. temperature in unstable stratification decreases with height
+    is it a limitation of the theory?
+
+in order to have phi_m close to 0 when z/L is negative, you would need no wind or large u*, none of which is true
+    is it a problem?
 
 when computing L, should I use temperature at 2m or soil temperature?
     actually, I am computing L for every z, is it correct?
 
-in order to have phi_m close to 0 when z/L is negative, you would need no wind or large u*, none of which is true
+wind speed at 2 m is not there, but I am interpolating it with values from 10m and 0m
+    because of this, gradient at 0m is the same as gradient at 2m
     is it a problem?
 
 for h-k-fold cross validation, which value of h?
