@@ -3,11 +3,16 @@
 \usepackage[a4paper,inner=36mm,outer=18mm,top=30mm,]{geometry}
 %\usepackage[doublespacing]{setspace} 
 \usepackage{mathptmx}
+\usepackage{bm}
 \usepackage{siunitx}
 \usepackage{titling}
-\usepackage{amsmath}
+\usepackage{amsmath,amsfonts,amssymb,amsthm,mathtools}
 \usepackage{hyperref}
 \usepackage{gensymb}
+\usepackage{tabto}
+
+\DeclareMathOperator*{\argmin}{argmin}
+\DeclareMathOperator*{\argmax}{argmax}
 
 \begin{document}
 
@@ -162,18 +167,18 @@ TODO elaborate on 3.4, 3.5 (reason why P and B have opposite sign), 3.6,
 \subsection{Monin-Obukhov Similarity Theory}
 One of the factors to distinguish laminar from turbulent flow is the length scale $L$ of the system. This length scale for the ABL was derived by A. M. Obukhov in 1946, and forms the basis of the similarity theory. According to this theory, the normalized wind and temperature profiles can be expressed as an unique function of $\xi=z/L$:
 
-$$
+\begin{equation}
 L=-\frac{u_*^3}{\kappa\frac{g}{T_v}\frac{Q}{\rho c_\rho}}
 =-\frac{u_*^3 T_v}{\kappa g \overline{w'\theta_v}}
-$$
+\end{equation}
 
-$$
+\begin{equation}
 \frac{\partial\overline{u}}{\partial z}\frac{kz}{u_*}=\phi_m(\xi)
-$$
+\end{equation}
 
-$$
+\begin{equation}
 \frac{\partial\overline{\theta}}{\partial z}\frac{kz}{T_*}=\phi_h(\xi)
-$$
+\end{equation}
 
 With
 
@@ -206,24 +211,96 @@ The stability parameter $\xi$ is positive for stable conditions, where wind shea
 
 The universal functions $\phi_m$ and $\phi_h$ must be determined experimentally. This is no easy task, and considerable effort has been devoted to it; one of the greatest difficulties lies in obtaining accurate and unbiased measurements, especially the fluxes. [hogstrom 1988] is a meta-study that aggregates and improves many previous results, and suggests the following expressions:
 
-$$
+\begin{equation}
 \phi_m(\xi)=\begin{cases}
 (1-19.3\xi)^{-1/4} & -2<\xi<0 \\
 1+6\xi & 0<\xi<1\\
 \end{cases}
-$$
+\end{equation}
 
-$$
+\begin{equation}
 \phi_h(\xi)=\begin{cases}
 0.95(1-11.6\xi)^{-1/2} & -2<\xi<0 \\
 0.95+8\xi & 0<\xi<1
 \end{cases}
-$$
+\end{equation}
 
 The Monin-Obukhov similarity theory is only applicable in the surface layer, at heights much larger than the aerodynamic roughness length, and with $\vert\xi\vert<2$; even under ideal conditions, the predictions of this theory are accurate up to 10-20\% [foken 2006].
 
 \section{ML stuff}
 least squares, regularization, conjugate gradient, neural networks (?)
+
+\subsection{Parameter Estimation for Regression}
+\label{sec:regression_fit}
+A common assumption in the regression setting is that the observations are corrupted by additive Gaussian white noise, i.e. $t_n=f_n+\epsilon_n$, where $f_n$ is the "true" value, and $\epsilon_n\sim\mathcal{N}(0,\beta^{-1})$ is the noise. Let $y_n=y(\bm x_n;\bm{\theta})$ be the model's prediction for the sample $\bm x_n$, then we can write the probability of observing $t_n$, were $y_n=f_n$, as:
+
+\begin{equation}
+p(t_n\vert \bm{x_n},\bm\theta,\beta)=\mathcal{N}(t_n\vert y(\bm{x_n};\bm\theta),\beta^{-1})
+\end{equation}
+
+This probability is called \emph{likelihood} of the observation $t_n$, under the model $y(\cdot;\cdot)$ with parameters $\bm{\theta}$. Since the training data is assumed to be independent and identically distributed, the likelihood of the whole training set is
+
+\begin{equation}
+\label{eq:likelihood}
+p(\bm{t}\vert\bm{X}, \bm{\theta},\beta)=\prod_{n=1}^N  \mathcal{N}(t_n\vert y(\bm{x_n};\bm\theta),\beta^{-1})
+\end{equation}
+
+Then, a sensible choice for the model parameters $\bm{\theta}$ is to choose the ones that give the largest dataset likelihood; this estimation method is called \emph{maximum likelihood} (MLE). Note that, since the goal is to predict $f_n$, there is a high probability that the best parameters would \emph{not} be the ones with maximum likelihood. When a model learns the noise in the training data, it cannot generalize well to new, unseen data, because the noise is random. This situation is known as \emph{overfitting}, and tends to happen when the model is too complex relative to the amount of data available for training.
+
+The risk of overfitting can be reduced with a number of \emph{regularization} strategies. A widely used strategy consists in including a prior distribution on the parameters of the model, and maximizing their posterior distribution, computed using Bayes theorem:
+
+
+\begin{align}
+\begin{split}
+\label{eq:map}
+p(\bm\Theta\vert\bm t, \bm X)&=\frac{p(\bm X \bm t\vert\bm\Theta)\cdot p(\bm\Theta)}{p(\bm X, \bm t)}\\
+&\propto p(\bm t\vert \bm X,\bm\Theta)\cdot p(\bm X\vert\bm\Theta)\cdot p(\bm\Theta)\\
+&\propto p(\bm t\vert \bm X,\bm\Theta)\cdot p(\bm\Theta)
+\end{split}
+\end{align}
+
+
+wher we removed $p(\bm X,\bm t)$ and $p(\bm X\vert\bm\Theta)=p(\bm X)$ because they are constant for a given dataset, and we are not interested in the exact probability, only where it reaches its maximum value. This parameter estimation procedure is called \emph{maximum a posteriori} (MAP). Two commonly used prior distributions are the multivariate Laplace and the multivariate Normal, leading respectively to L1 and L2 regularization, when centered and symmetrical/spherical.
+
+The maximization of the posterior can be done conveniently by maximizing its logarithm; this gives expressions that are easier to handle analytically, and give less numerical problems when computed. The MAP problem can be formulated as follows:
+
+\begin{equation}
+\bm\Theta^*=\argmax_{\bm\Theta}\ \log p(\bm t\vert\bm X,\bm\Theta)+\log p(\bm\Theta)
+\end{equation}
+
+
+If we assume a Gaussian likelihood like the one in equation \ref{eq:likelihood}, and a spherical Normal prior distribution $p(\bm\theta)=\mathcal{N}(\bm 0, \lambda\bm I)$, the MAP estimation of equation \ref{eq:map} becomes
+
+\begin{equation}
+\label{eq:least_squares}
+\bm\theta^*=\argmin_{\bm\theta}\ \sum_{n=1}^N\left( y(\bm x_n,\theta)-t_n\right)^2+\lambda\bm\theta^\intercal\bm\theta
+\end{equation}
+
+i.e. the minimization of the sum-of-squares error. The parameter $\beta$ can be estimated as well in a similar way, if necessary, and a fully Bayesian treatment allows to estimate $\lambda$, too. Depending on the model $y(\bm x_n,\bm\theta)$, \ref{eq:least_squares} can be solved analytically to yield a closed-form solution for $\theta$; this is the case for linear regression, where $y(\bm x_n,\bm\theta)=\bm\theta^\intercal\bm x_n$ and the optimal parameters are $\bm\theta^*=(\bm X^\intercal\bm X+\lambda\bm I_N)^{-1}\bm X^\intercal\bm t$.
+ 
+When this is not possible, a general approach called \emph{gradient descent} is employed; the gradient of a function computed at a given location "points" to the steepest direction where the function's value increases. By repeatedly following the gradient, it is possible to reach a local maximum, and, in the opposite direction, a local minimum:
+
+\begin{equation}
+\bm x_{n+1}:=\bm x_n-\eta\cdot\nabla f(\bm x_n)
+\end{equation}
+
+the series $\bm x_1,\ldots,\bm x_n$ is guaranteed to converge, provided that the \emph{learning rate} $\eta$ goes to 0 as $n$ goes to infinity [citation]. Vanilla gradient descent can be greatly improved with a number of techniques, such as momentum [citation], adaptive learning rate [citation], use of the Hessian [citation], and so on. The gradient of \ref{eq:least_squares} is
+
+\begin{equation}
+\label{eq:least_squares_gradient}
+\nabla_{\bm\theta}\log p(\bm\theta\vert\bm t,\bm X)
+=2\sum_{n=1}^N \big(y(\bm x_n;\theta)-\bm t_n\big)\cdot\nabla_{\bm\theta}y(\bm x_n;\theta) + 2\lambda\bm\theta
+\end{equation}
+
+And its Hessian is
+
+\begin{equation}
+\label{eq:least_squares_hessian}
+\nabla^2_{\bm\theta}\log p(\bm\theta\vert\bm t,\bm X)=2\sum_{n=1}^{N}\bigg[
+\big(\nabla_{\bm\theta} y(\bm x_n;\bm\theta)\big)^\intercal
+\big(\nabla_{\bm\theta} y(\bm x_n;\bm\theta)\big)
++\big(y(\bm x_n;\bm\theta)-t_n\big)\nabla^2_{\bm\theta}y(\bm x_n;\theta)\bigg]+2\lambda\bm I
+\end{equation}
 
 \subsection{Cross Validation}
 true risk vs empirical risk, kfold, hkfold, nested cv
@@ -245,7 +322,7 @@ Wind speed and direction are measured at heights of 200, 140, 80, 40, 20 and 10 
 For every ten minutes interval, the measurement comes from the instrument that is best exposed to the wind, and less affected by the obstruction caused by the mast. Corrections are then applied to the raw measurements to further attenuate the disturbance by the tower, following \cite{winddistortion}.
 
 \subsection{Air Temperature Measurement}
-Air temperature is measured at heights of 200, 140, 80, 40, 20, 10 and 1.5 meters
+Air temperature is measured at heights of 200, 140, 80, 40, 20, 10 and 1.5 meters. todo write more
 
 \subsection{Eddy Correlation}
 The eddy correlation technique is used to compute the turbulent surface fluxes of sensible and latent heat, as well as momentum and $CO_2$, starting from fluctuations in wind, temperature, and humidity.
@@ -269,7 +346,37 @@ For less than two hours of missing measurements, both forcing and evaluation par
 
 
 \section{Monin-Obukhov Similarity Theory}
-talk about recreating MOST with data from cabauw (and possibly arm)
+Even though there is agreement on form of the universal functions in the Monin-Obukhov similarity theory, there is still debate on the exact values of the coefficients, with different experiments resulting in different values. In order to ensure a fair comparison with the results of this work, we use fit the universal functions to the data from the Cesar database.
+
+The general form of the universal functions is:
+
+\begin{equation}
+\phi(\xi)=\begin{cases}
+a+b\xi & \xi\geq 0 \\
+a(1-c^2\xi)^d & \xi<0 \\
+\end{cases}
+\end{equation}
+
+Following the approach outlined in section \ref{sec:regression_fit}, the coefficients $a$, $b$, $c$ and $d$ can be found by minimizing the L2-regularized mean squared error using equation \ref{eq:least_squares_gradient}. The partial derivatives are:
+
+\begin{align}
+\frac{\partial}{\partial a}\phi(\xi)&=\begin{cases}
+\mathrlap{1}\hphantom{a(1-c^2\xi)^d\ln(1-c^2\xi)} & \xi\geq 0 \\
+(1-c^2\xi)^d &\xi<0
+\end{cases} \\
+\frac{\partial}{\partial b}\phi(\xi)&=\begin{cases}
+\xi & \xi\geq 0 \\
+\mathrlap{0}\hphantom{a(1-c^2\xi)^d\ln(1-c^2\xi)} &\xi<0
+\end{cases}\\
+\frac{\partial}{\partial c}\phi(\xi)&=\begin{cases}
+\mathrlap{0}\hphantom{a(1-c^2\xi)^d\ln(1-c^2\xi)} & \xi\geq 0 \\
+-2acd\xi(1-c^2\xi)^{d-1} & \xi<0
+\end{cases} \\
+\frac{\partial}{\partial d}\phi(\xi)&=\begin{cases}
+0 & \xi\geq 0 \\
+a(1-c^2\xi)^d\ln(1-c^2\xi) & \xi<0
+\end{cases}
+\end{align}
 
 
 \subsection{Profile Computation}

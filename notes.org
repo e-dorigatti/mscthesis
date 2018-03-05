@@ -325,7 +325,7 @@ research question is good
 not sure the problem is bad data: if it were, there should be some good points among all the bad ones
 ** questions for next one
 
-does fitting our own most parameters make sense? is it easily justified in the thesis?
+does fitting our own MOST parameters make sense? is it easily justified in the thesis?
     there's a lot of disagreement, but the papers are from the 80's
 
 according to formulas, phi is always > 0, how can you have decreasing profiles then??
@@ -342,9 +342,6 @@ wind speed at 2 m is not there, but I am interpolating it with values from 10m a
     because of this, gradient at 0m is the same as gradient at 2m
     is it a problem?
 
-for h-k-fold cross validation, which value of h?
-    currently using one week
-
 used fluxes from eddy correlation, but we also have the bowen ratio, which should be used
     https://link.springer.com/content/pdf/10.1007/BF00709218.pdf
-    
+

@@ -42,3 +42,8 @@ ways to approach this issue. Among possible candidates in the digital world
 there are the Open Source movement on one side, and patents and the Digital
 Rights Management (DRM) system on the other. A possible case study are the
 Operating System wars: Linux and Windows, or iOS and Android.
+
+
+feedback:
+focus on drm
+forget business model
