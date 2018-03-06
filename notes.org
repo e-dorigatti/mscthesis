@@ -323,25 +323,36 @@ research question is good
 
 *** post meeting
 not sure the problem is bad data: if it were, there should be some good points among all the bad ones
-** questions for next one
+** 6/3
 
-does fitting our own MOST parameters make sense? is it easily justified in the thesis?
-    there's a lot of disagreement, but the papers are from the 80's
+*** does fitting our own MOST parameters make sense? is it easily justified in the thesis?
+there's a lot of disagreement, but the papers are from the 80's
+also, perhaps it's my problem in computing phi/L
+*answer* yes
 
-according to formulas, phi is always > 0, how can you have decreasing profiles then??
-    e.g. temperature in unstable stratification decreases with height
-    is it a limitation of the theory?
+*** according to formulas, phi is always > 0, how can you have decreasing profiles then??
+e.g. temperature in unstable stratification decreases with height
+is it a limitation of the theory?
+*answer* did not ask, doesnt really matter
 
-in order to have phi_m close to 0 when z/L is negative, you would need no wind or large u*, none of which is true
-    is it a problem?
+*** in order to have phi_m close to 0 when z/L is negative, you would need no wind or large u*, none of which is true
+is it a problem?
+note that it actually applies to z=2 and z=10
+*answer* something is weird at the bottom levels. did not use z_0 to compute gradient
 
-when computing L, should I use temperature at 2m or soil temperature?
-    actually, I am computing L for every z, is it correct?
+*** when computing L, should I use temperature at 2m or soil temperature?
+actually, I am computing L for every z, is it correct?
+*answer* air temperature. it is correct
 
-wind speed at 2 m is not there, but I am interpolating it with values from 10m and 0m
-    because of this, gradient at 0m is the same as gradient at 2m
-    is it a problem?
+*** wind speed at 2 m is not there, but I am interpolating it with values from 10m and 0m
+because of this, gradient at 0m is the same as gradient at 2m
+is it a problem?
+maybe, data at z=10 and z=2 is very anomalous
+*answer* wind profile is not linear, so dont interpolate. also, use z_0 to compute gradient at z=10
 
-used fluxes from eddy correlation, but we also have the bowen ratio, which should be used
-    https://link.springer.com/content/pdf/10.1007/BF00709218.pdf
+*** phi_h is completely wrong. is it because I used temperature and not virtual temperature?
+*answer* yes
 
+*** other possible project
+estimate z_0 from the data
+fit a line to the log-profile of wind, and see at which y we have x=0 (that is z_0)

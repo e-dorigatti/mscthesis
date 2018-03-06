@@ -297,8 +297,8 @@ And its Hessian is
 \begin{equation}
 \label{eq:least_squares_hessian}
 \nabla^2_{\bm\theta}\log p(\bm\theta\vert\bm t,\bm X)=2\sum_{n=1}^{N}\bigg[
-\big(\nabla_{\bm\theta} y(\bm x_n;\bm\theta)\big)^\intercal
 \big(\nabla_{\bm\theta} y(\bm x_n;\bm\theta)\big)
+\big(\nabla_{\bm\theta} y(\bm x_n;\bm\theta)\big)^\intercal
 +\big(y(\bm x_n;\bm\theta)-t_n\big)\nabla^2_{\bm\theta}y(\bm x_n;\theta)\bigg]+2\lambda\bm I
 \end{equation}
 
@@ -315,6 +315,15 @@ The observatory is surrounded by fields and no urban agglomerations is present w
 The main focus of this project is on wind and temperature profiles, and the turbulent fluxes of sensible and latent heat. Additional variables, such as temperature and humidity, are needed to compute quantities of interest, most importantly the Obukhov length, and as possible predictors for the universal functions. There is one measurement for each variable every ten minutes, and missing measurements are gap-filled with a number of techniques. The data collected is always visually validated by an operator, which marks suspect or invalid sections of data
 
 The Cesar observatory provides full information regarding data collection\footnote{\url{http://projects.knmi.nl/cabauw/insitu/observations/documentation}}, what follows is a brief summary of the most relevant sections.
+
+
+\begin{figure}
+\caption{Sonic anemometer to measure wind and optical open-path sensor to measure humidity at the 180m level of the Cabauw mast.}
+\label{fig:bl}
+\centering
+\includegraphics[width=0.75\textwidth]{images/cabauw_turbulence_instruments}
+% https://www.knmi.nl/research/observations-data-technology/projects/cabauw-in-situ-measurements
+\end{figure}
 
 \subsection{Wind Measurement}
 Wind speed and direction are measured at heights of 200, 140, 80, 40, 20 and 10 meters, in either two or all three booms available. The wind vane that measures direction has a resolution of $1.5^\circ$, and the cup anemometer that measures wind speed has an accuracy of the largest between 1\% and \SI{0.1}{\meter\per\second}. The threshold sensitivity of both instruments is lower than \SI{0.5}{\meter\per\second}, and they report inaccurate measurements for up to \SI{3}{\meter\per\second} \cite{windinstr}.
@@ -346,38 +355,47 @@ For less than two hours of missing measurements, both forcing and evaluation par
 
 
 \section{Monin-Obukhov Similarity Theory}
-Even though there is agreement on form of the universal functions in the Monin-Obukhov similarity theory, there is still debate on the exact values of the coefficients, with different experiments resulting in different values. In order to ensure a fair comparison with the results of this work, we use fit the universal functions to the data from the Cesar database.
+Even though there is agreement on form of the universal functions in the Monin-Obukhov similarity theory, there is still debate on the exact values of the coefficients, with different experiments resulting in different values [citation]. In order to ensure a fair comparison with the results of this work, we fit the universal functions to the data from the Cesar database.
 
 The general form of the universal functions is:
 
 \begin{equation}
+\label{eq:phi_general}
 \phi(\xi)=\begin{cases}
 a+b\xi & \xi\geq 0 \\
 a(1-c^2\xi)^d & \xi<0 \\
 \end{cases}
 \end{equation}
 
-Following the approach outlined in section \ref{sec:regression_fit}, the coefficients $a$, $b$, $c$ and $d$ can be found by minimizing the L2-regularized mean squared error using equation \ref{eq:least_squares_gradient}. The partial derivatives are:
+Where $a$ is close to 1, $b$ is positive, and $d$ is negative. Since $d$ is negative, the base of the power must be positive, hence the squared $c$. Following the approach outlined in section \ref{sec:regression_fit}, the coefficients $a$, $b$, $c$ and $d$ can be found by minimizing the L2-regularized mean squared error using equations \ref{eq:least_squares_gradient} and \ref{eq:least_squares_hessian}; in this case, the parameter vector $\theta=\left[a,b,c,d\right]^\intercal$. The gradient of \ref{eq:phi_general} is:
 
-\begin{align}
-\frac{\partial}{\partial a}\phi(\xi)&=\begin{cases}
-\mathrlap{1}\hphantom{a(1-c^2\xi)^d\ln(1-c^2\xi)} & \xi\geq 0 \\
-(1-c^2\xi)^d &\xi<0
-\end{cases} \\
-\frac{\partial}{\partial b}\phi(\xi)&=\begin{cases}
-\xi & \xi\geq 0 \\
-\mathrlap{0}\hphantom{a(1-c^2\xi)^d\ln(1-c^2\xi)} &\xi<0
-\end{cases}\\
-\frac{\partial}{\partial c}\phi(\xi)&=\begin{cases}
-\mathrlap{0}\hphantom{a(1-c^2\xi)^d\ln(1-c^2\xi)} & \xi\geq 0 \\
--2acd\xi(1-c^2\xi)^{d-1} & \xi<0
-\end{cases} \\
-\frac{\partial}{\partial d}\phi(\xi)&=\begin{cases}
-0 & \xi\geq 0 \\
-a(1-c^2\xi)^d\ln(1-c^2\xi) & \xi<0
-\end{cases}
-\end{align}
+\begin{equation}
+\nabla_\theta\phi(\xi)\vert_{\xi\geq 0}=\left[1,\xi,0,0\right]^\intercal
+\end{equation}
 
+when $\xi$ is non-negative, and
+
+\begin{equation}
+\nabla_\theta\phi(\xi)\vert_{\xi<0}=\begin{bmatrix}
+\tau^d & 0 & -2acd\xi\tau^{d-1} & a\tau^d\ln\tau
+\end{bmatrix}^\intercal
+\end{equation}
+
+Where $\tau=1-c^2\xi$. The Hessian of \ref{eq:phi_general} when $\xi\geq 0$ is simply 0, because it is a linear function in all parameters, while, in the negative case, we have:
+
+\begin{equation}
+\nabla^2_\theta\phi(\xi)\vert_{\xi<0} = \begin{bmatrix}
+0 & 0 & - 2 c d \xi \tau^{d - 1} & \tau^{d} \log{\tau} \\
+0 & 0 & 0 & 0 \\
+- 2 c d \xi \tau^{d - 1} &
+0 & \frac{2 a d \xi \tau^{d}}{c^{4} \xi^{2}+\tau} \left(2 c^{2} d \xi - c^{2} \xi - 1\right) & - 2 a c \xi \tau^{d - 1} \left(d \log{\tau} + 1\right) \\
+\tau^{d} \log{\tau} & 0 &
+- 2 a c \xi \tau^{d - 1} \left(d \log{\tau} + 1\right) &
+\tau^{d} \log^{2}{\tau}
+\end{bmatrix}
+\end{equation}
+
+Analytical computation of the Hessian allows us to use the Newton conjugate gradient descent algorithm, which provides super-linear convergence rate, unlike other conjugate gradient methods whose rate of convergence is only linear \cite{numopt}.
 
 \subsection{Profile Computation}
 get gradient from measures
