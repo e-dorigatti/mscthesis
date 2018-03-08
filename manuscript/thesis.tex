@@ -34,17 +34,23 @@ Climatology, or climate science, studies the long-term average weather condition
 
 Climate science is an extremely difficult field, for a number of reasons. First, climate is evident, by definition, only over long periods of time and large distances, making the usual scientific approach of testing hypotheses by conducting experiments inapplicable; instead, climate scientists have to rely on historical data. Second, the atmosphere is a complex and chaotic system, which must be described through systems of nonlinear differential equation. They can be used to create numerical simulations, and the resulting predictions compared to historical data to assess the accuracy of the theory. Furthermore, the chaotic character of the atmosphere makes it impossible to study parts of it in isolation from others, as small scale phenomena affect large scale ones, and vice versa. In spite of this, it is useful to split the atmosphere in vertical layers and horizontal zones, in order to differentiate among conditions and phenomena typically occurring in one area or the other.
 
-Usually, the troposphere is referred to as the lowest layer of the atmosphere, but it can actually be subdivided in more sub-layers, the lowest of which is the \emph{atmospheric boundary layer}: it is the region of the atmosphere that is affected by the conditions of the surface. Most human activities happen in this layer, and it is responsible for a large part of the diffusion and transport of aerosol such as, among others, pollutants. Yet, the physics governing the atmospheric boundary layer is not fully understood, and the theory is lacking. One important issues in the study of the atmospheric boundary layer is the derivation of flux-profile relationships for wind and temperature: they essentially relate the transport of momentum and heat by the wind (flux) with the  change of wind speed/temperature with altitude (profile). The state of the art relationships are defined by the Monin-Obukhov Similarity theory in terms of the height above surface scaled by turbulence due to horizontal wind and vertical air movement due to variations in heat. Difficulties in measurements of relevant quantities make this theory accurate only up to 10-20\%, and applicable in a restricted set of conditions. 
+Usually, the troposphere is referred to as the lowest layer of the atmosphere, but it can actually be subdivided in more sub-layers, the lowest of which is the \emph{atmospheric boundary layer}: it is the region of the atmosphere that is affected by the conditions of the surface. Most human activities happen in this layer, and it is responsible for a large part of the diffusion and transport of aerosol such as, among others, pollutants. Yet, the physics governing the atmospheric boundary layer is not fully understood, and the theory is lacking. One important issues in the study of the atmospheric boundary layer is the derivation of flux-profile relationships for wind and temperature: they essentially relate the transport of momentum and heat by the wind (flux) with the change of wind speed/temperature with altitude (profile). The state of the art relationships are defined by the Monin-Obukhov Similarity theory in terms of the instability parameter $\xi$, computed as the height above surface scaled by turbulence due to horizontal wind and vertical air movement due to variations in heat. Difficulties in measurements of relevant quantities make this theory accurate only up to 10-20\%, and applicable in a restricted set of conditions.
 
 In stark contrast to the traditional, top-down approach of science, recent developments in information technology made bottom-up approaches possible. In this new way of thinking, existing data is used to automatically infer the "best" explanation for the measurements at hand, the underlying laws that originated that data. The field that makes this possible is called Machine Learning: it takes advantage of several methods coming from statistics, information theory, optimization theory, etc., to make computers learn from examples. Together with Natural Language Processing and Automated Planning, it is one of the three main branches of Artificial Intelligence, the sub-field of Computer Science that studies ways of making machines behave intelligently.
 
-todo more fluff about ml
+todo more fluff about ml ?
 
 \section{Research Question}
-With the growing awareness of the shortcomings of the Monin-Obukhov similarity theory, and the recent availability of micro-meteorological data from specialized observation sites such as Cabauw, one naturally wonders whether the 
+With the availability of micro-meteorological data from specialized observation sites such as Cabauw, in the Netherlands, and the recent developments in Machine Learning, a natural question to ask is whether the Monin-Obukhov similarity theory can be improved. More specifically, we pose the following \\
+
+\textbf{Research Question:} Is it possible to use the data from the Cesar database to improve the Monin-Obukhov model of the flux-profile relationships, by using more predictors besides the instability parameter? \\
+
+A positive answer to this question would contribute to improve the quality of current large scale climate simulations. Since errors in the simulation accumulate over time, even slight improvements can greatly improve the accuracy of the results after years of simulated time.
+
 
 \section{Ethics and Sustainability}
-todo
+
+reproducibility: using open data, following standards of reproducible research (open source and jupyter notebooks)
 
 \section{Outline}
 todo
@@ -52,7 +58,7 @@ todo
 \chapter{Background}
 This chapter introduces the basic concepts the reader should be qualitatively familiar with, in order to understand the content of this thesis. It is assumed readers are already knowledgeable of simple mathematical concepts, such as calculus, linear algebra, statistics, and probability theory. Readers acquainted with the material should feel free to skip this chapter.
 
-\section{Fluid Dynamics and the Boundary Layer}
+\section{Fluid Dynamics}
 Fluid dynamics is the discipline that studies the flow of fluids; it has several branches that study different fluids, such as aerodynamics (the study of air motion) and hydrodynamics (the study of water motion). These disciplines are routinely applied when designing cars, airplanes, ships, pipelines, etc.
 
 \subsection{Laminar and Turbulent flow}
@@ -87,7 +93,7 @@ By definition, $\overline{a'}=0$, which means that all the effects of turbulence
 \end{figure}
 
 
-\section{The Boundary Layer}
+\subsection{The Boundary Layer}
 In the context of fluid dynamics, the boundary layer studies the behavior of a fluid when it is flowing close to a solid surface. Imagine a laminar flow close to a solid surface; because of viscosity, the molecules flowing near the surface move slower, and, in the limit, the velocity of the molecules in direct contact with the surface is 0 (this is called the \emph{non-slip condition}). Thus, the velocity of the fluid increases smoothly, continuously and monotonously with the distance from the solid, until it reaches the \emph{free-flow} velocity, after which it stays constant. The region close to the surface, where the fluid moves slower, is called the \emph{boundary layer}, and is the region where the viscosity of the fluid influences its motion. Its height $\delta$ can be defined when the local velocity surpasses a certain threshold, such as 99\% of the free-flow velocity.
 
 \begin{figure}
@@ -151,32 +157,36 @@ It is important to notice that turbulence is dissipative in nature. Consider a h
 
 Since turbulence changes over time, we are more interested in the change of kinetic energy, the turbulent kinetic energy budget. A full derivation is out of the scope of this work, but its final form \cite{basicatm} can be derived from prime physical principles, resulting in
 
-$$
+\begin{equation}
 \frac{\partial\overline{{e'}^2}}{\partial t}
 =\underbrace{\overline{u'w'}\frac{\partial\overline{u}}{\partial z}}_P
 -\underbrace{\frac{g}{T}\overline{w'\theta'}}_B
 +\underbrace{\frac{\partial}{\partial z}\frac{\overline{w'{e'}^2}}{2}}_{T_t}
 +\underbrace{\frac{1}{\rho}\frac{\partial\overline{p'w'}}{\partial z}}_{T_p}
 +\epsilon
-$$
+\end{equation}
 
-Where ${e'}^2={u'}^2+{v'}^2+{w'}^2$. The $P$ term is the production due to shear, $B$ is the production due to buoyancy (TODO why the negative sign?), $T_t$ is the turbulent transport of TKE (???), $T_p$ is the transport due to pressure, and $\epsilon$ is molecular dissipation due to viscosity.
+Where ${e'}^2={u'}^2+{v'}^2+{w'}^2$. The $P$ term is the production due to shear, $B$ is the production due to buoyancy, $T_t$ is the turbulent transport of TKE by large-scale eddies, $T_p$ is the transport due to pressure, and $\epsilon$ is molecular dissipation due to viscosity. $P$ and $B$ are the most prominent terms, and the transport terms are close to zero in neutral conditions.
 
 TODO elaborate on 3.4, 3.5 (reason why P and B have opposite sign), 3.6, 
 
 \subsection{Monin-Obukhov Similarity Theory}
+\label{sec:most}
 One of the factors to distinguish laminar from turbulent flow is the length scale $L$ of the system. This length scale for the ABL was derived by A. M. Obukhov in 1946, and forms the basis of the similarity theory. According to this theory, the normalized wind and temperature profiles can be expressed as an unique function of $\xi=z/L$:
 
 \begin{equation}
+\label{eq:most_l}
 L=-\frac{u_*^3}{\kappa\frac{g}{T_v}\frac{Q}{\rho c_\rho}}
 =-\frac{u_*^3 T_v}{\kappa g \overline{w'\theta_v}}
 \end{equation}
 
 \begin{equation}
+\label{eq:phi_m}
 \frac{\partial\overline{u}}{\partial z}\frac{kz}{u_*}=\phi_m(\xi)
 \end{equation}
 
 \begin{equation}
+\label{eq:phi_h}
 \frac{\partial\overline{\theta}}{\partial z}\frac{kz}{T_*}=\phi_h(\xi)
 \end{equation}
 
@@ -227,8 +237,11 @@ The universal functions $\phi_m$ and $\phi_h$ must be determined experimentally.
 
 The Monin-Obukhov similarity theory is only applicable in the surface layer, at heights much larger than the aerodynamic roughness length, and with $\vert\xi\vert<2$; even under ideal conditions, the predictions of this theory are accurate up to 10-20\% [foken 2006].
 
-\section{ML stuff}
-least squares, regularization, conjugate gradient, neural networks (?)
+\section{Machine Learning}
+todo
+
+\subsection{Learning Theory}
+true risk vs empirical risk, kfold cv, nested cv
 
 \subsection{Parameter Estimation for Regression}
 \label{sec:regression_fit}
@@ -238,7 +251,7 @@ A common assumption in the regression setting is that the observations are corru
 p(t_n\vert \bm{x_n},\bm\theta,\beta)=\mathcal{N}(t_n\vert y(\bm{x_n};\bm\theta),\beta^{-1})
 \end{equation}
 
-This probability is called \emph{likelihood} of the observation $t_n$, under the model $y(\cdot;\cdot)$ with parameters $\bm{\theta}$. Since the training data is assumed to be independent and identically distributed, the likelihood of the whole training set is
+This probability is called \emph{likelihood} of the observation $t_n$, under the model $y(\cdot;\cdot)$ with parameters $\bm{\theta}$. Since the training data is assumed to be independent and identically distributed, the likelihood of the whole training set $\bm{X}=\left[\bm x_1 \dotsb \bm x_N\right]^\intercal$ is
 
 \begin{equation}
 \label{eq:likelihood}
@@ -260,7 +273,7 @@ p(\bm\Theta\vert\bm t, \bm X)&=\frac{p(\bm X \bm t\vert\bm\Theta)\cdot p(\bm\The
 \end{align}
 
 
-wher we removed $p(\bm X,\bm t)$ and $p(\bm X\vert\bm\Theta)=p(\bm X)$ because they are constant for a given dataset, and we are not interested in the exact probability, only where it reaches its maximum value. This parameter estimation procedure is called \emph{maximum a posteriori} (MAP). Two commonly used prior distributions are the multivariate Laplace and the multivariate Normal, leading respectively to L1 and L2 regularization, when centered and symmetrical/spherical.
+where we removed $p(\bm X,\bm t)$ and $p(\bm X\vert\bm\Theta)=p(\bm X)$ because they are constant for a given dataset, and we are not interested in the exact probability, only where it reaches its maximum value. This parameter estimation procedure is called \emph{maximum a posteriori} (MAP). Two commonly used prior distributions are the multivariate Laplace and the multivariate Normal, leading respectively to L1 and L2 regularization, when centered and symmetrical/spherical.
 
 The maximization of the posterior can be done conveniently by maximizing its logarithm; this gives expressions that are easier to handle analytically, and give less numerical problems when computed. The MAP problem can be formulated as follows:
 
@@ -269,14 +282,14 @@ The maximization of the posterior can be done conveniently by maximizing its log
 \end{equation}
 
 
-If we assume a Gaussian likelihood like the one in equation \ref{eq:likelihood}, and a spherical Normal prior distribution $p(\bm\theta)=\mathcal{N}(\bm 0, \lambda\bm I)$, the MAP estimation of equation \ref{eq:map} becomes
+If we assume a Gaussian likelihood like the one in equation \ref{eq:likelihood}, and a spherical Normal prior distribution $p(\bm\theta)=\mathcal{N}(\bm 0, \lambda\bm I)$, the MAP estimation of equation \ref{eq:map} becomes, after removing unnecessary constant terms,
 
 \begin{equation}
 \label{eq:least_squares}
-\bm\theta^*=\argmin_{\bm\theta}\ \sum_{n=1}^N\left( y(\bm x_n,\theta)-t_n\right)^2+\lambda\bm\theta^\intercal\bm\theta
+\bm\theta^*=\argmin_{\bm\theta}\ L(\bm\theta)=\argmin_{\bm\theta}\sum_{n=1}^N\left( y(\bm x_n,\theta)-t_n\right)^2+\lambda\bm\theta^\intercal\bm\theta
 \end{equation}
 
-i.e. the minimization of the sum-of-squares error. The parameter $\beta$ can be estimated as well in a similar way, if necessary, and a fully Bayesian treatment allows to estimate $\lambda$, too. Depending on the model $y(\bm x_n,\bm\theta)$, \ref{eq:least_squares} can be solved analytically to yield a closed-form solution for $\theta$; this is the case for linear regression, where $y(\bm x_n,\bm\theta)=\bm\theta^\intercal\bm x_n$ and the optimal parameters are $\bm\theta^*=(\bm X^\intercal\bm X+\lambda\bm I_N)^{-1}\bm X^\intercal\bm t$.
+Where $L$ is the \emph{loss function}, in this case the sum-of-squares error. It is customary to use the mean squared error instead of the sum of squares because it results in smaller numbers and is readily interpreted; being only a constant factor away from \ref{eq:least_squares}, it does not transcend the essence of maximum likelihood. The parameter $\beta$ can be estimated as well in a similar way, if necessary, and a fully Bayesian treatment allows to estimate $\lambda$, too. Depending on the model $y(\bm x_n,\bm\theta)$, \ref{eq:least_squares} can be solved analytically to yield a closed-form solution for $\bm\theta$; this is the case for linear regression, where $y(\bm x_n,\bm\theta)=\bm\theta^\intercal\bm x_n$ and the optimal parameters are $\bm\theta^*=(\bm X^\intercal\bm X+\lambda\bm I)^{-1}\bm X^\intercal\bm t$.
  
 When this is not possible, a general approach called \emph{gradient descent} is employed; the gradient of a function computed at a given location "points" to the steepest direction where the function's value increases. By repeatedly following the gradient, it is possible to reach a local maximum, and, in the opposite direction, a local minimum:
 
@@ -284,7 +297,7 @@ When this is not possible, a general approach called \emph{gradient descent} is 
 \bm x_{n+1}:=\bm x_n-\eta\cdot\nabla f(\bm x_n)
 \end{equation}
 
-the series $\bm x_1,\ldots,\bm x_n$ is guaranteed to converge, provided that the \emph{learning rate} $\eta$ goes to 0 as $n$ goes to infinity [citation]. Vanilla gradient descent can be greatly improved with a number of techniques, such as momentum [citation], adaptive learning rate [citation], use of the Hessian [citation], and so on. The gradient of \ref{eq:least_squares} is
+the series $\bm x_1,\ldots,\bm x_n$ is guaranteed to converge, provided that the \emph{learning rate} $\eta$ goes to 0 as $n$ goes to infinity [citation]. Vanilla gradient descent can be greatly improved with a number of techniques, such as momentum [citation], adaptive learning rate [citation], use of the Hessian [citation], and so on. The gradient of $L(\bm\theta)$ is
 
 \begin{equation}
 \label{eq:least_squares_gradient}
@@ -302,8 +315,20 @@ And its Hessian is
 +\big(y(\bm x_n;\bm\theta)-t_n\big)\nabla^2_{\bm\theta}y(\bm x_n;\theta)\bigg]+2\lambda\bm I
 \end{equation}
 
-\subsection{Cross Validation}
-true risk vs empirical risk, kfold, hkfold, nested cv
+\subsection{Models}
+blabla
+
+\subsubsection{k-Nearest Neighbors}
+todo
+
+\subsubsection{Linear Regression}
+todo
+
+\subsubsection{Random Forests}
+todo
+
+\subsubsection{Neural Networks}
+todo
 
 \chapter{Method}
 
@@ -353,10 +378,30 @@ With gap-filling, missing measurements are replaced by synthetic values. The gap
 
 For less than two hours of missing measurements, both forcing and evaluation parameters are gap-filled by interpolation of nearby values. For longer periods, forcing parameters are derived by transforming measures obtained from the nearby site of De Bilt, which are themselves gap-filled. Evaluation parameters are computed with a vegetation model that uses the forcing parameters as input.
 
-
 \section{Monin-Obukhov Similarity Theory}
-Even though there is agreement on form of the universal functions in the Monin-Obukhov similarity theory, there is still debate on the exact values of the coefficients, with different experiments resulting in different values [citation]. In order to ensure a fair comparison with the results of this work, we fit the universal functions to the data from the Cesar database.
+This section describes how the data from the Cesar database is used to reproduce the Monin-Obukhov similarity theory. The flux of virtual potential temperature can be computed following the formulas in section \ref{sec:most}, as the data contains all the necessary quantities; $u_*$ is given, as well as the specific humidity and the pressure. The next section describes how the gradients are computed starting from the raw measurements, in order to obtain the complete flux-profile relationships.
 
+Then, we describe how to use the data to obtain new coefficients for the universal functions. Even though there is agreement on form of their form, there is still debate on the exact values of the coefficients, with different experiments resulting in different values [citation]. In order to ensure a fair comparison with the results of this work, we fit the universal functions to the data from the Cesar database.
+
+
+\subsection{Profile Computation}
+The wind and temperature profiles are computed at 40, 20 and 10 meters, because the Monin-Obukhov similarity theory is only valid in the surface layer. It is very hard to know the exact height of the surface layer, because it depends on the weather and no exact formulas are known [citation], but it is usually assumed to be 10\% as high as the boundary layer [citation]. Based on its typical heights [citation], the surface layer is often higher than 40 meters and lower than 80.
+
+The gradient is computed with finite differencing using measurements from the neighboring levels. The bottom-most measurements are at 1.5 meters for the temperature, and the wind speed is 0 at $z_0$ meters. The characteristic roughness $z_0$ depends on the properties of the surface, and from the Cabauw observatory it is around 0.1 meters [citation]. Let $z_i$ be the height in meters of level $i$ and $a_i$ the corresponding measurement of quantity $a$, $\Delta^+a_i=a_{i+1}-a_i$ and $\Delta^-a_i=a_i-a_{i-1}$ and similarly for $z$. Then the gradient of $a$ at level $i$ is computed as the average of the top and bottom gradients, weighted by the distance between the levels:
+
+\begin{align}
+\begin{split}
+\frac{\partial a}{\partial z}\bigg\vert_{z=z_i}
+&=\frac{\Delta^+a_i}{\Delta^+z_i}\cdot\frac{\Delta^+z_i}{\Delta^+z_i+\Delta^-z_i}
++\frac{\Delta^-a_i}{\Delta^-z_i}\cdot\frac{\Delta^-z_i}{\Delta^+z_i+\Delta^-z_i} \\
+&=\frac{\Delta^+a_i+\Delta^-a_i}{\Delta^+z_i+\Delta^-z_i} \\
+&= \frac{a_{i+1}-a_{i-1}}{z_{i+1}-z_{i-1}}
+\end{split}
+\end{align}
+
+
+
+\subsection{Model Fitting}
 The general form of the universal functions is:
 
 \begin{equation}
@@ -385,23 +430,17 @@ Where $\tau=1-c^2\xi$. The Hessian of \ref{eq:phi_general} when $\xi\geq 0$ is s
 
 \begin{equation}
 \nabla^2_\theta\phi(\xi)\vert_{\xi<0} = \begin{bmatrix}
-0 & 0 & - 2 c d \xi \tau^{d - 1} & \tau^{d} \log{\tau} \\
+0 & 0 & - 2 c d \xi \tau^{d - 1} & \tau^{d} \ln{\tau} \\
 0 & 0 & 0 & 0 \\
 - 2 c d \xi \tau^{d - 1} &
-0 & \frac{2 a d \xi \tau^{d}}{c^{4} \xi^{2}+\tau} \left(2 c^{2} d \xi - c^{2} \xi - 1\right) & - 2 a c \xi \tau^{d - 1} \left(d \log{\tau} + 1\right) \\
-\tau^{d} \log{\tau} & 0 &
-- 2 a c \xi \tau^{d - 1} \left(d \log{\tau} + 1\right) &
-\tau^{d} \log^{2}{\tau}
+0 & \frac{2ad\xi\tau^{d}}{c^4\xi^2+\tau}\left(2c^2d\xi-c^2\xi-1\right) & -2ac\xi\tau^{d-1}\left(d\ln\tau+1\right) \\
+\tau^d \ln\tau & 0 &
+-2ac\xi\tau^{d-1}\left(d\ln\tau+1\right) &
+\tau^d\ln^2\tau
 \end{bmatrix}
 \end{equation}
 
 Analytical computation of the Hessian allows us to use the Newton conjugate gradient descent algorithm, which provides super-linear convergence rate, unlike other conjugate gradient methods whose rate of convergence is only linear \cite{numopt}.
-
-\subsection{Profile Computation}
-get gradient from measures
-
-\subsection{Model Fitting}
-get coefficients from our data
 
 \chapter{Results}
 todo
