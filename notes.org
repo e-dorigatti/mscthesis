@@ -264,40 +264,78 @@ moar paperz
    https://www.sciencedirect.com/science/article/pii/S0304407600000300
    https://ideas.repec.org/p/msh/ebswps/2015-10.html
 
+*FINAL SOLUTION* cv/holdout on shuffled/random months
+
 *** similarity theory baseline
-fit the functions found in the literature, find best coefficient thru least squares
-probably better done when the data follows those functions more closely
 
-*** k-nearest neighbors
-given set of features
-    F1: H, LE
-    F2: air_dens, surf_temp, spec_hum, rel_hum, press, rain
+result of 10/5-fold nested cv
 
-h-5-fold nested cv, h = 1 week worth of samples, sorted by time
+| measure                  |       mean |       std |
+|--------------------------+------------+-----------|
+| explained_variance_score |   0.771131 |  0.004376 |
+| mean_absolute_error      |   0.579233 |  0.009522 |
+| mean_squared_error       |   0.758287 |  0.035170 |
+| median_absolute_error    |   0.412105 |  0.013053 |
+| r2_score                 |   0.770381 |  0.004855 |
+| mean_percent_error       | 158.082942 | 33.040393 |
 
-predicting phi_m
-    clearly not using wind/ustar to predict phi_m since it heavily depends on it
+NB a mse of 0.75 corresponds to 0.22/0.23 normalized mse
 
-F1 are very good predictors, using F1+F2 decreases MSE by ~5%, using F2 only MSE decreases by 25/30 %
-    MSE(F1+F2) = 0.55/0.60, R2 scores are very low (around 0),
-    18 mean percent error on average
-        =just as good as similarity theory= 
+*** features
+using 4x2 feature sets
+F1 = [
+    'dewpoint', 'spec_hum', 'press', 'temp', 'air_dens', 
+    'virtual_temp', 'rel_hum', 'rain', 'z', 'wind', 'soil_temp'
+]
+F2 = ['co2flux', 'soilheat', 'netrad']
+F3 = ['H', 'LE',]
+F4 = ['lval',]
 
-*** neural network
+use features cumulatively: F1/F1+F2/F1+F2+F3/F1+F2+F3+F4
+augment each set with trend = (value 1 hour after - value 1 hour before) / 2 hours
 
-validation data affects performance:
-    - random months (even with just one): cannot go below 0.4
-    - hk-fold and random samples: can go below 0.01 (with roughly the same samples in one month)
+ideally we want to win with F1 only
+    because those are large-scale parameters that can be obtained "easily" and directly from instruments and simulations
+    NB: F1 contains redundant features such as virtual temperature, it's just to help the model
 
-not sure using data from one full month is fair, because test samples are not independent between each other
-OTOH, if the model was actually good, it shouldn't have troubles, but instead it overfits (badly)
+the higher the F needed to beat MOST the shittier the result
 
-experiment: change validation data and see how performance is affected
-    use a different number of months
-    use a wider interval for hk-fold CV
+in order to estimate phi_m, the model has to learn how to estimate ustar and wind gradient
+    ustar can be derived from L if model is trained with F4
+
+if model does not have F3, it must learn to estimate the turbulent fluxes as well
+    should be doable with surface fluxes in F2
+
+problem seems quite hard with F1 only
+    perhaps the trend helps in estimating the fluxes
+
+*** neural net
+preliminary results for phi_m, hopefully better with evo search
+
+| no trend                    |           F1+F2+F3+F4 |                 F1+F2+F3 |                        F1+F2 | F1    |
+|-----------------------------+-----------------------+--------------------------+------------------------------+-------|
+| explained variance          |                 0.860 |                    0.810 |                        0.778 |       |
+| mean absolute error         |                 0.440 |                    0.518 |                        0.555 |       |
+| mean squared error          |                 0.490 |                    0.677 |                        0.772 | sucks |
+| median absolute error       |                 0.277 |                    0.312 |                        0.340 |       |
+| r squared                   |                 0.859 |                    0.809 |                        0.778 |       |
+| mean absolute percent error |                97.218 |                   66.272 |                      138.508 |       |
+| architecture                | 1024/512/256/128/64/1 | 1024/0.5/512/256/64/32/1 | 2048/0.5/512/256/128/64/32/1 |       |
+|-----------------------------+-----------------------+--------------------------+------------------------------+-------|
+| trend                       |                       |                          |                              |       |
+|-----------------------------+-----------------------+--------------------------+------------------------------+-------|
+| explained variance          |                       |                          |                              |       |
+| mean absolute error         |                       |                          |                              |       |
+| mean squared error          |                       |                          |                              |       |
+| median absolute error       |                       |                          |                              |       |
+| r squared                   |                       |                          |                              |       |
+| mean absolute percent error |                       |                          |                              |       |
+| architecture                |                       |                          |                              |       |
+
 
 * limitations and future work
 measures on land, but oceanic BL is quite different
+    also, the model works for locations topologically similar to cabauw
 
 our fluxes are obtained using eddy correlation technique, which is known to be not so good
     if new measurement techniques are introduced, we can re-train this system

@@ -9,6 +9,7 @@
 \usepackage{amsmath,amsfonts,amssymb,amsthm,mathtools}
 \usepackage{hyperref}
 \usepackage{gensymb}
+\usepackage{calc}
 \usepackage{tabto}
 
 \DeclareMathOperator*{\argmin}{argmin}
@@ -221,24 +222,35 @@ The stability parameter $\xi$ is positive for stable conditions, where wind shea
 
 The universal functions $\phi_m$ and $\phi_h$ must be determined experimentally. This is no easy task, and considerable effort has been devoted to it; one of the greatest difficulties lies in obtaining accurate and unbiased measurements, especially the fluxes. [hogstrom 1988] is a meta-study that aggregates and improves many previous results, and suggests the following expressions:
 
-\begin{equation}
-\phi_m(\xi)=\begin{cases}
-(1-19.3\xi)^{-1/4} & -2<\xi<0 \\
+\begin{align}
+\phi_m(\xi)&=\begin{cases}
+\mathrlap{(1-19.3\xi)^{-1/4}} \hphantom{0.95(1-11.6\xi)^{-1/2}} & -2<\xi<0 \\
 1+6\xi & 0<\xi<1\\
-\end{cases}
-\end{equation}
-
-\begin{equation}
-\phi_h(\xi)=\begin{cases}
+\end{cases} \\
+\phi_h(\xi)&=\begin{cases}
 0.95(1-11.6\xi)^{-1/2} & -2<\xi<0 \\
 0.95+8\xi & 0<\xi<1
 \end{cases}
-\end{equation}
+\end{align}
 
 The Monin-Obukhov similarity theory is only applicable in the surface layer, at heights much larger than the aerodynamic roughness length, and with $\vert\xi\vert<2$; even under ideal conditions, the predictions of this theory are accurate up to 10-20\% [foken 2006].
 
 \section{Machine Learning}
-todo
+The goal of Machine learning is to develop algorithms that allow computers to learn from examples. Learning is intended as the ability of inferring general rules from the available examples, so that new, previously unseen examples can be correctly characterized. The set of samples from which the computer is supposed to learn is called the \emph{training set}, and each sample is a sequence of numbers describing its attributes, or \emph{features}. There are three approaches in machine learning:
+
+\begin{itemize}
+\item \emph{Supervised} learning: in this setting, the examples are composed of an input and a desired output, and the goal is to build a model that can correctly predict the output given the input. There are different algorithms depending on the type of output: \emph{regression} algorithms predict continuous output, while \emph{classification} algorithms predict discrete output.
+
+\item \emph{Unsupervised} learning: in this setting, no output is available. The task of the algorithm is to figure out hidden relationships between the samples in the training set, for example whether they form clusters, or there are anomalous samples, or the correlation between features of the examples.
+
+\item \emph{Reinforcement} learning: in this setting, the computer is free to act in an environment and to observe how the environment responds to its actions. Additionally, it receives a \emph{reward} for every action it takes, and the goal of the computer is to learn a sequence of actions that maximizes the received reward. Reinforcement learning is often applied in robotics [citation] and game playing [alphazero citation].
+\end{itemize}
+
+A supervised machine learning model uses a set of parameters to compute the output value starting from the input features. The actual parameters values are learned from the training set in a process called \emph{training}. This process is controlled by another set of parameters called hyper-parameters, whose value can be found from the training data as well. Whereas the parameters control the relationship between input and output, hyper-parameters control the "character" of the learning algorithm, such as how eager or conservative it is in learning minute details in the features. Learning too many details can be detrimental, because some differences can be due to noise, rather than actual differences.
+
+The next sections describe the theory of learning, a general technique to estimate the parameters of a regression model, and introduce several machine learning algorithms for regression.
+
+\paragraph{Notation:} Numbers are denoted in \textit{italic}, vectors (always column) and matrices in \textbf{bold}. The training set contains $N$ training samples, indexed by $n$, and each sample is a pair of feature vector $\bm x_n\in\mathbb{R}^D$ and a target value $t_n\in\mathbb{R}$. The feature vectors are grouped in the $N\times D$ matrix $\bm X=\left[\bm x_1\dotsb\bm x_N\right]^\intercal$ and the target values in the $N\times 1$ vector $\bm t=\left[t_1,\ldots,t_n\right]^\intercal$. Models are parametrized by a parameter vector $\bm\theta$ and their output for the feature vector $\bm x_n$ is $y_n=y(\bm x_n;\bm\theta)$. The vector containing both parameters and hyper-parameters is denoted with $\bm\Theta$.
 
 \subsection{Learning Theory}
 true risk vs empirical risk, kfold cv, nested cv
@@ -251,7 +263,7 @@ A common assumption in the regression setting is that the observations are corru
 p(t_n\vert \bm{x_n},\bm\theta,\beta)=\mathcal{N}(t_n\vert y(\bm{x_n};\bm\theta),\beta^{-1})
 \end{equation}
 
-This probability is called \emph{likelihood} of the observation $t_n$, under the model $y(\cdot;\cdot)$ with parameters $\bm{\theta}$. Since the training data is assumed to be independent and identically distributed, the likelihood of the whole training set $\bm{X}=\left[\bm x_1 \dotsb \bm x_N\right]^\intercal$ is
+This probability is called \emph{likelihood} of the observation $t_n$, under the model $y(\cdot;\cdot)$ with parameters $\bm{\theta}$. Since the training data is assumed to be independent and identically distributed, the likelihood of the whole training set is
 
 \begin{equation}
 \label{eq:likelihood}
@@ -399,8 +411,6 @@ The gradient is computed with finite differencing using measurements from the ne
 \end{split}
 \end{align}
 
-
-
 \subsection{Model Fitting}
 The general form of the universal functions is:
 
@@ -412,21 +422,19 @@ a(1-c^2\xi)^d & \xi<0 \\
 \end{cases}
 \end{equation}
 
-Where $a$ is close to 1, $b$ is positive, and $d$ is negative. Since $d$ is negative, the base of the power must be positive, hence the squared $c$. Following the approach outlined in section \ref{sec:regression_fit}, the coefficients $a$, $b$, $c$ and $d$ can be found by minimizing the L2-regularized mean squared error using equations \ref{eq:least_squares_gradient} and \ref{eq:least_squares_hessian}; in this case, the parameter vector $\theta=\left[a,b,c,d\right]^\intercal$. The gradient of \ref{eq:phi_general} is:
+Where $a$ is close to 1, $b$ is positive, and $d$ is negative. Since $d$ is negative, the base of the power must be positive, hence the squared $c$. Following the approach outlined in section \ref{sec:regression_fit}, the coefficients $a$, $b$, $c$ and $d$ can be found by minimizing the L2-regularized mean squared error using equations \ref{eq:least_squares_gradient} and \ref{eq:least_squares_hessian}; in this case, the parameter vector is $\bm\theta=\left[a,b,c,d\right]^\intercal$. The gradient of \ref{eq:phi_general} is:
 
-\begin{equation}
-\nabla_\theta\phi(\xi)\vert_{\xi\geq 0}=\left[1,\xi,0,0\right]^\intercal
-\end{equation}
 
-when $\xi$ is non-negative, and
-
-\begin{equation}
+\begin{align}
+\nabla_\theta\phi(\xi)\vert_{\xi\geq 0}=\begin{bmatrix}
+1 \\ \xi \\ 0 \\ 0
+\end{bmatrix} &&
 \nabla_\theta\phi(\xi)\vert_{\xi<0}=\begin{bmatrix}
-\tau^d & 0 & -2acd\xi\tau^{d-1} & a\tau^d\ln\tau
-\end{bmatrix}^\intercal
-\end{equation}
+\tau^d \\ 0 \\ -2acd\xi\tau^{d-1} \\ a\tau^d\ln\tau
+\end{bmatrix}
+\end{align}
 
-Where $\tau=1-c^2\xi$. The Hessian of \ref{eq:phi_general} when $\xi\geq 0$ is simply 0, because it is a linear function in all parameters, while, in the negative case, we have:
+where $\tau=1-c^2\xi$. The Hessian of \ref{eq:phi_general} when $\xi\geq 0$ is simply 0, because it is a linear function in all parameters, while, in the negative case, we have:
 
 \begin{equation}
 \nabla^2_\theta\phi(\xi)\vert_{\xi<0} = \begin{bmatrix}
