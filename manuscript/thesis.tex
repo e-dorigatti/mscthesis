@@ -6,6 +6,7 @@
 \usepackage{bm}
 \usepackage{siunitx}
 \usepackage{titling}
+\usepackage{hyphenat}
 \usepackage{amsmath,amsfonts,amssymb,amsthm,mathtools}
 \usepackage{hyperref}
 \usepackage{gensymb}
@@ -42,12 +43,14 @@ In stark contrast to the traditional, top-down approach of science, recent devel
 todo more fluff about ml ?
 
 \section{Research Question}
-With the availability of micro-meteorological data from specialized observation sites such as Cabauw, in the Netherlands, and the recent developments in Machine Learning, a natural question to ask is whether the Monin-Obukhov similarity theory can be improved. More specifically, we pose the following \\
+Currently, limitations of the validity of the Monin-Obukhov similarity theory are not believed to be a likely explanation for the high scatter that is found in experimental studies, unless in highly stable conditions \cite{basicatm,}. With the availability of micro-meteorological data from specialized observation sites such as Cabauw, in the Netherlands, and the recent developments in Machine Learning, this conjecture can be finally put to the test. More specifically, we pose the following \\
 
 \textbf{Research Question:} Is it possible to use the data from the Cesar database to improve the Monin-Obukhov model of the flux-profile relationships, by using more predictors besides the instability parameter? \\
 
-A positive answer to this question would contribute to improve the quality of current large scale climate simulations. Since errors in the simulation accumulate over time, even slight improvements can greatly improve the accuracy of the results after years of simulated time.
+A positive answer to this question would contribute to improve the quality of current global circulation models (large scale climate simulations). It has been shown that, at least in difficult conditions, several simulation models produce flux estimates that are highly inaccurate, presenting low correlation (mostly below 0.3) and errors that are as large as the actual fluxes \cite{sheba}. Since errors in the simulation accumulate over time, even slight improvements can greatly improve the accuracy of the results after years of simulated time.
 
+\section{Research Methodology}
+todo
 
 \section{Ethics and Sustainability}
 
@@ -177,7 +180,7 @@ One of the factors to distinguish laminar from turbulent flow is the length scal
 
 \begin{equation}
 \label{eq:most_l}
-L=-\frac{u_*^3}{\kappa\frac{g}{T_v}\frac{Q}{\rho c_\rho}}
+L=-\frac{u_*^3}{\kappa\frac{g}{\theta_v}\frac{Q}{\rho c_\rho}}
 =-\frac{u_*^3 T_v}{\kappa g \overline{w'\theta_v}}
 \end{equation}
 
@@ -188,7 +191,7 @@ L=-\frac{u_*^3}{\kappa\frac{g}{T_v}\frac{Q}{\rho c_\rho}}
 
 \begin{equation}
 \label{eq:phi_h}
-\frac{\partial\overline{\theta}}{\partial z}\frac{kz}{T_*}=\phi_h(\xi)
+\frac{\partial\overline{\theta_v}}{\partial z}\frac{kz}{T_*}=\phi_h(\xi)
 \end{equation}
 
 With
@@ -197,13 +200,14 @@ With
 \item $g=\SI{9.81}{\meter\per\square\second}$ the acceleration due to Earth's gravity
 \item $\kappa=0.4$ the von Karman constant
 
-\item $T_v$ virtual temperature\footnote{potential temperature of dry air if it had the same density as moist air. It allows to use formulas for dry air when the air is not dry.}, obtained as
+\item $\theta_v$ virtual temperature\footnote{potential temperature of dry air if it had the same density as moist air. It allows to use formulas for dry air when the air is not dry.}, obtained as
 
-$$
-T_v=T\frac{1+r_v/\epsilon}{1+r_v}=T(1+0.61\cdot q)
-$$
+\begin{equation}
+\label{eq:vtemp}
+\theta_v=\theta\frac{1+r_v/\epsilon}{1+r_v}=\theta(1+0.61\cdot q)
+\end{equation}
 
-Where $r_v$ is the mixing ratio, $q=r_v/(1+r_v)$ the specific humidity, and $\epsilon$ is the ratio of the gas constants of dry air and water vapor, roughly 0.622.
+Where $\theta$ is the air temperature, $r_v$ is the mixing ratio, $q=r_v/(1+r_v)$ the specific humidity, and $\epsilon$ is the ratio of the gas constants of dry air and water vapor, roughly 0.622.
 
 \item $\rho$ the air density, computed from the pressure $P$ and the specific gas constant for dry air $R=\SI{287.058}{\joule\per\kilo\gram\kelvin}$ as
 
@@ -220,7 +224,7 @@ $$
 
 The stability parameter $\xi$ is positive for stable conditions, where wind shear dominates the production of TKE, and negative for unstable conditions, where buoyancy is the main contributor to turbulence. It approaches 0 in the limit of neutral stratification (i.e. $\partial\overline{\theta}/\partial z=0$), because the temperature flux goes to 0 causing $L$ go to infinity.
 
-The universal functions $\phi_m$ and $\phi_h$ must be determined experimentally. This is no easy task, and considerable effort has been devoted to it; one of the greatest difficulties lies in obtaining accurate and unbiased measurements, especially the fluxes. [hogstrom 1988] is a meta-study that aggregates and improves many previous results, and suggests the following expressions:
+The universal functions $\phi_m$ and $\phi_h$ must be determined experimentally. This is no easy task, and considerable effort has been devoted to it; one of the greatest difficulties lies in obtaining accurate and unbiased measurements, especially the fluxes. \cite{hogstrom88} is a meta-study that aggregates and improves many previous results, and suggests the following expressions:
 
 \begin{align}
 \phi_m(\xi)&=\begin{cases}
@@ -250,10 +254,10 @@ A supervised machine learning model uses a set of parameters to compute the outp
 
 The next sections describe the theory of learning, a general technique to estimate the parameters of a regression model, and introduce several machine learning algorithms for regression.
 
-\paragraph{Notation:} Numbers are denoted in \textit{italic}, vectors (always column) and matrices in \textbf{bold}. The training set contains $N$ training samples, indexed by $n$, and each sample is a pair of feature vector $\bm x_n\in\mathbb{R}^D$ and a target value $t_n\in\mathbb{R}$. The feature vectors are grouped in the $N\times D$ matrix $\bm X=\left[\bm x_1\dotsb\bm x_N\right]^\intercal$ and the target values in the $N\times 1$ vector $\bm t=\left[t_1,\ldots,t_n\right]^\intercal$. Models are parametrized by a parameter vector $\bm\theta$ and their output for the feature vector $\bm x_n$ is $y_n=y(\bm x_n;\bm\theta)$. The vector containing both parameters and hyper-parameters is denoted with $\bm\Theta$.
+\paragraph{Notation:} Scalars are denoted in \textit{italic}, vectors (always column) and matrices in \textbf{bold}. The training set contains $N$ training samples, indexed by $n$, and each sample is a pair of feature vector $\bm x_n\in\mathbb{R}^D$ and a target value $t_n\in\mathbb{R}$. The feature vectors are grouped in the $N\times D$ matrix $\bm X=\left[\bm x_1\dotsb\bm x_N\right]^\intercal$ and the target values in the $N\times 1$ vector $\bm t=\left[t_1,\ldots,t_n\right]^\intercal$. Models are parametrized by a parameter vector $\bm\theta$ and their output for the feature vector $\bm x_n$ is $y_n=y(\bm x_n;\bm\theta)$. The vector containing both parameters and hyper-parameters is denoted with $\bm\Theta$.
 
 \subsection{Learning Theory}
-true risk vs empirical risk, kfold cv, nested cv
+true risk vs empirical risk, kfold cv, nested cv,
 
 \subsection{Parameter Estimation for Regression}
 \label{sec:regression_fit}
@@ -278,14 +282,14 @@ The risk of overfitting can be reduced with a number of \emph{regularization} st
 \begin{align}
 \begin{split}
 \label{eq:map}
-p(\bm\Theta\vert\bm t, \bm X)&=\frac{p(\bm X \bm t\vert\bm\Theta)\cdot p(\bm\Theta)}{p(\bm X, \bm t)}\\
+p(\bm\Theta\vert\bm t, \bm X)&=\frac{p(\bm X, \bm t\vert\bm\Theta)\cdot p(\bm\Theta)}{p(\bm X, \bm t)}\\
 &\propto p(\bm t\vert \bm X,\bm\Theta)\cdot p(\bm X\vert\bm\Theta)\cdot p(\bm\Theta)\\
 &\propto p(\bm t\vert \bm X,\bm\Theta)\cdot p(\bm\Theta)
 \end{split}
 \end{align}
 
 
-where we removed $p(\bm X,\bm t)$ and $p(\bm X\vert\bm\Theta)=p(\bm X)$ because they are constant for a given dataset, and we are not interested in the exact probability, only where it reaches its maximum value. This parameter estimation procedure is called \emph{maximum a posteriori} (MAP). Two commonly used prior distributions are the multivariate Laplace and the multivariate Normal, leading respectively to L1 and L2 regularization, when centered and symmetrical/spherical.
+where we removed $p(\bm X,\bm t)$ and $p(\bm X\vert\bm\Theta)=p(\bm X)$ because they are constant for a given dataset, and we are not interested in the exact probability, but where it reaches its maximum value. This parameter estimation procedure is called \emph{maximum a posteriori} (MAP). Two commonly used prior distributions are the multivariate Laplace and the multivariate Normal, leading respectively to L1 and L2 regularization, when centered and symmetrical/spherical.
 
 The maximization of the posterior can be done conveniently by maximizing its logarithm; this gives expressions that are easier to handle analytically, and give less numerical problems when computed. The MAP problem can be formulated as follows:
 
@@ -301,15 +305,15 @@ If we assume a Gaussian likelihood like the one in equation \ref{eq:likelihood},
 \bm\theta^*=\argmin_{\bm\theta}\ L(\bm\theta)=\argmin_{\bm\theta}\sum_{n=1}^N\left( y(\bm x_n,\theta)-t_n\right)^2+\lambda\bm\theta^\intercal\bm\theta
 \end{equation}
 
-Where $L$ is the \emph{loss function}, in this case the sum-of-squares error. It is customary to use the mean squared error instead of the sum of squares because it results in smaller numbers and is readily interpreted; being only a constant factor away from \ref{eq:least_squares}, it does not transcend the essence of maximum likelihood. The parameter $\beta$ can be estimated as well in a similar way, if necessary, and a fully Bayesian treatment allows to estimate $\lambda$, too. Depending on the model $y(\bm x_n,\bm\theta)$, \ref{eq:least_squares} can be solved analytically to yield a closed-form solution for $\bm\theta$; this is the case for linear regression, where $y(\bm x_n,\bm\theta)=\bm\theta^\intercal\bm x_n$ and the optimal parameters are $\bm\theta^*=(\bm X^\intercal\bm X+\lambda\bm I)^{-1}\bm X^\intercal\bm t$.
+Where $L$ is the \emph{loss function}, in this case the sum-of-squares error. It is customary to use the mean squared error instead of the sum of squares because it results in smaller numbers and is readily interpreted; being only a constant factor away from \ref{eq:least_squares}, it does not transcend the essence of maximum likelihood. The parameter $\beta$ can be estimated as well in a similar way, if necessary, and a fully Bayesian treatment allows to estimate $\lambda$, too. Depending on the model $y(\bm x_n,\bm\theta)$, \ref{eq:least_squares} can be solved analytically to yield a closed-form solution for $\bm\theta$.
  
-When this is not possible, a general approach called \emph{gradient descent} is employed; the gradient of a function computed at a given location "points" to the steepest direction where the function's value increases. By repeatedly following the gradient, it is possible to reach a local maximum, and, in the opposite direction, a local minimum:
+When this is not possible, iterative optimization methods are employed. A widely used approach is called \emph{gradient descent}: the gradient of a function computed at a given location "points" to the steepest direction where the function's value increases. By repeatedly following the gradient, it is possible to reach a local maximum, and, in the opposite direction, a local minimum:
 
 \begin{equation}
 \bm x_{n+1}:=\bm x_n-\eta\cdot\nabla f(\bm x_n)
 \end{equation}
 
-the series $\bm x_1,\ldots,\bm x_n$ is guaranteed to converge, provided that the \emph{learning rate} $\eta$ goes to 0 as $n$ goes to infinity [citation]. Vanilla gradient descent can be greatly improved with a number of techniques, such as momentum [citation], adaptive learning rate [citation], use of the Hessian [citation], and so on. The gradient of $L(\bm\theta)$ is
+the series $\bm x_1,\ldots,\bm x_n$ is guaranteed to converge to the local optimum at a rate of $O(n^{-1})$ if certain conditions are met \cite{gd_convergence}. Vanilla gradient descent can be greatly improved with a number of techniques, such as momentum \cite{gd_momentum}, adaptive learning rate \cite{adagrad, adadelta, adam}, and so on, see \cite{gd_overview} for an overview. More advanced optimization techniques that use the gradient and the Hessian, such as Newton's method, exist, see \cite{numopt} for an in-depth discussion. The gradient of $L(\bm\theta)$ is
 
 \begin{equation}
 \label{eq:least_squares_gradient}
@@ -327,17 +331,57 @@ And its Hessian is
 +\big(y(\bm x_n;\bm\theta)-t_n\big)\nabla^2_{\bm\theta}y(\bm x_n;\theta)\bigg]+2\lambda\bm I
 \end{equation}
 
+In some cases, the gradient and the Hessian can be approximated using a random subset of the training set, and, in extreme cases, a single sample.
+
 \subsection{Models}
-blabla
+This section introduces some commonly used regression machine learning models, in order of complexity and modeling power.
+
+\subsubsection{Ridge Regression}
+A linear regression model has the form $y(\bm x_n;\bm\theta)=\bm\theta^\intercal\bm x_n$; ridge regression is simply L2-regularized linear regression. This model is simple enough that the solution for equation \ref{eq:least_squares} can be found analytically in closed form:
+
+\begin{equation}
+\bm\theta^*=(\bm X^\intercal\bm X+\lambda\bm I)^{-1}\bm X^\intercal\bm t
+\end{equation}
+
+Notice that the term \emph{linear} in linear regression refers to linearity with respect to the parameters, not the features. In fact, new features can be added through the use of a possibly non-linear feature mapping $\phi:\mathbb{R}^D\rightarrow\mathbb{R}^M$, such that $\bm x^\prime_n=\phi(\bm x_n)=\left[\phi_1(\bm x_n),\ldots,\phi_M(\bm x_n)\right]^\intercal$. Then, the model parameters can be fitted to the augmented training set $\bm X^\prime$. A typical feature added is a bias $\phi_1(\bm x)=1$.
 
 \subsubsection{k-Nearest Neighbors}
-todo
+The k-nearest neighbor model \cite{knn} predicts a value for a sample $\bm x$ by averaging the target values of the $K$ training samples that are closest to $\bm x$, possibly weighted by distance or some other metric. Let $\bm t_{(1)},\ldots,\bm t_{(k)}$ be the target values of the $K$ training samples closest to $\bm x$ according to a distance metric $d:\mathbb{R}^D\rightarrow\mathbb{R}$, then we have
 
-\subsubsection{Linear Regression}
-todo
+\begin{equation}
+y(\bm x)=\sum_{k=1}^K w_{(k)}\cdot\bm t_{(k)}
+\end{equation}
+
+
+Note that the k-nearest neighbors algorithm does not have parameters, only hyper\hyp{}parameters: $K$ itself, the distance function, and the weighting scheme. Typical distance functions are the Manhattan distance $d(\bm u,\bm v)=\sum_{d=1}^D\vert u_d-v_d\vert$ and the squared Euclidean distance $d(\bm u,\bm v)=\sum_{d=1}^D(u_d-v_d)^2$, and typical weights are uniform $w_{(k)}=1/K$ and based on distance $w_{(k)}=d(\bm x,\bm x_{(k)})/\sum_{k^\prime=1}^K d(\bm x,\bm x_{(k^\prime)})$.
 
 \subsubsection{Random Forests}
-todo
+Random forests are an ensemble approach to prediction whose output values are the combination of the output of multiple decision trees \cite{random_forests}. In general, ensemble methods improve the performance of a single model by combining the output of many models trained on random subsets of features and/or samples.
+
+A decision tree is a sequence of nested \emph{if-then-else} rules, each of them testing one of the features of the input sample: inference starts from the root, and successively traverses each node by moving to the correct child, until a leaf, containing the final prediction, is reached. For classification, the prediction is the most frequent class among the training samples that end up in that leaf, while for regression the output value can be their average, or the output of a more complicated regression model trained on those samples.
+
+Given a training set, many decision trees can be built using different random subsets of features. This creates a number of \emph{expert} trees, each of them specialized in a restricted domain of the data. No tree is good enough on its own as it overfits its domain, but by averaging the output of many decision trees, their errors tend to cancel out.
+
+A simple and widely used algorithm for building decision trees is CART \cite{cart}. It builds decision trees by greedily and recursively partitioning the training samples until a stopping criterion is met. Partitions are created by selecting the split that has the smallest impurity; a common measure for regression is the mean squared error, while Gini impurity or cross-entropy are popular options in classification. Let $X$ be a set of training samples and $\Sigma=(f,\tau)$ be a candidate split on feature $f$ with threshold $\tau$, then we can partition the training samples in two sets:
+
+\begin{align}
+S^-(\Sigma)&=\{\bm x\in X\vert \bm x_f\leq\tau\} \\
+S^+(\Sigma)&=\{\bm x\in X\vert \bm x_f>\tau\}
+\end{align}
+
+And define the impurity $I$ of $\Sigma$ as the weighted average of the impurities of the two sets:
+
+\begin{equation}
+I(\Sigma)=\frac{\vert S^-(\Sigma)\vert}{\vert X\vert}I(S^-(\Sigma))+\frac{\vert S^+(\Sigma)\vert}{\vert X\vert}I(S^+(\Sigma))
+\end{equation}
+
+The best split is then
+
+\begin{equation}
+\Sigma^*=\argmin_{\Sigma}\ I(\Sigma)
+\end{equation}
+
+This best split defines a new node in the tree, and the construction can proceed recursively on its two children $S^-(\Sigma^*)$ and$ S^+(\Sigma^*)$. Stopping criteria for the construction can be a minimum impurity $I(X)$, a minimum impurity decrease with respect to the parent $I(X) - I(\Sigma^*)$, or a minimum cardinality for $X$ or the two splits $S^+$ and $S^-$.
 
 \subsubsection{Neural Networks}
 todo
@@ -390,16 +434,22 @@ With gap-filling, missing measurements are replaced by synthetic values. The gap
 
 For less than two hours of missing measurements, both forcing and evaluation parameters are gap-filled by interpolation of nearby values. For longer periods, forcing parameters are derived by transforming measures obtained from the nearby site of De Bilt, which are themselves gap-filled. Evaluation parameters are computed with a vegetation model that uses the forcing parameters as input.
 
-\section{Monin-Obukhov Similarity Theory}
-This section describes how the data from the Cesar database is used to reproduce the Monin-Obukhov similarity theory. The flux of virtual potential temperature can be computed following the formulas in section \ref{sec:most}, as the data contains all the necessary quantities; $u_*$ is given, as well as the specific humidity and the pressure. The next section describes how the gradients are computed starting from the raw measurements, in order to obtain the complete flux-profile relationships.
 
-Then, we describe how to use the data to obtain new coefficients for the universal functions. Even though there is agreement on form of their form, there is still debate on the exact values of the coefficients, with different experiments resulting in different values [citation]. In order to ensure a fair comparison with the results of this work, we fit the universal functions to the data from the Cesar database.
+\subsection{Data Filtering}
+todo
+
+
+\section{Monin-Obukhov Similarity Theory}
+This section describes how the data from the Cesar database is used to reproduce the Monin-Obukhov similarity theory. The flux of virtual potential temperature can be computed following the formulas in section \ref{sec:most}, as the data contains all the necessary quantities; $u_*$ is given, as well as the specific humidity and the pressure. The empirical values for $L$, $\phi_m$ and $\phi_h$ are computed following equations \ref{eq:most_l}, \ref{eq:phi_m} and \ref{eq:phi_h} respectively; all the necessary quantities are present in the Cesar database. The Obukhov length is computed at every height level using the corresponding temperature measurement, and the fluxes measured at the surface.
+
+The next section describes how the gradients are computed starting from the raw measurements, in order to obtain the complete flux-profile relationships. Then, we describe how to use the data to obtain new coefficients for the universal functions. Even though there is agreement on form of their form, there is still debate on the exact values of the coefficients, with different experiments resulting in different values \cite{hogstrom88}. In order to ensure a fair comparison with the results of this work, we fit the universal functions to the data from the Cesar database.
 
 
 \subsection{Profile Computation}
-The wind and temperature profiles are computed at 40, 20 and 10 meters, because the Monin-Obukhov similarity theory is only valid in the surface layer. It is very hard to know the exact height of the surface layer, because it depends on the weather and no exact formulas are known [citation], but it is usually assumed to be 10\% as high as the boundary layer [citation]. Based on its typical heights [citation], the surface layer is often higher than 40 meters and lower than 80.
+\label{sec:profiles}
+The wind and temperature profiles used to compute the flux-profile relationships are computed at 40 and 20 meters, because the turbulent surface fluxes present and surface friction velocity in the Cesar database are constant only within the surface layer. It is very hard to know the exact height of the surface layer, because it depends on the weather and no exact formulas are known [citation], but it is usually assumed to be 10\% as high as the boundary layer [citation]. Based on its typical heights [citation], the surface layer is often higher than 40 meters and lower than 80. \cite{cabauw_z0} indeed reports that a large number of observations at \SI{100}{\meter} are already outside of the surface layer. The wind speed is \SI{0}{\meter\per\second} at the height $z_0$, called \emph{characteristic roughness}. Its value depends on the properties of the surface, but no unambiguous value is known for the Cabauw observatory, especially since it depends on the direction of the wind \cite{cabauw_night, cabauw_z0}.
 
-The gradient is computed with finite differencing using measurements from the neighboring levels. The bottom-most measurements are at 1.5 meters for the temperature, and the wind speed is 0 at $z_0$ meters. The characteristic roughness $z_0$ depends on the properties of the surface, and from the Cabauw observatory it is around 0.1 meters [citation]. Let $z_i$ be the height in meters of level $i$ and $a_i$ the corresponding measurement of quantity $a$, $\Delta^+a_i=a_{i+1}-a_i$ and $\Delta^-a_i=a_i-a_{i-1}$ and similarly for $z$. Then the gradient of $a$ at level $i$ is computed as the average of the top and bottom gradients, weighted by the distance between the levels:
+The gradient is computed with finite differencing using measurements from the neighboring levels. The bottom-most measurements are at \SI{1.5}{\meter} for the temperature, and \SI{10}{meters} for the wind. Let $z_i$ be the height in meters of level $i$ and $a_i$ the corresponding measurement of quantity $a$, $\Delta^+a_i=a_{i+1}-a_i$ and $\Delta^-a_i=a_i-a_{i-1}$ and similarly for $z$. Then the gradient of $a$ at level $i$ is computed as the average of the top and bottom gradients, weighted by the distance between the levels:
 
 \begin{align}
 \begin{split}
@@ -410,6 +460,8 @@ The gradient is computed with finite differencing using measurements from the ne
 &= \frac{a_{i+1}-a_{i-1}}{z_{i+1}-z_{i-1}}
 \end{split}
 \end{align}
+
+Note that more advanced methods to obtain $\partial\overline{u}/\partial z$ can be used in stable conditions, where the wind profile is known to increase logarithmically with altitude; in this case, fitting $\overline{u}(z)=a+bz+cz^2+d\ln z$ to the profile yields an uncertainty in the estimate of the gradients $\partial\overline{u}/\partial z=b+2cz+d/z$ of around 30\% \cite{windlogprofile}.
 
 \subsection{Model Fitting}
 The general form of the universal functions is:
@@ -450,14 +502,17 @@ where $\tau=1-c^2\xi$. The Hessian of \ref{eq:phi_general} when $\xi\geq 0$ is s
 
 Analytical computation of the Hessian allows us to use the Newton conjugate gradient descent algorithm, which provides super-linear convergence rate, unlike other conjugate gradient methods whose rate of convergence is only linear \cite{numopt}.
 
+\section{Model Fitting}
+todo
+
 \chapter{Results}
 todo
 
 \chapter{Discussion}
-todo
+actual constants and coefficients (e.g. von karmans constant) dont really matter, because they are constant and do not affect the ml model 
 
 \section{Limitations and Future Work}
-todo
+one of the reasons why MOST is unreliable in stable conditions is because of the difficulty of measuring fluxes
 
 \bibliographystyle{unsrt}
 \bibliography{thesis}

@@ -222,9 +222,34 @@ anyways, we will be able to integrate better methods to measure fluxes into our 
 obukhov himself derived the phi functions outside of the similarity theory
     structure of the temp and vel. fields under conditions of free convection, 1960
 
+https://www.researchgate.net/publication/271922543_Moving_Beyond_Monin-Obukhov_Similarity_Theory_in_Modelling_Wind-Speed_Profiles_in_the_Lower_Atmospheric_Boundary_Layer_under_Stable_Stratification
+
 ** TODO find additional predictors
-*** humidity
-most works focus on dry air, although influences due to moisture are likely very small (foken 2006, 50 years)
+try with wind direction
+
+** TODO try new method for computing wind profile
+https://journals.ametsoc.org/doi/abs/10.1175/1520-0469%281984%29041%3C2202%3ATTSOTS%3E2.0.CO%3B2
+basically fit U(z) = a + bz + cz^2 + dln(z) and get profile du/dz(z)=b+2cz+d/z
+
+*result*
+(on a random sample of 7 months)
+fit metrics on training set
+     - average r squared for positive and negative z/L are -0.6 and -0.8 with std 1.5 and 4 respectively
+     - % error on the wind speed is between 10 and 80
+    basically bad fit most of the times, highly depends on conditions
+on the other hand
+    this allows us to get gradient at 10 meters without worrying about roughness length
+        distribution of phi_m at 10 meters is similar to distribution at 20 and 40 meters
+    compare the CDF of phi_m with this method and with finite differences (>10 meters)
+        very veery similar!
+    they are correlated to some extend (the r-squared is 0.59)
+        absolute difference is high <=> the r-squared of the modeled wind speed is high
+        absolute difference is low <=> the r-squared is all over the place
+            meaning that when the profile is not logarithmic, both methods suck
+        there seem to be three clusters in the correlation graph
+            model >> fdiff, model ~ fdiff, model << fdiff
+            tried to predict difference (<-1, >1, -1<<1), with decision tree, but had no success
+
 
 ** prediction 
 *** block cross validation
@@ -312,25 +337,25 @@ problem seems quite hard with F1 only
 *** neural net
 preliminary results for phi_m, hopefully better with evo search
 
-| no trend                    |           F1+F2+F3+F4 |                 F1+F2+F3 |                        F1+F2 | F1    |
-|-----------------------------+-----------------------+--------------------------+------------------------------+-------|
-| explained variance          |                 0.860 |                    0.810 |                        0.778 |       |
-| mean absolute error         |                 0.440 |                    0.518 |                        0.555 |       |
-| mean squared error          |                 0.490 |                    0.677 |                        0.772 | sucks |
-| median absolute error       |                 0.277 |                    0.312 |                        0.340 |       |
-| r squared                   |                 0.859 |                    0.809 |                        0.778 |       |
-| mean absolute percent error |                97.218 |                   66.272 |                      138.508 |       |
-| architecture                | 1024/512/256/128/64/1 | 1024/0.5/512/256/64/32/1 | 2048/0.5/512/256/128/64/32/1 |       |
-|-----------------------------+-----------------------+--------------------------+------------------------------+-------|
-| trend                       |                       |                          |                              |       |
-|-----------------------------+-----------------------+--------------------------+------------------------------+-------|
-| explained variance          |                       |                          |                              |       |
-| mean absolute error         |                       |                          |                              |       |
-| mean squared error          |                       |                          |                              |       |
-| median absolute error       |                       |                          |                              |       |
-| r squared                   |                       |                          |                              |       |
-| mean absolute percent error |                       |                          |                              |       |
-| architecture                |                       |                          |                              |       |
+| no trend                    |           F1+F2+F3+F4 |                 F1+F2+F3 |                                                                      F1+F2 | F1    |
+|-----------------------------+-----------------------+--------------------------+----------------------------------------------------------------------------+-------|
+| explained variance          |                 0.860 |                    0.810 |                                                                      0.778 |       |
+| mean absolute error         |                 0.440 |                    0.518 |                                                                      0.555 |       |
+| mean squared error          |                 0.490 |                    0.677 |                                        0.772 (have better results on hops) | sucks |
+| median absolute error       |                 0.277 |                    0.312 |                                                                      0.340 |       |
+| r squared                   |                 0.859 |                    0.809 |                                                                      0.778 |       |
+| mean absolute percent error |                97.218 |                   66.272 |                                                                    138.508 |       |
+| architecture                | 1024/512/256/128/64/1 | 1024/0.5/512/256/64/32/1 |                                               2048/0.5/512/256/128/64/32/1 |       |
+|-----------------------------+-----------------------+--------------------------+----------------------------------------------------------------------------+-------|
+| trend                       |                       |                          |                                                                            |       |
+|-----------------------------+-----------------------+--------------------------+----------------------------------------------------------------------------+-------|
+| explained variance          |                       |                          |                                                                      0.813 |       |
+| mean absolute error         |                       |                          |                                                                      0.507 |       |
+| mean squared error          |                       |                          |                                                                      0.615 |       |
+| median absolute error       |                       |                          |                                                                      0.319 |       |
+| r squared                   |                       |                          |                                                                      0.812 |       |
+| mean absolute percent error |                       |                          |                                                                     96.243 |       |
+| architecture                |                       |                          | 1024,0.5,512,0.5,256,-2,-4,0.5,256,0.5,128,64,64,32,32,16,16,-4,8,-8,4,2,1 |       |
 
 
 * limitations and future work
@@ -394,3 +419,5 @@ maybe, data at z=10 and z=2 is very anomalous
 *** other possible project
 estimate z_0 from the data
 fit a line to the log-profile of wind, and see at which y we have x=0 (that is z_0)
+already done
+    https://www.researchgate.net/profile/Bert_Holtslag/publication/225654672_Wind_profiles_momentum_fluxes_and_roughness_lengths_at_Cabauw_revisited/links/0deec52e3d757ef4c8000000/Wind-profiles-momentum-fluxes-and-roughness-lengths-at-Cabauw-revisited.pdf
