@@ -230,25 +230,20 @@ try with wind direction
 ** TODO try new method for computing wind profile
 https://journals.ametsoc.org/doi/abs/10.1175/1520-0469%281984%29041%3C2202%3ATTSOTS%3E2.0.CO%3B2
 basically fit U(z) = a + bz + cz^2 + dln(z) and get profile du/dz(z)=b+2cz+d/z
+fit model on all levels, even though we only use 10,20 and 40
 
 *result*
 (on a random sample of 7 months)
-fit metrics on training set
-     - average r squared for positive and negative z/L are -0.6 and -0.8 with std 1.5 and 4 respectively
-     - % error on the wind speed is between 10 and 80
-    basically bad fit most of the times, highly depends on conditions
-on the other hand
-    this allows us to get gradient at 10 meters without worrying about roughness length
-        distribution of phi_m at 10 meters is similar to distribution at 20 and 40 meters
-    compare the CDF of phi_m with this method and with finite differences (>10 meters)
-        very veery similar!
-    they are correlated to some extend (the r-squared is 0.59)
-        absolute difference is high <=> the r-squared of the modeled wind speed is high
-        absolute difference is low <=> the r-squared is all over the place
-            meaning that when the profile is not logarithmic, both methods suck
-        there seem to be three clusters in the correlation graph
-            model >> fdiff, model ~ fdiff, model << fdiff
-            tried to predict difference (<-1, >1, -1<<1), with decision tree, but had no success
+generally very good fit
+    strongly disagrees with finite differences at z=10
+        because finite differences at z=10 is very bad, equals wind@20 / 20
+        =takeaway=: cannot insert artificial measure using the no-slip condition
+
+
+can get an even better fit by fitting only on the levels we want
+    basically perfect fit in the vast majority of cases
+    i don't think this is good for the project, though
+        we are basically overfitting and have no indication on when the model is not adequate
 
 
 ** prediction 
@@ -295,6 +290,9 @@ moar paperz
 
 result of 10/5-fold nested cv
 
+**** finite differences gradient
+nb: data with z=10 was excluded
+
 | measure                  |       mean |       std |
 |--------------------------+------------+-----------|
 | explained_variance_score |   0.771131 |  0.004376 |
@@ -304,7 +302,19 @@ result of 10/5-fold nested cv
 | r2_score                 |   0.770381 |  0.004855 |
 | mean_percent_error       | 158.082942 | 33.040393 |
 
-NB a mse of 0.75 corresponds to 0.22/0.23 normalized mse
+
+**** log model gradient
+nb: data with z=10 was included
+
+| measure                  |       mean |        std |
+|--------------------------+------------+------------|
+| explained_variance_score |   0.705367 |   0.009978 |
+| mean_absolute_error      |   0.542703 |   0.019470 |
+| mean_squared_error       |   0.676408 |   0.062248 |
+| median_absolute_error    |   0.373084 |   0.011478 |
+| r2_score                 |   0.705153 |   0.009930 |
+| mean_percent_error       | 251.432329 | 156.285022 |
+
 
 *** features
 using 4x2 feature sets
@@ -337,6 +347,9 @@ problem seems quite hard with F1 only
 *** neural net
 preliminary results for phi_m, hopefully better with evo search
 
+**** finite differences gradient
+target to beat: 0.758 (std. 0.0351) => 0.670
+
 | no trend                    |           F1+F2+F3+F4 |                 F1+F2+F3 |                                                                      F1+F2 | F1    |
 |-----------------------------+-----------------------+--------------------------+----------------------------------------------------------------------------+-------|
 | explained variance          |                 0.860 |                    0.810 |                                                                      0.778 |       |
@@ -357,6 +370,9 @@ preliminary results for phi_m, hopefully better with evo search
 | mean absolute percent error |                       |                          |                                                                     96.243 |       |
 | architecture                |                       |                          | 1024,0.5,512,0.5,256,-2,-4,0.5,256,0.5,128,64,64,32,32,16,16,-4,8,-8,4,2,1 |       |
 
+**** log model gradient
+target: 0.676 (std. 0.0623) => 0.554
+got 0.5316 mse with F1+F2 with trend, same architecture
 
 * limitations and future work
 measures on land, but oceanic BL is quite different
