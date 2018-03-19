@@ -43,7 +43,7 @@ In stark contrast to the traditional, top-down approach of science, recent devel
 todo more fluff about ml ?
 
 \section{Research Question}
-Currently, limitations of the validity of the Monin-Obukhov similarity theory are not believed to be a likely explanation for the high scatter that is found in experimental studies, unless in highly stable conditions \cite{basicatm,}. With the availability of micro-meteorological data from specialized observation sites such as Cabauw, in the Netherlands, and the recent developments in Machine Learning, this conjecture can be finally put to the test. More specifically, we pose the following \\
+Currently, limitations of the validity of the Monin-Obukhov similarity theory are not believed to be a likely explanation for the high scatter that is found in experimental studies, unless in highly stable conditions \cite{basicatm}. With the availability of micro-meteorological data from specialized observation sites such as Cabauw, in the Netherlands, and the recent developments in Machine Learning, this conjecture can be finally put to the test. More specifically, we pose the following \\
 
 \textbf{Research Question:} Is it possible to use the data from the Cesar database to improve the Monin-Obukhov model of the flux-profile relationships, by using more predictors besides the instability parameter? \\
 
@@ -530,8 +530,31 @@ Analytical computation of the Hessian allows us to use the Newton conjugate grad
 \section{Model Fitting}
 todo
 
+\subsection{Models}
+which models are used, and why (?)
+e.g. why not SVM? (too computationally expensive)
+why random forest instead of gradient boosted trees? (not easily parallelizable, marginal increase in performace)
+
+\subsection{Features}
+available features, feature sets, trend, etc.
+
+\subsection{Performance Evaluation}
+which metrics (mse, r2, mape, etc.) and how they are computed (nested cv on months)
+
 \chapter{Results}
 todo
+
+\section{Exploratory Data Analysis}
+basic info about data
+
+\section{Gradient Computation}
+compare methods for computing gradient
+
+\section{Monin-Obukhov Similarity Theory}
+performance of MOST
+
+\section{Model Comparison}
+performance of the models
 
 \chapter{Discussion}
 actual constants and coefficients (e.g. von karmans constant) dont really matter, because they are constant and do not affect the ml model 
