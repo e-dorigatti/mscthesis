@@ -2,7 +2,6 @@
 \usepackage{graphicx}
 \usepackage[a4paper,inner=36mm,outer=18mm,top=30mm,]{geometry}
 %\usepackage[doublespacing]{setspace} 
-\usepackage{mathptmx}
 \usepackage{bm}
 \usepackage{siunitx}
 \usepackage{titling}
@@ -257,9 +256,46 @@ The next sections describe the theory of learning, a general technique to estima
 \paragraph{Notation:} Scalars are denoted in \textit{italic}, vectors (always column) and matrices in \textbf{bold}. The training set contains $N$ training samples, indexed by $n$, and each sample is a pair of feature vector $\bm x_n\in\mathbb{R}^D$ and a target value $t_n\in\mathbb{R}$. The feature vectors are grouped in the $N\times D$ matrix $\bm X=\left[\bm x_1\dotsb\bm x_N\right]^\intercal$ and the target values in the $N\times 1$ vector $\bm t=\left[t_1,\ldots,t_n\right]^\intercal$. Models are parametrized by a parameter vector $\bm\theta$ and their output for the feature vector $\bm x_n$ is $y_n=y(\bm x_n;\bm\theta)$. The vector containing both parameters and hyper-parameters is denoted with $\bm\Theta$.
 
 \subsection{Learning Theory}
-true risk vs empirical risk, kfold cv, nested cv,
+The goal of supervised learning is to use the training examples $D=(\bm X, \bm t)$, independent and identically distributed according to an unknown distribution $p_{XT}$, to find a good prediction rule $\hat{f}:\mathcal{X}\rightarrow\mathcal{T}$ among a family of available functions $\mathcal{F}$. In most practical cases, $\mathcal{X}=\mathbb{R}^D$ and $\mathcal{T}$ is either $\mathbb{R}$ for regression or a subset of $\mathbb{N}$ for classification. The goodness of a prediction rule $f$ is measured through a \emph{loss function} $\ell:\mathcal{T}\times\mathcal{T}\rightarrow\mathbb{R}$ that tells, given a target value $t$ and a guess $y=f(x)$, how much the guess is off. The \emph{risk} of an estimator $f$ is simply its expected loss:
 
-The goal of supervised learning is to find the best approximation for an unknown mapping $f*\rightarrow\mathcal{X}\times\mathcal{T}$ among a family of available functions $\mathcal{F}$, using a set of $N$ training examples generated from an unknown joint probability distribution $p(\mathcal{X},\mathcal{T})$. The quality of a guess $y_n$ for the true value $t_n$ is computed using a loss function $l:\mathcal{T}\times\mathcal{T}\rightarrow\mathcal{R}$
+\begin{equation}
+R(f)=\mathbb{E}_{(x,t)\sim p_{XT}}\left[\ell(f(x),t) \vert f \right]
+\end{equation}
+
+The ideal situation is to find the estimator $f^*$ that has the lowest risk; unfortunately this is not possible, because the distribution $p_{XT}$ is unknown. Since the training data is a sample from this distribution, we can compute the \emph{empirical risk} of $f$ on this set of examples instead:
+
+\begin{equation}
+\hat{R}(f)=\mathbb{E}_{(x,t)\sim D}\left[\ell(f(x),t)\vert f\right]=\frac{1}{N}\sum_{n=1}^N \ell(f(x_n),t_n)
+\end{equation}
+
+We can now use the empirical risk as a surrogate for the true risk, selecting the estimator
+
+\begin{equation}
+\hat{f}=\argmin_{f\in\mathcal{F}}\hat{R}(f)
+\end{equation}
+
+as our best guess. This procedure is called \emph{empirical risk minimization}. Note that $\hat{f}$ is a random function, because it depends on $D$, which is a random variable. An interesting question to ask is how good $\hat{f}$ actually is, or, in other words, what is its expected true risk $\mathbb{E}[R(\hat{f})]$ and how it compares to the lowest attainable risk $R(f^*)$. This latter quantity can be decomposed as
+
+\begin{equation}
+\mathbb{E}[R(\hat{f})]-R(f^*)=
+\left(\mathbb{E}[R(\hat{f})]-\inf_{f\in\mathcal{F}} R(f)\right)
++\left(\inf_{f\in\mathcal{F}} R(f)-R(f^*)\right)
+\end{equation}
+
+Where the first term is the \emph{estimation} error incurred by not selecting the best possible estimator in $\mathcal{F}$, and the second term is the \emph{approximation} error caused by searching a good estimator in $\mathcal{F}$. They usually have opposite behavior:
+
+\begin{itemize}
+\item the approximation error is high when $\mathcal{F}$ is too complex for the data at hand, where complexity refers to the range of phenomena that can be accurately modeled by these functions. In other words, $\mathcal{F}$ contains many valid explanations that are equally good on the training set (they have low empirical risk $\hat{R}$), but are not accurate models of the underlying phenomenon $p_{XT}$, i.e. they do not generalize well (they have high risk $R$);
+\item the estimation error is high when $\mathcal{F}$ cannot adequately model the phenomenon that we are trying to describe, i.e. when it does not contain any good explanation for it.
+\end{itemize}
+
+This decomposition is often referred to as the \emph{bias-variance decomposition}, where bias and variance refer to, respectively, approximation and estimation error.
+
+The fundamental problem is to find a class of functions that is powerful enough to model $p_{XT}$, but not too powerful so as to contain too many good explanations, because we would not be able to choose. This can be done in two ways: by penalizing complex models, in order to favor simpler explanations, even though they might have slightly higher empirical risk, or by directly estimating approximation and estimation errors using hold-out sets. An example of the former approach are Bayesian methods, which work by assigning higher \emph{prior} probability to simple models, and selecting complex models only when the data allows to do so. Section 
+\ref{sec:regression_fit} describes this approach in more detail, while we now turn our attention to a widely used hold-out method: cross validation.
+
+\subsubsection{Cross Validation}
+The idea behind hold-out methods is to partition the training set in two smaller sets $D_T$ and $D_V$, and use $D_T$ to choose $\hat{f}$ and $D_V$ to estimate its risk. Since $D$ is assumed to be a representative sample from $p_{XT}$, if the two partitions contain independent and identically distributed samples, the empirical risk on the \emph{validation set} $D_V$ can give us a glimpse on the generalization power of $\hat{f}$. This is because the validation set contains new samples that were not used to choose $\hat{f}$, thus the empirical risk on this set is an unbiased estimate of the true risk of the discovered model.
 
 \subsection{Parameter Estimation for Regression}
 \label{sec:regression_fit}
@@ -335,7 +371,7 @@ And its Hessian is
 
 In some cases, the gradient and the Hessian can be approximated using a random subset of the training set, and, in extreme cases, a single sample.
 
-\subsection{Models}
+\subsection{Regression Models}
 This section introduces some commonly used regression machine learning models, in order of complexity and modeling power.
 
 \subsubsection{Ridge Regression}
