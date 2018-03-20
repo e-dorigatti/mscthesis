@@ -239,12 +239,10 @@ generally very good fit
         because finite differences at z=10 is very bad, equals wind@20 / 20
         =takeaway=: cannot insert artificial measure using the no-slip condition
 
-
 can get an even better fit by fitting only on the levels we want
     basically perfect fit in the vast majority of cases
     i don't think this is good for the project, though
         we are basically overfitting and have no indication on when the model is not adequate
-
 
 ** prediction 
 *** block cross validation
@@ -437,3 +435,27 @@ estimate z_0 from the data
 fit a line to the log-profile of wind, and see at which y we have x=0 (that is z_0)
 already done
     https://www.researchgate.net/profile/Bert_Holtslag/publication/225654672_Wind_profiles_momentum_fluxes_and_roughness_lengths_at_Cabauw_revisited/links/0deec52e3d757ef4c8000000/Wind-profiles-momentum-fluxes-and-roughness-lengths-at-Cabauw-revisited.pdf
+** Q for next meeting
+*** can we use surface fluxes?
+fundamental to get good performance, together with hourly trend
+should not be a problem, sheba paper says they are estimated well
+
+*** how to deal with wind?
+if we can use wind at 10,20,40 meters then it makes sense to give all levels as input to the network
+    then estimating the gradient becomes very easy, and we have great performances
+    wind is the most important quantity
+        hard to estimate
+        gives great performance if available
+
+*** is fitting with log profile acceptable from a theoretical perspective?
+model agrees well with data even in unstable conditions, but ...?
+also note that whatever method we use, the network will learn to emulate it
+    so it does not matter if we input wind at all levels
+    but can make a huge difference if we dont use wind as input
+
+alternative is to use GP profile
+    still need to test them, but their gradient seem to be similar to others
+    biggest difference seems to be at z=10
+        since they are smoother, gradient should be smaller in abs. value
+
+must use some sort of model, dont want to discard z=10 (it's 500k more data points)

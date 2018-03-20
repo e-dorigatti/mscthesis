@@ -259,6 +259,8 @@ The next sections describe the theory of learning, a general technique to estima
 \subsection{Learning Theory}
 true risk vs empirical risk, kfold cv, nested cv,
 
+The goal of supervised learning is to find the best approximation for an unknown mapping $f*\rightarrow\mathcal{X}\times\mathcal{T}$ among a family of available functions $\mathcal{F}$, using a set of $N$ training examples generated from an unknown joint probability distribution $p(\mathcal{X},\mathcal{T})$. The quality of a guess $y_n$ for the true value $t_n$ is computed using a loss function $l:\mathcal{T}\times\mathcal{T}\rightarrow\mathcal{R}$
+
 \subsection{Parameter Estimation for Regression}
 \label{sec:regression_fit}
 A common assumption in the regression setting is that the observations are corrupted by additive Gaussian white noise, i.e. $t_n=f_n+\epsilon_n$, where $f_n$ is the "true" value, and $\epsilon_n\sim\mathcal{N}(0,\beta^{-1})$ is the noise. Let $y_n=y(\bm x_n;\bm{\theta})$ be the model's prediction for the sample $\bm x_n$, then we can write the probability of observing $t_n$, were $y_n=f_n$, as:
