@@ -371,6 +371,7 @@ target to beat: 0.758 (std. 0.0351) => 0.670
 **** log model gradient
 target: 0.676 (std. 0.0623) => 0.554
 got 0.5316 mse with F1+F2 with trend, same architecture
+0.2907 wind wind at all levels
 
 * limitations and future work
 measures on land, but oceanic BL is quite different
@@ -435,10 +436,16 @@ estimate z_0 from the data
 fit a line to the log-profile of wind, and see at which y we have x=0 (that is z_0)
 already done
     https://www.researchgate.net/profile/Bert_Holtslag/publication/225654672_Wind_profiles_momentum_fluxes_and_roughness_lengths_at_Cabauw_revisited/links/0deec52e3d757ef4c8000000/Wind-profiles-momentum-fluxes-and-roughness-lengths-at-Cabauw-revisited.pdf
-** Q for next meeting
-*** can we use surface fluxes?
+** 21/3
+*** summary of results
+ - surface fluxes are fundamental to reach MOST performance, and trend allows to improve a bit further
+ - wind at all levels is a very important feature for the network, u star and turbulent fluxes not so much
+ - used log profile to compute wind gradient, works well in many conditions, and not worse than non-parametric regression
+
+*** legit to use surface fluxes?
 fundamental to get good performance, together with hourly trend
 should not be a problem, sheba paper says they are estimated well
+*answer* no problem
 
 *** how to deal with wind?
 if we can use wind at 10,20,40 meters then it makes sense to give all levels as input to the network
@@ -447,6 +454,8 @@ if we can use wind at 10,20,40 meters then it makes sense to give all levels as 
         hard to estimate
         gives great performance if available
 
+*answer* no problem
+
 *** is fitting with log profile acceptable from a theoretical perspective?
 model agrees well with data even in unstable conditions, but ...?
 also note that whatever method we use, the network will learn to emulate it
@@ -454,8 +463,24 @@ also note that whatever method we use, the network will learn to emulate it
     but can make a huge difference if we dont use wind as input
 
 alternative is to use GP profile
-    still need to test them, but their gradient seem to be similar to others
     biggest difference seems to be at z=10
         since they are smoother, gradient should be smaller in abs. value
+        likely cause of not high correlation with log model
+    okay correlation with log model, slightly lower MSE but difference is nothing compared to std.err
+    MOST has slightly worse performance with the gp gradient
 
 must use some sort of model, dont want to discard z=10 (it's 500k more data points)
+
+*answer* no problem
+
+*** future work
+try to use as few variables as possible
+try to understand which variables are most important
+    i.e. use new feature sets:
+        1. z, wind@levels, temp@levels, soil temp
+        2. soil heat
+        3. net radiation
+        4. rain, dewpoint
+        5. H,LE
+    with and without trend
+use only past values to compute trend!
