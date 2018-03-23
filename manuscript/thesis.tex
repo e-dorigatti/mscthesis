@@ -8,9 +8,11 @@
 \usepackage{hyphenat}
 \usepackage{amsmath,amsfonts,amssymb,amsthm,mathtools}
 \usepackage{hyperref}
+\usepackage{bbm}
 \usepackage{gensymb}
 \usepackage{calc}
 \usepackage{tabto}
+\usepackage{natbib}
 
 \DeclareMathOperator*{\argmin}{argmin}
 \DeclareMathOperator*{\argmax}{argmax}
@@ -44,9 +46,11 @@ todo more fluff about ml ?
 \section{Research Question}
 Currently, limitations of the validity of the Monin-Obukhov similarity theory are not believed to be a likely explanation for the high scatter that is found in experimental studies, unless in highly stable conditions \cite{basicatm}. With the availability of micro-meteorological data from specialized observation sites such as Cabauw, in the Netherlands, and the recent developments in Machine Learning, this conjecture can be finally put to the test. More specifically, we pose the following \\
 
-\textbf{Research Question:} Is it possible to use the data from the Cesar database to improve the Monin-Obukhov model of the flux-profile relationships, by using more predictors besides the instability parameter? \\
+\textbf{Research Question 1:} Is it possible to use the data from the Cesar database to improve the Monin-Obukhov model of the flux-profile relationships, by using more predictors besides the instability parameter? \\
 
-A positive answer to this question would contribute to improve the quality of current global circulation models (large scale climate simulations). It has been shown that, at least in difficult conditions, several simulation models produce flux estimates that are highly inaccurate, presenting low correlation (mostly below 0.3) and errors that are as large as the fluxes themselves \cite{sheba}. Since errors in the simulation accumulate over time, even slight improvements can greatly improve the accuracy of the results after years of simulated time.
+\textbf{Research Question 2:} (in case of an affirmative answer to the first research question): What impact do the different features have on the quality of the prediction? \\
+
+Affirmative answers to these question would contribute to improve the quality of current global circulation models (large scale climate simulations). \cite{sheba} shows that, at least in difficult conditions, several simulation models produce flux estimates that are highly inaccurate, presenting low correlation (mostly below 0.3) and errors that are as large as the fluxes themselves. Since errors in the simulation accumulate over time, even slight improvements can greatly improve the accuracy of the results after years of simulated time. Improved flux-profile relationship can, therefore, yield more accurate estimates of the fluxes.
 
 \section{Research Methodology}
 todo
@@ -148,7 +152,7 @@ The turbulent fluxes $H$ and $\lambda E$ are constant in the surface layer [todo
 Kinetic energy is energy stored in form of movement: faster or heavier objects have more kinetic energy than slower or lighter ones. The Reynolds decomposition allows us to decompose the kinetic energy of turbulent flows in two terms: one caused by the mean flow, and one caused by turbulence. This decomposition can be justified by examining the temporal spectrum of kinetic energy, shown in figure \ref{fig:tkespectrum}. Four peaks are visible, corresponding to different sources of kinetic energy: turbulence, day-night cycle, westerlies\footnote{winds blowing from the east towards the west in the mid-latitudes}, and seasons. Importantly, there are few sources of kinetic energy in the 30 minutes to one hour time scale; this so-called spectral gap allows us to separate between turbulence and other sources of fluctuations in the atmosphere.
 
 \begin{figure}
-\caption{Change of atmospheric kinetic energy at different time-scales. The peaks in the scale of days and months and years are due to the day-night and Summer-Winter cycles, the peaks in the monthly scale are due to baroclinic instability in the mid-latitude westerlies, and the peaks at one minute are due to convection and atmospheric turbulence \cite{tkespectrumsrc,tkespectrumorig}}
+\caption{Change of atmospheric kinetic energy at different time-scales. The peaks in the scale of days and months and years are due to the day-night and Summer-Winter cycles, the peaks in the monthly scale are due to baroclinic instability in the mid-latitude westerlies, and the peaks at one minute are due to convection and atmospheric turbulence \citep{tkespectrumsrc,tkespectrumorig}}
 \label{fig:tkespectrum}
 \centering
 \includegraphics[width=0.5\textwidth]{images/kinetic_energy_spectrum}
@@ -158,7 +162,7 @@ From now on, we will use a coordinate system with the $x$ axis aligned to the av
 
 It is important to notice that turbulence is dissipative in nature. Consider a hot Summer day, where air is warmer close to the surface, and a circular eddy moving some air up and some down, so that the average motion is zero. The parcel of air moving up ($w'>0$) ends up being warmer than its surroundings ($\theta'>0$), while the one moving down ($w'<0$) will be colder ($\theta'<0$); the result is a new transport of heat through the eddy: $\overline{w'\theta'}>0$. On the contrary, imagine a cold night, where the air close to the surface is colder; the same eddy would transport a colder parcel of air upwards, and a warmer one downwards. In both cases, the end result would be a net transport of heat without transport of mass. Because of the ??? law, the eddy must lose energy, and thus dissipate over time.
 
-Since turbulence changes over time, we are more interested in the change of kinetic energy, the turbulent kinetic energy budget. A full derivation is out of the scope of this work, but its final form \cite{basicatm} can be derived from prime physical principles, resulting in
+Since turbulence changes over time, we are more interested in the change of kinetic energy, the \emph{turbulent kinetic energy budget}. A full derivation is out of the scope of this work, but its final form \citep{basicatm} can be derived from prime physical principles, resulting in
 
 \begin{equation}
 \frac{\partial\overline{{e'}^2}}{\partial t}
@@ -253,10 +257,10 @@ A supervised machine learning model uses a set of parameters to compute the outp
 
 The next sections describe the theory of learning, a general technique to estimate the parameters of a regression model, and introduce several machine learning algorithms for regression.
 
-\paragraph{Notation:} Scalars are denoted in \textit{italic}, vectors (always column) and matrices in \textbf{bold}. The training set contains $N$ training samples, indexed by $n$, and each sample is a pair of feature vector $\bm x_n\in\mathbb{R}^D$ and a target value $t_n\in\mathbb{R}$. The feature vectors are grouped in the $N\times D$ matrix $\bm X=\left[\bm x_1\dotsb\bm x_N\right]^\intercal$ and the target values in the $N\times 1$ vector $\bm t=\left[t_1,\ldots,t_n\right]^\intercal$. Models are parametrized by a parameter vector $\bm\theta$ and their output for the feature vector $\bm x_n$ is $y_n=y(\bm x_n;\bm\theta)$. The vector containing both parameters and hyper-parameters is denoted with $\bm\Theta$.
+\paragraph{Notation:} Scalars are denoted in \textit{italic}, vectors (always column) and matrices in \textbf{bold}. The training set contains $N$ training samples, indexed by $n$, and each sample is a pair of feature vector $\bm x_n\in\mathbb{R}^D$ and a target value $t_n\in\mathbb{R}$. The feature vectors are grouped in the $N\times D$ matrix $\bm X=\left[\bm x_1\dotsb\bm x_N\right]^\intercal$ and the target values in the $N\times 1$ vector $\bm t=\left[t_1,\ldots,t_n\right]^\intercal$. Models are parametrized by a parameter vector $\bm\theta$ and their output for the feature vector $\bm x_n$ is $f_n=f(\bm x_n;\bm\theta)$. The vector containing both parameters and hyper-parameters is denoted with $\bm\Theta$.
 
 \subsection{Learning Theory}
-The goal of supervised learning is to use the training examples $D=(\bm X, \bm t)$, independent and identically distributed according to an unknown distribution $p_{XT}$, to find a good prediction rule $\hat{f}:\mathcal{X}\rightarrow\mathcal{T}$ among a family of available functions $\mathcal{F}$. In most practical cases, $\mathcal{X}=\mathbb{R}^D$ and $\mathcal{T}$ is either $\mathbb{R}$ for regression or a subset of $\mathbb{N}$ for classification. The goodness of a prediction rule $f$ is measured through a \emph{loss function} $\ell:\mathcal{T}\times\mathcal{T}\rightarrow\mathbb{R}$ that tells, given a target value $t$ and a guess $y=f(x)$, how much the guess is off. The \emph{risk} of an estimator $f$ is simply its expected loss:
+The goal of supervised learning is to use the training examples $D=(\bm X, \bm t)$, independent and identically distributed according to an unknown distribution $p_{XT}$, to find a good prediction rule $\hat{f}:\mathcal{X}\rightarrow\mathcal{Y}$ among a family of available functions $\mathcal{F}$. In most practical cases, $\mathcal{X}=\mathbb{R}^D$ and $\mathcal{Y}$ is either $\mathbb{R}$ for regression or a subset of $\mathbb{N}$ for classification. The goodness of a prediction rule $f$ is measured through a \emph{loss function} $\ell:\mathcal{Y}\times\mathcal{Y}\rightarrow\mathbb{R}$ that tells, given a target value $t$ and a guess $y=f(x)$, how much the guess is off. The \emph{risk} of an estimator $f$ is simply its expected loss:
 
 \begin{equation}
 R(f)=\mathbb{E}_{(x,t)\sim p_{XT}}\left[\ell(f(x),t) \vert f \right]
@@ -285,46 +289,57 @@ as our best guess. This procedure is called \emph{empirical risk minimization}. 
 Where the first term is the \emph{estimation} error incurred by not selecting the best possible estimator in $\mathcal{F}$, and the second term is the \emph{approximation} error caused by searching a good estimator in $\mathcal{F}$. They usually have opposite behavior:
 
 \begin{itemize}
-\item the approximation error is high when $\mathcal{F}$ is too complex for the data at hand, where complexity refers to the range of phenomena that can be accurately modeled by these functions. In other words, $\mathcal{F}$ contains many valid explanations that are equally good on the training set (they have low empirical risk $\hat{R}$), but are not accurate models of the underlying phenomenon $p_{XT}$, i.e. they do not generalize well (they have high risk $R$);
-\item the estimation error is high when $\mathcal{F}$ cannot adequately model the phenomenon that we are trying to describe, i.e. when it does not contain any good explanation for it.
+\item the estimation error is high when $\mathcal{F}$ is too complex for the data at hand, where complexity refers to the range of phenomena that can be accurately modeled by these functions. In other words, $\mathcal{F}$ contains many valid explanations that are equally good on the training set (they have low empirical risk $\hat{R}$), but are not accurate models of the underlying phenomenon $p_{XT}$, i.e. they do not generalize well (they have high risk $R$);
+\item the approximation error is high when $\mathcal{F}$ cannot adequately model the phenomenon that we are trying to describe, i.e. when it does not contain any good explanation for it.
 \end{itemize}
 
 This decomposition is often referred to as the \emph{bias-variance decomposition}, where bias and variance refer to, respectively, approximation and estimation error.
 
-The fundamental problem is to find a class of functions that is powerful enough to model $p_{XT}$, but not too powerful so as to contain too many good explanations, because we would not be able to choose. This can be done in two ways: by penalizing complex models, in order to favor simpler explanations, even though they might have slightly higher empirical risk, or by directly estimating approximation and estimation errors using hold-out sets. An example of the former approach are Bayesian methods, which work by assigning higher \emph{prior} probability to simple models, and selecting complex models only when the data allows to do so. Section 
-\ref{sec:regression_fit} describes this approach in more detail, while we now turn our attention to a widely used hold-out method: cross validation.
+The fundamental problem is to find a class of functions that is powerful enough to model $p_{XT}$, but not too powerful so as to contain too many good explanations, because we would not be able to choose. Equivalently, we want to find a good model, one that can explain the data we have, and generalize to new examples. This problem is known as \emph{model selection}, and is important to distinguish between model selection for \emph{identification}, and model selection for \emph{estimation}. In the former case, the goal is to obtain a model and its parameters, to be used on new prediction problems, whereas the goal of the latter is to obtain a realistic estimate of the performance that can be obtained on new data. This problem can be approached in two ways: by directly estimating approximation and estimation errors using hold-out sets, or by penalizing complex models in order to favor simpler explanations, even though they might have slightly higher empirical risk. The next sections describe these two approaches.
 
-\subsubsection{Cross Validation}
+
+\subsection{Cross Validation}
+\label{sec:cv}
 The idea behind hold-out methods is to partition the available data in two smaller sets $D_T$ and $D_V$, usually of size 2/3 and 1/3 of the total, and use the \emph{training} set $D_T$ to choose $\hat{f}$ and $D_V$ to estimate its risk. Since $D$ is assumed to be a representative sample from $p_{XT}$, if the two partitions contain independent and identically distributed samples, the empirical risk on the \emph{validation set} $D_V$ can give us a glimpse on the generalization power of $\hat{f}$. This is because the validation set contains new samples that were not used to choose $\hat{f}$, thus the empirical risk on this set is an unbiased estimate of the true risk of the discovered model. This allows us not only to be confident about the performance of the estimator on unseen data, but also to compare different estimators. The problem of a single hold-out set is the variance of its estimate of the risk, which depends on the size of the validation set. This means that we are faced with a trade-off: use a lot of data to select a good estimator, but have high uncertainty in its estimated performance, or use less data and select a less powerful estimator, but have a more accurate picture of its performance.
 
 The solution to this problem is to repeatedly perform this partitioning procedure so as to obtain many estimates of the risk, each on a different subset of validation samples, and average these results together. This can be done in a number of different ways:
 
 \begin{itemize}
 \item in random subsampling, the procedure above is simply repeated many times, by using two thirds random examples for training, and the remaining one third for validation;
-\item In bootstrapping, the training set is created by taking $N=\vert D\vert$ examples \emph{with replacement} from $D$, and using the remaining examples for validation. This means that the validation set contains on average approximately 36.8\% of the samples in $D$, and the training set the remaining 63.2\%, with many duplicates;
-\item In k-fold cross validation, $D$ is partitioned in $k$ subsets, and each of them is used in turn as validation set, while the others are used for training. This produces $k$ estimates of the true risk, coming from the $k$ subsets.
+\item In bootstrapping \citep{bootstrap}, the training set is created by taking $N=\vert D\vert$ examples \emph{with replacement} from $D$, and using the remaining examples for validation. This means that the validation set contains on average approximately 36.8\% of the samples in $D$, and the training set the remaining 63.2\%, with many duplicates;
+\item In k-fold cross validation \citep{kfold}, $D$ is partitioned in $k$ subsets, and each of them is used in turn as validation set, while the others are used for training. This produces $k$ estimates of the true risk, coming from the $k$ subsets.
 \end{itemize}
 
-Regardless of the method used, the final estimate of the performance is the average of the estimates obtained from the individual trials. Every method has different properties regarding both the bias and the variance of the estimates, and there is considerable controversy on which method should be used in which situation. For example, \cite{cv_bootstrap} recommends using 10-fold cross validation for comparing models, because, although its estimate of the performance is biased, it has lower variance compared to bootstrapping; however, \cite{no_unbiased_cv} shows that it is not possible to obtain an universal unbiased estimate of the variance of k-fold cross validation. \cite{cvmyths} further discusses this issue, and debunks some myths and commonly held misconceptions about cross validation, including the belief, consequent \cite{cv_bootstrap}, that 10-fold cross validation is always the best choice.
+Regardless of the method used, the final estimate of the performance is the average of the estimates obtained from the individual trials. Every method has different properties regarding both the bias and the variance of the estimates, and there is considerable controversy on which method should be used in which situation. For example, \cite{cv_bootstrap} recommends using 10-fold cross validation for comparing models, because, although its estimate of the performance is biased, it has lower variance compared to bootstrapping; however, \cite{no_unbiased_cv} show that it is not possible to obtain an universal unbiased estimate of the variance of k-fold cross validation. \cite{cvmyths} further discusses this issue, and debunks some myths and commonly held misconceptions about cross validation, including the belief, consequent \cite{cv_bootstrap}, that 10-fold cross validation is always the best choice. Generally, there is a tradeoff in choosing the value of k, as high values yield estimates with lower bias, but higher variance \citep{cv_survey}, and are more computationally intensive.
 
-todo model identification vs evaluation, nested cv
+nested cv \cite{nested_cv}
 
 \subsection{Parameter Estimation for Regression}
 \label{sec:regression_fit}
-A common assumption in the regression setting is that the observations are corrupted by additive Gaussian white noise, i.e. $t_n=f_n+\epsilon_n$, where $f_n$ is the "true" value, and $\epsilon_n\sim\mathcal{N}(0,\beta^{-1})$ is the noise. Let $y_n=y(\bm x_n;\bm{\theta})$ be the model's prediction for the sample $\bm x_n$, then we can write the probability of observing $t_n$, were $y_n=f_n$, as:
+
+In this section, we describe a general framework, rooted in Bayesian statistics, for estimating the parameters of a regression model, while controlling overfitting. An advantage of Bayesian methods is that they offer a sound theoretical foundation for model selection, without requiring repeated experiments to choose among candidate models, although this mathematical rigor is not free from practical difficulties \citep{bayesian_model_selection, practical_bayesian_model_selection}.
+
+A common assumption in the regression setting is that the observations are corrupted by additive Gaussian white noise, i.e. $t_n=y_n+\epsilon_n$, where $y_n$ is the "true" value, and $\epsilon_n\sim\mathcal{N}(0,\beta^{-1})$ is the noise. Let $f_n=f(\bm x_n;\bm{\theta})$ be the model's prediction for the sample $\bm x_n$, then we can write the probability of observing $t_n$, assuming that $f_n=y_n$, as:
 
 \begin{equation}
-p(t_n\vert \bm{x_n},\bm\theta,\beta)=\mathcal{N}(t_n\vert y(\bm{x_n};\bm\theta),\beta^{-1})
+p(t_n\vert \bm{x_n},\bm\Theta)=\mathcal{N}(t_n\vert f(\bm{x_n};\bm\theta),\beta^{-1})
 \end{equation}
 
-This probability is called \emph{likelihood} of the observation $t_n$, under the model $y(\cdot;\cdot)$ with parameters $\bm{\theta}$. Since the training data is assumed to be independent and identically distributed, the likelihood of the whole training set is
+This probability is called \emph{likelihood} of the observation $t_n$, under the model $f(\cdot;\cdot)$ with parameters $\bm{\theta}$. Since the training data is assumed to be independent and identically distributed, the likelihood of the whole training set is
 
 \begin{equation}
 \label{eq:likelihood}
-p(\bm{t}\vert\bm{X}, \bm{\theta},\beta)=\prod_{n=1}^N  \mathcal{N}(t_n\vert y(\bm{x_n};\bm\theta),\beta^{-1})
+p(\bm{t}\vert\bm{X}, \bm\Theta)=\prod_{n=1}^N  \mathcal{N}(t_n\vert f(\bm{x_n};\bm\theta),\beta^{-1})
 \end{equation}
 
-Then, a sensible choice for the model parameters $\bm{\theta}$ is to choose the ones that give the largest dataset likelihood; this estimation method is called \emph{maximum likelihood} (MLE). Note that, since the goal is to predict $f_n$, there is a high probability that the best parameters would \emph{not} be the ones with maximum likelihood. When a model learns the noise in the training data, it cannot generalize well to new, unseen data, because the noise is random. This situation is known as \emph{overfitting}, and tends to happen when the model is too complex relative to the amount of data available for training.
+And the predicted value $t$ for a new sample $\bm x$ is distributed as
+
+\begin{equation}
+p(t\vert \bm x, \bm X, \bm t)=\int
+p(t\vert\bm x,\bm\Theta)\cdot p(\bm\Theta\vert \bm t, \bm X)\ \text{d}\bm\Theta 
+\end{equation}
+
+In practice, it is not feasible to compute this integral, and its value is dominated by the values of $\bm\theta$ close to the one that maximizes equation \ref{eq:likelihood} anyways; this is the gist of \emph{maximum likelihood estimation} (MLE). Note that, since the goal is to predict $y_n$, there is a high probability that the "true" parameters would \emph{not} be the ones with maximum likelihood. When a model learns the noise in the training data, it cannot generalize well to new, unseen data, because the noise is random. This situation is known as \emph{overfitting}, and tends to happen when the model is too complex relative to the amount of data available for training, and is related to high estimation error mentioned previously.
 
 The risk of overfitting can be reduced with a number of \emph{regularization} strategies. A widely used strategy consists in including a prior distribution on the parameters of the model, and maximizing their posterior distribution, computed using Bayes theorem:
 
@@ -352,23 +367,23 @@ If we assume a Gaussian likelihood like the one in equation \ref{eq:likelihood},
 
 \begin{equation}
 \label{eq:least_squares}
-\bm\theta^*=\argmin_{\bm\theta}\ L(\bm\theta)=\argmin_{\bm\theta}\sum_{n=1}^N\left( y(\bm x_n,\theta)-t_n\right)^2+\lambda\bm\theta^\intercal\bm\theta
+\bm\theta^*=\argmin_{\bm\theta}\ L(\bm\theta)=\argmin_{\bm\theta}\sum_{n=1}^N\left( f(\bm x_n,\theta)-t_n\right)^2+\lambda\bm\theta^\intercal\bm\theta
 \end{equation}
 
-Where $L$ is the \emph{loss function}, in this case the sum-of-squares error. It is customary to use the mean squared error instead of the sum of squares because it results in smaller numbers and is readily interpreted; being only a constant factor away from \ref{eq:least_squares}, it does not transcend the essence of maximum likelihood. The parameter $\beta$ can be estimated as well in a similar way, if necessary, and a fully Bayesian treatment allows to estimate $\lambda$, too. Depending on the model $y(\bm x_n,\bm\theta)$, \ref{eq:least_squares} can be solved analytically to yield a closed-form solution for $\bm\theta$.
+Where $L$ is the \emph{loss function}, in this case the sum-of-squares error. It is customary to use the mean squared error instead of the sum of squares because it results in smaller numbers and is readily interpreted; being only a constant factor away from \ref{eq:least_squares}, it does not transcend the essence of MAP estimation. The parameter $\beta$ can be estimated as well in a similar way, if necessary, and a fully Bayesian treatment allows to estimate $\lambda$, too. Depending on the model $f(\bm x_n,\bm\theta)$, \ref{eq:least_squares} can be solved analytically to yield a closed-form solution for $\bm\theta$.
  
 When this is not possible, iterative optimization methods are employed. A widely used approach is called \emph{gradient descent}: the gradient of a function computed at a given location "points" to the steepest direction where the function's value increases. By repeatedly following the gradient, it is possible to reach a local maximum, and, in the opposite direction, a local minimum:
 
 \begin{equation}
-\bm x_{n+1}:=\bm x_n-\eta\cdot\nabla f(\bm x_n)
+\bm\theta_{n+1}:=\bm\theta_n-\eta\cdot\nabla f(\bm x_n)
 \end{equation}
 
-the series $\bm x_1,\ldots,\bm x_n$ is guaranteed to converge to the local optimum at a rate of $O(n^{-1})$ if certain conditions are met \cite{gd_convergence}. Vanilla gradient descent can be greatly improved with a number of techniques, such as momentum \cite{gd_momentum}, adaptive learning rate \cite{adagrad, adadelta, adam}, and so on, see \cite{gd_overview} for an overview. More advanced optimization techniques that use the gradient and the Hessian, such as Newton's method, exist, see \cite{numopt} for an in-depth discussion. The gradient of $L(\bm\theta)$ is
+the series $\bm\theta_1,\ldots,\bm\theta_n$ is guaranteed to converge to the local optimum at a rate of $O(n^{-1})$ if certain conditions are met \citep{gd_convergence}. \cite{numopt} describes more advanced optimization techniques that use the gradient and, possibly, the Hessian, such as Newton's. The gradient of $L(\bm\theta)$ is
 
 \begin{equation}
 \label{eq:least_squares_gradient}
 \nabla_{\bm\theta}\log p(\bm\theta\vert\bm t,\bm X)
-=2\sum_{n=1}^N \big(y(\bm x_n;\theta)-\bm t_n\big)\cdot\nabla_{\bm\theta}y(\bm x_n;\theta) + 2\lambda\bm\theta
+=2\sum_{n=1}^N \big(f(\bm x_n;\theta)-\bm t_n\big)\cdot\nabla_{\bm\theta}f(\bm x_n;\theta) + 2\lambda\bm\theta
 \end{equation}
 
 And its Hessian is
@@ -376,18 +391,18 @@ And its Hessian is
 \begin{equation}
 \label{eq:least_squares_hessian}
 \nabla^2_{\bm\theta}\log p(\bm\theta\vert\bm t,\bm X)=2\sum_{n=1}^{N}\bigg[
-\big(\nabla_{\bm\theta} y(\bm x_n;\bm\theta)\big)
-\big(\nabla_{\bm\theta} y(\bm x_n;\bm\theta)\big)^\intercal
-+\big(y(\bm x_n;\bm\theta)-t_n\big)\nabla^2_{\bm\theta}y(\bm x_n;\theta)\bigg]+2\lambda\bm I
+\big(\nabla_{\bm\theta} f(\bm x_n;\bm\theta)\big)
+\big(\nabla_{\bm\theta} f(\bm x_n;\bm\theta)\big)^\intercal
++\big(f(\bm x_n;\bm\theta)-t_n\big)\nabla^2_{\bm\theta}f(\bm x_n;\theta)\bigg]+2\lambda\bm I
 \end{equation}
 
-In some cases, the gradient and the Hessian can be approximated using a random subset of the training set, and, in extreme cases, a single sample.
+In some cases, the gradient and the Hessian can be approximated using a random subset of the training set, and, in extreme cases, a single sample. These variants are called \emph{minibatch} gradient descent and \emph{stochastic} gradient descent respectively. They both compute a noisy approximation to the true gradient, which can actually improve convergence and generalization of high-dimensional, non-convex loss functions such as those found in deep learning \citep{sgd_noise, bayesian_sgd}. Vanilla gradient descent can be greatly improved with a number of techniques, such as momentum \citep{gd_momentum}, adaptive learning rate \citep{adagrad, adadelta, adam}, and so on, see \cite{gd_overview} for an overview. 
 
-\subsection{Regression Models}
-This section introduces some commonly used regression machine learning models, in order of complexity and modeling power.
+\subsection{Hyperparameter Optimization}
+grid search vs random search
 
-\subsubsection{Ridge Regression}
-A linear regression model has the form $y(\bm x_n;\bm\theta)=\bm\theta^\intercal\bm x_n$; ridge regression is simply L2-regularized linear regression. This model is simple enough that the solution for equation \ref{eq:least_squares} can be found analytically in closed form:
+\subsection{Ridge Regression}
+A linear regression model has the form $f(\bm x_n;\bm\theta)=\bm\theta^\intercal\bm x_n$; ridge regression is simply L2-regularized linear regression. This model is simple enough that the solution for equation \ref{eq:least_squares} can be found analytically in closed form:
 
 \begin{equation}
 \label{eq:ridge_solution}
@@ -396,24 +411,24 @@ A linear regression model has the form $y(\bm x_n;\bm\theta)=\bm\theta^\intercal
 
 Notice that the term \emph{linear} in linear regression refers to linearity with respect to the parameters, not the features. In fact, new features can be added through the use of a possibly non-linear feature mapping $\phi:\mathbb{R}^D\rightarrow\mathbb{R}^M$, such that $\bm x^\prime_n=\phi(\bm x_n)=\left[\phi_1(\bm x_n),\ldots,\phi_M(\bm x_n)\right]^\intercal$. Then, the model parameters can be fitted to the augmented training set $\bm X^\prime$. A typical feature added is a bias $\phi_1(\bm x)=1$.
 
-\subsubsection{k-Nearest Neighbors}
+\subsection{k-Nearest Neighbors}
 The k-nearest neighbor model \cite{knn} predicts a value for a sample $\bm x$ by averaging the target values of the $K$ training samples that are closest to $\bm x$, possibly weighted by distance or some other metric. Let $\bm t_{(1)},\ldots,\bm t_{(k)}$ be the target values of the $K$ training samples closest to $\bm x$ according to a distance metric $d:\mathbb{R}^D\rightarrow\mathbb{R}$, then we have
 
 \begin{equation}
-y(\bm x)=\sum_{k=1}^K w_{(k)}\cdot\bm t_{(k)}
+f(\bm x)=\sum_{k=1}^K w_{(k)}\cdot\bm t_{(k)}
 \end{equation}
 
 
 Note that the k-nearest neighbors algorithm does not have parameters, only hyper\hyp{}parameters: $K$ itself, the distance function, and the weighting scheme. Typical distance functions are the Manhattan distance $d(\bm u,\bm v)=\sum_{d=1}^D\vert u_d-v_d\vert$ and the squared Euclidean distance $d(\bm u,\bm v)=\sum_{d=1}^D(u_d-v_d)^2$, and typical weights are uniform $w_{(k)}=1/K$ and based on distance $w_{(k)}=d(\bm x,\bm x_{(k)})/\sum_{k^\prime=1}^K d(\bm x,\bm x_{(k^\prime)})$.
 
-\subsubsection{Random Forests}
+\subsection{Random Forests}
 Random forests are an ensemble approach to prediction whose output values are the combination of the output of multiple decision trees \cite{random_forests}. In general, ensemble methods improve the performance of a single model by combining the output of many models trained on random subsets of features and/or samples.
 
 A decision tree is a sequence of nested \emph{if-then-else} rules, each of them testing one of the features of the input sample: inference starts from the root, and successively traverses each node by moving to the correct child, until a leaf, containing the final prediction, is reached. For classification, the prediction is the most frequent class among the training samples that end up in that leaf, while for regression the output value can be their average, or the output of a more complicated regression model trained on those samples.
 
 Given a training set, many decision trees can be built using different random subsets of features. This creates a number of \emph{expert} trees, each of them specialized in a restricted domain of the data. No tree is good enough on its own as it overfits its domain, but by averaging the output of many decision trees, their errors tend to cancel out.
 
-A simple and widely used algorithm for building decision trees is CART \cite{cart}. It builds decision trees by greedily and recursively partitioning the training samples until a stopping criterion is met. Partitions are created by selecting the split that has the smallest impurity; a common measure for regression is the mean squared error, while Gini impurity or cross-entropy are popular options in classification. Let $X$ be a set of training samples and $\Sigma=(f,\tau)$ be a candidate split on feature $f$ with threshold $\tau$, then we can partition the training samples in two sets:
+A simple and widely used algorithm for building decision trees is CART \citep{cart}. It builds decision trees by greedily and recursively partitioning the training samples until a stopping criterion is met. Partitions are created by selecting the split that has the smallest impurity; a common measure for regression is the mean squared error, while Gini impurity or cross-entropy are popular options in classification. Let $X$ be a set of training samples and $\Sigma=(f,\tau)$ be a candidate split on feature $f$ with threshold $\tau$, then we can partition the training samples in two sets:
 
 \begin{align}
 S^-(\Sigma)&=\{\bm x\in X\vert \bm x_f\leq\tau\} \\
@@ -434,12 +449,16 @@ The best split is then
 
 This best split defines a new node in the tree, and the construction can proceed recursively on its two children $S^-(\Sigma^*)$ and$ S^+(\Sigma^*)$. Stopping criteria for the construction can be a minimum impurity $I(X)$, a minimum impurity decrease with respect to the parent $I(X) - I(\Sigma^*)$, or a minimum cardinality for $X$ or the two splits $S^+$ and $S^-$.
 
-\subsubsection{Neural Networks}
+\subsection{Gaussian Processes}
+todo
+
+\subsection{Neural Networks}
 todo
 
 \chapter{Method}
 
 \section{Data Collection}
+\label{sec:data_collection}
 The Cabauw Experimental Site for Atmospheric Research\footnote{\url{http://www.cesar-database.nl/}} (Cesar) is a consortium formed by eight Dutch institutes and universities, which collaborate to operate and maintain an observatory for micro-meteorological conditions near the village of Cabauw, the Netherlands. The data collected characterizes the state of the atmosphere and the soil, and their interaction via radiation and surface fluxes.
 
 The observatory is surrounded by fields and no urban agglomerations is present within 15 kilometers; the land is flat with changes of altitude within a few meters over 20 kilometers. The main mast is 213 meters high and offers measurement levels every 20 meters; at each level there are three booms of length 10 meters that allow observations unobstructed by the main mast. There are three additional smaller masts of height 10 and 20 meters located close to the main mast, in order to obtain undisturbed measurements at the lower levels, and facilities to perform soil and surface observations.
@@ -447,7 +466,6 @@ The observatory is surrounded by fields and no urban agglomerations is present w
 The main focus of this project is on wind and temperature profiles, and the turbulent fluxes of sensible and latent heat. Additional variables, such as temperature and humidity, are needed to compute quantities of interest, most importantly the Obukhov length, and as possible predictors for the universal functions. There is one measurement for each variable every ten minutes, and missing measurements are gap-filled with a number of techniques. The data collected is always visually validated by an operator, which marks suspect or invalid sections of data
 
 The Cesar observatory provides full information regarding data collection\footnote{\url{http://projects.knmi.nl/cabauw/insitu/observations/documentation}}, what follows is a brief summary of the most relevant sections.
-
 
 \begin{figure}
 \caption{Sonic anemometer to measure wind and optical open-path sensor to measure humidity at the 180m level of the Cabauw mast.}
@@ -458,7 +476,7 @@ The Cesar observatory provides full information regarding data collection\footno
 \end{figure}
 
 \subsection{Wind Measurement}
-Wind speed and direction are measured at heights of 200, 140, 80, 40, 20 and 10 meters, in either two or all three booms available. The wind vane that measures direction has a resolution of $1.5^\circ$, and the cup anemometer that measures wind speed has an accuracy of the largest between 1\% and \SI{0.1}{\meter\per\second}. The threshold sensitivity of both instruments is lower than \SI{0.5}{\meter\per\second}, and they report inaccurate measurements for up to \SI{3}{\meter\per\second} \cite{windinstr}.
+Wind speed and direction are measured at heights of 200, 140, 80, 40, 20 and 10 meters, in either two or all three booms available. The wind vane that measures direction has a resolution of $1.5^\circ$, and the cup anemometer that measures wind speed has an accuracy of the largest between 1\% and \SI{0.1}{\meter\per\second}. \cite{windinstr} studied the threshold sensitivity of both instruments, and fount it lower than \SI{0.5}{\meter\per\second}, even though the measurements are inaccurate up to \SI{3}{\meter\per\second}.
 
 For every ten minutes interval, the measurement comes from the instrument that is best exposed to the wind, and less affected by the obstruction caused by the mast. Corrections are then applied to the raw measurements to further attenuate the disturbance by the tower, following \cite{winddistortion}.
 
@@ -466,6 +484,7 @@ For every ten minutes interval, the measurement comes from the instrument that i
 Air temperature is measured at heights of 200, 140, 80, 40, 20, 10 and 1.5 meters. todo write more
 
 \subsection{Eddy Correlation}
+\label{sec:eddy_correlation}
 The eddy correlation technique is used to compute the turbulent surface fluxes of sensible and latent heat, as well as momentum and $CO_2$, starting from fluctuations in wind, temperature, and humidity.
 
 These measurements are obtained with, respectively, a sonic anemometer, a sonic thermometer, and an optical open-path sensor. Sonic anemometers measure the wind speed by leveraging the fact that the speed of sound in free air is affected by the speed of the air itself; since the speed of sound is known, the wind speed can be easily recovered from the time a sound impulse takes to travel a short distance. By measuring the wind velocity along three orthogonal paths, the full wind vector can be recovered. Sonic thermometers work similarly, by leveraging the fact that the speed of sound is affected by the temperature of the medium it travels in. These instruments can take up to 100 measurements per second. Optical open-path sensors quantify the amount of water vapor and carbon dioxide in the air by emitting a ray of infrared light and measuring its intensity 10 to 20 centimeters further away. $H_2O$ and $CO_2$ molecules in the air absorb electromagnetic radiation at known frequencies, thus the concentration of water vapor and carbon dioxide can be inferred by measuring the attenuation at these wavelengths.
@@ -489,17 +508,18 @@ For less than two hours of missing measurements, both forcing and evaluation par
 \subsection{Data Filtering}
 todo
 
+todo also mention dew point, soil heat (and that missing values are not imputed), net radiation, rain
 
 \section{Monin-Obukhov Similarity Theory}
-This section describes how the data from the Cesar database is used to reproduce the Monin-Obukhov similarity theory. The flux of virtual potential temperature can be computed following the formulas in section \ref{sec:most}, as the data contains all the necessary quantities; $u_*$ is given, as well as the specific humidity and the pressure. The empirical values for $L$, $\phi_m$ and $\phi_h$ are computed following equations \ref{eq:most_l}, \ref{eq:phi_m} and \ref{eq:phi_h} respectively; all the necessary quantities are present in the Cesar database. The Obukhov length is computed at every height level using the corresponding temperature measurement, and the fluxes measured at the surface.
+This section describes how the data from the Cesar database is used to reproduce the Monin-Obukhov similarity theory. The flux of virtual potential temperature can be computed following the formulas in section \ref{sec:most}, as the data contains all the necessary quantities; $u_*$ is given, as well as the specific humidity and the pressure. The empirical values for $L$, $\phi_m$ and $\phi_h$ are computed following equations \ref{eq:most_l}, \ref{eq:phi_m} and \ref{eq:phi_h} respectively; all the necessary quantities are present in the Cesar database. The Obukhov length is computed at each height level using the corresponding temperature measurement, and the fluxes measured at the surface.
 
-The next section describes how the gradients are computed starting from the raw measurements, in order to obtain the complete flux-profile relationships. Then, we describe how to use the data to obtain new coefficients for the universal functions. Even though there is agreement on form of their form, there is still debate on the exact values of the coefficients, with different experiments resulting in different values \cite{hogstrom88}. In order to ensure a fair comparison with the results of this work, we fit the universal functions to the data from the Cesar database.
+Since the turbulent fluxes and the friction velocity are measured at the surface level, we can compute the flux-profile relationships only at 10, 20 and 40 meters, because these quantities can be assumed constant only within the surface layer. It is very hard to know the exact height of the surface layer, because it depends on the weather and no exact formulas are known [citation], but it is usually assumed to be 10\% as high as the boundary layer [citation]. Based on its typical heights [citation], the surface layer is often higher than 40 meters and lower than 80. \cite{cabauw_z0} indeed reports that a large number of observations from Cabauw at \SI{100}{\meter} are already outside of the surface layer.
+
+The next section describes how the gradients are computed starting from the raw measurements, in order to obtain the complete flux-profile relationships. Then, we describe how to use the data to obtain new coefficients for the universal functions. Even though there is agreement on form of their form, there is still debate on the exact values of the coefficients, with different experiments resulting in different values \citep{hogstrom88}. In order to ensure a fair comparison with the results of this work, we fit the universal functions to the data from the Cesar database.
 
 
 \subsection{Profile Computation}
 \label{sec:profiles}
-The wind and temperature profiles used to compute the flux-profile relationships are computed at 40, 20 and 10 meters, because the turbulent surface fluxes present and surface friction velocity in the Cesar database are constant only within the surface layer. It is very hard to know the exact height of the surface layer, because it depends on the weather and no exact formulas are known [citation], but it is usually assumed to be 10\% as high as the boundary layer [citation]. Based on its typical heights [citation], the surface layer is often higher than 40 meters and lower than 80. \cite{cabauw_z0} indeed reports that a large number of observations at \SI{100}{\meter} are already outside of the surface layer.
-
 In general, the derivative can be obtained by fitting a model on the observations, and computing the derivative using the model. The simplest option is to use a piecewise linear function that passes through the measurements; let the observations be sorted by height and $y_i$ the measurement at height $z_i$, then for $z\in[z_i,z_{i+1}]$ we have:
 
 \begin{equation}
@@ -523,7 +543,7 @@ f^\prime(z_i)&=\lim_{h\rightarrow 0}\frac{f(z_i+h)-f(z_i-h)}{2h} \\
 
 In order to compute this derivative at the lowest measured level $z_1=\SI{10}{\meter}$, we can exploit the no-slip condition and introduce an artificial observation $y_0=\SI{0}{\meter\per\second}$ at $z_0$. The value of the \emph{rougness length} $z_0$ depends on the properties of the surface, and, although no unambiguous value is known for the Cabauw observatory, its value is likely between $10^{-1}$m and $10^{-2}$m \cite{cabauw_z0, cabauw_night}, therefore it is reasonable to conclude that its effect is negligible on the final gradient.
 
-A more complicated model, introduced in \cite{windlogprofile}, is
+A more complicated model, introduced by \cite{windlogprofile}, is
 
 \begin{equation}
 \label{eq:logmodel}
@@ -536,7 +556,15 @@ The model is linear in its parameters, therefore equation \ref{eq:ridge_solution
 f^\prime(z)=b+2cz^2+d\frac{1}{z}
 \end{equation}
 
-\cite{windlogprofile} estimates the uncertainty of this gradient to be around 30\%.
+After removing the observations for which this model has a $R^2>0.9$, \cite{windlogprofile} estimates the uncertainty of this gradient to be around 30\%.
+
+Finally, a third method of computing the gradient is to fit a Gaussian process to the profile using the following kernel:
+
+\begin{equation}
+k(z_1,z_2)=k+\exp\left(-\frac{(z_1-z_2)^2}{2\sigma_0^2}\right)+\sqrt{\sigma_1^2 z_1 z_2}+\sigma_2^2 \mathbbm{1}[z_1=z_2]
+\end{equation}
+
+
 
 \subsection{Universal Functions}
 The general form of the universal functions is:
@@ -575,21 +603,43 @@ where $\tau=1-c^2\xi$. The Hessian of \ref{eq:phi_general} when $\xi\geq 0$ is s
 \end{bmatrix}
 \end{equation}
 
-Analytical computation of the Hessian allows us to use the Newton conjugate gradient descent algorithm, which provides super-linear convergence rate, unlike other conjugate gradient methods whose rate of convergence is only linear \cite{numopt}.
+Analytical computation of the Hessian allows us to use the Newton conjugate gradient descent algorithm, which provides super-linear convergence rate, unlike other conjugate gradient methods whose rate of convergence is only linear \citep{numopt}.
 
 \section{Model Fitting}
-todo
+In this section, we discuss how we use the data from the Cesar database to predict $\phi_m$.
+
+\subsection{Features}
+All the features come from the Cesar database, refer to section \ref{sec:data_collection} for details on how the data was collected. The predictors are partitioned in five sets:
+
+\begin{enumerate}
+\item[F1:] altitude $z$, wind at $z$, temperature at $z$, wind at 10 meters, temperature at 10 meters, wind at 20 meters, temperature at 20 meters, wind at 40 meters, temperature at 40 meters, soil temperature;
+\item[F2:] Soil heat flux;
+\item[F3:] Net radiation;
+\item[F4:] Rain amount, dew point;
+\item[F5:] Turbulent kinetic heat flux, turbulent latent heat flux;
+\end{enumerate}
+
+These sets are used cumulatively in the order they are listed, meaning that, for example, F3 is used in conjunction with F2 and F1. Derived features that can be computed from others, such as the virtual temperature, computed as in equation \ref{eq:vtemp}, are not included. The reason is that the less inputs a model requires, the more useful and "agile" it can be. This division was decided based on domain knowledge, so that the level of a feature reflects both its expected impact on the performance and how desirable it is to include it. An example of the former reasoning is with F4, where the effect of moisture is expected to be captured by the soil heat flux, and to be generally negligible in all but the most extreme conditions. An example of the latter reasoning is with F5, because turbulent fluxes are hard to measure accurately (see section \ref{sec:eddy_correlation}), and current simulation models are known to be quite inaccurate in their estimation of these fluxes \citep{sheba}.
+
+We also create a second version of each feature set, augmented with the hourly trend of each variable, except for $z$. The reason for including the trend is that it can give an indication of, for example, the time of the day, or other complex phenomena for which there is no measurement. The interval for the trend (one hour) is used because it is enough to capture local variations, but not too large so as to contain irrelevant information. The hourly trend is computed simply as the difference between the current value and the value measured one hour before, divided by one hour; given the goal of this work, it would not be feasible to use the future value to compute the trend.
+
+Finally, each feature is centered and standardized so as to have zero mean and unit standard deviation:
+
+\begin{equation}
+\label{eq:standardization}
+z_{i,j}=\frac{x_{i,j}-\mu_j}{\sigma_j}
+\end{equation}
+
+This method is not robust to outliers, since they heavily affect mean and standard deviation. This can be prevented by subtracting the median and normalizing with the interquartile range; since in our dataset these two methods give similar results, we follow equation \ref{eq:standardization}, because it is one of the most popular normalization method. Obviously, $\mu_j$ and $\sigma_j$ are computed only on the training data, and used to normalize both train and test data.
 
 \subsection{Models}
+
 which models are used, and why (?)
 e.g. why not SVM? (too computationally expensive)
 why random forest instead of gradient boosted trees? (not easily parallelizable, marginal increase in performace)
 
-\subsection{Features}
-available features, feature sets, trend, etc.
-
 \subsection{Performance Evaluation}
-which metrics (mse, r2, mape, etc.) and how they are computed (nested cv on months)
+which metrics (mse, r2, mape, etc.) and how they are computed (nested cv on months with random search)
 
 \chapter{Results}
 todo
@@ -612,7 +662,9 @@ actual constants and coefficients (e.g. von karmans constant) dont really matter
 \section{Limitations and Future Work}
 one of the reasons why MOST is unreliable in stable conditions is because of the difficulty of measuring fluxes
 
-\bibliographystyle{unsrt}
+%\bibliographystyle{unsrt}
+\bibliographystyle{plainnat}
+
 \bibliography{thesis}
 
 \end{document}
