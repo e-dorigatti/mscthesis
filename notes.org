@@ -244,7 +244,7 @@ can get an even better fit by fitting only on the levels we want
     i don't think this is good for the project, though
         we are basically overfitting and have no indication on when the model is not adequate
 
-** prediction 
+** predictio 
 *** block cross validation
 we have a data point every 10 minutes, which means that points close in time are very similar one another
 therefore we cannot assume that data is iid and make random splits

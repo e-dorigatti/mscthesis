@@ -9,6 +9,8 @@
 \usepackage{amsmath,amsfonts,amssymb,amsthm,mathtools}
 \usepackage{hyperref}
 \usepackage{bbm}
+\usepackage{caption}
+\usepackage{subcaption}
 \usepackage{gensymb}
 \usepackage{calc}
 \usepackage{tabto}
@@ -24,10 +26,20 @@
 
 \maketitle
 
+
+\section*{Acknowledgments}
+todo
+
+\newpage
+
 \section*{Summary}
 todo
 
 \tableofcontents
+
+%\listoffigures
+
+%\listoftables
 
 \chapter{Introduction}
 
@@ -363,7 +375,7 @@ The maximization of the posterior can be done conveniently by maximizing its log
 \end{equation}
 
 
-If we assume a Gaussian likelihood like the one in equation \ref{eq:likelihood}, and a spherical Normal prior distribution $p(\bm\theta)=\mathcal{N}(\bm 0, \lambda\bm I)$, the MAP estimation of equation \ref{eq:map} becomes, after removing unnecessary constant terms,
+If we assume a Gaussian likelihood like the one in equation \ref{eq:likelihood}, and a spherical Gaussian prior distribution $p(\bm\theta)=\mathcal{N}(\bm 0, \lambda\bm I)$, the MAP estimation of equation \ref{eq:map} becomes, after removing unnecessary constant terms,
 
 \begin{equation}
 \label{eq:least_squares}
@@ -399,7 +411,7 @@ And its Hessian is
 In some cases, the gradient and the Hessian can be approximated using a random subset of the training set, and, in extreme cases, a single sample. These variants are called \emph{minibatch} gradient descent and \emph{stochastic} gradient descent respectively. They both compute a noisy approximation to the true gradient, which can actually improve convergence and generalization of high-dimensional, non-convex loss functions such as those found in deep learning \citep{sgd_noise, bayesian_sgd}. Vanilla gradient descent can be greatly improved with a number of techniques, such as momentum \citep{gd_momentum}, adaptive learning rate \citep{adagrad, adadelta, adam}, and so on, see \cite{gd_overview} for an overview. 
 
 \subsection{Hyperparameter Optimization}
-grid search vs random search
+grid search vs random search,  briefly mention bayesian methods
 
 \subsection{Ridge Regression}
 A linear regression model has the form $f(\bm x_n;\bm\theta)=\bm\theta^\intercal\bm x_n$; ridge regression is simply L2-regularized linear regression. This model is simple enough that the solution for equation \ref{eq:least_squares} can be found analytically in closed form:
@@ -422,13 +434,13 @@ f(\bm x)=\sum_{k=1}^K w_{(k)}\cdot\bm t_{(k)}
 Note that the k-nearest neighbors algorithm does not have parameters, only hyper\hyp{}parameters: $K$ itself, the distance function, and the weighting scheme. Typical distance functions are the Manhattan distance $d(\bm u,\bm v)=\sum_{d=1}^D\vert u_d-v_d\vert$ and the squared Euclidean distance $d(\bm u,\bm v)=\sum_{d=1}^D(u_d-v_d)^2$, and typical weights are uniform $w_{(k)}=1/K$ and based on distance $w_{(k)}=d(\bm x,\bm x_{(k)})/\sum_{k^\prime=1}^K d(\bm x,\bm x_{(k^\prime)})$.
 
 \subsection{Random Forests}
-Random forests are an ensemble approach to prediction whose output values are the combination of the output of multiple decision trees \cite{random_forests}. In general, ensemble methods improve the performance of a single model by combining the output of many models trained on random subsets of features and/or samples.
+Random forests \citep{random_forests} are an ensemble approach to prediction whose output values are the combination of the output of multiple decision trees. In general, ensemble methods improve the performance of a single model by combining the output of many models trained on random subsets of features and/or samples.
 
 A decision tree is a sequence of nested \emph{if-then-else} rules, each of them testing one of the features of the input sample: inference starts from the root, and successively traverses each node by moving to the correct child, until a leaf, containing the final prediction, is reached. For classification, the prediction is the most frequent class among the training samples that end up in that leaf, while for regression the output value can be their average, or the output of a more complicated regression model trained on those samples.
 
 Given a training set, many decision trees can be built using different random subsets of features. This creates a number of \emph{expert} trees, each of them specialized in a restricted domain of the data. No tree is good enough on its own as it overfits its domain, but by averaging the output of many decision trees, their errors tend to cancel out.
 
-A simple and widely used algorithm for building decision trees is CART \citep{cart}. It builds decision trees by greedily and recursively partitioning the training samples until a stopping criterion is met. Partitions are created by selecting the split that has the smallest impurity; a common measure for regression is the mean squared error, while Gini impurity or cross-entropy are popular options in classification. Let $X$ be a set of training samples and $\Sigma=(f,\tau)$ be a candidate split on feature $f$ with threshold $\tau$, then we can partition the training samples in two sets:
+\cite{cart} introduced a simple and widely used algorithm for building decision trees, CART; it builds decision trees by greedily and recursively partitioning the training samples until a stopping criterion is met. Partitions are created by selecting the split that has the smallest impurity; a common measure for regression is the mean squared error, while Gini impurity or cross-entropy are popular options in classification. Let $X$ be a set of training samples and $\Sigma=(f,\tau)$ be a candidate split on feature $f$ with threshold $\tau$, then we can partition the training samples in two sets:
 
 \begin{align}
 S^-(\Sigma)&=\{\bm x\in X\vert \bm x_f\leq\tau\} \\
@@ -449,6 +461,8 @@ The best split is then
 
 This best split defines a new node in the tree, and the construction can proceed recursively on its two children $S^-(\Sigma^*)$ and$ S^+(\Sigma^*)$. Stopping criteria for the construction can be a minimum impurity $I(X)$, a minimum impurity decrease with respect to the parent $I(X) - I(\Sigma^*)$, or a minimum cardinality for $X$ or the two splits $S^+$ and $S^-$.
 
+
+
 \subsection{Gaussian Processes}
 todo
 
@@ -456,6 +470,7 @@ todo
 todo
 
 \chapter{Method}
+This chapter describes how the data is collected (section \ref{sec:data_collection}) and used to re-create the flux-profile relationships (section \ref{sec:profiles}), as well as their prediction based on the Monin-Obukhov similarity theory (section \ref{sec:most_fit}). Finally, we describe the main contribution of this thesis, namely how machine learning techniques are used to improve their prediction (section \ref{sec:model_fit}).
 
 \section{Data Collection}
 \label{sec:data_collection}
@@ -502,7 +517,7 @@ The eddy correlation technique is far from perfect, see \cite{microhandbook} for
 \subsection{Gap Filling}
 With gap-filling, missing measurements are replaced by synthetic values. The gap-filling method depends on the missing parameter and the duration of the period where data is not available. There are two classes of parameters: forcing parameters, which include wind, temperature, specific humidity, incoming radiation and rain, and validation parameters, which include the surface fluxes, outgoing radiation, and friction velocity.
 
-For less than two hours of missing measurements, both forcing and evaluation parameters are gap-filled by interpolation of nearby values. For longer periods, forcing parameters are derived by transforming measures obtained from the nearby site of De Bilt, which are themselves gap-filled. Evaluation parameters are computed with a vegetation model that uses the forcing parameters as input.
+For less than two hours of missing measurements, both forcing and evaluation parameters are gap-filled by interpolation of nearby values. For longer periods, forcing parameters are derived by transforming measures obtained from the nearby site of De Bilt, which are themselves gap-filled. Evaluation parameters are computed with a vegetation model that uses the forcing parameters as input. The gap-filling procedure is performed by the Cesar consortium.
 
 
 \subsection{Data Filtering}
@@ -510,17 +525,21 @@ todo
 
 todo also mention dew point, soil heat (and that missing values are not imputed), net radiation, rain
 
-\section{Monin-Obukhov Similarity Theory}
-This section describes how the data from the Cesar database is used to reproduce the Monin-Obukhov similarity theory. The flux of virtual potential temperature can be computed following the formulas in section \ref{sec:most}, as the data contains all the necessary quantities; $u_*$ is given, as well as the specific humidity and the pressure. The empirical values for $L$, $\phi_m$ and $\phi_h$ are computed following equations \ref{eq:most_l}, \ref{eq:phi_m} and \ref{eq:phi_h} respectively; all the necessary quantities are present in the Cesar database. The Obukhov length is computed at each height level using the corresponding temperature measurement, and the fluxes measured at the surface.
-
+\section{Flux-Profile Relationships}
+\label{sec:profiles}
 Since the turbulent fluxes and the friction velocity are measured at the surface level, we can compute the flux-profile relationships only at 10, 20 and 40 meters, because these quantities can be assumed constant only within the surface layer. It is very hard to know the exact height of the surface layer, because it depends on the weather and no exact formulas are known [citation], but it is usually assumed to be 10\% as high as the boundary layer [citation]. Based on its typical heights [citation], the surface layer is often higher than 40 meters and lower than 80. \cite{cabauw_z0} indeed reports that a large number of observations from Cabauw at \SI{100}{\meter} are already outside of the surface layer.
 
-The next section describes how the gradients are computed starting from the raw measurements, in order to obtain the complete flux-profile relationships. Then, we describe how to use the data to obtain new coefficients for the universal functions. Even though there is agreement on form of their form, there is still debate on the exact values of the coefficients, with different experiments resulting in different values \citep{hogstrom88}. In order to ensure a fair comparison with the results of this work, we fit the universal functions to the data from the Cesar database.
+The flux-profile relationships are listed in equations \ref{eq:phi_m} and \ref{eq:phi_h}, and are reported here for the reader's convenience:
 
+$$
+\phi_m(\xi)=\frac{\partial\overline{u}}{\partial z}\frac{kz}{u_*}
+$$
 
-\subsection{Profile Computation}
-\label{sec:profiles}
-In general, the derivative can be obtained by fitting a model on the observations, and computing the derivative using the model. The simplest option is to use a piecewise linear function that passes through the measurements; let the observations be sorted by height and $y_i$ the measurement at height $z_i$, then for $z\in[z_i,z_{i+1}]$ we have:
+$$
+\phi_h(\xi)=\frac{\partial\overline{\theta_v}}{\partial z}\frac{kz}{T_*}
+$$
+
+In order to compute them from the data, we need to compute the derivative of the wind speed, for $\phi_m$, and of the virtual temperature, for $\phi_h$. In general, the derivative can be obtained by fitting a model on the observations, and computing the derivative using the model. The simplest option is to use a piecewise linear function that passes through the measurements; let the observations be sorted by height and $y_i$ the measurement at height $z_i$, then for $z\in[z_i,z_{i+1}]$ we have:
 
 \begin{equation}
 f(z)=y_i+(z-z_i)\frac{y_{i+1}-y_i}{z_{i+1}-z_i}
@@ -561,13 +580,50 @@ After removing the observations for which this model has a $R^2>0.9$, \cite{wind
 Finally, a third method of computing the gradient is to fit a Gaussian process to the profile using the following kernel:
 
 \begin{equation}
+\label{eq:kernel}
 k(z_1,z_2)=k+\exp\left(-\frac{(z_1-z_2)^2}{2\sigma_0^2}\right)+\sqrt{\sigma_1^2 z_1 z_2}+\sigma_2^2 \mathbbm{1}[z_1=z_2]
 \end{equation}
 
+The parameter $\sigma_2$ controls the noise, and depends on the instrument used to measure the modeled quantity; for example, for wind, we have $\sigma_2^2=\SI{0.1}{\square\meter\per\square\second}$; the other parameters are found by optimizing the marginal likelihood.
 
+Figure \ref{fig:kernel} shows the prior distribution of a Gaussian process with this kernel, as well as the value of the kernel for some choices of $z_1$ and $z_2$.
+
+
+\begin{figure}
+    \centering
+    \begin{subfigure}[t]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/profile_kernel_prior}
+        \caption{Prior distribution and some samples; the grey area is the 95\% confidence interval.}
+        \label{fig:kernel_prior}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/kernel_values}
+        \caption{Values of the kernel: each line corresponds to a different value of $z_1$, and $z_2$ is on the ordinate.}
+        \label{fig:kernel_values}
+    \end{subfigure}
+    \caption{Behavior of the kernel in equation \ref{eq:kernel}, where the altitude is on the $x$ axis, and the predicted value on the $y$ axis. Notice the approximate logarithmic profile with which the predicted value changes with altitude; this is caused by the square root term in the kernel, and emulates the effect of the $\ln z$ term in equation \ref{eq:logmodel}.}
+	\label{fig:kernel}
+\end{figure}
+
+\section{Monin-Obukhov Similarity theory}
+\label{sec:most_fit}
+
+\subsection{Obukhov Length}
+
+The Obukhov length is computed as in equation \ref{eq:most_l}, reported here:
+
+$$
+L=-\frac{u_*^3}{\kappa\frac{g}{\theta_v}\frac{Q}{\rho c_\rho}}
+=-\frac{u_*^3 T_v}{\kappa g \overline{w'\theta_v}}
+$$
+
+The flux of virtual potential temperature can be computed following the formulas in section \ref{sec:most}, as the data contains all the necessary quantities; $u_*$ is given, as well as the specific humidity and the pressure. The Obukhov length is computed at each height level using the corresponding air temperature measurement, and the fluxes measured at the surface.
 
 \subsection{Universal Functions}
-The general form of the universal functions is:
+Even though there is agreement on form of their form, there is still debate on the exact values of the coefficients, with different experiments resulting in different values \citep{hogstrom88}. In order to ensure a fair comparison with the results of this work, we fit the universal functions to the data from the Cesar database. Their general form is:
 
 \begin{equation}
 \label{eq:phi_general}
@@ -606,6 +662,7 @@ where $\tau=1-c^2\xi$. The Hessian of \ref{eq:phi_general} when $\xi\geq 0$ is s
 Analytical computation of the Hessian allows us to use the Newton conjugate gradient descent algorithm, which provides super-linear convergence rate, unlike other conjugate gradient methods whose rate of convergence is only linear \citep{numopt}.
 
 \section{Model Fitting}
+\label{sec:model_fit}
 In this section, we discuss how we use the data from the Cesar database to predict $\phi_m$.
 
 \subsection{Features}
@@ -661,6 +718,8 @@ actual constants and coefficients (e.g. von karmans constant) dont really matter
 
 \section{Limitations and Future Work}
 one of the reasons why MOST is unreliable in stable conditions is because of the difficulty of measuring fluxes
+
+our models can only be used in conditions that are similar to cabauw. most importantly, they are not valid in the oceanic surface layer, because it is very different [citation]
 
 %\bibliographystyle{unsrt}
 \bibliographystyle{plainnat}
