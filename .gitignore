@@ -7,3 +7,4 @@ data/
 *.h5
 dev/
 manuscript/build/
+!manuscript/build/*.pdf
