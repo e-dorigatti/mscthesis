@@ -8,6 +8,8 @@
 \usepackage{hyphenat}
 \usepackage{amsmath,amsfonts,amssymb,amsthm,mathtools}
 \usepackage{hyperref}
+\usepackage{algpseudocode}
+\usepackage{algorithm}
 \usepackage{bbm}
 \usepackage{caption}
 \usepackage{subcaption}
@@ -467,10 +469,10 @@ This best split defines a new node in the tree, and the construction can proceed
 todo
 
 \subsection{Neural Networks}
-todo
+todo \cite{prelu}
 
 \chapter{Method}
-This chapter describes how the data is collected (section \ref{sec:data_collection}) and used to re-create the flux-profile relationships (section \ref{sec:profiles}), as well as their prediction based on the Monin-Obukhov similarity theory (section \ref{sec:most_fit}). Finally, we describe the main contribution of this thesis, namely how machine learning techniques are used to improve their prediction (section \ref{sec:model_fit}).
+This chapter describes how the data is collected (section \ref{sec:data_collection}) and used to re-create the flux-profile relationships (section \ref{sec:profiles}), as well as their prediction based on the Monin-Obukhov similarity theory (section \ref{sec:most_fit}). Then, we describe the main contribution of this thesis, namely how their prediction can be improved using machine learning techniques (section \ref{sec:model_fit}). Finally, we describe how the evaluation is performed (section \ref{sec:perf_eval}), and explicitly state the necessary criteria for a successful answer to the research questions (section  \ref{sec:success}).
 
 \section{Data Collection}
 \label{sec:data_collection}
@@ -527,8 +529,21 @@ todo also mention dew point, soil heat (and that missing values are not imputed)
 
 \section{Flux-Profile Relationships}
 \label{sec:profiles}
+
 Since the turbulent fluxes and the friction velocity are measured at the surface level, we can compute the flux-profile relationships only at 10, 20 and 40 meters, because these quantities can be assumed constant only within the surface layer. It is very hard to know the exact height of the surface layer, because it depends on the weather and no exact formulas are known [citation], but it is usually assumed to be 10\% as high as the boundary layer [citation]. Based on its typical heights [citation], the surface layer is often higher than 40 meters and lower than 80. \cite{cabauw_z0} indeed reports that a large number of observations from Cabauw at \SI{100}{\meter} are already outside of the surface layer.
 
+\subsection{Obukhov Length}
+
+The Obukhov length is computed as in equation \ref{eq:most_l}, reported here:
+
+$$
+L=-\frac{u_*^3}{\kappa\frac{g}{\theta_v}\frac{Q}{\rho c_\rho}}
+=-\frac{u_*^3 T_v}{\kappa g \overline{w'\theta_v}}
+$$
+
+The flux of virtual potential temperature can be computed following the formulas in section \ref{sec:most}, as the data contains all the necessary quantities; $u_*$ is given, as well as the specific humidity and the pressure. The Obukhov length is computed at each height level using the corresponding air temperature measurement, and the fluxes measured at the surface.
+
+\subsection{Gradients}
 The flux-profile relationships are listed in equations \ref{eq:phi_m} and \ref{eq:phi_h}, and are reported here for the reader's convenience:
 
 $$
@@ -608,21 +623,9 @@ Figure \ref{fig:kernel} shows the prior distribution of a Gaussian process with 
 	\label{fig:kernel}
 \end{figure}
 
-\section{Monin-Obukhov Similarity theory}
+\section{Monin-Obukhov Similarity Theory}
 \label{sec:most_fit}
 
-\subsection{Obukhov Length}
-
-The Obukhov length is computed as in equation \ref{eq:most_l}, reported here:
-
-$$
-L=-\frac{u_*^3}{\kappa\frac{g}{\theta_v}\frac{Q}{\rho c_\rho}}
-=-\frac{u_*^3 T_v}{\kappa g \overline{w'\theta_v}}
-$$
-
-The flux of virtual potential temperature can be computed following the formulas in section \ref{sec:most}, as the data contains all the necessary quantities; $u_*$ is given, as well as the specific humidity and the pressure. The Obukhov length is computed at each height level using the corresponding air temperature measurement, and the fluxes measured at the surface.
-
-\subsection{Universal Functions}
 Even though there is agreement on form of their form, there is still debate on the exact values of the coefficients, with different experiments resulting in different values \citep{hogstrom88}. In order to ensure a fair comparison with the results of this work, we fit the universal functions to the data from the Cesar database. Their general form is:
 
 \begin{equation}
@@ -661,6 +664,8 @@ where $\tau=1-c^2\xi$. The Hessian of \ref{eq:phi_general} when $\xi\geq 0$ is s
 
 Analytical computation of the Hessian allows us to use the Newton conjugate gradient descent algorithm, which provides super-linear convergence rate, unlike other conjugate gradient methods whose rate of convergence is only linear \citep{numopt}.
 
+This model is then fitted to the data and evaluated as the other regression models; see section \ref{sec:perf_eval} for details on the procedure.
+
 \section{Model Fitting}
 \label{sec:model_fit}
 In this section, we discuss how we use the data from the Cesar database to predict $\phi_m$.
@@ -676,7 +681,7 @@ All the features come from the Cesar database, refer to section \ref{sec:data_co
 \item[F5:] Turbulent kinetic heat flux, turbulent latent heat flux;
 \end{enumerate}
 
-These sets are used cumulatively in the order they are listed, meaning that, for example, F3 is used in conjunction with F2 and F1. Derived features that can be computed from others, such as the virtual temperature, computed as in equation \ref{eq:vtemp}, are not included. The reason is that the less inputs a model requires, the more useful and "agile" it can be. This division was decided based on domain knowledge, so that the level of a feature reflects both its expected impact on the performance and how desirable it is to include it. An example of the former reasoning is with F4, where the effect of moisture is expected to be captured by the soil heat flux, and to be generally negligible in all but the most extreme conditions. An example of the latter reasoning is with F5, because turbulent fluxes are hard to measure accurately (see section \ref{sec:eddy_correlation}), and current simulation models are known to be quite inaccurate in their estimation of these fluxes \citep{sheba}.
+These sets are used cumulatively in the order they are listed, meaning that, for example, F3 is used in conjunction with F2 and F1. Derived features that can be computed from others, such as the virtual temperature (equation \ref{eq:vtemp}), are not included. The reason is that the less inputs a model requires, the more useful and "agile" it can be. This division was decided based on domain knowledge, so that the level of a feature reflects both its expected impact on the performance and how desirable it is to include it. An example of the former reasoning is with F4, where the effect of moisture is expected to be captured by the soil heat flux, and to be generally negligible in all but the most extreme conditions. An example of the latter reasoning is with F5, because turbulent fluxes are hard to measure accurately (see section \ref{sec:eddy_correlation}), and current simulation models are known to be quite inaccurate in their estimation of these fluxes \citep{sheba}. Similarly, the friction velocity was not included, because the point of predicting $\phi_m$ is to use it to estimate $u_*$ from the wind gradient, which is readily measured both in real life and in simulations.
 
 We also create a second version of each feature set, augmented with the hourly trend of each variable, except for $z$. The reason for including the trend is that it can give an indication of, for example, the time of the day, or other complex phenomena for which there is no measurement. The interval for the trend (one hour) is used because it is enough to capture local variations, but not too large so as to contain irrelevant information. The hourly trend is computed simply as the difference between the current value and the value measured one hour before, divided by one hour; given the goal of this work, it would not be feasible to use the future value to compute the trend.
 
@@ -687,16 +692,77 @@ Finally, each feature is centered and standardized so as to have zero mean and u
 z_{i,j}=\frac{x_{i,j}-\mu_j}{\sigma_j}
 \end{equation}
 
-This method is not robust to outliers, since they heavily affect mean and standard deviation. This can be prevented by subtracting the median and normalizing with the interquartile range; since in our dataset these two methods give similar results, we follow equation \ref{eq:standardization}, because it is one of the most popular normalization method. Obviously, $\mu_j$ and $\sigma_j$ are computed only on the training data, and used to normalize both train and test data.
+This method is not robust to outliers, since they heavily affect mean and standard deviation; this can be prevented by subtracting the median and normalizing with the interquartile range. These two methods give similar results in our datasets, therefore we follow equation \ref{eq:standardization}, since it it the most widely used in practice. Obviously, $\mu_j$ and $\sigma_j$ are computed only on the training data, and used to normalize both train and test data.
 
 \subsection{Models}
+
+The models that we use are ridge regression, k-nearest neighbors, random forests, and neural networks. Due to the size of the dataset, we cannot use kernel-based algorithms such as SVM and Gaussian Processes, as they require $\Theta(N^2)$ memory to store the $N\times N$ kernel matrix, and $O(N^3)$ time to invert it. Random forests were preferred over Gradient boosted trees because they can be constructed much more efficiently, since all the trees can be constructed in parallel. Gradient boosted trees, on the other hand, have to be constructed incrementally
 
 which models are used, and why (?)
 e.g. why not SVM? (too computationally expensive)
 why random forest instead of gradient boosted trees? (not easily parallelizable, marginal increase in performace)
 
-\subsection{Performance Evaluation}
-which metrics (mse, r2, mape, etc.) and how they are computed (nested cv on months with random search)
+\section{Performance Evaluation}
+\label{sec:perf_eval}
+The goal of performance evaluation is to obtain a realistic and unbiased estimate of the performance of a model on unseen data; we are not interested in the values of the hyper-parameters that yield this performance. For this reason, we perform nested cross validation, with the inner loop used to optimize the hyper-parameters through random search \citep{random_search}, and the outer loop used to evaluate the model. We use 10 folds in both the inner and outer CV, and test 10 different hyper-parameter combinations. This procedure is outlined in algorithm \ref{alg:nested_cv}.
+
+A fundamental assumption underlying hold-out evaluation methods is that the samples in the training set are independent and identically distributed, so that the distribution in the two partitions are equal. This is not our case, since there is a inherent time dependency in the data, meaning that samples obtained close in time are very similar. This can be confirmed by training and evaluating a k-nearest neighbors classifier with $k=1$ on random splits: the resulting mean squared error is in the order of $10^{-3}$, clearly unrealistic. To circumvent this problem, the CV folds are created on \emph{months}: all the samples in a given month and year are either in the training set or in the validation set.
+
+The main evaluation metric is the mean squared error, but we compute other metrics in the outer CV to get a more complete idea of the performance of the estimators:
+
+\begin{itemize}
+\item Mean Squared Error
+\item Mean Absolute Error
+\item Median Absolute Error
+\item Mean Absolute Percent Error
+\item Median Absolute Percent Error
+\item $R^2$ Score:
+$$
+1-\frac{\sum (f_n-t_n)^2}{\sum (t_n-\overline{t})^2}
+$$
+\end{itemize}
+
+Where $f_n$ is the predicted value for the test sample $\bm x_n$ with true value $t_n$, the squared error is $(f_n-t_n)^2$, the absolute error is $\vert f_n-t_n\vert$, the absolute percent error is $\vert 1-f_n/t_n\vert$
+
+
+\begin{algorithm}
+\caption{Nested cross validation with random hyper-parameter search.}
+
+\label{alg:nested_cv}
+\begin{algorithmic}
+
+\For{$i\gets 1\ldots I$}\Comment{Outer $I$-fold cross validation}
+	\State{Generate $i$-th outer fold $(D^o_T,D^o_V)$ from the dataset $D$}
+	\State{$best\_mse\gets\inf$}
+	\State{$best\_params\gets\bot$}
+	\For{$j\gets 1\ldots J$}\Comment{Find best hyper-parameters on $D^o_T$}
+		\State{$params\gets$ a random hyper-parameter combination}
+		\State{$params\_mse\gets 0$}
+		\For{$k\gets 1\ldots K$}\Comment{Evaluate $params$ with $K$-fold CV}
+			\State{Generate $k$-th inner fold $(D^i_T,D^i_V)$ from $D^o_T$}
+			\State{$model\gets$ a new instance of the model with parameters $params$}
+			\State{Train $model$ on $D^i_T$}
+			\State{$mse\gets$ result of the evaluation of $model$ on $D^i_V$}
+			\State{$params\_mse\gets params\_mse+mse$}
+		\EndFor
+
+		\If{$params\_mse<best\_mse$}\Comment{MSE comparison on $K$-fold CV result}
+			\State{$best\_mse\gets params\_mse$}
+			\State{$best\_params\gets params$}
+		\EndIf		
+	\EndFor
+
+	\State{$model\gets$ a new instance of the model with parameters $best\_params$}
+	\State{Train $model$ on $D^o_T$}
+	\State{Evaluate $model$ on $D^o_V$ and compute evaluation metrics}
+\EndFor
+\State{Compute summary of the metrics obtained in the outer loop}
+\end{algorithmic}
+\end{algorithm}
+
+\section{Success Criteria}
+\label{sec:success}
+A successful answer to the first research question entails finding a model whose mean squared error on F5 with trend is smaller than the mean squared error of the Monin-Obukhov similarity theory estimator introduced in section \ref{sec:most_fit}. The second research question is answered by comparing the different evaluation metrics on the ten feature sets (F1 to F5, with and without trend).
 
 \chapter{Results}
 todo
@@ -708,10 +774,41 @@ basic info about data
 compare methods for computing gradient
 
 \section{Monin-Obukhov Similarity Theory}
-performance of MOST
+performance of MOST in table \ref{tbl:most_results}
+
+
+\begin{table}[]
+\centering
+\caption{Evaluation metrics for the Monin-Obukhov estimator}
+\label{tbl:most_results}
+\begin{tabular}{r|l|l}
+ & Mean & Std.   \\ \hline
+Mean Squared Error 					& 0.672028  	& 0.031320  \\
+Mean Absolute Error 					& 0.540632  		& 0.013878   \\
+Median Absolute Error 				& 0.371569 		& 0.015601   \\
+Mean Absolute Percent Error  	& 252.925389 	& 196.086056  \\
+Median Absolute Percent Error	& 28.964847  	& 0.938811
+\end{tabular}
+\end{table}
 
 \section{Model Comparison}
 performance of the models
+
+
+\begin{table}[]
+\centering
+\caption{Evaluation metrics for the Ridge linear regression estimator on F5 with trend}
+\label{tbl:most_results}
+\begin{tabular}{r|l|l}
+ & Mean & Std.   \\ \hline
+Mean Squared Error 					& 0.593038  		& 0.048443  \\
+Mean Absolute Error 					& 0.509204  		& 0.018504   \\
+Median Absolute Error 				& 0.345660 		& 0.009037   \\
+Mean Absolute Percent Error  	& 264.613746 	& 298.463690 \\
+Median Absolute Percent Error	& 27.816959  	& 1.286721
+\end{tabular}
+\end{table}
+
 
 \chapter{Discussion}
 actual constants and coefficients (e.g. von karmans constant) dont really matter, because they are constant and do not affect the ml model 
