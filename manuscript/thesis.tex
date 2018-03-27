@@ -731,14 +731,14 @@ Where $f_n$ is the predicted value for the test sample $\bm x_n$ with true value
 \label{alg:nested_cv}
 \begin{algorithmic}
 
-\For{$i\gets 1\ldots I$}\Comment{Outer $I$-fold cross validation}
-	\State{Generate $i$-th outer fold $(D^o_T,D^o_V)$ from the dataset $D$}
+\For{$k_o\gets 1\ldots K_O$}\Comment{Outer $K_O$-fold cross validation}
+	\State{Generate $k_o$-th outer fold $(D^o_T,D^o_V)$ from the dataset $D$}
 	\State{$best\_mse\gets\inf$}
 	\State{$best\_params\gets\bot$}
-	\For{$j\gets 1\ldots J$}\Comment{Find best hyper-parameters on $D^o_T$}
+	\For{$r\gets 1\ldots R$}\Comment{Find best hyper-parameters on $D^o_T$}
 		\State{$params\gets$ a random hyper-parameter combination}
 		\State{$params\_mse\gets 0$}
-		\For{$k\gets 1\ldots K$}\Comment{Evaluate $params$ with $K$-fold CV}
+		\For{$k_i\gets 1\ldots K_I$}\Comment{Evaluate $params$ with $K_I$-fold CV}
 			\State{Generate $k$-th inner fold $(D^i_T,D^i_V)$ from $D^o_T$}
 			\State{$model\gets$ a new instance of the model with parameters $params$}
 			\State{Train $model$ on $D^i_T$}
@@ -783,7 +783,8 @@ performance of MOST in table \ref{tbl:most_results}
 \label{tbl:most_results}
 \begin{tabular}{r|l|l}
  & Mean & Std.   \\ \hline
-Mean Squared Error 					& 0.672028  	& 0.031320  \\
+Mean Squared Error 					& 0.672028  		& 0.031320  \\
+$R^2$ Score									& 0.705471    	& 0.008943   \\
 Mean Absolute Error 					& 0.540632  		& 0.013878   \\
 Median Absolute Error 				& 0.371569 		& 0.015601   \\
 Mean Absolute Percent Error  	& 252.925389 	& 196.086056  \\
@@ -802,10 +803,28 @@ performance of the models
 \begin{tabular}{r|l|l}
  & Mean & Std.   \\ \hline
 Mean Squared Error 					& 0.593038  		& 0.048443  \\
+$R^2$ Score									& 0.734663     	& 0.017526   \\
 Mean Absolute Error 					& 0.509204  		& 0.018504   \\
 Median Absolute Error 				& 0.345660 		& 0.009037   \\
 Mean Absolute Percent Error  	& 264.613746 	& 298.463690 \\
 Median Absolute Percent Error	& 27.816959  	& 1.286721
+\end{tabular}
+\end{table}
+
+
+
+\begin{table}[]
+\centering
+\caption{Evaluation metrics for the k-nearest neighbors estimator on F5 with trend}
+\label{tbl:most_results}
+\begin{tabular}{r|l|l}
+ & Mean & Std.   \\ \hline
+Mean Squared Error 					& 0.583102   	& 0.035314  \\ 
+$R^2$ Score									& 0.739219   	& 0.010517   \\
+Mean Absolute Error 					& 0.487180   	& 0.016797   \\
+Median Absolute Error 				& 0.300725   	& 0.011178     \\
+Mean Absolute Percent Error  	& 151.571688	&  55.287673  \\
+Median Absolute Percent Error	& 25.450125   	& 1.270630 
 \end{tabular}
 \end{table}
 
