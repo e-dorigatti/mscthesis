@@ -517,12 +517,14 @@ Where $\overline{w}$ and $\overline{a}$ are the averages of $w_t$ and $a_t$ for 
 The eddy correlation technique is far from perfect, see \cite{microhandbook} for a detailed summary of issues.
 
 \subsection{Gap Filling}
+\label{sec:gap_filling}
 With gap-filling, missing measurements are replaced by synthetic values. The gap-filling method depends on the missing parameter and the duration of the period where data is not available. There are two classes of parameters: forcing parameters, which include wind, temperature, specific humidity, incoming radiation and rain, and validation parameters, which include the surface fluxes, outgoing radiation, and friction velocity.
 
 For less than two hours of missing measurements, both forcing and evaluation parameters are gap-filled by interpolation of nearby values. For longer periods, forcing parameters are derived by transforming measures obtained from the nearby site of De Bilt, which are themselves gap-filled. Evaluation parameters are computed with a vegetation model that uses the forcing parameters as input. The gap-filling procedure is performed by the Cesar consortium.
 
 
 \subsection{Data Filtering}
+\label{sec:data_filter}
 todo
 
 todo also mention dew point, soil heat (and that missing values are not imputed), net radiation, rain
@@ -768,7 +770,51 @@ A successful answer to the first research question entails finding a model whose
 todo
 
 \section{Exploratory Data Analysis}
-basic info about data
+The dataset consists of 17 years of measurements, from January 2001 to December 2017, for a total of 3 436 416 observations. Unfortunately, most of these observations contain low quality measurements, as detailed in section \ref{sec:data_filter}, leaving only  1 561 973 usable records. Additionally, the turbulent fluxes measured in March 2016 exhibit a much wider range than the March measurements of other years. Roughly 15 to 20\% of the measurements in that month are suspicious; since the Cesar database contains a separate dataset every month, we decided to completely exclude the dataset of March 2016, fearing for a systematic error somewhere in the process. Finally, 6 more measurements of the turbulent latent heat are way above the acceptable range. This leaves 1 552 414 usable records.
+
+
+
+\begin{figure}
+    \centering
+    \begin{subfigure}[t]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/le_winter}
+        \caption{Winter}
+        \label{fig:le_winter}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/le_summer}
+        \caption{Summer}
+        \label{fig:le_summer}
+    \end{subfigure}
+    \caption{Turbulent latent heat flux versus hour of day in Winter (left) and Summer (right). One can see both the difference in day duration, and the effect of increased temperature on evaporation. The sensible heat flux follows a very similar pattern, with lower absolute values.}
+	\label{fig:le_season}
+\end{figure}
+
+
+\begin{figure}
+    \centering
+    \begin{subfigure}[t]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/ustar_temp}
+        \caption{Temperature}
+        \label{fig:ustar_temp}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/ustar_wind}
+        \caption{Wind.}
+        \label{fig:ustar_wind}
+    \end{subfigure}
+    \caption{Friction velocity versus temperature (left) and wind speed (right). There is a clear subgroup where the wind and $u^*$ are almost perfectly correlated; this is because of the gap-filling technique discussed in section \ref{sec:gap_filling}. Additionally, there are three subgroups with different slopes of the regression line; they differ widely in fluxes (both surface and turbulent) and radiation.}
+	\label{fig:ustar_wind_temp}
+\end{figure}
+
+
+
 
 \section{Gradient Computation}
 compare methods for computing gradient
@@ -799,7 +845,7 @@ performance of the models
 \begin{table}[]
 \centering
 \caption{Evaluation metrics for the Ridge linear regression estimator on F5 with trend}
-\label{tbl:most_results}
+\label{tbl:ridge_results_f5t}
 \begin{tabular}{r|l|l}
  & Mean & Std.   \\ \hline
 Mean Squared Error 					& 0.593038  		& 0.048443  \\
@@ -816,7 +862,7 @@ Median Absolute Percent Error	& 27.816959  	& 1.286721
 \begin{table}[]
 \centering
 \caption{Evaluation metrics for the k-nearest neighbors estimator on F5 with trend}
-\label{tbl:most_results}
+\label{tbl:knn_results_f5t}
 \begin{tabular}{r|l|l}
  & Mean & Std.   \\ \hline
 Mean Squared Error 					& 0.583102   	& 0.035314  \\ 
@@ -827,6 +873,25 @@ Mean Absolute Percent Error  	& 151.571688	&  55.287673  \\
 Median Absolute Percent Error	& 25.450125   	& 1.270630 
 \end{tabular}
 \end{table}
+
+
+\begin{table}[]
+\centering
+\caption{Evaluation metrics for the gradient boosting estimator on F5 with trend}
+\label{tbl:gb_results_f5t}
+\begin{tabular}{r|l|l}
+ & Mean & Std.   \\ \hline
+Mean Squared Error 					& 0.285956	& 0.012074 \\  
+$R^2$ Score									& 0.872323   & 0.006331   \\
+Mean Absolute Error 					& 0.319557   & 0.006457 \\
+Median Absolute Error 				& 0.180583  	& 0.003956   \\
+Mean Absolute Percent Error		& 88.093397	& 53.138612 \\
+Median Absolute Percent Error	& 15.888091	& 0.499692 \\
+\end{tabular}
+\end{table}
+
+
+
 
 
 \chapter{Discussion}
