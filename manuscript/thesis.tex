@@ -187,9 +187,9 @@ Since turbulence changes over time, we are more interested in the change of kine
 +\epsilon
 \end{equation}
 
-Where ${e'}^2={u'}^2+{v'}^2+{w'}^2$. The $P$ term is the production due to shear, $B$ is the production due to buoyancy, $T_t$ is the turbulent transport of TKE by large-scale eddies, $T_p$ is the transport due to pressure, and $\epsilon$ is molecular dissipation due to viscosity. $P$ and $B$ are the most prominent terms, and the transport terms are close to zero in neutral conditions.
+Where ${e'}^2={u'}^2+{v'}^2+{w'}^2$. The $P$ term is the production due to shear, $B$ is the production due to buoyancy, $T_t$ is the turbulent transport of TKE by large-scale eddies, $T_p$ is the transport due to pressure, and $\epsilon$ is molecular dissipation due to viscosity. $P$ and $B$ are the most prominent terms, and the transport terms are close to zero in neutral conditions \citep{basicatm}.
 
-TODO elaborate on 3.4, 3.5 (reason why P and B have opposite sign), 3.6, 
+The $P$ term is always positive, as turbulence can only introduce more kinetic energy. On the other hand, the contribution from buoyancy can be either positive or negative, depending on the difference of temperature between a parcel of air moved by the turbulence and the surrounding air. When $\overline{w^\prime\theta^\prime}$ is negative, the turbulence is moving cold air upwards and warm air downwards; these parcels of air will try to undo the effect of turbulence, thereby increasing the overall kinetic energy. A similar reasoning goes for when the heat flux is positive.
 
 \subsection{Monin-Obukhov Similarity Theory}
 \label{sec:most}
@@ -412,8 +412,12 @@ And its Hessian is
 
 In some cases, the gradient and the Hessian can be approximated using a random subset of the training set, and, in extreme cases, a single sample. These variants are called \emph{minibatch} gradient descent and \emph{stochastic} gradient descent respectively. They both compute a noisy approximation to the true gradient, which can actually improve convergence and generalization of high-dimensional, non-convex loss functions such as those found in deep learning \citep{sgd_noise, bayesian_sgd}. Vanilla gradient descent can be greatly improved with a number of techniques, such as momentum \citep{gd_momentum}, adaptive learning rate \citep{adagrad, adadelta, adam}, and so on, see \cite{gd_overview} for an overview. 
 
-\subsection{Hyperparameter Optimization}
-grid search vs random search,  briefly mention bayesian methods
+\subsection{Hyper-parameter Optimization}
+The previous section discussed some methods to find the best parameters for a model. In practice, though, finding good values for the hyper-parameters is often as important as fitting the model, since these hyper-parameters control the learning process itself.
+
+A simple way to approach this problem is to choose some possible values for each hyper-parameter, try all the possible combinations, and pick the one that works best. Alternatively, one can sample each hyper-parameter from a probability distribution, and try many random combinations of values; \cite{random_search} showed that this latter method is surprisingly effective at this task, and scales much better than the first approach. Unfortunately, this procedure can overfit, too, so it has to be paired with some resampling technique such as cross validation. The procedure is simply to test every hyper-parameter combination on every fold, so that 50 combinations tested with 10-fold cross validation require to fit the model 500 times.
+
+More sophisticated techniques treat hyper-parameter optimization as a regression problem, and use supervised machine learning to predict the performance of a given hyper-parameter combination and to guide the search accordingly. Clearly, one should use models that are not sensitive to their own hyper-parameter setting, or the problem remains! For this reason, popular algorithms that are used for this are evolutionary algorithms [citation] and Bayesian non-parametric models [citation].
 
 \subsection{Ridge Regression}
 A linear regression model has the form $f(\bm x_n;\bm\theta)=\bm\theta^\intercal\bm x_n$; ridge regression is simply L2-regularized linear regression. This model is simple enough that the solution for equation \ref{eq:least_squares} can be found analytically in closed form:
@@ -520,19 +524,25 @@ The eddy correlation technique is far from perfect, see \cite{microhandbook} for
 \label{sec:gap_filling}
 With gap-filling, missing measurements are replaced by synthetic values. The gap-filling method depends on the missing parameter and the duration of the period where data is not available. There are two classes of parameters: forcing parameters, which include wind, temperature, specific humidity, incoming radiation and rain, and validation parameters, which include the surface fluxes, outgoing radiation, and friction velocity.
 
-For less than two hours of missing measurements, both forcing and evaluation parameters are gap-filled by interpolation of nearby values. For longer periods, forcing parameters are derived by transforming measures obtained from the nearby site of De Bilt, which are themselves gap-filled. Evaluation parameters are computed with a vegetation model that uses the forcing parameters as input. The gap-filling procedure is performed by the Cesar consortium.
+For less than two hours of missing measurements, both forcing and evaluation parameters are gap-filled by interpolation of nearby values. For longer periods, forcing parameters are derived by transforming measures obtained from the nearby site of De Bilt, which are themselves gap-filled, if necessary. Evaluation parameters are computed with a vegetation model that uses the forcing parameters as input. The gap-filling procedure is performed by the Cesar consortium.
 
 
 \subsection{Data Filtering}
 \label{sec:data_filter}
-todo
+Following other works in this field, such as \cite{boulder} and \cite{hogstrom88}, we exclude all the records where any of the following conditions applies:
+
+\begin{itemize}
+\item The sensible heat flux $H$ is smaller than \SI{10}{\watt\per\square\meter};
+\item The friction velocity $u_*$ is smaller than \SI{0.1}{\meter\per\second};
+\item The wind speed $\overline{u}$ is lower than \SI{1}{\meter\per\second}.
+\end{itemize}
 
 todo also mention dew point, soil heat (and that missing values are not imputed), net radiation, rain
 
 \section{Flux-Profile Relationships}
 \label{sec:profiles}
 
-Since the turbulent fluxes and the friction velocity are measured at the surface level, we can compute the flux-profile relationships only at 10, 20 and 40 meters, because these quantities can be assumed constant only within the surface layer. It is very hard to know the exact height of the surface layer, because it depends on the weather and no exact formulas are known [citation], but it is usually assumed to be 10\% as high as the boundary layer [citation]. Based on its typical heights [citation], the surface layer is often higher than 40 meters and lower than 80. \cite{cabauw_z0} indeed reports that a large number of observations from Cabauw at \SI{100}{\meter} are already outside of the surface layer.
+Since the turbulent fluxes and the friction velocity are measured at the surface level, we can compute the flux-profile relationships only at 10, 20 and 40 meters, because these quantities can be assumed constant only within the surface layer. It is very hard to know the exact height of the surface layer, because it depends on the weather and no exact formulas are known, but it is usually assumed to be 10\% as high as the boundary layer. Based on the typical height of the boundary layer, the surface layer is often higher than 40 meters and lower than 80. \cite{cabauw_z0} indeed reports that a large number of observations from Cabauw at \SI{20}{\meter} are inside the surface layer, the \SI{100}{\meter} level is already outside of the surface layer, and \cite{boulder} used the observations at \SI{50}{\meter} in their analysis, but not those at \SI{100}{\meter}.
 
 \subsection{Obukhov Length}
 
