@@ -417,7 +417,7 @@ The previous section discussed some methods to find the best parameters for a mo
 
 A simple way to approach this problem is to choose some possible values for each hyper-parameter, try all the possible combinations, and pick the one that works best. Alternatively, one can sample each hyper-parameter from a probability distribution, and try many random combinations of values; \cite{random_search} showed that this latter method is surprisingly effective at this task, and scales much better than the former. Unfortunately, this procedure can overfit, too, so it has to be paired with some resampling technique such as cross validation. The procedure is simply to test every hyper-parameter combination on every fold, so that 50 combinations tested with 10-fold cross validation require to fit the model 500 times.
 
-More sophisticated techniques treat hyper-parameter optimization as a regression problem, and use supervised machine learning to predict the performance of a given hyper-parameter combination, and to guide the search accordingly. Clearly, one should use models that are not sensitive to their own hyper-parameter setting, or the problem is just moved! For this reason, popular algorithms that are used for this are evolutionary algorithms [citation] and Bayesian non-parametric models [citation].
+More sophisticated techniques treat hyper-parameter optimization as a regression problem, and use supervised machine learning to predict the performance of a given hyper-parameter combination, and to guide the search accordingly \citep{hyperopt}. Clearly, one should use models that are not sensitive to their own hyper-parameter setting, or the problem is just moved! For this reason, popular algorithms that are used for this are evolutionary algorithms and Bayesian non-parametric models.
 
 \subsection{Ridge Regression}
 A linear regression model has the form $f(\bm x_n;\bm\theta)=\bm\theta^\intercal\bm x_n$; ridge regression is simply L2-regularized linear regression. This model is simple enough that the solution for equation \ref{eq:least_squares} can be found analytically in closed form:
@@ -486,7 +486,7 @@ The observatory is surrounded by fields and no urban agglomerations is present w
 
 The main focus of this project is on wind and temperature profiles, and the turbulent fluxes of sensible and latent heat. Additional variables, such as temperature and humidity, are needed to compute quantities of interest, most importantly the Obukhov length, and as possible predictors for the universal functions. There is one measurement for each variable every ten minutes, and missing measurements are gap-filled with a number of techniques. The data collected is always visually validated by an operator, which marks suspect or invalid sections of data
 
-The Cesar observatory provides full information regarding data collection\footnote{\url{http://projects.knmi.nl/cabauw/insitu/observations/documentation}}, what follows is a brief summary of the most relevant sections.
+The Cesar observatory provides full information regarding data collection\footnote{\url{http://projects.knmi.nl/cabauw/insitu/observations/documentation}}, see in particular \cite{cabauwinsitu}, what follows is a brief summary of the most relevant sections.
 
 \begin{figure}
 \caption{Sonic anemometer to measure wind and optical open-path sensor to measure humidity at the 180m level of the Cabauw mast.}
@@ -496,13 +496,22 @@ The Cesar observatory provides full information regarding data collection\footno
 % https://www.knmi.nl/research/observations-data-technology/projects/cabauw-in-situ-measurements
 \end{figure}
 
-\subsection{Wind Measurement}
+\subsection{Wind Speed Measurement}
 Wind speed and direction are measured at heights of 200, 140, 80, 40, 20 and 10 meters, in either two or all three booms available. The wind vane that measures direction has a resolution of $1.5^\circ$, and the cup anemometer that measures wind speed has an accuracy of the largest between 1\% and \SI{0.1}{\meter\per\second}. \cite{windinstr} studied the threshold sensitivity of both instruments, and fount it lower than \SI{0.5}{\meter\per\second}, even though the measurements are inaccurate up to \SI{3}{\meter\per\second}.
 
 For every ten minutes interval, the measurement comes from the instrument that is best exposed to the wind, and less affected by the obstruction caused by the mast. Corrections are then applied to the raw measurements to further attenuate the disturbance by the tower, following \cite{winddistortion}.
 
-\subsection{Air Temperature Measurement}
-Air temperature is measured at heights of 200, 140, 80, 40, 20, 10 and 1.5 meters. todo write more
+\subsection{Air Temperature and Dew Point Measurement}
+Both air temperature and dew point are measured at heights of 200, 140, 80, 40, 20, 10 and 1.5 meters. The instruments at the highest four levels are located on the main tower, whereas 20 and 10 meters are measured in the smaller mast, and 1.5 meters is measured by the weather station. The resolution of the instruments is of \SI{0.1}{\celsius}, whereas the accuracy is \SI{0.1}{\celsius} for temperature and 3.5\% of relative humidity for the dew point (1.5\% after 2014). Low wind speed and high irradiation can result result in a few \SI{0.1}{\celsius} overestimate of the temperature \citep{tempoverestimate}, whereas the humidity can be over estimated when drying after dew, fog, or rain \citep{cabauwinsitu}.
+
+\subsection{Net Radiation Measurement}
+The Cabauw observatory measures both incoming and outgoing long- and short-wave radiation, and the net radiation is simply the combination of these four components. The basic operating principle of an instrument that measures radiation is to have a device coated with paint that is highly absorbing towards a certain range of frequencies; the temperature difference between the surface of this sensor and the body of the whole instrument generates an electrical potential that is proportional to the radiation absorbed by the sensor, after appropriate corrections.  The instruments that measure short-wave radiation are called \emph{pyranometers}, while long-wave radiation is measured by \emph{pyrgeometer}.  The instrument used to measure the net radiation has a pair or pyrgeometers, one facing up and one facing down, to measure the net long-wave radiation, and a pair of pyranometers arranged similarly to measure net short-wave radiation.
+
+This instrument is positioned at \SI{1.5}{\meter} height, and is ventilated and heated to prevent formation of dew, that can make the measurements invalid.
+
+\subsection{Soil Heat and $CO_2$ Flux}
+asd
+
 
 \subsection{Eddy Correlation}
 \label{sec:eddy_correlation}
@@ -722,8 +731,7 @@ All models but neural networks are fit using nested cross validation with random
 
 \section{Performance Evaluation}
 \label{sec:perf_eval}
-The goal of performance evaluation is to obtain a realistic and unbiased estimate of the performance of a model on unseen data; we are not interested in the values of the hyper-parameters that yield this performance. For this reason, we perform nested cross validation, with the inner loop used to optimize the hyper-parameters through random search \citep{random_search}, and the outer loop used to evaluate the model. We use 10 folds in both the inner and outer CV, and test 60 different hyper-parameter combinations. This number was chosen based following the advice by \cite{random_search}, based on a simple probabilistic argument: if every combination has a 5\% probability of giving a model whose performance is within 5\% of the best attainable performance, then the probability that at least one in 60 trials finds a combination within 5\% of the optimal is $1-0.95^{60}\approx 0.95$.
-Algorithm \ref{alg:nested_cv} shows in detail how nested cross validation with random search works.
+The goal of performance evaluation is to obtain a realistic and unbiased estimate of the performance of a model on unseen data; we are not interested in the values of the hyper-parameters that yield this performance. For this reason, we perform nested cross validation, with the inner loop used to optimize the hyper-parameters through random search \citep{random_search}, and the outer loop used to evaluate the model. We use 10 folds in both the inner and outer CV, and test 60 different hyper-parameter combinations. This number is based on a simple probabilistic argument\footnote{\url{https://stats.stackexchange.com/a/209409/141343}}: if a combination has a 5\% probability of giving a model whose performance is within 5\% of the best attainable performance, then the probability that at least one in 60 trials finds a combination within 5\% of the optimal is $1-0.95^{60}\approx 0.95$. Clearly, these numbers are arbitrary, but even a probability of 1\% would give a success probability of 45\%. Algorithm \ref{alg:nested_cv} shows in detail how nested cross validation with random search works.
 
 A fundamental assumption underlying hold-out evaluation methods is that the samples in the training set are independent and identically distributed, so that the distribution in the two partitions are equal. This is not our case, since there is a inherent time dependency in the data, meaning that samples obtained close in time are very similar. This can be confirmed by training and evaluating a k-nearest neighbors classifier with $k=1$ on random splits: the resulting mean squared error is in the order of $10^{-3}$, clearly unrealistic. To circumvent this problem, the CV folds are created on \emph{months}: all the samples in a given month and year are either in the training set or in the validation set.
 
@@ -787,9 +795,9 @@ A successful answer to the first research question entails finding a model whose
 todo
 
 \section{Exploratory Data Analysis}
-The dataset consists of 17 years of measurements, from January 2001 to December 2017, for a total of 3 436 416 observations. Unfortunately, most of these observations contain low quality measurements, as detailed in section \ref{sec:data_filter}, leaving only  1 561 973 usable records. Additionally, the turbulent fluxes measured in March 2016 exhibit a much wider range than the March measurements of other years. Roughly 15 to 20\% of the measurements in that month are suspicious; since the Cesar database contains a separate dataset every month, we decided to completely exclude the dataset of March 2016, fearing for a systematic error somewhere in the process. Finally, 6 more measurements of the turbulent latent heat are way above the acceptable range. This leaves 1 552 414 usable records.
+The dataset consists of 17 years of measurements, from January 2001 to December 2017, for a total of 3 436 416 observations. Unfortunately, most of these observations contain low quality measurements, as detailed in section \ref{sec:data_filter}, leaving only  1 561 973 usable records. Additionally, the turbulent fluxes measured in March 2016 exhibit a much wider range than the March measurements of other years. Roughly 15 to 20\% of the measurements in that month are suspicious; since the Cesar database contains a separate dataset every month, we decided to completely exclude the dataset of March 2016, fearing for a systematic error somewhere in the process. Moreover, 6 measurements of the turbulent latent heat are way above the acceptable range, 4538 do not have a dew point , and 247 656 do not have a soil temperature. We do not attempt to impute missing values, because this process was already performed by the Cesar consortium, and we believe there is a good reason why these values were not imputed. This leaves 1 301 574 usable records.
 
-
+Figure \ref{fig:le_season} shows the turbulent latent heat flux versus hour of day both in Winter and Summer, whereas figure \ref{fig:ustar_wind_temp} shows the friction velocity as a function of air temperature and wind speed. The dependency of $u_*$ with the wind speed of figure \ref{fig:ustar_wind} is quite complicated: there are three clear regions with different constant of proportionality and correlation coefficient. The group where the two quantities are almost perfectly correlated corresponds to imputed values for the friction velocity, derived from the wind speed. The three other groups differ widely in the values of the fluxes and radiation; for example, fitting an ordinary least squares model to 1000 bootstraps of the observations with negative net radiation yields an average proportionality coefficient of \num{0.051} with standard deviation \num{1.52e-05}, whereas the same procedure on the complementary set yields an average of \num{0.046} with standard deviation \num{1.40e-05}. Note that this dependency might be related to the observed imbalance in the surface energy budged, usually around 15\% during day time and 100\% during night time at the Cabauw observatory; \cite{cabauwinsitu} notes that the imbalance seems to depend on the speed of wind.
 
 \begin{figure}
     \centering
@@ -823,10 +831,10 @@ The dataset consists of 17 years of measurements, from January 2001 to December 
     \begin{subfigure}[t]{0.45\textwidth}
         \centering
         \includegraphics[width=\textwidth]{images/ustar_wind}
-        \caption{Wind.}
+        \caption{Wind}
         \label{fig:ustar_wind}
     \end{subfigure}
-    \caption{Friction velocity versus temperature (left) and wind speed (right). There is a clear subgroup where the wind and $u^*$ are almost perfectly correlated; this is because of the gap-filling technique discussed in section \ref{sec:gap_filling}. Additionally, there are three subgroups with different slopes of the regression line; they differ widely in fluxes (both surface and turbulent) and radiation.}
+    \caption{Friction velocity versus temperature (left) and wind speed (right). There is a clear subgroup where the wind and $u^*$ are almost perfectly correlated; this is because of the gap-filling technique discussed in section \ref{sec:gap_filling}. Additionally, there are three subgroups with different constant of proportionality; they differ widely in fluxes and radiation.}
 	\label{fig:ustar_wind_temp}
 \end{figure}
 

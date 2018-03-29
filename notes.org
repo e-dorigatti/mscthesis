@@ -187,7 +187,7 @@ cabauw observatory
     http://www.cesar-database.nl
 
 data documentation:
-    http://projects.knmi.nlcabauw/insitu/index2.htm
+    http://projects.knmi.nl/cabauw/insitu/index2.htm
         observations -> documentation -> technical description
     gapfilling method
         http://projects.knmi.nl/cabauw/insitu/observations/documentation/gapfilling/cabcon_gapfilling.pdf
