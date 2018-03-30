@@ -5,6 +5,7 @@
 \usepackage{bm}
 \usepackage{siunitx}
 \usepackage{titling}
+\usepackage{tabularx}
 \usepackage{hyphenat}
 \usepackage{amsmath,amsfonts,amssymb,amsthm,mathtools}
 \usepackage{hyperref}
@@ -13,6 +14,7 @@
 \usepackage{bbm}
 \usepackage{caption}
 \usepackage{subcaption}
+\usepackage{multirow}
 \usepackage{gensymb}
 \usepackage{calc}
 \usepackage{tabto}
@@ -565,6 +567,7 @@ $$
 The flux of virtual potential temperature can be computed following the formulas in section \ref{sec:most}, as the data contains all the necessary quantities; $u_*$ is given, as well as the specific humidity and the pressure. The Obukhov length is computed at each height level using the corresponding air temperature measurement, and the fluxes measured at the surface.
 
 \subsection{Gradients}
+\label{sec:gradients}
 The flux-profile relationships are listed in equations \ref{eq:phi_m} and \ref{eq:phi_h}, and are reported here for the reader's convenience:
 
 $$
@@ -584,6 +587,7 @@ f(z)=y_i+(z-z_i)\frac{y_{i+1}-y_i}{z_{i+1}-z_i}
 The derivative of this function at height $z_i$ is then the average of the slope of the segments that start and end at $z_i$:
 
 \begin{align}
+\label{eq:fd_gradient}
 \begin{split}
 f^\prime(z_i)&=\lim_{h\rightarrow 0}\frac{f(z_i+h)-f(z_i-h)}{2h} \\
 &=\frac{1}{2}\cdot\lim_{h\rightarrow 0}\left(\frac{f(z_i+h)}{h}-\frac{f(z_i-h)}{h}\right) \\
@@ -608,6 +612,7 @@ f(z)=a+bz+cz^2+d\ln z
 The model is linear in its parameters, therefore equation \ref{eq:ridge_solution} can be used to compute the coefficients, using the feature mapping $\phi(z)=\left[1,z,z^2,\ln z\right]^\intercal$ and regularization parameter $\lambda=0$. Once the coefficients are known, the gradient is trivial to compute:
 
 \begin{equation}
+\label{eq:log_gradient}
 f^\prime(z)=b+2cz^2+d\frac{1}{z}
 \end{equation}
 
@@ -617,13 +622,10 @@ Finally, a third method of computing the gradient is to fit a Gaussian process t
 
 \begin{equation}
 \label{eq:kernel}
-k(z_1,z_2)=k+\exp\left(-\frac{(z_1-z_2)^2}{2\sigma_0^2}\right)+\sqrt{\sigma_1^2 z_1 z_2}+\sigma_2^2 \mathbbm{1}[z_1=z_2]
+k(z_1,z_2)=k+\exp\left(-\frac{(z_1-z_2)^2}{2\sigma_0^2}\right)+\sqrt{\sigma_1^2+ z_1 z_2}+\sigma_2^2 \mathbbm{1}[z_1=z_2]
 \end{equation}
 
-The parameter $\sigma_2$ controls the noise, and depends on the instrument used to measure the modeled quantity; for example, for wind, we have $\sigma_2^2=\SI{0.1}{\square\meter\per\square\second}$; the other parameters are found by optimizing the marginal likelihood.
-
-Figure \ref{fig:kernel} shows the prior distribution of a Gaussian process with this kernel, as well as the value of the kernel for some choices of $z_1$ and $z_2$.
-
+Where $\mathbbm{1}[z_1=z_2]$ is an indicator function whose value is 1 if $z_1=z_2$, and 0 otherwise. The parameter $\sigma_2$ controls the noise, and depends on the instrument used to measure the modeled quantity; for example, for wind, we have $\sigma_2^2=\SI{0.1}{\square\meter\per\square\second}$; the other parameters are found by optimizing the marginal likelihood. Figure \ref{fig:kernel} shows the prior distribution of a Gaussian process with this kernel, as well as the value of the kernel for some choices of $z_1$ and $z_2$.
 
 \begin{figure}
     \centering
@@ -643,6 +645,21 @@ Figure \ref{fig:kernel} shows the prior distribution of a Gaussian process with 
     \caption{Behavior of the kernel in equation \ref{eq:kernel}, where the altitude is on the $x$ axis, and the predicted value on the $y$ axis. Notice the approximate logarithmic profile with which the predicted value changes with altitude; this is caused by the square root term in the kernel, and emulates the effect of the $\ln z$ term in equation \ref{eq:logmodel}.}
 	\label{fig:kernel}
 \end{figure}
+
+
+Our final goal is to obtain the derivative of the predictive posterior mean, and for this we need to derive equation \ref{eq:kernel} with respect to $z_1$:
+
+\begin{equation}
+\label{eq:kernel_derivative}
+\frac{\partial k(z_1,z_2)}{\partial z_1}=\frac{z_2-z_1}{\sigma_0^2}\exp\left(-\frac{(z_1-z_2)^2}{\sigma_0^2}\right)+\frac{z_2}{2\sqrt{\sigma_1^2+z_1z_2}}+\sigma_2^2\mathbbm{1}[z_1=z_2]
+\end{equation}
+
+And plug this into equation \ref{todo} to obtain
+
+\begin{equation}
+\label{eq:gp_gradient}
+\frac{\partial\overline{f}(\bm x_*)}{\partial\bm x_*}=\frac{\partial K(\bm x_*,\bm X)}{\partial\bm x_*}K(\bm X,\bm X)^{-1}\bm t
+\end{equation}
 
 \section{Monin-Obukhov Similarity Theory}
 \label{sec:most_fit}
@@ -722,16 +739,35 @@ The models that we use are ridge regression, k-nearest neighbors, gradient boost
 All models but neural networks are fit using nested cross validation with random hyper-parameter search. This procedure detailed in section \ref{sec:perf_eval}, but we list here the distributions of the hyper-parameters that we used in the random search:
 
 \begin{itemize}
-\item Ridge regression and Monin-Obukhov estimator: the only hyper-parameter to tune is the regularization coefficient, for which we use a log$_{10}$-uniform distribution from $10^{-6}$ to $10_{1}$\footnote{a random variable $X$ has a log$_\beta$-uniform distribution from $a$ to $b$ if $\log_\beta X$ is uniformly distributed between $a$ and $b$. Equivalently, if $Y$ is uniform between $a$ and $b$, then $\beta^Y$ is log$_\beta$-uniform.}.
+\item Ridge regression and Monin-Obukhov estimator: the only hyper-parameter to tune is the regularization coefficient, for which we use a log$_{10}$-uniform distribution\footnote{a random variable $X$ has a log$_\beta$-uniform distribution from $a$ to $b$ if $\log_\beta X$ is uniformly distributed between $a$ and $b$. Equivalently, if $Y$ is uniform between $a$ and $b$, then $\beta^Y$ is log$_\beta$-uniform.} from $10^{-6}$ to $10^{1}$.
 
 \item k-nearest neighbors: the hyper-parameters to tune are the number of neighbors, chosen uniformly from $1$ to $15$, the distance function, either L1 or L2 norm, and the weights of the neighbors, either uniform or directly proportional to the distance to the query point.
 
-\item Gradient boosted trees: the number of estimators is a log$_10$-uniform from 10 to 1000, the number of features is uniform from 1 to all, the maximum depth is uniform from 2 to 10, the sub-sampling factor is uniform from 10\% to 100\%, and the loss function is either least squares or least absolute deviation. The learning rate was not tweaked, as there is a depe
+\item Gradient boosted trees: the distributions are shown in table \ref{tbl:gb_hyperparams}. Note that $\delta$, for the Huber loss, refers to the percentile of the residuals, so that $\delta=0.5$ uses L2 loss for the smallest 50\% and L1 loss for the largest 50\%.
 \end{itemize}
+
+
+\begin{table}[]
+\centering
+\caption{Distribution of the hyper-parameters for gradient boosted trees}
+\label{tbl:gb_hyperparams}
+\begin{tabularx}{\textwidth}{r|l|X}
+\textbf{Hyper-parameter} & \textbf{Distribution} & \textbf{Values} \\ \hline
+Number of estimators & log$_{10}$-uniform & From $10^1$ to $10^4$ \\
+Learning rate & log$_{10}$-uniform & From $10^{-3}$ to $10^0$ \\
+Number of features & Uniform & All possible values \\
+Maximum depth & Uniform & From 2 to 10 \\
+Sub-sampling factor & Uniform & From 25\% to 100\% \\
+Loss function & Uniform & Least squares, least absolute deviation, \newline Huber loss \\
+$\delta$ (for the Huber loss) & Uniform & From 1\% to 98\%
+\end{tabularx}
+\end{table}
+
+
 
 \section{Performance Evaluation}
 \label{sec:perf_eval}
-The goal of performance evaluation is to obtain a realistic and unbiased estimate of the performance of a model on unseen data; we are not interested in the values of the hyper-parameters that yield this performance. For this reason, we perform nested cross validation, with the inner loop used to optimize the hyper-parameters through random search \citep{random_search}, and the outer loop used to evaluate the model. We use 10 folds in both the inner and outer CV, and test 60 different hyper-parameter combinations. This number is based on a simple probabilistic argument\footnote{\url{https://stats.stackexchange.com/a/209409/141343}}: if a combination has a 5\% probability of giving a model whose performance is within 5\% of the best attainable performance, then the probability that at least one in 60 trials finds a combination within 5\% of the optimal is $1-0.95^{60}\approx 0.95$. Clearly, these numbers are arbitrary, but even a probability of 1\% would give a success probability of 45\%. Algorithm \ref{alg:nested_cv} shows in detail how nested cross validation with random search works.
+The goal of performance evaluation is to obtain a realistic and unbiased estimate of the performance of a model on unseen data; we are not interested in the values of the hyper-parameters that yield this performance. For this reason, we perform nested cross validation, with the inner loop used to optimize the hyper-parameters through random search \citep{random_search}, and the outer loop used to evaluate the model. We use 10 folds in both the inner and outer CV, and test 60 different hyper-parameter combinations for all estimators but gradient boosted trees, for which we use 180. This number is based on a simple probabilistic argument\footnote{\url{https://stats.stackexchange.com/a/209409/141343}}: if a combination has a 5\% probability of giving a model whose performance is within 5\% of the best attainable performance, then the probability that at least one in 60 trials finds a combination within 5\% of the optimal is $1-0.95^{60}\approx 0.95$. Clearly, these numbers are arbitrary, but even a probability of 1\% would give a success probability of 45\%. Algorithm \ref{alg:nested_cv} shows in detail how nested cross validation with random search works.
 
 A fundamental assumption underlying hold-out evaluation methods is that the samples in the training set are independent and identically distributed, so that the distribution in the two partitions are equal. This is not our case, since there is a inherent time dependency in the data, meaning that samples obtained close in time are very similar. This can be confirmed by training and evaluating a k-nearest neighbors classifier with $k=1$ on random splits: the resulting mean squared error is in the order of $10^{-3}$, clearly unrealistic. To circumvent this problem, the CV folds are created on \emph{months}: all the samples in a given month and year are either in the training set or in the validation set.
 
@@ -799,9 +835,11 @@ The dataset consists of 17 years of measurements, from January 2001 to December 
 
 Figure \ref{fig:le_season} shows the turbulent latent heat flux versus hour of day both in Winter and Summer, whereas figure \ref{fig:ustar_wind_temp} shows the friction velocity as a function of air temperature and wind speed. The dependency of $u_*$ with the wind speed of figure \ref{fig:ustar_wind} is quite complicated: there are three clear regions with different constant of proportionality and correlation coefficient. The group where the two quantities are almost perfectly correlated corresponds to imputed values for the friction velocity, derived from the wind speed. The three other groups differ widely in the values of the fluxes and radiation; for example, fitting an ordinary least squares model to 1000 bootstraps of the observations with negative net radiation yields an average proportionality coefficient of \num{0.051} with standard deviation \num{1.52e-05}, whereas the same procedure on the complementary set yields an average of \num{0.046} with standard deviation \num{1.40e-05}. Note that this dependency might be related to the observed imbalance in the surface energy budged, usually around 15\% during day time and 100\% during night time at the Cabauw observatory; \cite{cabauwinsitu} notes that the imbalance seems to depend on the speed of wind.
 
+Talking about speed of wind, figure \ref{fig:ustar_wind} shows some measurements exceeding \SI{25}{\meter\per\second}; according to the Beaufort scale, holding umbrellas and walking become hard with wind at \SI{15}{\meter\per\second}, but those measurements are not issues with the data. Figure \ref{fig:cyclone_jeanett} shows the highest wind speed present in the Cesar database to date, corresponding to cyclone Jeanett.
+
 \begin{figure}
     \centering
-    \begin{subfigure}[t]{0.45\textwidth}
+    \begin{subfigure}[t]{0.48\textwidth}
         \centering
         \includegraphics[width=\textwidth]{images/le_winter}
         \caption{Winter}
@@ -838,11 +876,59 @@ Figure \ref{fig:le_season} shows the turbulent latent heat flux versus hour of d
 	\label{fig:ustar_wind_temp}
 \end{figure}
 
+\begin{figure}
+    \centering
+	\includegraphics[width=0.95\textwidth]{images/cyclone_jeanett}
+	\caption{Wind speed measurements during Cyclone Jeanett, which struck north-west Europe in October 2002, causing 33 fatalities. Although \SI{30}{\meter\per\second} wind is, in absolute terms, destructive, this cyclone registered winds up to \SI{42.5}{\meter\per\second}!}
+	\label{fig:cyclone_jeanett}
+\end{figure}
 
 
 
 \section{Gradient Computation}
-compare methods for computing gradient
+Section \ref{sec:gradients} introduced three different ways to compute the gradient, but we need to choose one to compute the universal functions. In this section, we refer to equation \ref{eq:fd_gradient} as \emph{F.D.}, equation \ref{eq:log_gradient} as \emph{Log} and equation \ref{eq:gp_gradient} as \emph{G.P.} Table \ref{tbl:gradients_corr} shows the Pearson correlation coefficient between the three methods, separately for every altitude level. It is clear that the F.D. gradient is inadequate at the lowest level; this can be explained by considering that equation \ref{eq:fd_gradient} with $z=10$ reduces to the wind speed at 20 meters divided by 20. This method appears to be too naive, especially since it does not take the roughness length into consideration, but, as \cite{cabauw_z0} showed, finding a value for $z_0$ is far from trivial. In spite of this, the F.D. and the Log gradients strongly agree on all levels, and are quite different from the gradients by G.P.
+
+\begin{table}[]
+\centering
+\caption{Pearson correlation coefficient between the gradients predicted by the different methods, divided by level. The F.D. gradient is poorly correlated with the other two methods at the 10 meters level, but is very well correlated with the Log gradient at the other levels. The Log and G.P. gradients disagree on the lower levels, but it appears their predictions converge as altitude increases.}
+\label{tbl:gradients_corr}
+\begin{tabular}{c|c|c|c}
+z & F.D. / G.P. & Log / F.D. & Log / G.P. \\ \hline
+ 	10 & 	0.192 & 0.480 &	0.317 \\
+ 	20 &	0.645 	& 0.991 &	0.640 \\
+ 	40 &	0.863 & 0.981 &	0.835 \\
+\end{tabular}
+\end{table}
+
+Since Log and G.P. predict the wind speed too, we can compare their predictions to the measured wind speed. Notice that these methods are fitted on the wind speed at all levels, from 10 to 200 meters, but we evaluate them only on the three lowest levels, since that is where we compute the universal functions. Table \ref{tbl:model_wind_errors} shows the squared error between the modeled wind and the true wind speed at the three levels for both models. It is interesting to see that both models are quite accurate at all levels; this allows us to conclude that F.D. is not reliable at 10 meters. Figure \ref{fig:gp_log_perc_err_wind_speed} shows the error as a function of the wind speed; it is interesting to see that G.P. becomes more and more reliable as the wind speed increases. Not only does its error decrease, so does the variance of the error; this seems to confirm that equation \ref{eq:kernel} is a good kernel, considering that at very high wind speed the wind profile is almost perfectly logarithmic.
+
+
+\begin{table}[]
+\centering
+\caption{Absolute percent error of the wind speed modeled by the Log and G.P. methods at each altitude level. The altitude does not affect the error, and the G.P. wind speed is closer to the true wind speed than the Log model in the vast majority of cases, although the difference is negligible, often less than a few percents.}
+\label{tbl:model_wind_errors}
+\begin{tabular}{c|ccc|ccc|ccc}
+& z & Log & G.P. & z & Log & G.P. & z & Log & G.P. \\\hline
+mean & \multirow{7}{*}{ 10 } & 1.2250 & 1.0329 & \multirow{7}{*}{ 20 } & 2.2605 & 1.4217 & \multirow{7}{*}{ 40 } & 1.3878 & 1.0364 \\
+std & & 1.4033 & 1.1169 & & 2.3432 & 1.4658 & & 1.4783 & 1.1208 \\
+min & & 0.0000 & 0.0000 & & 0.0000 & 0.0000 & & 0.0000 & 0.0000 \\
+25\% & & 0.3714 & 0.3249 & & 0.7447 & 0.4549 & & 0.4744 & 0.3037 \\
+50\% & & 0.8217 & 0.7608 & & 1.6251 & 1.0595 & & 1.0263 & 0.7265 \\
+75\% & & 1.5505 & 1.4179 & & 2.9642 & 1.9693 & & 1.8413 & 1.4143 \\
+max & & 53.7541 & 212.3985 & & 106.5623 & 192.9434 & & 80.3531 & 43.4657 \\
+\end{tabular} 
+\end{table}
+
+
+
+\begin{figure}
+    \centering
+	\includegraphics[width=0.75\textwidth]{images/gp_log_perc_err_wind_speed}
+	\caption{Mean absolute percent error of the wind modeled by the Log and G.P. models as a function of the true wind speed; the lines are the average, and the shaded regions enclose the average plus or minus the standard deviation. Both quantities are computed by binning the wind by its integral part. Notice that only wind 656 observations, or 0.04\% of the total, are above \SI{20}{\meter\per\second} (\SI{72}{\kilo\meter\per\hour}), and slightly less than 5\% are above \SI{11}{\meter\per\second}.}
+	\label{fig:gp_log_perc_err_wind_speed}
+\end{figure}
+
+
 
 \section{Monin-Obukhov Similarity Theory}
 performance of MOST in table \ref{tbl:most_results}
