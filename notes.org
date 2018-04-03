@@ -244,7 +244,7 @@ can get an even better fit by fitting only on the levels we want
     i don't think this is good for the project, though
         we are basically overfitting and have no indication on when the model is not adequate
 
-** predictio 
+** prediction
 *** block cross validation
 we have a data point every 10 minutes, which means that points close in time are very similar one another
 therefore we cannot assume that data is iid and make random splits
@@ -373,6 +373,8 @@ target: 0.676 (std. 0.0623) => 0.554
 got 0.5316 mse with F1+F2 with trend, same architecture
 0.2907 wind wind at all levels
 
+**** observations
+L2 regularization seems to hurt, better to use dropout
 * limitations and future work
 measures on land, but oceanic BL is quite different
     also, the model works for locations topologically similar to cabauw
