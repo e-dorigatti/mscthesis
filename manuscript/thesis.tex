@@ -693,9 +693,9 @@ All the features come from the Cesar database, refer to section \ref{sec:data_co
 \item[F5:] Turbulent kinetic heat flux, turbulent latent heat flux;
 \end{enumerate}
 
-These sets are used cumulatively in the order they are listed, meaning that, for example, F3 is used in conjunction with F2 and F1. Derived features that can be computed from others, such as the virtual temperature (equation \ref{eq:vtemp}), are not included. The reason is that the less inputs a model requires, the more useful and "agile" it can be. This division was decided based on domain knowledge, so that the level of a feature reflects both its expected impact on the performance and how desirable it is to include it. An example of the former reasoning is with F4, where the effect of moisture is expected to be captured by the soil heat flux, and to be generally negligible in all but the most extreme conditions. An example of the latter reasoning is with F5, because turbulent fluxes are hard to measure accurately (see section \ref{sec:eddy_correlation}), and current simulation models are known to be quite inaccurate in their estimation of these fluxes \citep{sheba}. Similarly, the friction velocity was not included, because the point of predicting $\phi_m$ is to use it to estimate $u_*$ from the wind gradient, which is readily measured both in real life and in simulations.
+These sets are used cumulatively in the order they are listed, meaning that, for example, F3 is used in conjunction with F2 and F1. Derived features that can be computed from others, such as the virtual temperature (equation \ref{eq:vtemp}), are not included. The reason is that the less inputs a model requires, the more useful and "agile" it can be. This division was decided based on domain knowledge, so that the level of a feature reflects both its expected impact on the performance and how desirable it is to include it. An example of the former reasoning is with F4, where the effect of moisture is expected to be captured by the soil heat flux, and to be generally negligible in all but the most extreme conditions. An example of the latter reasoning is with F5, because turbulent fluxes are hard to measure accurately (see section \ref{sec:eddy_correlation}), and current simulation models are known to be quite inaccurate in their estimation of these fluxes \citep{sheba}. Similarly, the friction velocity was not included, because the point of predicting $\phi_m$ is to use it to estimate $u_*$ from the wind gradient, which is readily measured both in real life and in simulations. \cite{cabauw_z0} has shown that the direction of the wind affects the universal functions at Cabauw, because of the different covers of the surface, changing the roughness length, and disturbances by the main mast, preventing accurate wind speed measurement. Nonetheless, we decided not to include the wind direction in the features, as this is very specific to the Cabauw observatory, and would reduce the generality of our models.
 
-We also create a second version of each feature set, augmented with the hourly trend of each variable, except for the altitude $z$. The reason for including the trend is that it can give an indication of, for example, the time of the day, or other complex phenomena for which there is no measurement. The interval for the trend (one hour) is used because it is enough to capture local variations, but not too large so as to contain irrelevant information. The hourly trend is computed simply as the difference between the current value and the value measured one hour before, divided by one hour; given the goal of this work, it would not be feasible to use the future value to compute the trend.
+We also create a second version of each feature set, augmented with the hourly trend of each variable, except for the altitude $z$. The reason for including the trend is that it can give an indication of, for example, the time of the day, or other complex phenomena for which there is no measurement. The interval for the trend (one hour) is used because it is enough to capture local variations, but not too large so as to contain irrelevant information. The hourly trend is computed simply as the difference between the current value and the value measured one hour before, divided by one hour. Given the goal of this work, namely to produce a model to be used in climate simulations, it would not make sense to use future values to compute the trend.
 
 Finally, each feature is centered and standardized so as to have zero mean and unit standard deviation:
 
@@ -704,13 +704,13 @@ Finally, each feature is centered and standardized so as to have zero mean and u
 x^\prime_{i,j}=\frac{x_{i,j}-\mu_j}{\sigma_j}
 \end{equation}
 
-This method is not robust to outliers, since they heavily affect mean and standard deviation; this can be prevented by subtracting the median and normalizing with the interquartile range. These two methods give similar results in our datasets, therefore we follow equation \ref{eq:standardization}, since it it the most widely used in practice. Obviously, $\mu_j$ and $\sigma_j$ are computed only on the training data, and used to normalize both train and test data.
+This method is not robust to outliers, since they heavily affect mean and standard deviation; this can be prevented by subtracting the median and normalizing with the interquartile range instead. These two methods give similar results in our datasets, therefore we follow equation \ref{eq:standardization}, since it it the most widely used in practice. Obviously, every $\mu_j$ and $\sigma_j$ are computed only on the training data, and used to normalize both training and testing data.
 
 \subsection{Models}
 
 The models that we use are ridge regression, k-nearest neighbors, gradient boosted trees, and neural networks. Due to the size of the dataset, we cannot use kernel-based algorithms such as SVM and Gaussian Processes, as they require $\Theta(N^2)$ memory to store the kernel matrix, and $O(N^3)$ time to invert it. Gradient boosted trees were used instead of random forests because they were shown to work slightly better [citation], and small-scale experiments on our dataset showed they can be fit almost an order of magnitude more quickly.
 
-All models but neural networks are fit using nested cross validation with random hyper-parameter search. This procedure detailed in section \ref{sec:perf_eval}, but we list here the distributions of the hyper-parameters that we used in the random search:
+All models but neural networks are fitted using nested cross validation with random hyper-parameter search. This procedure detailed in section \ref{sec:perf_eval}, but we list here the distributions of the hyper-parameters that we use in the random search:
 
 \begin{itemize}
 \item Ridge regression and Monin-Obukhov estimator: the only hyper-parameter to tune is the regularization coefficient, for which we use a log$_{10}$-uniform distribution\footnote{a random variable $X$ has a log$_\beta$-uniform distribution from $a$ to $b$ if $\log_\beta X$ is uniformly distributed between $a$ and $b$. Equivalently, if $Y$ is uniform between $a$ and $b$, then $\beta^Y$ is log$_\beta$-uniform.} from $10^{-6}$ to $10^{1}$.
@@ -719,6 +719,8 @@ All models but neural networks are fit using nested cross validation with random
 
 \item Gradient boosted trees: the distributions are shown in table \ref{tbl:gb_hyperparams}. Note that $\delta$, for the Huber loss, refers to the percentile of the residuals, so that $\delta=0.5$ uses L2 loss for the smallest 50\% and L1 loss for the largest 50\%.
 \end{itemize}
+
+We use log-uniform distributions for parameters with a high range of possible values to reflect the intuition that small values are as likely as large values, and to avoid the samples being dominated by the larger values. Samples from an uniform distribution from $10^0$ to $10^3$ are ten times more likely to be from $[10^2,10^3]$ than from $[10^1,10^2]$, and, on average, only one in 100 samples will be in $[10^0,10^1]$. Log$_{10}$-uniform distributions do not have this problem, and a sample is equally likely to belong to any of the three intervals.
 
 todo talk about nnets
  - use prelu instead of relu because relus get stuck
@@ -733,10 +735,10 @@ todo talk about nnets
 Number of estimators & log$_{10}$-uniform & From $10^1$ to $10^4$ \\
 Learning rate & log$_{10}$-uniform & From $10^{-3}$ to $10^0$ \\
 Number of features & Uniform & All possible values \\
-Maximum depth & Uniform & From 2 to 10 \\
+Maximum depth & Uniform & From 4 to 12 \\
 Sub-sampling factor & Uniform & From 25\% to 100\% \\
 Loss function & Uniform & Least squares, least absolute deviation, \newline Huber loss \\
-$\delta$ (for the Huber loss) & Uniform & From 1\% to 98\%
+$\delta$ (for the Huber loss) & Uniform & From 1\% to 99\%
 \end{tabularx}
 \end{table}
 
@@ -746,11 +748,11 @@ $\delta$ (for the Huber loss) & Uniform & From 1\% to 98\%
 \label{sec:perf_eval}
 The goal of performance evaluation is to obtain a realistic and unbiased estimate of the performance of a model on unseen data. Because the Monin-Obukhov similarity theory is only valid in the $-2\leq\xi\leq1$ range, we will use this data as the primary target for evaluation. We will also evaluate the models on the full dataset, to see what kind of performance can be expected outside of the typical range where the similarity theory is employed.
 
-We are actually not interested in the optimal values of the hyper-parameters; for this reason, we perform nested cross validation, with the inner loop used to optimize the hyper-parameters through random search \citep{random_search}, and the outer loop used to evaluate the model. We use 10 folds in both the inner and outer CV, and test 60 different hyper-parameter combinations for all estimators but gradient boosted trees, for which we use 180. This number is based on a simple probabilistic argument\footnote{\url{https://stats.stackexchange.com/a/209409/141343}}: if a combination has a 5\% probability of giving a model whose performance is within 5\% of the best attainable performance, then the probability that at least one in 60 trials finds a combination within 5\% of the optimal is $1-0.95^{60}\approx 0.95$. Clearly, these numbers are arbitrary, but even a probability of 1\% would give a success probability of 45\%. Algorithm \ref{alg:nested_cv} shows in detail how nested cross validation with random search works.
+We are actually not interested in the optimal values of the hyper-parameters; for this reason, we perform nested cross validation, with the inner loop used to optimize the hyper-parameters through random search \citep{random_search}, and the outer loop used to evaluate the model. We use 10 folds in both the inner and outer CV, and test 10 different hyper-parameter combinations for all estimators. Limits in the available computational resources prevent us from testing more combinations; the possibility that this number is too low can manifest itself in the high variance of the nested cross validation results. Algorithm \ref{alg:nested_cv} shows in detail how nested cross validation with random search works.
 
-A fundamental assumption underlying hold-out evaluation methods is that the samples in the training set are independent and identically distributed, so that the distribution in the two partitions are equal. This is not our case, since there is a inherent time dependency in the data, meaning that samples obtained close in time are very similar. This can be confirmed by training and evaluating a k-nearest neighbors classifier with $k=1$ on random splits: the resulting mean squared error is in the order of $10^{-3}$, clearly unrealistic. To circumvent this problem, the CV folds are created on \emph{months}: all the samples in a given month and year are either in the training set or in the validation set.
+A fundamental assumption underlying hold-out evaluation methods is that the samples in the training set are independent and identically distributed, so that the distribution in the two partitions are equal. This is not our case, since there is a inherent time dependency in the data, meaning that samples obtained close in time are very similar. This can be confirmed by training and evaluating a k-nearest neighbors classifier with $k=1$ on random splits: the resulting mean squared error is in the order of $10^{-3}$, which is clearly unrealistic. To circumvent this problem, the CV folds are created on \emph{months}: all the samples in a given month and year are either in the training set or in the validation set. We choose months instead of days because the weather often does not change significantly in the span of 24 hours, whereas in a month there are around three weeks worth of samples that are independent from the conditions at the start and end of the month.
 
-The main evaluation metric is the mean squared error, but we compute other metrics in the outer CV to get a more complete idea of the performance of the estimators:
+The main evaluation metric is the mean squared error, since that is what we are optimizing for, but we compute other metrics in the outer cross validation loop to get a more complete idea of the performance of the estimators:
 
 \begin{itemize}
 \item Mean Squared Error
@@ -764,7 +766,7 @@ $$
 $$
 \end{itemize}
 
-Where $f_n$ is the predicted value for the test sample $\bm x_n$ with true value $t_n$, the squared error is $(f_n-t_n)^2$, the absolute error is $\vert f_n-t_n\vert$, the absolute percent error is $\vert 1-f_n/t_n\vert$. We present both mean and median scores, because the former are heavily skewed by outliers.
+Where $f_n$ is the predicted value for the test sample $\bm x_n$ with true value $t_n$, the squared error is $(f_n-t_n)^2$, the absolute error is $\vert f_n-t_n\vert$, the absolute percent error is $100\vert 1-f_n/t_n\vert$. We present both mean and median scores because the former are heavily skewed by outliers. We also present both absolute and percent errors because the latter are easier to interpret, but tend to explode when the true value is very small,\footnote{predicting 1 for a true value of 100 gives a percent error of 99\%, but predicting 100 for a true value of 1 gives, somewhat unfairly, a percent error of 9900\%} a condition that frequently happens in our dataset.
 
 
 \begin{algorithm}
@@ -781,14 +783,14 @@ Where $f_n$ is the predicted value for the test sample $\bm x_n$ with true value
 		\State{$params\gets$ a random hyper-parameter combination}
 		\State{$params\_mse\gets 0$}
 		\For{$k_i\gets 1\ldots K_I$}\Comment{Evaluate $params$ with $K_I$-fold CV}
-			\State{Generate $k$-th inner fold $(D^i_T,D^i_V)$ from $D^o_T$}
+			\State{Generate $k_i$-th inner fold $(D^i_T,D^i_V)$ from $D^o_T$}
 			\State{$model\gets$ a new instance of the model with parameters $params$}
 			\State{Train $model$ on $D^i_T$}
 			\State{$mse\gets$ result of the evaluation of $model$ on $D^i_V$}
 			\State{$params\_mse\gets params\_mse+mse$}
 		\EndFor
 
-		\If{$params\_mse<best\_mse$}\Comment{MSE comparison on $K$-fold CV result}
+		\If{$params\_mse<best\_mse$}\Comment{MSE comparison on $K_i$-fold CV result}
 			\State{$best\_mse\gets params\_mse$}
 			\State{$best\_params\gets params$}
 		\EndIf		
@@ -806,7 +808,7 @@ Where $f_n$ is the predicted value for the test sample $\bm x_n$ with true value
 \label{sec:success}
 A successful answer to the first research question entails finding a model whose mean squared error on F5 with trend is smaller than the mean squared error of the Monin-Obukhov similarity theory estimator introduced in section \ref{sec:most_fit}.
 
-The second research question is answered by comparing the different evaluation metrics on the ten feature sets (F1 to F5, with and without trend). Note that we cannot use the output of a model to obtain the importance of the features, as this method does not work well when some of them are correlated [citation], which is a very relevant issue in our case. Trivially, wind speed and temperature at the different levels are very strongly correlated (Pearson's $r$ is above 0.95), and there are other, more complex, correlations, such as between the net radiation and the soil heat flux, or between the soil temperature and the dew point (Pearson's $r$ is respectively 0.75 and 0.79). In spite of the correlations, all these variables contribute to the flux-profile relationships, often in very nuanced ways.
+The second research question is answered by comparing the different evaluation metrics on the ten feature sets (F1 to F5, with and without trend). Note that we cannot use the output of a model to obtain the importance of the features, as this method is not reliable when some of them are correlated [citation], which is a very relevant issue in our case. Trivially, wind speed and temperature at the different levels are very strongly correlated (Pearson's $r$ is above 0.95), and there are other, more complex, correlations, such as between the net radiation and the soil heat flux, or between the soil temperature and the dew point (Pearson's $r$ is respectively 0.75 and 0.79). In spite of the correlations, all these variables contribute to the flux-profile relationships, often in very nuanced ways.
 
 
 
@@ -818,7 +820,7 @@ The dataset consists of 17 years of measurements, from January 2001 to December 
 
 Figure \ref{fig:le_season} shows the turbulent latent heat flux versus hour of day both in Winter and Summer, whereas figure \ref{fig:ustar_wind_temp} shows the friction velocity as a function of air temperature and wind speed. The dependency of $u_*$ with the wind speed of figure \ref{fig:ustar_wind} is quite complicated: there are three clear regions with different constant of proportionality and correlation coefficient. The group where the two quantities are almost perfectly correlated corresponds to imputed values for the friction velocity, derived from the wind speed. The three other groups differ widely in the values of the fluxes and radiation; for example, fitting an ordinary least squares model to 1000 bootstraps of the observations with negative net radiation yields an average proportionality coefficient of \num{0.051} with standard deviation \num{1.52e-05}, whereas the same procedure on the complementary set yields an average of \num{0.046} with standard deviation \num{1.40e-05}. Note that this dependency might be related to the observed imbalance in the surface energy budged, usually around 15\% during day time and 100\% during night time at the Cabauw observatory; \cite{cabauwinsitu} notes that the imbalance seems to depend on the speed of wind.
 
-Talking about speed of wind, figure \ref{fig:ustar_wind} shows some measurements exceeding \SI{25}{\meter\per\second}; according to the Beaufort scale, holding umbrellas and walking become hard with wind at \SI{15}{\meter\per\second}, but those measurements are not issues with the data. Figure \ref{fig:cyclone_jeanett} shows the highest wind speed present in the Cesar database to date, corresponding to cyclone Jeanett.
+Talking about speed of wind, figure \ref{fig:ustar_wind} shows some measurements exceeding \SI{25}{\meter\per\second}; according to the Beaufort scale, holding umbrellas and walking become hard with wind at \SI{15}{\meter\per\second}. Those measurements are not issues with the data: figure \ref{fig:cyclone_jeanett} shows the highest wind speed present in the Cesar database to date, corresponding to cyclone Jeanett.
 
 \begin{figure}
     \centering
@@ -928,7 +930,7 @@ G.P. & 1.213 & 8.899
 \end{tabular}
 \end{table}
 
-To conclude, equation \ref{eq:log_gradient} is the most accurate way of computing the profile gradient, and all the results presented from now on make use of it.
+To conclude, although F.D. (equation \ref{eq:fd_gradient}) is the most accurate way of computing the profile gradient, it does not allow us to use data at the 10 meters level. Considering that Log (equation \ref{eq:log_gradient}) is very slightly worse, but allows us to include that level (increasing the data available by 50\%!), all the results presented from now on make use of it.
 
 
 \section{Monin-Obukhov Similarity Theory}
@@ -958,16 +960,22 @@ performance of the models
 
 \begin{table}[]
 \centering
-\caption{Evaluation metrics for the Ridge linear regression estimator on F5 with trend}
-\begin{tabular}{r|c|c|c|c}
-& \multicolumn{2}{c|}{All} & \multicolumn{2}{c}{$-2\le\xi\le1$} \\
- & Mean & Std. & Mean & Std.   \\ \hline
-Mean Squared Error 					& 0.593038  		& 0.048443  & 0.168731    & 0.016571    \\
-$R^2$ Score									& 0.734663     	& 0.017526 & 0.688497    & 0.029011      \\
-Mean Absolute Error 					& 0.509204  		& 0.018504 & 0.284076    & 0.011686      \\
-Median Absolute Error 				& 0.345660 		& 0.009037   & 0.204298    & 0.005318    \\
-Mean Absolute Percent Error  	& 264.613746 	& 298.463690 & 79.669309   & 30.583787   \\
-Median Absolute Percent Error	& 27.816959  	& 1.286721  & 19.301579    & 0.565164  
+\caption{Evaluation metrics for the Ridge linear regression estimator on the five feature sets augmented with trend.}
+\begin{tabular}{c|r|c|c|c|c}
+& & \multicolumn{2}{c|}{All} & \multicolumn{2}{c}{$-2\le\xi\le1$} \\
+&  & Mean & Std. & Mean & Std.   \\ \hline
+ \multirow{6}{*}{F5} & Mean Squared Error 					& 0.593038  		& 0.048443  & 0.168731    & 0.016571    \\
+& $R^2$ Score									& 0.734663     	& 0.017526 & 0.688497    & 0.029011      \\
+& Mean Absolute Error 					& 0.509204  		& 0.018504 & 0.284076    & 0.011686      \\
+& Median Absolute Error 				& 0.345660 		& 0.009037   & 0.204298    & 0.005318    \\
+& Mean Absolute Percent Error  	& 264.613746 	& 298.463690 & 79.669309   & 30.583787   \\
+& Median Absolute Percent Error	& 27.816959  	& 1.286721  & 19.301579    & 0.565164  \\ \hline
+ \multirow{6}{*}{F4} & Mean Squared Error 					& a & b & 0.168744   & 0.012348   \\
+& $R^2$ Score									& a & b & 0.689096   & 0.018279   \\
+& Mean Absolute Error 					& a & b & 0.284449   & 0.010863   \\
+& Median Absolute Error 				& a & b & 0.205146    & 0.006771   \\
+& Mean Absolute Percent Error  	& a & b & 80.805403  & 34.558653  \\
+& Median Absolute Percent Error	& a & b & 19.327348   & 0.538968  
 \end{tabular}
 \end{table}
 
@@ -975,34 +983,46 @@ Median Absolute Percent Error	& 27.816959  	& 1.286721  & 19.301579    & 0.56516
 
 \begin{table}[]
 \centering
-\caption{Evaluation metrics for the k-nearest neighbors estimator on F5 with trend}
+\caption{Evaluation metrics for the k-nearest neighbors estimator on the five feature sets augmented with trend.}
 \label{tbl:knn_results_f5t}
-\begin{tabular}{r|c|c|c|c}
-& \multicolumn{2}{c|}{All} & \multicolumn{2}{c}{$-2\le\xi\le1$} \\
- & Mean & Std. & Mean & Std.   \\ \hline
-Mean Squared Error 					& 0.583102   	& 0.035314  & 0.187911    & 0.009168    \\ 
-$R^2$ Score									& 0.739219   	& 0.010517 & 0.653668    & 009450      \\
-Mean Absolute Error 					& 0.487180   	& 0.016797  & 0.314231    & 0.006526     \\
-Median Absolute Error 				& 0.300725   	& 0.011178  & 0.237316    & 0.005357       \\
-Mean Absolute Percent Error  	& 151.571688	&  55.287673 & 98.785002   & 39.723715    \\
-Median Absolute Percent Error	& 25.450125   	& 1.270630  & 21.959704    & 0.538930  
+\begin{tabular}{c|r|c|c|c|c}
+& & \multicolumn{2}{c|}{All} & \multicolumn{2}{c}{$-2\le\xi\le1$} \\
+& & Mean & Std. & Mean & Std.   \\ \hline
+\multirow{6}{*}{F5} & Mean Squared Error 					& 0.583102   	& 0.035314  & 0.187911    & 0.009168    \\ 
+& $R^2$ Score									& 0.739219   	& 0.010517 & 0.653668    & 0.009450      \\
+& Mean Absolute Error 					& 0.487180   	& 0.016797  & 0.314231    & 0.006526     \\
+& Median Absolute Error 				& 0.300725   	& 0.011178  & 0.237316    & 0.005357       \\
+& Mean Absolute Percent Error  	& 151.571688	&  55.287673 & 98.785002   & 39.723715    \\
+& Median Absolute Percent Error	& 25.450125   	& 1.270630  & 21.959704    & 0.538930 \\ \hline
+\multirow{6}{*}{F4} & Mean Squared Error 					& a & b & 0.197570   & 0.006350   \\ 
+& $R^2$ Score									& a & b & 0.635371   & 0.010965   \\
+& Mean Absolute Error 					& a & b & 0.321321   & 0.005622   \\
+& Median Absolute Error 				& a & b & 0.241515   & 0.004917   \\
+& Mean Absolute Percent Error  	& a & b & 98.139450  & 40.602436  \\
+& Median Absolute Percent Error	& a & b & 22.339853    & 0.829702  \\ \hline
 \end{tabular}
 \end{table}
 
 
 \begin{table}[]
 \centering
-\caption{Evaluation metrics for the gradient boosting estimator on F5 with trend}
+\caption{Evaluation metrics for the gradient boosting estimator on the five feature sets augmented with trend.}
 \label{tbl:gb_results_f5t}
-\begin{tabular}{r|c|c|c|c}
-& \multicolumn{2}{c|}{All} & \multicolumn{2}{c}{$-2\le\xi\le1$} \\
- & Mean & Std. & Mean & Std.   \\ \hline
-Mean Squared Error 					& 0.285956	& 0.012074 & a & b \\  
-$R^2$ Score									& 0.872323   & 0.006331   & a & b \\
-Mean Absolute Error 					& 0.319557   & 0.006457 & a & b \\
-Median Absolute Error 				& 0.180583  	& 0.003956   & a & b \\
-Mean Absolute Percent Error		& 88.093397	& 53.138612  & a & b \\
-Median Absolute Percent Error	& 15.888091	& 0.499692 & a & b \\
+\begin{tabular}{c|r|c|c|c|c}
+& & \multicolumn{2}{c|}{All} & \multicolumn{2}{c}{$-2\le\xi\le1$} \\
+\multirow{6}{*}{F5} & Mean & Std. & Mean & Std.   \\ \hline
+& Mean Squared Error 					& 0.285956	& 0.012074 & 0.087484    & 0.007147    \\  
+& $R^2$ Score									& 0.872323   & 0.006331   & 0.838710    & 0.008769    \\
+& Mean Absolute Error 					& 0.319557   & 0.006457 & 0.192329    & 0.007915    \\
+& Median Absolute Error 				& 0.180583  	& 0.003956   & 0.127258    & 0.006362   \\
+& Mean Absolute Percent Error		& 88.093397	& 53.138612  & 43.165082   & 13.711617   \\
+& Median Absolute Percent Error	& 15.888091	& 0.499692 & 12.523625    & 0.535662   \\ \hline
+\multirow{6}{*}{F4} & Mean Squared Error 					& a & b & 0.093117   & 0.006277   \\ 
+& $R^2$ Score									& a & b & 0.828070   & 0.006365   \\
+& Mean Absolute Error 					& a & b & 0.201683      & 0.007324   \\
+& Median Absolute Error 				& a & b & 0.136112   & 0.006557   \\
+& Mean Absolute Percent Error  	& a & b & 45.666477  & 10.974657  \\
+& Median Absolute Percent Error	& a & b & 13.447042   & 0.706335  \\ \hline
 \end{tabular}
 \end{table}
 
