@@ -1,0 +1,76 @@
+#+TITLE: Maximizing the Reach of Innovation
+#+AUTHOR: Emilio Dorigatti
+#+OPTIONS: toc:nil
+
+# stupid word noobs
+#+LATEX_HEADER: \usepackage[margin=2.5cm]{geometry}
+#+LATEX_CLASS_OPTIONS: [12pt]
+#+LATEX_HEADER: \usepackage[doublespacing]{setspace} 
+#+LATEX_HEADER: \usepackage{mathptmx}
+#+LATEX_HEADER: \usepackage{titling}
+#+LATEX_HEADER: \setlength{\droptitle}{-1.0in}
+
+
+* Introduction
+That science is an important driver of economic growth and national wealth was already postulated in 1800 [citation], and many studies have confirmed this link. Technological development is what connects scientific research to economic growth, and an important factor to accelerate the rate of technological innovation is the rapid diffusion of the knowledge generated from scientific works. Scientists disseminate their works through different mediums, such as conferences, personal correspondence, professorship, and pubblications. This last method was shown [citation] to be by far the most important one to quickly spread information, and thus generate, ultimately, economic value, for the simple reason that, without pubblications, discoveries spread only through the personal social network of the authors, typically very localized.
+
+The discipline that qualitatively studies and analyzes science is called Scientometrics [citation]. The main mechanism by which scientists attribute due credit for the work they use in their research to its authors is citations. Much work in Scientometrics is based on the study of citation patterns. For example, the impact of a piece of scientific work can be quantified by the number of citations of such work; from this, one can derive the impact of journals and even individual scientists.
+
+todo argue about importance of software
+
+* Research Question
+In the introduction, we argued the importance of spreading scientific work as quickly and easily as possible, so that scientists and engineers can build on it to create new scientific and technological innovations. This, coupled with the fact that today's economy is heavily based on computers and software products, raises the following important \\
+
+*Research Question:* How can the authors of a research project in Computer Science maximize the diffusion of their work? \\
+
+The research projects that we refer to are those which produce a tangible and verifiable solution to a problem, in form of an algorithm that must be run by a computer in order to generate actual value. In this context, any idea, no matter how clever, remains only an idea, and the only way to generate value from it is to transform it into an algorithm and implement it, so that it can be used by a computer system to solve actual problems.
+
+Another restriction that we apply is to consider only adoption for creative purposes, by other scientists and engineers, either professionals or amateurs, such as students. The point is that this work is adopted to be extended, improved, or used to build something else; we do not consider commercialization strategies to maximize adoption by end users, who only make a passive use of it.
+
+* Methodology
+Due to the limited scope of this work, it is not possible to perform a full quantitative data analysis to determine the factors that affect adoption of a software product. Instead, we will perform a literature review to find studies that identified some of these factors, possibly in fields other than Computer Science, and relate these factors to our research question. The outcome can be seen as a set of guidelines that researchers can use to increase the impact of their work, inspired by empirical evidence, as well as the author's own experience. 
+
+todo how to measure diffusion/adoption
+
+* Background
+The study of the diffusion of innovation was popularized by Everett Roger's book /Diffusion of Innovation/, first published in 1962. What follows is a very brief summary of the main points of this theory that are useful to answer the research question presented previously. According to Everett, diffusion is essentially a form of communication where the subject of interest is an innovation. The essential factors in a communication process are the information being transmitted, the channel through which it is transmitted, the time that it takes the information to reach the involved actors, and the social system to which these actors belong. All these factors are discussed in the next sections.
+
+** The Innovation
+The main feature determining whether an invention is innovative is not so much its newness, as measured by, for example, the time since it was invented, but the /perceived/ newness by the receiving actor. Innovation and technology, in this context, are used as synonyms, and refer to a piece of information that essentially reduces uncertainty, in the sense that, after an actor gets to know the technology, the added information advances the actor's understanding. Usually, an innovation is composed of two components: a software aspect, comprising the underlying idea and informative content of the innovation, and its hardware aspect, which embodies the actual realization of the technology; not all innovations have a hardware aspect. Given the context of this work, it is important not to confuse the hardware and software aspects of an innovation as defined by Everett, and the hardware ans sofware terms used to describe a physical computer and the code it runs. In Computer Science parlance, an algorithm corresponds to Everett's definition of software, and its implementation in code corresponds to Everett's definition of hardware. In the remainder of this paper, we will stick to the Computer Science meaning of the terms, algorithm and implementation, and use software as a synonym for the latter, unless explicitly stated.
+
+An innovation can be characterized by several subjective traits, that can be perceived in different degrees by different actors, and that determine the rate of adoption:
+
+ - /Relative advantage/ is how much better the innovation is perceived, compared to the idea that it takes over;
+ - /Compatibility/ is the degree by which the innovation is consistent with values, beliefs, norms, needs, etc. of the potential adopters;
+ - /Complexity/ is the perceived difficulty in grasping the essence of the innovation and productively put it into use;
+ - /Trialability/ is how easy it is for new users to try the innovation in the setting they need it;
+ - /Observability/ is the degree by which the advantage brought by the innovation can be quantified.
+
+All these characteristics are positively associated with the rate of adoption, so that innovations that score highest in all these traits are the ones that spread more quickly.
+
+** Communication Channels
+The diffusion of innovation is, essentially, a communication process, and the channel over which such communication is performed has an important role in determining how an innovation is perceived. Mass media channels diffuse information using mass mediums such as television, radio and newspapers, whereas interpersonal channels involve direct, face to face exchange of information between a smaller group of individuals. The recent widespread adoption of the internet makes these definitions somewhat obsolete, but the gist is that in mass media channels the information is broadcasted to a wide audience, not aimed at particular individuals.
+
+Previous studies showed that an individual learning about an innovation evaluate it based mainly on the its subjective evaluation from other individuals who have already adopted it, and the trust that this individual places on previous adopters. This phenomenon is known as /homophily/, and essentially states that most effective communication occurs between homophilous individuals, i.e. individuals who are similar in a large number of attributes.
+
+** Time
+Time is an important factor in the diffusion of innovation, and can be used to characterize several stages during the diffusion process, such as the time it takes for an individual to be informed of the new technology since its first introduction, how long it takes for it to decide whether to adopt an innovation, and when to communicate it to ther individuals. Moreover, a central characteristic of diffusion, namely the rate of adoption, is defined as a function of time. Adoption refers to the fraction of individuals in a population that are aware of the innovation, and follow an s-shaped curve, increasing slowly at first and accelerating until the system almost reached saturation, at which point the rate of adoption gradually slows down and, eventually, stops.
+
+*** The Innovation-Decision Process
+The innovation-decision process is the sequence of steps followed by an agent, from when it first learns about an innovation to when it reaches a decision on whether to make use of this innovation or discard it. This process is composed of five steps:
+
+ 1. /Knowledge:/ when an agent is first exposed to the innovation, and gains a basic understanding of it. During this stage, the agent seeks the software information of the invention, as defined by Everett, in order to find what the innovation is and how it works. Mass media communication channels are an effective way of transmitting such information;
+ 2. /Persuasion:/ when the agent is forming an opinion of the innovation. In this stage, the hardware aspect of the invention, as defined by Everett, is the main driver that helps the agent decide to which extend the innovation is applicable in its situation, if at all, and its advantages and disadvantages. Interpersonal communication also plays an important role in this stage;
+ 3. /Decision:/ encompasses the activities that lead the agent to reach a decision regarding the adoption of the innovation, such as trying the innovation in a simple setting. This stage can result in either adoption or rejection;
+ 4. /Implementation:/ when the agent, after deciding favourably towards the innovation, puts it into use in its specific situation;
+ 5. /Confirmation:/ when the agent seeks evidence that its implementation of the innovation gives the expected results. This step can result in the rejection of the innovation, in case it did not result in the advantages the agent expected.
+
+
+** Social System
+todo
+
+* Results (todo better title?)
+todo
+
+* Discussion and Conclusion
+Because of the anecdotal nature of the results presented here, we stress the need of corroborating them with more solid evidence coming from qualitative investigations of this topic. Given that many guidelines are already being followed, to varying degrees, by many branches of computer science, there is ample opportunity for collecting data related to this topic.

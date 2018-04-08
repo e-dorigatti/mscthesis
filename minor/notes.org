@@ -1,0 +1,126 @@
+* importance of the diffusion of scientific work
+https://pdfs.semanticscholar.org/c65d/4942c87a5814c7eca2ad33479a4529c1f611.pdf
+    see the introduction for an overview, and build from there
+
+* general background on diffusion of innovation
+https://en.wikipedia.org/wiki/Diffusion_of_innovations
+    basically summarizes https://teddykw2.files.wordpress.com/2012/07/everett-m-rogers-diffusion-of-innovations.pdf
+    divides users into innovators, early adopters, early majority, late majority, laggards
+    focused mainly on general public
+    "... there are more than four thousand articles across many disciplines published on Diffusion of Innovations ..."
+and the dikw model http://www.spreadingscience.com/our-approach/diffusion-of-innovations-in-a-community/1-the-dikw-model-of-innovation/
+    actually PR bullshit inspired by the above
+
+* research question
+how can the authors of a research project in computer science
+    make their work accessible to as many people as possible?
+    maximize the adoption of their work?
+
+(scientific) research project:
+    the work presents a verifiable solution to a problem
+
+in computer science:
+    the solution is to be implemented using code run by a computer
+    or consider only e.g. machine learning?
+
+spread: measured through adoption
+    how many people use the code, or cite the paper
+    restricted to academia, not talking about user acquisition
+        to active people, who use the work to build something else or improve it
+
+restrict the scope (?)
+    e.g. consider only machine learning
+    make simplifying assumptions, e.g. to ignore networking effects
+
+* research methodology
+observational? 
+
+* answer to RQ
+ease of communication !
+  - social network topology
+  - troubles of communicating with the general public
+  - must spread fast, but not too fast, to allow criticism to arise before wide spread consensus
+
+
+IDEA
+focus on works that can be reproduced through code
+and apply the general framework to this field
+e.g. communication is important, so github, documentation, examples, blog posts are all important factors
+    github (or gitlab, bitbucket, etc.) > author's personal page
+    cumulatively in order of importance: data, code, parameters, algorithm, method (the paper)
+        data: for benchmark and test of the solution, to reproduce findings in the paper
+    because they help people understand the new idea, and try it out
+    they also help reproducibility, which is is also paramount if you want your work to be adopted
+        if people want to use it, they need the code, either yours or rewritten by themselves
+ease of access to computational resources could be an important issue
+    e.g. in distributed computing, database technology, deep learning, etc.
+there are papers which are very hard to replicate
+    remember neural arch search with reinf learning paper, need 800 gpus and settings were not described in detail
+
+    
+referring to Everett's
+    - characteristics of innovation
+        - relative advantage: has to be argued in the paper
+        - compatibility: implement using widespread language and frameworks
+        - complexity: also not our concern
+        - trialability: can be improved with documentation, blog posts, examples, etc., and (FOSS) licenses!
+        - observability: need data to reproduce paper's benchmark
+    - reinvention
+        fix bugs, easier usage
+    - communication channels
+        - argue about open access, github, arxiv & co,
+    - innovation process
+        1. knowledge
+        2. persuasion
+        3. decision
+        4. implementation
+        5. confirmation
+        - better access to code helps all; (1) is helped because the code often contains details not mentioned
+        - (2) and (3) are best helped through blog posts, showcasing the innovation on different use cases
+
+
+problem: how to stand out among all the noise? (basically the knowledge part of the innovation process)
+
+* literature and resources
+    target: public or other researchers?
+    scientometrics
+        studies science and scientific research, e.g. measurement of impact
+        https://arxiv.org/ftp/arxiv/papers/1208/1208.4566.pdf
+    http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0019917#s1
+        models how awareness of new scientific papers grow among scientists
+        also distinguishes between peer reviewed, not peer reviewed and patents
+    https://www.spreadingscience.com/
+        social network analysis studying how to best move ideas around
+    https://www.eu2017.ee/sites/default/files/inline-files/Research%20and%20Innovation%20How%20to%20get%20more%20impact.pdf
+        focused on spreading scientific discoveries to the general public
+        identifies three issues:
+            1. bad communications of scientific progress to the public
+            2. policymakers not engaged with science and innovation
+            3. scientists cannot communicate effectively with the public
+    https://www.nature.com/articles/212449a0
+        paywalled. oh, the irony
+    http://www.sciencediffusion.com/
+    https://pdfs.semanticscholar.org/c65d/4942c87a5814c7eca2ad33479a4529c1f611.pdf
+       for the (economic) benefits of rapid dissemination of knowledge
+    https://arxiv.org/pdf/0909.2481.pdf
+        studies the role of communities in knowledge creation
+    http://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1002598
+        licensing guide for scientists
+        
+    - reproducibility
+          p-hacking, etc.
+    - open source work (slightly related to the previous point)
+        very strong in the deep learning community
+    - paywall/open access
+        https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4837983/
+        https://phys.org/news/2017-08-paywall-journals.html
+    - fake news (can apply to controversial research)
+        see tobacco and sugar industry
+        https://www.forbes.com/sites/stevensalzberg/2017/01/03/fake-medical-journals-are-spreading-and-they-are-filled-with-bad-science/#5cc8b57a30c9
+    issues
+        - how to measure diffusion?
+              number of citations, but it is a troublesome proxy
+                  paper 2 uses this method
+              rate of adoption?
+              co-authorship networks?
+        - focus on a specific field?

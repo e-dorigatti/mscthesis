@@ -486,3 +486,7 @@ try to understand which variables are most important
         5. H,LE
     with and without trend
 use only past values to compute trend!
+
+** Q for next meeting
+*** do I have to write about implementation details?
+such as spark implementation of random nested CV

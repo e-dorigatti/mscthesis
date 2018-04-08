@@ -42,33 +42,3 @@ ways to approach this issue. Among possible candidates in the digital world
 there are the Open Source movement on one side, and patents and the Digital
 Rights Management (DRM) system on the other. A possible case study are the
 Operating System wars: Linux and Windows, or iOS and Android.
-
-
-feedback:
-focus on drm
-forget business model
-
-alternatives:
- - is drm and dmca really necessary?
-    it's being abused in a number of cases, e.g. to prevent people from repairing tools
- - what factors affect the spread/adoption of scientific work/research?
-    target: public or other researchers?
-    https://en.wikipedia.org/wiki/Diffusion_of_innovations
-    http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0019917#s1
-    https://www.spreadingscience.com/
-    https://www.eu2017.ee/sites/default/files/inline-files/Research%20and%20Innovation%20How%20to%20get%20more%20impact.pdf
-    https://www.nature.com/articles/212449a0
-        paywalled. oh, the irony
-    http://www.sciencediffusion.com/
-    https://pdfs.semanticscholar.org/c65d/4942c87a5814c7eca2ad33479a4529c1f611.pdf
-       for the benefits of rapid dissemination of knowledge
-    - reproducibility
-          p-hacking, etc.
-    - open source work (slightly related to the previous point)
-        very strong in the deep learning community
-    - paywall/open access
-        https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4837983/
-        https://phys.org/news/2017-08-paywall-journals.html
-    - fake news (can apply to controversial research)
-        see tobacco and sugar industry
-        https://www.forbes.com/sites/stevensalzberg/2017/01/03/fake-medical-journals-are-spreading-and-they-are-filled-with-bad-science/#5cc8b57a30c9
