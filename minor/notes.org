@@ -106,7 +106,10 @@ problem: how to stand out among all the noise? (basically the knowledge part of 
         studies the role of communities in knowledge creation
     http://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1002598
         licensing guide for scientists
-        
+    https://link.springer.com/chapter/10.1007/978-3-319-00026-8_2 
+    https://link.springer.com/article/10.1007/s10961-014-9375-6
+        open science
+        we align with the pragmatic view of open science
     - reproducibility
           p-hacking, etc.
     - open source work (slightly related to the previous point)
