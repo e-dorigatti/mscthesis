@@ -159,7 +159,7 @@ $$
 R=H+\lambda E+G
 $$
 
-which states that the total incoming energy $R$ must be equal to the energy given back to the atmosphere $H+\lambda E$ (not counting long-wave radiation, which is accounted to in $R$) plus the energy absorbed by the surface $G$, assuming the temperature is constant.
+which states that the total incoming energy $R$ must be equal to the energy given back to the atmosphere $H+\lambda E$ (not counting long-wave radiation, which is accounted to in $R$) plus the energy absorbed by the surface $G$, assuming the temperature is constant. When the temperature is not constant, one can write a budget equation relating the changes in these quantities.
 
 The turbulent fluxes $H$ and $\lambda E$ are constant in the surface layer. Experimentally, the energy balance is not always achieved \citep{cabauwinsitu} because of the difficulty in measuring fluxes due to eddy correlation being inaccurate.
 
@@ -257,6 +257,8 @@ The universal functions $\phi_m$ and $\phi_h$ must be determined experimentally.
 0.95+8\xi & 0<\xi<1
 \end{cases}
 \end{align}
+
+
 
 The Monin-Obukhov similarity theory is only applicable in the surface layer, at heights much larger than the aerodynamic roughness length, and with $\vert\xi\vert<2$; when $\vert\xi\vert$ is too large, the eddies do not feel the effect of the surface anymore. Even under ideal conditions, the predictions of this theory are accurate up to 10-20\% [foken 2006].
 
@@ -680,7 +682,7 @@ where $\tau=1-c^2\xi$. The Hessian of \ref{eq:phi_general} when $\xi\geq 0$ is s
 
 Analytical computation of the Hessian allows us to use the Newton conjugate gradient descent algorithm, which provides super-linear convergence rate, unlike other conjugate gradient methods whose rate of convergence is only linear \citep{numopt}.
 
-This model is then fitted to the data and evaluated as the other regression models; see section \ref{sec:perf_eval} for details on the procedure.
+This model is then fitted to the data using L2 regularization, and evaluated as the other regression models; see section \ref{sec:perf_eval} for details on the procedure.
 
 \section{Model Fitting}
 \label{sec:model_fit}
@@ -697,7 +699,9 @@ All the features come from the Cesar database, refer to section \ref{sec:data_co
 \item[F5:] Turbulent kinetic heat flux, turbulent latent heat flux;
 \end{enumerate}
 
-These sets are used cumulatively in the order they are listed, meaning that, for example, F3 is used in conjunction with F2 and F1. Derived features that can be computed from others, such as the virtual temperature (equation \ref{eq:vtemp}), are not included. The reason is that the less inputs a model requires, the more useful and "agile" it can be. This division was decided based on domain knowledge, so that the level of a feature reflects both its expected impact on the performance and how desirable it is to include it. An example of the former reasoning is with F4, where the effect of moisture is expected to be captured by the soil heat flux, and to be generally negligible in all but the most extreme conditions. An example of the latter reasoning is with F5, because turbulent fluxes are hard to measure accurately (see section \ref{sec:eddy_correlation}), and current simulation models are known to be quite inaccurate in their estimation of these fluxes \citep{sheba}. Similarly, the friction velocity was not included, because the point of predicting $\phi_m$ is to use it to estimate $u_*$ from the wind gradient, which is readily measured both in real life and in simulations. \cite{cabauw_z0} has shown that the direction of the wind affects the universal functions at Cabauw, because of the different covers of the surface, changing the roughness length, and disturbances by the main mast, preventing accurate wind speed measurement. Nonetheless, we decided not to include the wind direction in the features, as this is very specific to the Cabauw observatory, and would reduce the generality of our models.
+These sets are used cumulatively in the order they are listed, meaning that, for example, F3 is used in conjunction with F2 and F1. Derived features that can be computed from others, such as the virtual temperature (equation \ref{eq:vtemp}), are not included. The reason is that the less inputs the models require, the more useful and "agile" they can be when used as a component in a larger system, such as climate simulations.
+
+This division was decided based on domain knowledge, so that the level of a feature reflects both its expected impact on the performance and how desirable it is to include it. An example of the former reasoning is with F4, where the effect of moisture is expected to be captured by the soil heat flux, and to be generally negligible in all but the most extreme conditions. An example of the latter reasoning is with F5, because turbulent fluxes are hard to measure accurately (see section \ref{sec:eddy_correlation}), and current simulation models are known to be quite inaccurate in their estimation of these fluxes \citep{sheba}. Similarly, the friction velocity was not included, because the point of predicting $\phi_m$ is to use it to estimate $u_*$ from the wind gradient, which is readily measured both in real life and in simulations. \cite{cabauw_z0} has shown that the direction of the wind affects the universal functions at Cabauw, because of the different covers of the surface, changing the roughness length, and disturbances by the main mast, preventing accurate wind speed measurement. Nonetheless, we decided not to include the wind direction in the features, as this is very specific to the Cabauw observatory, and would reduce the generality of our models.
 
 We also create a second version of each feature set, augmented with the hourly trend of each variable, except for the altitude $z$. The reason for including the trend is that it can give an indication of, for example, the time of the day, or other complex phenomena for which there is no measurement. The interval for the trend (one hour) is used because it is enough to capture local variations, but not too large so as to contain irrelevant information. The hourly trend is computed simply as the difference between the current value and the value measured one hour before, divided by one hour. Given the goal of this work, namely to produce a model to be used in climate simulations, it would not make sense to use future values to compute the trend.
 
@@ -837,7 +841,7 @@ Talking about speed of wind, figure \ref{fig:ustar_wind} shows some measurements
         \label{fig:le_winter}
     \end{subfigure}
     \hfill
-    \begin{subfigure}[t]{0.45\textwidth}
+    \begin{subfigure}[t]{0.48\textwidth}
         \centering
         \includegraphics[width=\textwidth]{images/le_summer}
         \caption{Summer}
@@ -850,14 +854,14 @@ Talking about speed of wind, figure \ref{fig:ustar_wind} shows some measurements
 
 \begin{figure}
     \centering
-    \begin{subfigure}[t]{0.45\textwidth}
+    \begin{subfigure}[t]{0.48\textwidth}
         \centering
         \includegraphics[width=\textwidth]{images/ustar_temp}
         \caption{Temperature}
         \label{fig:ustar_temp}
     \end{subfigure}
     \hfill
-    \begin{subfigure}[t]{0.45\textwidth}
+    \begin{subfigure}[t]{0.48\textwidth}
         \centering
         \includegraphics[width=\textwidth]{images/ustar_wind}
         \caption{Wind}
@@ -940,10 +944,9 @@ To conclude, although F.D. (equation \ref{eq:fd_gradient}) is the most accurate 
 
 
 \section{Monin-Obukhov Similarity Theory}
-performance of MOST in table \ref{tbl:most_results}
-also show plots of phim vs zL and mention how many records are -2<zL<1
+The performance of the MOST estimator is shown in table \ref{tbl:most_results}; the proportion of data for which $-2\leq\xi\leq 1$ is 83.6\%. We see a considerable increase in the MSE when the full dataset is used; this is not surprising, considering that, with $\xi>1$, $\phi_m$ tends to level off. Figure \ref{fig:most_scatter} shows $\phi_m$ as a function of $\xi$ as computed in our dataset, as well as the predictions of equation \ref{eq:phi_m_coeff} and the fitted MOST estimator.
 
-also compare coefficients with values http://bibliotheek.knmi.nl/knmipubTR/TR130.pdf p35 table 5.3
+Table \ref{tbl:most_results} shows the values of the coefficients in equation \ref{eq:phi_general}, when fitted to the region of data where the Monin-Obukhov similarity theory is valid. We note a big difference with the values recommended in \cite{hogstrom88}, as well as most studies on the topic. However, \cite{cabauw_night_most} studied the stable, nocturnal boundary layer at Cabauw, and reported values varying between 0.81 and 0.95 for $a$ and between 2.7 and 3.2 for $b$, depending on the direction of the wind; there is no known explanation for this discrepancy. Although these values were obtained with linear regression, essentially the same method that we applied, no goodness of fit statistics, such as MSE or $R^2$, were reported.
 
 
 \begin{table}[]
@@ -961,6 +964,38 @@ Mean Absolute Percent Error  	& 252.925389 	& 196.086056 & 184.707665   & 48.260
 Median Absolute Percent Error	& 28.964847  	& 0.938811 & 24.618438    & 0.729602   
 \end{tabular}
 \end{table}
+
+\begin{table}[]
+\centering
+\caption{Values of the coefficients of the MOST estimator of equation \ref{eq:eq:phi_general} fitted on the data with $-2\leq\xi\leq1$. The minimum values for $c$ and $d$ seem to be outliers, as well as the next smallest value, but the other 8 values are closely clustered together within an interval of about 0.15.}
+\label{tbl:most_coeffs}
+\begin{tabular}{r|c|c|c|c|c|c|c}
+   & Mean       & Std.       & Min.       & 25\%       & 50\%       & 75\%       & Max. \\ \hline
+$a$   & 0.943802  & 0.004228  & 0.935826  & 0.942926  & 0.944624  & 0.946017  & 0.950583 \\
+$b$   & 2.772180  & 0.008216  & 2.758320  & 2.769266  & 2.772188  & 2.778464  & 2.783730 \\
+$c$   & 2.452160  & 0.469983  & 1.246522  & 2.607285  & 2.646705  & 2.674603  & 2.713834 \\
+$d$   & -0.298687  & 0.109407 & -0.601655 & -0.261012 & -0.258147 & -0.255400 & -0.248226
+\end{tabular}
+\end{table}
+
+\begin{figure}
+    \centering
+    \begin{subfigure}[t]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/most_full}
+        \caption{Full dataset}
+        \label{fig:most_full}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/most_zoom}
+        \caption{Validity region for the Monin-Obukhov similarity theor.}
+        \label{fig:most_zoom}
+    \end{subfigure}
+    \caption{Wind shear $\phi_m$ versus the instability parameter $\xi$, with the prediction according to equation \ref{eq:phi_m_coeff} in green, and our predictions, following the median values in table \ref{tbl:most_results}, in red.}
+	\label{fig:most_scatter}
+\end{figure}
 
 \section{Model Comparison}
 performance of the models
@@ -1038,15 +1073,22 @@ performance of the models
 
 
 \chapter{Discussion}
+even though we predicted phim, the actual interest is in u*. we predict phim to have a direct means of comparing with state of the art
+
 actual constants and coefficients (e.g. von karmans constant) dont really matter, because they are constant and do not affect the ml model 
 
-\section{Limitations and Future Work}
-one of the reasons why MOST is unreliable in stable conditions is because of the difficulty of measuring fluxes
+estimating parameters (von karman, roughness length etc) is very difficult, by using ml we can circumvent the problem (they need a supporting infrastructure even if they want to compute those constants, so not huge downside)
+
+one of the reasons why MOST is unreliable in stable conditions is because of the difficulty of measuring fluxes. there are other methods to compute the turbulent fluxes (http://bibliotheek.knmi.nl/knmipubWR/WR87-02.pdf, ), we used eddy corr because that's what in the cesar database
 
 our models can only be used in conditions that are similar to cabauw. most importantly, they are not valid in the oceanic surface layer, because it is very different [citation]
 
+\section{Limitations and Future Work}
+todo
+
 %\bibliographystyle{unsrt}
-\bibliographystyle{plainnat}
+%\bibliographystyle{plainnat}
+\bibliographystyle{agsm}
 
 \bibliography{thesis}
 
