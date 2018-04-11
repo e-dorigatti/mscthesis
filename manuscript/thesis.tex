@@ -943,11 +943,41 @@ G.P. & 1.213 & 8.899
 To conclude, although F.D. (equation \ref{eq:fd_gradient}) is the most accurate way of computing the profile gradient, it does not allow us to use data at the 10 meters level. Considering that Log (equation \ref{eq:log_gradient}) is very slightly worse, but allows us to include that level (increasing the data available by 50\%!), all the results presented from now on make use of it.
 
 
-\section{Monin-Obukhov Similarity Theory}
-The performance of the MOST estimator is shown in table \ref{tbl:most_results}; the proportion of data for which $-2\leq\xi\leq 1$ is 83.6\%. We see a considerable increase in the MSE when the full dataset is used; this is not surprising, considering that, with $\xi>1$, $\phi_m$ tends to level off. Figure \ref{fig:most_scatter} shows $\phi_m$ as a function of $\xi$ as computed in our dataset, as well as the predictions of equation \ref{eq:phi_m_coeff} and the fitted MOST estimator.
+\section{Flux-Profile Relationship}
+Figure \ref{fig:most_scatter} shows the wind shear versus the instability parameter, together with the commonly accepted flux-profile relationship and the relationship fitted on our dataset, and in figure \ref{fig:most_zoom} we see the flux-profile relationship restricted to the interval of instability parameter where the Monin-Obukhov similarity theory is valid. Qualitatively, the relationship behaves as expected, going to zero as $\xi$ decreases, linearly increasing in the $0\leq\xi\leq1$ interval, and leveling after that. Refer to section \ref{sec:most_estimator_results} for further details.
+
+negative phim with small |xi|
+
+
+\begin{figure}
+    \centering
+    \begin{subfigure}[t]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/most_full}
+        \caption{Full dataset}
+        \label{fig:most_full}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/most_zoom}
+        \caption{Validity region for the Monin-Obukhov similarity theor.}
+        \label{fig:most_zoom}
+    \end{subfigure}
+    \caption{Wind shear $\phi_m$ versus the instability parameter $\xi$, with the prediction according to equation \ref{eq:phi_m_coeff} in green, and our predictions, following equation \ref{eq:phi_general} with the coefficients being the median values in table \ref{tbl:most_coeffs}, in red.}
+	\label{fig:most_scatter}
+\end{figure}
+
+
+\section{Model Comparison}
+performance of the models
+
+
+\subsection{MOST Estimator}
+\label{sec:most_estimator_results}
+The performance of the MOST estimator is shown in table \ref{tbl:most_results}; the proportion of data for which $-2\leq\xi\leq 1$ is 83.6\%. We see a considerable increase in the MSE when the full dataset is used; this is not surprising, considering that, with $\xi>1$, $\phi_m$ tends to level off, and there are a considerable number of outliers in the range $-20\leq\xi\leq-2$ (see figure \ref{fig:most_full}) that cannot be fitted by the MOST estimator. Figure \ref{fig:most_scatter} shows $\phi_m$ as a function of $\xi$ as computed in our dataset, as well as the predictions of equation \ref{eq:phi_m_coeff} and the fitted MOST estimator.
 
 Table \ref{tbl:most_results} shows the values of the coefficients in equation \ref{eq:phi_general}, when fitted to the region of data where the Monin-Obukhov similarity theory is valid. We note a big difference with the values recommended in \cite{hogstrom88}, as well as most studies on the topic. However, \cite{cabauw_night_most} studied the stable, nocturnal boundary layer at Cabauw, and reported values varying between 0.81 and 0.95 for $a$ and between 2.7 and 3.2 for $b$, depending on the direction of the wind; there is no known explanation for this discrepancy. Although these values were obtained with linear regression, essentially the same method that we applied, no goodness of fit statistics, such as MSE or $R^2$, were reported.
-
 
 \begin{table}[]
 \centering
@@ -967,7 +997,7 @@ Median Absolute Percent Error	& 28.964847  	& 0.938811 & 24.618438    & 0.729602
 
 \begin{table}[]
 \centering
-\caption{Values of the coefficients of the MOST estimator of equation \ref{eq:eq:phi_general} fitted on the data with $-2\leq\xi\leq1$. The minimum values for $c$ and $d$ seem to be outliers, as well as the next smallest value, but the other 8 values are closely clustered together within an interval of about 0.15.}
+\caption{Values of the coefficients of the MOST estimator of equation \ref{eq:phi_general} fitted on the data with $-2\leq\xi\leq1$. The minimum values for $c$ and $d$ seem to be outliers, as well as the next smallest value, but the other 8 values are closely clustered together within an interval of about 0.15.}
 \label{tbl:most_coeffs}
 \begin{tabular}{r|c|c|c|c|c|c|c}
    & Mean       & Std.       & Min.       & 25\%       & 50\%       & 75\%       & Max. \\ \hline
@@ -978,28 +1008,15 @@ $d$   & -0.298687  & 0.109407 & -0.601655 & -0.261012 & -0.258147 & -0.255400 & 
 \end{tabular}
 \end{table}
 
+
+\subsection{Ridge Regression}
+
 \begin{figure}
-    \centering
-    \begin{subfigure}[t]{0.48\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{images/most_full}
-        \caption{Full dataset}
-        \label{fig:most_full}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[t]{0.48\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{images/most_zoom}
-        \caption{Validity region for the Monin-Obukhov similarity theor.}
-        \label{fig:most_zoom}
-    \end{subfigure}
-    \caption{Wind shear $\phi_m$ versus the instability parameter $\xi$, with the prediction according to equation \ref{eq:phi_m_coeff} in green, and our predictions, following the median values in table \ref{tbl:most_results}, in red.}
-	\label{fig:most_scatter}
+\centering
+\includegraphics[width=\textwidth]{images/ridge_results}
+\caption{Performance of the Ridge regression estimator on the five feature sets with and without trend; the error bars are two standard deviations long in each direction. The solid yellow line is the performance attained by the MOST estimator, and the dashed yellow is that minus two standard deviations.}
+\label{fig:ridge_results}
 \end{figure}
-
-\section{Model Comparison}
-performance of the models
-
 
 \begin{table}[]
 \centering
@@ -1079,6 +1096,8 @@ actual constants and coefficients (e.g. von karmans constant) dont really matter
 
 estimating parameters (von karman, roughness length etc) is very difficult, by using ml we can circumvent the problem (they need a supporting infrastructure even if they want to compute those constants, so not huge downside)
 
+outliers with xi between -20 and -2 mostly belong to z=40 in the morning (between 6 and 12); given what was said in [paper], there is the possibility that they are not in the surface layer, explaining why the c coefficient is higher than expected
+
 one of the reasons why MOST is unreliable in stable conditions is because of the difficulty of measuring fluxes. there are other methods to compute the turbulent fluxes (http://bibliotheek.knmi.nl/knmipubWR/WR87-02.pdf, ), we used eddy corr because that's what in the cesar database
 
 our models can only be used in conditions that are similar to cabauw. most importantly, they are not valid in the oceanic surface layer, because it is very different [citation]
@@ -1086,10 +1105,10 @@ our models can only be used in conditions that are similar to cabauw. most impor
 \section{Limitations and Future Work}
 todo
 
+
 %\bibliographystyle{unsrt}
 %\bibliographystyle{plainnat}
 \bibliographystyle{agsm}
-
 \bibliography{thesis}
 
 \end{document}
