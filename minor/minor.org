@@ -1,0 +1,126 @@
+#+TITLE: Maximizing the Reach of Innovation
+#+AUTHOR: Emilio Dorigatti
+#+OPTIONS: toc:nil
+
+# stupid word noobs
+#+LATEX_HEADER: \usepackage[margin=2.5cm]{geometry}
+#+LATEX_CLASS_OPTIONS: [12pt]
+#+LATEX_HEADER: \usepackage[doublespacing]{setspace} 
+#+LATEX_HEADER: \usepackage{mathptmx}
+#+LATEX_HEADER: \usepackage{titling}
+#+LATEX_HEADER: \setlength{\droptitle}{-1.0in}
+
+
+* Introduction
+That science is an important driver of economic growth and national wealth was already postulated in 1800 [citation], and many studies have confirmed this link. Technological development is what connects scientific research to economic growth, and an important factor to accelerate the rate of technological innovation is the rapid diffusion of the knowledge generated from scientific works. Scientists disseminate their works through different mediums, such as conferences, personal correspondence, professorship, and pubblications. This last method was shown [citation] to be by far the most important one to quickly spread information, and thus generate, ultimately, economic value, for the simple reason that, without pubblications, discoveries spread only through the personal social network of the authors, typically very localized.
+
+The discipline that qualitatively studies and analyzes science is called Scientometrics [citation]. The main mechanism by which scientists attribute due credit for the work they use in their research to its authors is citations. Much work in Scientometrics is based on the study of citation patterns. For example, the impact of a piece of scientific work can be quantified by the number of citations of such work; from this, one can derive the impact of journals and even individual scientists.
+
+todo argue about importance of software
+
+* Background
+** Diffusion of innovation
+ The study of the diffusion of innovation was popularized by Everett Roger's book /Diffusion of Innovation/, first published in 1962. What follows is a very brief summary of the main points of this theory that are useful to answer the research question presented previously. According to Everett, diffusion is essentially a form of communication where the subject of interest is an innovation. The essential factors in a communication process are the information being transmitted, the channel through which it is transmitted, the time that it takes the information to reach the involved actors, and the social system to which these actors belong. All these factors are discussed in the next sections.
+
+*** The Innovation
+ The main feature determining whether an invention is innovative is not so much its newness, as measured by, for example, the time since it was invented, but the /perceived/ newness by the receiving actor. Innovation and technology, in this context, are used as synonyms, and refer to a piece of information that essentially reduces uncertainty, in the sense that, after an actor gets to know the technology, the added information advances the actor's understanding. Usually, an innovation is composed of two components: a software aspect, comprising the underlying idea and informative content of the innovation, and its hardware aspect, which embodies the actual realization of the technology; not all innovations have a hardware aspect. Given the context of this work, it is important not to confuse the hardware and software aspects of an innovation as defined by Everett, and the hardware ans sofware terms used to describe a physical computer and the code it runs. In Computer Science parlance, an algorithm corresponds to Everett's definition of software, and its implementation in code corresponds to Everett's definition of hardware. In the remainder of this paper, we will stick to the Computer Science meaning of the terms, algorithm and implementation, and use software as a synonym for the latter, unless explicitly stated.
+
+**** Characteristics of Innovation
+ An innovation can be characterized by several subjective traits, that can be perceived in different degrees by different actors, and that determine the rate of adoption:
+
+  - /Relative advantage/ is how much better the innovation is perceived, compared to the idea that it takes over;
+  - /Compatibility/ is the degree by which the innovation is consistent with values, beliefs, norms, needs, etc. of the potential adopters;
+  - /Complexity/ is the perceived difficulty in grasping the essence of the innovation and productively put it into use;
+  - /Trialability/ is how easy it is for new users to try the innovation in the setting they need it;
+  - /Observability/ is the degree by which the advantage brought by the innovation can be quantified.
+
+ All these characteristics are positively associated with the rate of adoption, so that innovations that score highest in all these traits are the ones that spread more quickly.
+
+*** Communication Channels
+ The diffusion of innovation is, essentially, a communication process, and the channel over which such communication is performed has an important role in determining how an innovation is perceived. Mass media channels diffuse information using mass mediums such as television, radio and newspapers, whereas interpersonal channels involve direct, face to face exchange of information between a smaller group of individuals. The recent widespread adoption of the internet makes these definitions somewhat obsolete, but the gist is that in mass media channels the information is broadcasted to a wide audience, not aimed at particular individuals.
+
+ Previous studies showed that an individual learning about an innovation evaluate it based mainly on the its subjective evaluation from other individuals who have already adopted it, and the trust that this individual places on previous adopters. This phenomenon is known as /homophily/, and essentially states that most effective communication occurs between homophilous individuals, i.e. individuals who are similar in a large number of attributes.
+
+*** Time
+ Time is an important factor in the diffusion of innovation, and can be used to characterize several stages during the diffusion process, such as the time it takes for an individual to be informed of the new technology since its first introduction, how long it takes for it to decide whether to adopt an innovation, and when to communicate it to ther individuals. Moreover, a central characteristic of diffusion, namely the rate of adoption, is defined as a function of time. Adoption refers to the fraction of individuals in a population that are aware of the innovation, and follow an s-shaped curve, increasing slowly at first and accelerating until the system almost reached saturation, at which point the rate of adoption gradually slows down and, eventually, stops.
+
+**** The Innovation-Decision Process
+ The innovation-decision process is the sequence of steps followed by an agent, from when it first learns about an innovation to when it reaches a decision on whether to make use of this innovation or discard it. This process is composed of five steps:
+
+  1. /Knowledge:/ when an agent is first exposed to the innovation, and gains a basic understanding of it. During this stage, the agent seeks the software information of the invention, as defined by Everett, in order to find what the innovation is and how it works. Mass media communication channels are an effective way of transmitting such information;
+  2. /Persuasion:/ when the agent is forming an opinion of the innovation. In this stage, the hardware aspect of the invention, as defined by Everett, is the main driver that helps the agent decide to which extend the innovation is applicable in its situation, if at all, and its advantages and disadvantages. Interpersonal communication also plays an important role in this stage;
+  3. /Decision:/ encompasses the activities that lead the agent to reach a decision regarding the adoption of the innovation, such as trying the innovation in a simple setting. This stage can result in either adoption or rejection;
+  4. /Implementation:/ when the agent, after deciding favourably towards the innovation, puts it into use in its specific situation;
+  5. /Confirmation:/ when the agent seeks evidence that its implementation of the innovation gives the expected results. This step can result in the rejection of the innovation, in case it did not result in the advantages the agent expected.
+
+*** Social System
+ A social system is a set of agents that interact and cooperate with each other in order to solve a common goal. Diffusion of an innovation always occur within a social system, and is affected by the structure of this system, i.e. the interaction patterns of the agents. An example of this are communities, defined as groups of agents which interact much more frequently with members of the same community than with members outside of it. One would expect, then, that information spreads more easily within one community, and takes more time to reach agents in separate communities. Another factor that affect the diffusion of innovation in a social system are the system norms, intended as the established and accepted behavior patterns, such as traditions; it is easier for a social system to adopt innovations that align with the values accepted in the system (this is related to the /compatibility/ trait discussed earlier). Opinion leaders have a strong influence on the opinions of the other agents of a social system, therefore they can significantly affect the diffusion of innovation, either by promoting or by blocking it; note that there is a connection between the norms of a social system and the attitude of its opinion leaders toward change. Finally, change agents are those agents who have the authority to impose change on the other members of the system.
+
+** Open Science
+Open Science is a movement advocating for openly sharing all stages of scientific research, from the publications and their review process, to the code used to analyze the data and even the data itself. Given the large number of stakeholders of this movement, such as scientists, policy makers, publishers, and so on, it is no surprise that the movement itself is very diverse and nuanced, with different opinions regarding its motives and purposes. [citation] divides the Open Science movement into five school of thoughts:
+
+ - /Democratic/, arguing that free access to the products of scientific research, especially knowledge, is a matter of fundamental rights;
+ - /Pragmatic/, arguing that open access to research facilitates the creation and dissemination of knowledge, making science more efficient and accelerating scientific progress;
+ - /Infrastructure/, arguing that the purpose of open access to science is to accelerate scientific progress by making it more efficient through the creation of tools and applications, based mainly on the Internet technologies, supporting scientists;
+ - /Public/, arguing that the goal of open science is to make research, either its process or its outcome, more accessible to a wider audience;
+ - /Measurement/, arguing that the purpose of open science is to create new, modern ways to assess the impact of scientific works, since so much of researchers' careers depends on their reputation.
+
+*** The Pragmatic School of Thought
+todo
+
+
+*** Open Access
+Open Access is one of the ways that the Open Science movement advocates in order to reach its goal. The essence of Open Access is to allow everyone to freely access all parts or the work, regardless of their social status. Currently, about 75% of the scientific literature can only be accessed by privileged individuals, those who work at a research institute or have enough money to pay for the articles, although recently the amount of open access publications is increasing [citation]. Open access to research brings benefits for society [citation] and economy [citation]; open access to knowledge can be argued to be a fundamental human right, and is an especially tough obstacle to overcome for developing countries. Additionally, there are business models that allow publishers to obtain profits while providing open access to the articles, such as funding by public and private institutions; current prices for research are overinflated and could be reduced by a couple orders of magnitude, making funding a viable alternative.
+
+* Research Question
+The Open Science movement stresses the importance of opening the research process, and the diffusion of innovation is based on effective communication of information. Undoubtedly, this can be put in practice in different ways depending on the research field, because different disciplines operate in different ways and produce different research outcomes. By restricting ourselves to a specific field, and the pragmatic interpretation of the Open Science movement, we can formulate the following \\
+
+*Research Question:* How can the authors of a research project in Computer Science maximize the diffusion of their work? \\
+
+The research projects that we refer to are those which produce a tangible and verifiable solution to a problem, in form of an algorithm that must be run by a computer in order to generate actual value. In this context, any idea, no matter how clever, remains only an idea, and the only way to generate value from it is to transform it into an algorithm and implement it, so that it can be used by a computer system to solve actual problems.
+
+Another restriction that we apply is to consider only adoption for creative purposes, by other scientists and engineers, either professionals or amateurs, such as students. The point is that this work is adopted to be extended, improved, or used to build something else; we do not consider commercialization strategies to maximize adoption by end users, who only make a passive use of it.
+
+Given that we are considering tangible outcomes of these research projects, the diffusion can be measured pretty much in the same way as intended by Everett: with the rate of adoption. Even for creative use, software can be adopted in many different ways: using it as a component in a bigger system, applying it to a novel use case, resolving issues, extending it with new features, are all possibilities that are covered by the meaning of adoption that we consider in this paper.
+
+* Methodology
+Due to the limited scope of this work, it is not possible to perform a full quantitative data analysis to determine the factors that affect adoption of a software product. Instead, we will perform a literature review to find studies that identified some of these factors, possibly in fields other than Computer Science, and relate these factors to our research question. The outcome can be seen as a set of guidelines that researchers can use to increase the impact of their work, inspired by empirical evidence, as well as the author's own experience. 
+
+* Results
+
+** Open Access
+Here, we adopt a more broad definition of open access than the one commonly used when talking about scientific work: we consider varying degrees of openness, according to what assets are made available by the authors, whereas the commonly used definition of open access refers only to the publication. Cumulatively, in order of importance, they are:
+
+ 1. /Publication:/ the most basic form of Open Access regards the publication of a scientific paper describing the fundamental idea, or ideas, that allow the problem, subject of the research, to be solved, as well as the benefits of this idea over previous or alternative solutions, and the evaluation results, proving the worth of the contribution;
+ 2. /Algorithm:/ in Computer Science, it is often not enough to present an idea in natural language, because of its inherent ambiguity. Presenting the solution to the problem in a formal language, be it a diagram or, even better, pseudo-code, is fundamental both to eliminate possible ambiguities (not all readers/writers are native English speakers!), and to specify details that are irrelevant to the idea, but very important for its practical realization;
+ 3. /Parameters:/ many algorithms are controlled by parameters that can be tuned and customized to better suit specific a application; the authors should specify the exact values used in every test they perform, and how these values are chosen. This helps readers better understand the trade-offs involved, and possible ways of tuning the parameters themselves;
+ 4. /Code:/ often, implementation details are not described when discussing the contributions for brevity requirements, even though they can make a difference between successfully implementing the algorithm, and failing to do so. Moreover, there is often a considerable amount of supporting code, used to prepare the inputs for the algorithm, to evaluate it, and to analyze the results of the evaluation. Letting other people access the code ensures they are able to reproduce the claims in the publication, as well as readily adopt it in their own work;
+ 5. /Data:/ the data used in the evaluation, both input data (if applicable) and the raw results, not the summarized version appearing in the paper. This is important when the authors use data that is not already available to the public, for example when they create a synthetic dataset. In this case, it is important to know how the synthetic data was created, and to have the possibility of altering this process, since the results presented in the paper may depend on it.
+
+The added benefit of these stages is not linear, and they are not necessarily followed in this order. We are focusing on research projects that produce algorithms as the main outcome, and, as we argued previously, the only way to create value out of an algorithm is to implement it so that it can be run by a computer. It follows that having access to the actual code is by far the most beneficial step that authors can take.
+
+Relating this to Everett's framework, we find that every increasing level of openness increases the trialability of the idea, and, ultimately, the observability of its advertised benefits. Every new step, until the fourth, aids potential adopters in trying the idea in their setting with less and less effort, since it reduces the amount of work they have to perform. Moreover, most stages of the decision process can benefit from increased access to the resources mentioned above; from persuasion to confirmation, reducing adoption friction can be a determining factor in many situations. For businesses, which are always short on money, it translates to reduced economic costs. For students, who are short on time to complete assignments and have incomplete technical capabilities, it can transform adoption from impossible to viable. For researchers, who often are short both on time and money, it allows them to perform more work in less time. In general, the more work is available, the less time is wasted on redoing the same things.
+
+Given the importance of sharing code, and (anecdotal) evidence that this is already a diffused practice in the Computer Science community, from now on we will assume the code is available.
+
+** Documentation
+** Tutorials
+
+** Technology
+
+** Standing out among all the noise
+if you are not an opinion leader, a great example is as important as the innovation itself
+
+** Why share code
+a problem not considered in the literature is why you would share the information, scientists need incentives, or the added work is not seen as worth the effort
+
+cannot rely only on the satisfaction and fulfillment feeling of actually making your work usable
+cannot rely on idealistic goals
+
+previous work showed that scientists do not share for altruistic reasons, but they expect something in return (not money). arguably, in most cases, fellow colleagues sharing their work enables many scientists to do their job, therefore sharing their work is a fair way to return the favor to the scientific community as a whole
+
+
+* Discussion and Conclusion
+Open science [citation] advocates for open access to publications, data, code, education, and peer review; in this work we follow a similar line of thought, but do not argue about open education nor open peer review, as they are not relevant to our research question.
+
+Because of the anecdotal nature of the results presented here, we stress the need of corroborating them with more solid evidence coming from qualitative investigations of this topic. Given that many guidelines are already being followed, to varying degrees, by many branches of computer science, there is ample opportunity for collecting data related to this topic.

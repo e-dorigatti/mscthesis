@@ -41,19 +41,19 @@ todo
 
 \tableofcontents
 
-%\listoffigures
+\listoffigures
 
-%\listoftables
+\listoftables
 
 \chapter{Introduction}
 
 \section{Problem}
 
-Climatology, or climate science, studies the long-term average weather conditions. In the last few decades, climate scientists found solid evidence of ongoing changes in Earth's climate, most notably, a general increase in average temperature; in the long run, this and other changes can potentially have a devastating impact on life on our planet. Regardless of the causal effect of human activities on it, having a solid understanding of the climate allows us to find the best way to mitigate its change, and possibly prevent it completely.
+Climatology, or climate science, studies the long-term average weather conditions. In the last few decades, climate scientists found evidence of ongoing changes in Earth's climate, most notably, a general increase in average temperature; in the long run, this and other changes can potentially have a devastating impact on life on our planet. Regardless of the causal effect of human activities on it, having a solid understanding of the climate allows us to find the best way to mitigate its change, and to preserve our planet.
 
 Climate science is an extremely difficult field, for a number of reasons. First, climate is evident, by definition, only over long periods of time and large distances, making the usual scientific approach of testing hypotheses by conducting experiments inapplicable; instead, climate scientists have to rely on historical data. Second, the atmosphere is a complex and chaotic system, which must be described through systems of nonlinear differential equation. They can be used to create numerical simulations, and the resulting predictions compared to historical data to assess the accuracy of the theory. Furthermore, the chaotic character of the atmosphere makes it impossible to study parts of it in isolation from others, as small scale phenomena affect large scale ones, and vice versa. In spite of this, it is useful to split the atmosphere in vertical layers and horizontal zones, in order to differentiate among conditions and phenomena typically occurring in one area or the other.
 
-Usually, the troposphere is referred to as the lowest layer of the atmosphere, but it can actually be subdivided in more sub-layers, the lowest of which is the \emph{atmospheric boundary layer}: it is the region of the atmosphere that is affected by the conditions of the surface. Most human activities happen in this layer, and it is responsible for a large part of the diffusion and transport of aerosol such as, among others, pollutants. Yet, the physics governing the atmospheric boundary layer is not fully understood, and the theory is lacking. One important issues in the study of the atmospheric boundary layer is the derivation of flux-profile relationships for wind and temperature: they essentially relate the transport of momentum and heat by the wind (flux) with the change of wind speed/temperature with altitude (profile). The state of the art relationships are defined by the Monin-Obukhov Similarity theory in terms of the instability parameter $\xi$, computed as the height above surface scaled by turbulence due to horizontal wind and vertical air movement due to variations in heat. Difficulties in measurements of relevant quantities make this theory accurate only up to 10-20\%, and applicable in a restricted set of conditions.
+The troposphere contains most of the air mass in the atmosphere, and occupies the lowest 10 to 12 kilometers of the atmosphere. This is where weather happens, and it can be divided in a number of sub-layers, the lowest of which is the \emph{atmospheric boundary layer}: it is the region of the atmosphere that is affected by the conditions of the surface. Most human activities happen in this layer, and it is responsible for a large part of the diffusion and transport of aerosol such as, among others, pollutants. Yet, the physics governing the atmospheric boundary layer is not fully understood, and the theory is lacking. One important issues in the study of the atmospheric boundary layer is the derivation of flux-profile relationships for wind and temperature: they essentially relate the transport of momentum and heat by the turbulence (flux) with the change of wind speed/temperature with altitude (profile). The state of the art relationships are defined by the Monin-Obukhov Similarity theory in terms of the instability parameter $\xi$, computed as the height above surface scaled by turbulence due to horizontal wind and vertical air movement due to variations in heat. Difficulties in measurements of relevant quantities make this theory accurate only up to 10-20\%, and applicable in a restricted set of conditions.
 
 In stark contrast to the traditional, top-down approach of science, recent developments in information technology made bottom-up approaches possible. In this new way of thinking, existing data is used to automatically infer the "best" explanation for the measurements at hand, the underlying laws that originated that data. The field that makes this possible is called Machine Learning: it takes advantage of several methods coming from statistics, information theory, optimization theory, etc., to make computers learn from examples. Together with Natural Language Processing and Automated Planning, it is one of the three main branches of Artificial Intelligence, the sub-field of Computer Science that studies ways of making machines behave intelligently.
 
@@ -117,10 +117,10 @@ By definition, $\overline{a'}=0$, which means that all the effects of turbulence
 
 
 \subsection{The Boundary Layer}
-In the context of fluid dynamics, the boundary layer studies the behavior of a fluid when it is flowing close to a solid surface. Imagine a laminar flow close to a solid surface; because of viscosity, the molecules flowing near the surface move slower, and, in the limit, the velocity of the molecules in direct contact with the surface is 0 (this is called the \emph{non-slip condition}). Thus, the velocity of the fluid increases smoothly, continuously and monotonously with the distance from the solid, until it reaches the \emph{free-flow} velocity, after which it stays constant. The region close to the surface, where the fluid moves slower, is called the \emph{boundary layer}, and is the region where the viscosity of the fluid influences its motion. Its height $\delta$ can be defined when the local velocity surpasses a certain threshold, such as 99\% of the free-flow velocity.
+In the context of fluid dynamics, the boundary layer is the region where a fluid flows close to a solid surface. Imagine a laminar flow close to a solid surface; because of viscosity, the molecules flowing near the surface move slower, and, in the limit, the velocity of the molecules in direct contact with the surface is 0 (this is called the \emph{non-slip condition}). Thus, the velocity of the fluid increases smoothly, continuously and monotonously with the distance from the solid, until it reaches the \emph{free-flow} velocity, after which it stays constant. The region close to the surface, where the fluid moves slower, is called the \emph{boundary layer}, and is the region where the viscosity of the fluid influences its motion. Its height $\delta$ can be defined when the local velocity surpasses a certain threshold, such as 99\% of the free-flow velocity.
 
 \begin{figure}
-\caption{Turbulent boundary layer at the edge of a canal; the end of the BL is clearly visible, where the flow transitions from turbulent to laminar. Water flows from right to left.}
+\caption{Turbulent boundary layer at the edge of a canal; water flows from right to left.}
 \label{fig:bl}
 \centering
 \includegraphics[width=\textwidth]{images/bl}
@@ -133,14 +133,13 @@ The strength of the turbulence is proportional to $u_{rms}=(\overline{u'^2})^{1/
 The mean velocity $\overline{u}$ increases linearly within the laminar sub-layer, then logarithmically until the end of the boundary layer, thus the shear decreases further away from the surface. In the logarithmic sub-layer, the velocity is computed as $\overline{u}(z)=u_*(\log z - \log z_0)/\kappa$, where $z_0$ is the characteristic roughness of the surface, and $\kappa$ is the von Karman's constant, whose value is around 0.4 [citation needed]. The characteristic roughness depends on the texture of the surface, and its relationship with the height $\delta_s$ of the laminar sub-layer; if the roughness scale is smaller than $\delta_s$, the logarithmic velocity profile is not affected by the texture, because the laminar sub-layer completely covers the variations on the surface, and we have the so-called smooth turbulent flow. If, on the contrary, the bumps in the surface are larger than $\delta_s$, the laminar sub-layer follow the profile of the surface, and the logarithmic velocity profile is altered depending on the texture, a regime called rough turbulent flow.
 
 \section{The Atmospheric Boundary Layer}
-The atmosphere is composed by air, which is behaves like fluid. Therefore, close to the Earth's surface, in the region called \emph{atmospheric boundary layer}, we find the same effects described in the previous section. Additionally, there are other phenomena that complicate things further, such as the temperature of the surface, which changes widely from day to night and from Summer to Winter, the rotation of the Earth, the varying roughness of the surface, due to cities and mountains, etc. The effect of the surface on the first few hundred meters of the atmosphere is the main focus of \emph{boundary layer meteorology}. 
+The atmosphere is composed by air, which is behaves like fluid. Therefore, close to the Earth's surface, in the region called \emph{atmospheric boundary layer}, we find the same effects described in the previous section. Additionally, there are other phenomena that complicate things further, such as the temperature of the surface, which changes widely from day to night and from Summer to Winter, the rotation of the Earth, the varying roughness of the surface, due to cities and vegetation, etc. The effect of the surface on the first few hundred meters of the atmosphere is the main focus of \emph{boundary layer meteorology}. 
 
-The height of the atmospheric boundary layer (hereafter abbreviated as ABL) typically varies between 100 and 1000 meters, highly depending on the conditions, and it is always turbulent. There are three main instabilities driving turbulence in the ABL:
+The height of the atmospheric boundary layer (hereafter abbreviated as ABL) typically varies between 100 and 1000 meters, highly depending on the conditions, and it is always turbulent. There are two main instabilities driving turbulence in the ABL:
 
 \begin{itemize}
 \item Shear instability: caused by shear, the mechanism described in the previous section. This happens at high Reynolds number, and, by using typical values for the ABL, we find $Re$ well above $10^6$.
-\item Kelvin-Helmholtz instability: occurs when there is a difference of density and velocity in different layers of flow. This is the mechanism that generates, for example, waves in ponds, lakes, and oceans.
-\item Rayleigh-Bernard instability: is caused by the decrease of potential density\footnote{the potential density is the density that a parcel of air would attain if brought at a standard reference pressure adiabatically, i.e. disallowing exchanges of heat with its surroundings. Potential density is useful to compare densities irrespectively of pressure, i.e. altitude} with height, or, in other words, when warm fluid is below cold fluid; the warm fluid will rise, and the cold fluid will drop, a phenomenon called \emph{convection}. During hot Summer days, the surface is much warmer than the air, thus the air close to the surface will heat and tend to rise.
+\item Rayleigh-Bernard (also known as buoyancy driven) instability: is caused by the decrease of potential density\footnote{the potential density is the density that a parcel of air would attain if brought at a standard reference pressure adiabatically, i.e. disallowing exchanges of heat with its surroundings. Potential density is useful to compare densities irrespectively of pressure, i.e. altitude} with height, or, in other words, when warm fluid is below cold fluid; the warm fluid will rise, and the cold fluid will drop, a phenomenon called \emph{convection}. During hot Summer days, the surface is much warmer than the air, thus the air close to the surface will heat and tend to rise.
 \end{itemize}
 
 Turbulence has the very important role of transport and mix of air properties, such as heat, moisture, particles, aerosols, etc. This is especially true in \emph{unstable} conditions, when the air moving upwards (e.g. because it is warmer) is less dense than the air moving downwards; when the contrary happens, the ABL is called \emph{stable}.
@@ -150,33 +149,33 @@ The ABL can be divided in two main sub-layers: the inner surface layer and the o
 It is very important to have a macroscopic understanding of the turbulent processes in the ABL, because they happen at length and time scales too small to be simulated in global climate models. The process of expressing the result of turbulence as a function of large scale parameters is called parametrization; having realistic models is essential in order to conduct precise simulations of the global climate in the scale of tens or hundreds of years, because errors tend to accumulate and amplificate as the simulation goes on. Other fields that benefit from the study of the ABL are urban meteorology (interested in the dispersion of pollutants), agricultural meteorology (interested in the formation of frost and dew, the temperature of the soil, etc.), aviation (predict fog and strong winds), and so on.
 
 \subsection{Surface Fluxes}
-A flux measures the amount of a physical quantity that flows through a surface. In the context of boundary layer meteorology, we are interested in the flows through the surface of earth, because, through them, the surface and the atmosphere exchange energy; these fluxes are thus measured in \si{\watt\per\square\meter}. The main source of energy for the surface is long-wave radiation coming from the sun, and short-wave radiation coming from the atmosphere and the clouds. A small amount of long-wave radiation is emitted from the surface, therefore let the net radiative flux be $R$, positive when the surface gains energy.
+A flux measures the amount of a physical quantity that flows through a surface. In the context of boundary layer meteorology, we are interested in the flows through the surface of earth, because, through them, the surface and the atmosphere exchange energy; these fluxes are thus measured in \si{\watt\per\square\meter}. The main source of energy for the surface is short-wave radiation coming from the sun, and long-wave radiation coming from the atmosphere and the clouds. A small amount of long-wave radiation is emitted from the surface, therefore let the net radiative flux be $R$, positive when the surface gains energy.
 
-The main fluxes by which the surface loses energy to the atmosphere are called the turbulent flux of \emph{sensible heat} $H$, also called kinematic heat flux, and the turbulent flux of \emph{latent heat} $\lambda E$, also called kinematic flux of water vapor/moisture. The difference between the two is that the former causes an actual change of temperature, whereas the latter does not affect temperature\footnote{imagine a pot of boiling water; selecting a higher temperature on the stove will not increase the temperature of water above \SI{100}{\celsius}, but will make it boil faster. The additional heat introduced in the system is dissipated through increased evaporation}. The main causes of sensible heat fluxes are conduction and convection, whereas the main cause of latent heat fluxes is water movement: condensation, evaporation, melting, etc. 
+The main fluxes by which the surface gains or loses energy to the atmosphere are called the turbulent flux of \emph{sensible heat} $H$, also called kinematic heat flux, and the turbulent flux of \emph{latent heat} $\lambda E$, also called kinematic flux of water vapor/moisture. The difference between the two is that the former causes an actual change of temperature, whereas the latter does not affect temperature\footnote{imagine a pot of boiling water; selecting a higher temperature on the stove will not increase the temperature of water above \SI{100}{\celsius}, but will make it boil faster. The additional heat introduced in the system is dissipated through increased evaporation}. The main causes of sensible heat fluxes are conduction and convection, whereas the main cause of latent heat fluxes is water movement: condensation, evaporation, melting, etc. 
 
-The final flux of interest is the soil heat flux $G$, which is simply the heat "absorbed" by the surface and not given to the atmosphere. These four fluxes are linked by the surface energy balance equation:
+The final flux of interest is the soil heat flux $G$, which is the heat transferred into or out of the deeper layer of the soil and not given back to the atmosphere. These four fluxes are linked by the surface energy balance equation:
 
 $$
 R=H+\lambda E+G
 $$
 
-which states that the total incoming energy $R$ must be equal to the energy given back to the atmosphere $H+\lambda E$ (not counting long-wave radiation, which is accounted to in $R$) plus the energy absorbed by the surface $G$.
+which states that the total incoming energy $R$ must be equal to the energy given back to the atmosphere $H+\lambda E$ (not counting long-wave radiation, which is accounted to in $R$) plus the energy absorbed by the surface $G$, assuming the temperature is constant. When the temperature is not constant, one can write a budget equation relating the changes in these quantities.
 
-The turbulent fluxes $H$ and $\lambda E$ are constant in the surface layer [todo add citation]. Experimentally, the energy balance is not always achieved [todo cite from cabauw] due to difficulty in measuring fluxes due to eddy correlation being inaccurate (verify this)
+The turbulent fluxes $H$ and $\lambda E$ are constant in the surface layer. Experimentally, the energy balance is not always achieved \citep{cabauwinsitu} because of the difficulty in measuring fluxes due to eddy correlation being inaccurate.
 
-\subsection{The Turbulence Kinetic Energy Budged}
-Kinetic energy is energy stored in form of movement: faster or heavier objects have more kinetic energy than slower or lighter ones. The Reynolds decomposition allows us to decompose the kinetic energy of turbulent flows in two terms: one caused by the mean flow, and one caused by turbulence. This decomposition can be justified by examining the temporal spectrum of kinetic energy, shown in figure \ref{fig:tkespectrum}. Four peaks are visible, corresponding to different sources of kinetic energy: turbulence, day-night cycle, westerlies\footnote{winds blowing from the east towards the west in the mid-latitudes}, and seasons. Importantly, there are few sources of kinetic energy in the 30 minutes to one hour time scale; this so-called spectral gap allows us to separate between turbulence and other sources of fluctuations in the atmosphere.
+\subsection{The Turbulence Kinetic Energy Budget}
+Kinetic energy is energy stored in form of movement: faster or heavier objects have more kinetic energy than slower or lighter ones. The Reynolds decomposition allows us to decompose the kinetic energy of turbulent flows in two terms: one caused by the mean flow, and one caused by turbulence. This decomposition can be justified by examining the temporal spectrum of kinetic energy, shown in figure \ref{fig:tkespectrum}. Four peaks are visible, corresponding to different sources of kinetic energy: turbulence, day-night cycle, synoptic scale variability, lows and highs passing, and seasons. Importantly, there are few sources of kinetic energy in the 30 minutes to one hour time scale; this so-called spectral gap allows us to separate between turbulence and other sources of fluctuations in the atmosphere.
 
 \begin{figure}
-\caption{Change of atmospheric kinetic energy at different time-scales. The peaks in the scale of days and months and years are due to the day-night and Summer-Winter cycles, the peaks in the monthly scale are due to baroclinic instability in the mid-latitude westerlies, and the peaks at one minute are due to convection and atmospheric turbulence \citep{tkespectrumsrc,tkespectrumorig}}
+\caption{Long term average of atmospheric kinetic energy at different time-scales. The peaks in the scale of days and months and years are due to the day-night and Summer-Winter cycles, the peaks in the monthly scale are due to baroclinic instability in the mid-latitude westerlies, and the peaks at one minute are due to convection and atmospheric turbulence \citep{tkespectrumsrc,tkespectrumorig}}
 \label{fig:tkespectrum}
 \centering
 \includegraphics[width=0.5\textwidth]{images/kinetic_energy_spectrum}
 \end{figure}
 
-From now on, we will use a coordinate system with the $x$ axis aligned to the average horizontal wind direction, the $y$ axis perpendicular to it, and the $z$ axis pointing away from the surface. Then, we will use the letters $u$, $v$ and $w$ to denote the components of the wind along the axes $x$, $y$ and $z$ respectively; clearly, $\overline{v}=0$. Eddy fluxes can then be described in terms of covariances: let $\theta$ denote the potential temperature\footnote{the potential temperature is final temperature after bringing a parcel of air to a standard pressure adiabatically, i.e. not allowing exchange of temperature with the surroundings. It is a useful mean to compare temperatures irrespectively of pressure, i.e. altitude}, then $\overline{w'\theta'}$ is the turbulent heat flux, i.e. the sensible heat flux in the vertical due to wind. Usually the ABL  studied assuming homogeneous horizontal conditions, because they vary on a length scale larger than the height of the ABL. Because of this, the horizontal eddy correlations $\partial\overline{u'a'}/\partial x$ and $\partial\overline{v'a'}/\partial y$ are usually of negligible intensity, and are thus ignored. Note that this is not necessarily true when clouds are involved.
+From now on, we will use a coordinate system with the $x$ axis aligned to the average horizontal wind direction, the $y$ axis perpendicular to it, and the $z$ axis pointing away from the surface. Then, we will use the letters $u$, $v$ and $w$ to denote the components of the wind along the axes $x$, $y$ and $z$ respectively; clearly, $\overline{v}=0$. Eddy fluxes can then be described in terms of covariances: let $\theta$ denote the potential temperature\footnote{the potential temperature is final temperature after bringing a parcel of air to a standard pressure adiabatically, i.e. not allowing exchange of temperature with the surroundings. It is a useful mean to compare temperatures irrespectively of pressure, i.e. altitude}, then $\overline{w'\theta'}$ is the turbulent heat flux, i.e. the sensible heat flux in the vertical due to turbulence. Usually the ABL  studied assuming homogeneous horizontal conditions, because they vary on a length scale larger than the height of the ABL. Because of this, the horizontal eddy correlations $\partial\overline{u'a'}/\partial x$ and $\partial\overline{v'a'}/\partial y$ are usually of negligible intensity, and are thus ignored. Note that this is not necessarily true when clouds are involved.
 
-It is important to notice that turbulence is dissipative in nature. Consider a hot Summer day, where air is warmer close to the surface, and a circular eddy moving some air up and some down, so that the average motion is zero. The parcel of air moving up ($w'>0$) ends up being warmer than its surroundings ($\theta'>0$), while the one moving down ($w'<0$) will be colder ($\theta'<0$); the result is a new transport of heat through the eddy: $\overline{w'\theta'}>0$. On the contrary, imagine a cold night, where the air close to the surface is colder; the same eddy would transport a colder parcel of air upwards, and a warmer one downwards. In both cases, the end result would be a net transport of heat without transport of mass. Because of the ??? law, the eddy must lose energy, and thus dissipate over time.
+It is important to notice that turbulence is dissipative in nature. Consider a hot Summer day, where air is warmer close to the surface, and a circular eddy moving some air up and some down, so that the average motion is zero. The parcel of air moving up ($w'>0$) ends up being warmer than its surroundings ($\theta'>0$), while the one moving down ($w'<0$) will be colder ($\theta'<0$); the result is a net transport of heat through the eddy: $\overline{w'\theta'}>0$. On the contrary, imagine a cold night, where the air close to the surface is colder; the same eddy would transport a colder parcel of air upwards, and a warmer one downwards. In both cases, the end result would be a net transport of heat without transport of mass. Because of the ??? law, the eddy must lose energy, and thus dissipate over time.
 
 Since turbulence changes over time, we are more interested in the change of kinetic energy, the \emph{turbulent kinetic energy budget}. A full derivation is out of the scope of this work, but its final form \citep{basicatm} can be derived from prime physical principles, resulting in
 
@@ -191,7 +190,7 @@ Since turbulence changes over time, we are more interested in the change of kine
 
 Where ${e'}^2={u'}^2+{v'}^2+{w'}^2$. The $P$ term is the production due to shear, $B$ is the production due to buoyancy, $T_t$ is the turbulent transport of TKE by large-scale eddies, $T_p$ is the transport due to pressure, and $\epsilon$ is molecular dissipation due to viscosity. $P$ and $B$ are the most prominent terms, and the transport terms are close to zero in neutral conditions \citep{basicatm}.
 
-The $P$ term is always positive, as turbulence can only introduce more kinetic energy. On the other hand, the contribution from buoyancy can be either positive or negative, depending on the difference of temperature between a parcel of air moved by the turbulence and the surrounding air. When $\overline{w^\prime\theta^\prime}$ is negative, the turbulence is moving cold air upwards and warm air downwards; these parcels of air will try to undo the effect of turbulence, thereby increasing the overall kinetic energy. A similar reasoning goes for when the heat flux is positive.
+The $P$ term is always positive, as energy is taken from the mean flow to the turbulent one. On the other hand, the contribution from buoyancy can be either positive or negative, depending on the difference of temperature between a parcel of air moved by the turbulence and the surrounding air. When $\overline{w^\prime\theta^\prime}$ is negative, the turbulence is moving cold air upwards and warm air downwards; these parcels of air will try to undo the effect of turbulence, thereby increasing the overall kinetic energy. A similar reasoning goes for when the heat flux is positive.
 
 \subsection{Monin-Obukhov Similarity Theory}
 \label{sec:most}
@@ -243,10 +242,13 @@ $$
 
 The stability parameter $\xi$ is positive for stable conditions, where wind shear dominates the production of TKE, and negative for unstable conditions, where buoyancy is the main contributor to turbulence. It approaches 0 in the limit of neutral stratification (i.e. $\partial\overline{\theta}/\partial z=0$), because the temperature flux goes to 0 causing $L$ go to infinity.
 
+todo talk about the method in \citep{cabauw_abl} to compute L
+
 The universal functions $\phi_m$ and $\phi_h$ must be determined experimentally. This is no easy task, and considerable effort has been devoted to it; one of the greatest difficulties lies in obtaining accurate and unbiased measurements, especially the fluxes. \cite{hogstrom88} is a meta-study that aggregates and improves many previous results, and suggests the following expressions:
 
 \begin{align}
 \phi_m(\xi)&=\begin{cases}
+\label{eq:phi_m_coeff}
 \mathrlap{(1-19.3\xi)^{-1/4}} \hphantom{0.95(1-11.6\xi)^{-1/2}} & -2<\xi<0 \\
 1+6\xi & 0<\xi<1\\
 \end{cases} \\
@@ -256,7 +258,9 @@ The universal functions $\phi_m$ and $\phi_h$ must be determined experimentally.
 \end{cases}
 \end{align}
 
-The Monin-Obukhov similarity theory is only applicable in the surface layer, at heights much larger than the aerodynamic roughness length, and with $\vert\xi\vert<2$; even under ideal conditions, the predictions of this theory are accurate up to 10-20\% [foken 2006].
+
+
+The Monin-Obukhov similarity theory is only applicable in the surface layer, at heights much larger than the aerodynamic roughness length, and with $\vert\xi\vert<2$; when $\vert\xi\vert$ is too large, the eddies do not feel the effect of the surface anymore. Even under ideal conditions, the predictions of this theory are accurate up to 10-20\% [foken 2006].
 
 \section{Machine Learning}
 The goal of Machine learning is to develop algorithms that allow computers to learn from examples. Learning is intended as the ability of inferring general rules from the available examples, so that new, previously unseen examples can be correctly characterized. The set of samples from which the computer is supposed to learn is called the \emph{training set}, and each sample is a sequence of numbers describing its attributes, or \emph{features}. There are three approaches in machine learning:
@@ -441,41 +445,14 @@ f(\bm x)=\sum_{k=1}^K w_{(k)}\cdot\bm t_{(k)}
 
 Note that the k-nearest neighbors algorithm does not have parameters, only hyper\hyp{}parameters: $K$ itself, the distance function, and the weighting scheme. Typical distance functions are the Manhattan distance $d(\bm u,\bm v)=\sum_{d=1}^D\vert u_d-v_d\vert$ and the squared Euclidean distance $d(\bm u,\bm v)=\sum_{d=1}^D(u_d-v_d)^2$, and typical weights are uniform $w_{(k)}=1/K$ and based on distance $w_{(k)}=d(\bm x,\bm x_{(k)})/\sum_{k^\prime=1}^K d(\bm x,\bm x_{(k^\prime)})$.
 
-\subsection{Random Forests}
-Random forests \citep{random_forests} are an ensemble approach to prediction whose output values are the combination of the output of multiple decision trees. In general, ensemble methods improve the performance of a single model by combining the output of many models trained on random subsets of features and/or samples.
-
-A decision tree is a sequence of nested \emph{if-then-else} rules, each of them testing one of the features of the input sample: inference starts from the root, and successively traverses each node by moving to the correct child, until a leaf, containing the final prediction, is reached. For classification, the prediction is the most frequent class among the training samples that end up in that leaf, while for regression the output value can be their average, or the output of a more complicated regression model trained on those samples.
-
-Given a training set, many decision trees can be built using different random subsets of features. This creates a number of \emph{expert} trees, each of them specialized in a restricted domain of the data. No tree is good enough on its own as it overfits its domain, but by averaging the output of many decision trees, their errors tend to cancel out.
-
-\cite{cart} introduced a simple and widely used algorithm for building decision trees, CART; it builds decision trees by greedily and recursively partitioning the training samples until a stopping criterion is met. Partitions are created by selecting the split that has the smallest impurity; a common measure for regression is the mean squared error, while Gini impurity or cross-entropy are popular options in classification. Let $X$ be a set of training samples and $\Sigma=(f,\tau)$ be a candidate split on feature $f$ with threshold $\tau$, then we can partition the training samples in two sets:
-
-\begin{align}
-S^-(\Sigma)&=\{\bm x\in X\vert \bm x_f\leq\tau\} \\
-S^+(\Sigma)&=\{\bm x\in X\vert \bm x_f>\tau\}
-\end{align}
-
-And define the impurity $I$ of $\Sigma$ as the weighted average of the impurities of the two sets:
-
-\begin{equation}
-I(\Sigma)=\frac{\vert S^-(\Sigma)\vert}{\vert X\vert}I(S^-(\Sigma))+\frac{\vert S^+(\Sigma)\vert}{\vert X\vert}I(S^+(\Sigma))
-\end{equation}
-
-The best split is then
-
-\begin{equation}
-\Sigma^*=\argmin_{\Sigma}\ I(\Sigma)
-\end{equation}
-
-This best split defines a new node in the tree, and the construction can proceed recursively on its two children $S^-(\Sigma^*)$ and$ S^+(\Sigma^*)$. Stopping criteria for the construction can be a minimum impurity $I(X)$, a minimum impurity decrease with respect to the parent $I(X) - I(\Sigma^*)$, or a minimum cardinality for $X$ or the two splits $S^+$ and $S^-$.
-
-
-
-\subsection{Gaussian Processes}
+\subsection{Gradient Boosted Trees}
 todo
 
+\subsection{Gaussian Processes}
+todo also mention differentiation
+
 \subsection{Neural Networks}
-todo \cite{prelu}
+todo
 
 \chapter{Method}
 This chapter describes how the data is collected (section \ref{sec:data_collection}) and used to re-create the flux-profile relationships (section \ref{sec:profiles}), as well as their prediction based on the Monin-Obukhov similarity theory (section \ref{sec:most_fit}). Then, we describe the main contribution of this thesis, namely how their prediction can be improved using machine learning techniques (section \ref{sec:model_fit}). Finally, we describe how the evaluation is performed (section \ref{sec:perf_eval}), and explicitly state the necessary criteria for a successful answer to the research questions (section  \ref{sec:success}).
@@ -492,7 +469,7 @@ The Cesar observatory provides full information regarding data collection\footno
 
 \begin{figure}
 \caption{Sonic anemometer to measure wind and optical open-path sensor to measure humidity at the 180m level of the Cabauw mast.}
-\label{fig:bl}
+\label{fig:cabauw_180m_instruments}
 \centering
 \includegraphics[width=0.75\textwidth]{images/cabauw_turbulence_instruments}
 % https://www.knmi.nl/research/observations-data-technology/projects/cabauw-in-situ-measurements
@@ -512,7 +489,7 @@ The Cabauw observatory measures both incoming and outgoing long- and short-wave 
 This instrument is positioned at \SI{1.5}{\meter} height, and is ventilated and heated to prevent formation of dew, that can make the measurements invalid.
 
 \subsection{Soil Heat and $CO_2$ Flux}
-asd
+todo
 
 
 \subsection{Eddy Correlation}
@@ -555,6 +532,8 @@ todo also mention dew point, soil heat (and that missing values are not imputed)
 
 Since the turbulent fluxes and the friction velocity are measured at the surface level, we can compute the flux-profile relationships only at 10, 20 and 40 meters, because these quantities can be assumed constant only within the surface layer. It is very hard to know the exact height of the surface layer, because it depends on the weather and no exact formulas are known, but it is usually assumed to be 10\% as high as the boundary layer. Based on the typical height of the boundary layer, the surface layer is often higher than 40 meters and lower than 80. \cite{cabauw_z0} indeed reports that a large number of observations from Cabauw at \SI{20}{\meter} are inside the surface layer, the \SI{100}{\meter} level is already outside of the surface layer, and \cite{boulder} used the observations at \SI{50}{\meter} in their analysis, but not those at \SI{100}{\meter}.
 
+todo http://bibliotheek.knmi.nl/knmipubTR/TR303.pdf says 60m is outside of the surface layer only in the morning, and 100m / 180m are inside later in the day
+
 \subsection{Obukhov Length}
 
 The Obukhov length is computed as in equation \ref{eq:most_l}, reported here:
@@ -565,6 +544,7 @@ L=-\frac{u_*^3}{\kappa\frac{g}{\theta_v}\frac{Q}{\rho c_\rho}}
 $$
 
 The flux of virtual potential temperature can be computed following the formulas in section \ref{sec:most}, as the data contains all the necessary quantities; $u_*$ is given, as well as the specific humidity and the pressure. The Obukhov length is computed at each height level using the corresponding air temperature measurement, and the fluxes measured at the surface.
+
 
 \subsection{Gradients}
 \label{sec:gradients}
@@ -616,7 +596,7 @@ The model is linear in its parameters, therefore equation \ref{eq:ridge_solution
 f^\prime(z)=b+2cz^2+d\frac{1}{z}
 \end{equation}
 
-After removing the observations for which this model has a $R^2>0.9$, \cite{windlogprofile} estimates the uncertainty of this gradient to be around 30\%.
+After removing the observations for which this model has a $R^2<0.9$, \cite{windlogprofile} estimates the uncertainty of this gradient to be around 30\%.
 
 Finally, a third method of computing the gradient is to fit a Gaussian process to the profile using the following kernel:
 
@@ -625,7 +605,7 @@ Finally, a third method of computing the gradient is to fit a Gaussian process t
 k(z_1,z_2)=k+\exp\left(-\frac{(z_1-z_2)^2}{2\sigma_0^2}\right)+\sqrt{\sigma_1^2+ z_1 z_2}+\sigma_2^2 \mathbbm{1}[z_1=z_2]
 \end{equation}
 
-Where $\mathbbm{1}[z_1=z_2]$ is an indicator function whose value is 1 if $z_1=z_2$, and 0 otherwise. The parameter $\sigma_2$ controls the noise, and depends on the instrument used to measure the modeled quantity; for example, for wind, we have $\sigma_2^2=\SI{0.1}{\square\meter\per\square\second}$; the other parameters are found by optimizing the marginal likelihood. Figure \ref{fig:kernel} shows the prior distribution of a Gaussian process with this kernel, as well as the value of the kernel for some choices of $z_1$ and $z_2$.
+Where $\mathbbm{1}[P]$ is an indicator function whose value is 1 iff the predicate $P$ is true, and the parameter $\sigma_2$ controls the noise in the measurement. Unfortunately, this noise is not constant, and does not depend on the altitude level; for example, for wind, the precision of the instrument is $\max(0.1,0.01\cdot u)$. Therefore, all the parameters must be found by optimizing the marginal likelihood. Figure \ref{fig:kernel} shows the prior distribution of a Gaussian process with this kernel, as well as the value of the kernel for some choices of $z_1$ and $z_2$.
 
 \begin{figure}
     \centering
@@ -702,7 +682,7 @@ where $\tau=1-c^2\xi$. The Hessian of \ref{eq:phi_general} when $\xi\geq 0$ is s
 
 Analytical computation of the Hessian allows us to use the Newton conjugate gradient descent algorithm, which provides super-linear convergence rate, unlike other conjugate gradient methods whose rate of convergence is only linear \citep{numopt}.
 
-This model is then fitted to the data and evaluated as the other regression models; see section \ref{sec:perf_eval} for details on the procedure.
+This model is then fitted to the data using L2 regularization, and evaluated as the other regression models; see section \ref{sec:perf_eval} for details on the procedure.
 
 \section{Model Fitting}
 \label{sec:model_fit}
@@ -719,24 +699,26 @@ All the features come from the Cesar database, refer to section \ref{sec:data_co
 \item[F5:] Turbulent kinetic heat flux, turbulent latent heat flux;
 \end{enumerate}
 
-These sets are used cumulatively in the order they are listed, meaning that, for example, F3 is used in conjunction with F2 and F1. Derived features that can be computed from others, such as the virtual temperature (equation \ref{eq:vtemp}), are not included. The reason is that the less inputs a model requires, the more useful and "agile" it can be. This division was decided based on domain knowledge, so that the level of a feature reflects both its expected impact on the performance and how desirable it is to include it. An example of the former reasoning is with F4, where the effect of moisture is expected to be captured by the soil heat flux, and to be generally negligible in all but the most extreme conditions. An example of the latter reasoning is with F5, because turbulent fluxes are hard to measure accurately (see section \ref{sec:eddy_correlation}), and current simulation models are known to be quite inaccurate in their estimation of these fluxes \citep{sheba}. Similarly, the friction velocity was not included, because the point of predicting $\phi_m$ is to use it to estimate $u_*$ from the wind gradient, which is readily measured both in real life and in simulations.
+These sets are used cumulatively in the order they are listed, meaning that, for example, F3 is used in conjunction with F2 and F1. Derived features that can be computed from others, such as the virtual temperature (equation \ref{eq:vtemp}), are not included. The reason is that the less inputs the models require, the more useful and "agile" they can be when used as a component in a larger system, such as climate simulations.
 
-We also create a second version of each feature set, augmented with the hourly trend of each variable, except for $z$. The reason for including the trend is that it can give an indication of, for example, the time of the day, or other complex phenomena for which there is no measurement. The interval for the trend (one hour) is used because it is enough to capture local variations, but not too large so as to contain irrelevant information. The hourly trend is computed simply as the difference between the current value and the value measured one hour before, divided by one hour; given the goal of this work, it would not be feasible to use the future value to compute the trend.
+This division was decided based on domain knowledge, so that the level of a feature reflects both its expected impact on the performance and how desirable it is to include it. An example of the former reasoning is with F4, where the effect of moisture is expected to be captured by the soil heat flux, and to be generally negligible in all but the most extreme conditions. An example of the latter reasoning is with F5, because turbulent fluxes are hard to measure accurately (see section \ref{sec:eddy_correlation}), and current simulation models are known to be quite inaccurate in their estimation of these fluxes \citep{sheba}. Similarly, the friction velocity was not included, because the point of predicting $\phi_m$ is to use it to estimate $u_*$ from the wind gradient, which is readily measured both in real life and in simulations. \cite{cabauw_z0} has shown that the direction of the wind affects the universal functions at Cabauw, because of the different covers of the surface, changing the roughness length, and disturbances by the main mast, preventing accurate wind speed measurement. Nonetheless, we decided not to include the wind direction in the features, as this is very specific to the Cabauw observatory, and would reduce the generality of our models.
+
+We also create a second version of each feature set, augmented with the hourly trend of each variable, except for the altitude $z$. The reason for including the trend is that it can give an indication of, for example, the time of the day, or other complex phenomena for which there is no measurement. The interval for the trend (one hour) is used because it is enough to capture local variations, but not too large so as to contain irrelevant information. The hourly trend is computed simply as the difference between the current value and the value measured one hour before, divided by one hour. Given the goal of this work, namely to produce a model to be used in climate simulations, it would not make sense to use future values to compute the trend.
 
 Finally, each feature is centered and standardized so as to have zero mean and unit standard deviation:
 
 \begin{equation}
 \label{eq:standardization}
-z_{i,j}=\frac{x_{i,j}-\mu_j}{\sigma_j}
+x^\prime_{i,j}=\frac{x_{i,j}-\mu_j}{\sigma_j}
 \end{equation}
 
-This method is not robust to outliers, since they heavily affect mean and standard deviation; this can be prevented by subtracting the median and normalizing with the interquartile range. These two methods give similar results in our datasets, therefore we follow equation \ref{eq:standardization}, since it it the most widely used in practice. Obviously, $\mu_j$ and $\sigma_j$ are computed only on the training data, and used to normalize both train and test data.
+This method is not robust to outliers, since they heavily affect mean and standard deviation; this can be prevented by subtracting the median and normalizing with the interquartile range instead. These two methods give similar results in our datasets, therefore we follow equation \ref{eq:standardization}, since it it the most widely used in practice. Obviously, every $\mu_j$ and $\sigma_j$ are computed only on the training data, and used to normalize both training and testing data.
 
 \subsection{Models}
 
 The models that we use are ridge regression, k-nearest neighbors, gradient boosted trees, and neural networks. Due to the size of the dataset, we cannot use kernel-based algorithms such as SVM and Gaussian Processes, as they require $\Theta(N^2)$ memory to store the kernel matrix, and $O(N^3)$ time to invert it. Gradient boosted trees were used instead of random forests because they were shown to work slightly better [citation], and small-scale experiments on our dataset showed they can be fit almost an order of magnitude more quickly.
 
-All models but neural networks are fit using nested cross validation with random hyper-parameter search. This procedure detailed in section \ref{sec:perf_eval}, but we list here the distributions of the hyper-parameters that we used in the random search:
+All models but neural networks are fitted using nested cross validation with random hyper-parameter search. This procedure detailed in section \ref{sec:perf_eval}, but we list here the distributions of the hyper-parameters that we use in the random search:
 
 \begin{itemize}
 \item Ridge regression and Monin-Obukhov estimator: the only hyper-parameter to tune is the regularization coefficient, for which we use a log$_{10}$-uniform distribution\footnote{a random variable $X$ has a log$_\beta$-uniform distribution from $a$ to $b$ if $\log_\beta X$ is uniformly distributed between $a$ and $b$. Equivalently, if $Y$ is uniform between $a$ and $b$, then $\beta^Y$ is log$_\beta$-uniform.} from $10^{-6}$ to $10^{1}$.
@@ -746,6 +728,11 @@ All models but neural networks are fit using nested cross validation with random
 \item Gradient boosted trees: the distributions are shown in table \ref{tbl:gb_hyperparams}. Note that $\delta$, for the Huber loss, refers to the percentile of the residuals, so that $\delta=0.5$ uses L2 loss for the smallest 50\% and L1 loss for the largest 50\%.
 \end{itemize}
 
+We use log-uniform distributions for parameters with a high range of possible values to reflect the intuition that small values are as likely as large values, and to avoid the samples being dominated by the larger values. Samples from an uniform distribution from $10^0$ to $10^3$ are ten times more likely to be from $[10^2,10^3]$ than from $[10^1,10^2]$, and, on average, only one in 100 samples will be in $[10^0,10^1]$. Log$_{10}$-uniform distributions do not have this problem, and a sample is equally likely to belong to any of the three intervals.
+
+todo talk about nnets
+ - use prelu instead of relu because relus get stuck
+ - use dropout instead of batch norm + l2 regu because works better
 
 \begin{table}[]
 \centering
@@ -756,10 +743,10 @@ All models but neural networks are fit using nested cross validation with random
 Number of estimators & log$_{10}$-uniform & From $10^1$ to $10^4$ \\
 Learning rate & log$_{10}$-uniform & From $10^{-3}$ to $10^0$ \\
 Number of features & Uniform & All possible values \\
-Maximum depth & Uniform & From 2 to 10 \\
+Maximum depth & Uniform & From 4 to 12 \\
 Sub-sampling factor & Uniform & From 25\% to 100\% \\
 Loss function & Uniform & Least squares, least absolute deviation, \newline Huber loss \\
-$\delta$ (for the Huber loss) & Uniform & From 1\% to 98\%
+$\delta$ (for the Huber loss) & Uniform & From 1\% to 99\%
 \end{tabularx}
 \end{table}
 
@@ -767,11 +754,15 @@ $\delta$ (for the Huber loss) & Uniform & From 1\% to 98\%
 
 \section{Performance Evaluation}
 \label{sec:perf_eval}
-The goal of performance evaluation is to obtain a realistic and unbiased estimate of the performance of a model on unseen data; we are not interested in the values of the hyper-parameters that yield this performance. For this reason, we perform nested cross validation, with the inner loop used to optimize the hyper-parameters through random search \citep{random_search}, and the outer loop used to evaluate the model. We use 10 folds in both the inner and outer CV, and test 60 different hyper-parameter combinations for all estimators but gradient boosted trees, for which we use 180. This number is based on a simple probabilistic argument\footnote{\url{https://stats.stackexchange.com/a/209409/141343}}: if a combination has a 5\% probability of giving a model whose performance is within 5\% of the best attainable performance, then the probability that at least one in 60 trials finds a combination within 5\% of the optimal is $1-0.95^{60}\approx 0.95$. Clearly, these numbers are arbitrary, but even a probability of 1\% would give a success probability of 45\%. Algorithm \ref{alg:nested_cv} shows in detail how nested cross validation with random search works.
+The goal of performance evaluation is to obtain a realistic and unbiased estimate of the performance of a model on unseen data. Because the Monin-Obukhov similarity theory is only valid in the $-2\leq\xi\leq1$ range, we will use this data as the primary target for evaluation. We will also evaluate the models on the full dataset, to see what kind of performance can be expected outside of the typical range where the similarity theory is employed.
 
-A fundamental assumption underlying hold-out evaluation methods is that the samples in the training set are independent and identically distributed, so that the distribution in the two partitions are equal. This is not our case, since there is a inherent time dependency in the data, meaning that samples obtained close in time are very similar. This can be confirmed by training and evaluating a k-nearest neighbors classifier with $k=1$ on random splits: the resulting mean squared error is in the order of $10^{-3}$, clearly unrealistic. To circumvent this problem, the CV folds are created on \emph{months}: all the samples in a given month and year are either in the training set or in the validation set.
+We are actually not interested in the optimal values of the hyper-parameters; for this reason, we perform nested cross validation, with the inner loop used to optimize the hyper-parameters through random search \citep{random_search}, and the outer loop used to evaluate the model. We use 10 folds in both the inner and outer CV, and test 10 different hyper-parameter combinations for all estimators. Limits in the available computational resources prevent us from testing more combinations; the possibility that this number is too low can manifest itself in the high variance of the nested cross validation results. Algorithm \ref{alg:nested_cv} shows in detail how nested cross validation with random search works.
 
-The main evaluation metric is the mean squared error, but we compute other metrics in the outer CV to get a more complete idea of the performance of the estimators:
+todo describe parallel spark implementation?
+
+A fundamental assumption underlying hold-out evaluation methods is that the samples in the training set are independent and identically distributed, so that the distribution in the two partitions are equal. This is not our case, since there is a inherent time dependency in the data, meaning that samples obtained close in time are very similar. This can be confirmed by training and evaluating a k-nearest neighbors classifier with $k=1$ on random splits: the resulting mean squared error is in the order of $10^{-3}$, which is clearly unrealistic. To circumvent this problem, the CV folds are created on \emph{months}: all the samples in a given month and year are either in the training set or in the validation set. We choose months instead of days because the weather often does not change significantly in the span of 24 hours, whereas in a month there are around three weeks worth of samples that are independent from the conditions at the start and end of the month.
+
+The main evaluation metric is the mean squared error, since that is what we are optimizing for, but we compute other metrics in the outer cross validation loop to get a more complete idea of the performance of the estimators:
 
 \begin{itemize}
 \item Mean Squared Error
@@ -785,7 +776,7 @@ $$
 $$
 \end{itemize}
 
-Where $f_n$ is the predicted value for the test sample $\bm x_n$ with true value $t_n$, the squared error is $(f_n-t_n)^2$, the absolute error is $\vert f_n-t_n\vert$, the absolute percent error is $\vert 1-f_n/t_n\vert$
+Where $f_n$ is the predicted value for the test sample $\bm x_n$ with true value $t_n$, the squared error is $(f_n-t_n)^2$, the absolute error is $\vert f_n-t_n\vert$, the absolute percent error is $100\vert 1-f_n/t_n\vert$. We present both mean and median scores because the former are heavily skewed by outliers. We also present both absolute and percent errors because the latter are easier to interpret, but tend to explode when the true value is very small,\footnote{predicting 1 for a true value of 100 gives a percent error of 99\%, but predicting 100 for a true value of 1 gives, somewhat unfairly, a percent error of 9900\%} a condition that frequently happens in our dataset.
 
 
 \begin{algorithm}
@@ -802,14 +793,14 @@ Where $f_n$ is the predicted value for the test sample $\bm x_n$ with true value
 		\State{$params\gets$ a random hyper-parameter combination}
 		\State{$params\_mse\gets 0$}
 		\For{$k_i\gets 1\ldots K_I$}\Comment{Evaluate $params$ with $K_I$-fold CV}
-			\State{Generate $k$-th inner fold $(D^i_T,D^i_V)$ from $D^o_T$}
+			\State{Generate $k_i$-th inner fold $(D^i_T,D^i_V)$ from $D^o_T$}
 			\State{$model\gets$ a new instance of the model with parameters $params$}
 			\State{Train $model$ on $D^i_T$}
 			\State{$mse\gets$ result of the evaluation of $model$ on $D^i_V$}
 			\State{$params\_mse\gets params\_mse+mse$}
 		\EndFor
 
-		\If{$params\_mse<best\_mse$}\Comment{MSE comparison on $K$-fold CV result}
+		\If{$params\_mse<best\_mse$}\Comment{MSE comparison on $K_i$-fold CV result}
 			\State{$best\_mse\gets params\_mse$}
 			\State{$best\_params\gets params$}
 		\EndIf		
@@ -825,7 +816,11 @@ Where $f_n$ is the predicted value for the test sample $\bm x_n$ with true value
 
 \section{Success Criteria}
 \label{sec:success}
-A successful answer to the first research question entails finding a model whose mean squared error on F5 with trend is smaller than the mean squared error of the Monin-Obukhov similarity theory estimator introduced in section \ref{sec:most_fit}. The second research question is answered by comparing the different evaluation metrics on the ten feature sets (F1 to F5, with and without trend).
+A successful answer to the first research question entails finding a model whose mean squared error on F5 with trend is smaller than the mean squared error of the Monin-Obukhov similarity theory estimator introduced in section \ref{sec:most_fit}.
+
+The second research question is answered by comparing the different evaluation metrics on the ten feature sets (F1 to F5, with and without trend). Note that we cannot use the output of a model to obtain the importance of the features, as this method is not reliable when some of them are correlated [citation], which is a very relevant issue in our case. Trivially, wind speed and temperature at the different levels are very strongly correlated (Pearson's $r$ is above 0.95), and there are other, more complex, correlations, such as between the net radiation and the soil heat flux, or between the soil temperature and the dew point (Pearson's $r$ is respectively 0.75 and 0.79). In spite of the correlations, all these variables contribute to the flux-profile relationships, often in very nuanced ways.
+
+
 
 \chapter{Results}
 todo
@@ -835,7 +830,7 @@ The dataset consists of 17 years of measurements, from January 2001 to December 
 
 Figure \ref{fig:le_season} shows the turbulent latent heat flux versus hour of day both in Winter and Summer, whereas figure \ref{fig:ustar_wind_temp} shows the friction velocity as a function of air temperature and wind speed. The dependency of $u_*$ with the wind speed of figure \ref{fig:ustar_wind} is quite complicated: there are three clear regions with different constant of proportionality and correlation coefficient. The group where the two quantities are almost perfectly correlated corresponds to imputed values for the friction velocity, derived from the wind speed. The three other groups differ widely in the values of the fluxes and radiation; for example, fitting an ordinary least squares model to 1000 bootstraps of the observations with negative net radiation yields an average proportionality coefficient of \num{0.051} with standard deviation \num{1.52e-05}, whereas the same procedure on the complementary set yields an average of \num{0.046} with standard deviation \num{1.40e-05}. Note that this dependency might be related to the observed imbalance in the surface energy budged, usually around 15\% during day time and 100\% during night time at the Cabauw observatory; \cite{cabauwinsitu} notes that the imbalance seems to depend on the speed of wind.
 
-Talking about speed of wind, figure \ref{fig:ustar_wind} shows some measurements exceeding \SI{25}{\meter\per\second}; according to the Beaufort scale, holding umbrellas and walking become hard with wind at \SI{15}{\meter\per\second}, but those measurements are not issues with the data. Figure \ref{fig:cyclone_jeanett} shows the highest wind speed present in the Cesar database to date, corresponding to cyclone Jeanett.
+Talking about speed of wind, figure \ref{fig:ustar_wind} shows some measurements exceeding \SI{25}{\meter\per\second}; according to the Beaufort scale, holding umbrellas and walking become hard with wind at \SI{15}{\meter\per\second}. Those measurements are not issues with the data: figure \ref{fig:cyclone_jeanett} shows the highest wind speed present in the Cesar database to date, corresponding to cyclone Jeanett.
 
 \begin{figure}
     \centering
@@ -846,7 +841,7 @@ Talking about speed of wind, figure \ref{fig:ustar_wind} shows some measurements
         \label{fig:le_winter}
     \end{subfigure}
     \hfill
-    \begin{subfigure}[t]{0.45\textwidth}
+    \begin{subfigure}[t]{0.48\textwidth}
         \centering
         \includegraphics[width=\textwidth]{images/le_summer}
         \caption{Summer}
@@ -859,14 +854,14 @@ Talking about speed of wind, figure \ref{fig:ustar_wind} shows some measurements
 
 \begin{figure}
     \centering
-    \begin{subfigure}[t]{0.45\textwidth}
+    \begin{subfigure}[t]{0.48\textwidth}
         \centering
         \includegraphics[width=\textwidth]{images/ustar_temp}
         \caption{Temperature}
         \label{fig:ustar_temp}
     \end{subfigure}
     \hfill
-    \begin{subfigure}[t]{0.45\textwidth}
+    \begin{subfigure}[t]{0.48\textwidth}
         \centering
         \includegraphics[width=\textwidth]{images/ustar_wind}
         \caption{Wind}
@@ -900,8 +895,7 @@ z & F.D. / G.P. & Log / F.D. & Log / G.P. \\ \hline
 \end{tabular}
 \end{table}
 
-Since Log and G.P. predict the wind speed too, we can compare their predictions to the measured wind speed. Notice that these methods are fitted on the wind speed at all levels, from 10 to 200 meters, but we evaluate them only on the three lowest levels, since that is where we compute the universal functions. Table \ref{tbl:model_wind_errors} shows the squared error between the modeled wind and the true wind speed at the three levels for both models. It is interesting to see that both models are quite accurate at all levels; this allows us to conclude that F.D. is not reliable at 10 meters. Figure \ref{fig:gp_log_perc_err_wind_speed} shows the error as a function of the wind speed; it is interesting to see that G.P. becomes more and more reliable as the wind speed increases. Not only does its error decrease, so does the variance of the error; this seems to confirm that equation \ref{eq:kernel} is a good kernel, considering that at very high wind speed the wind profile is almost perfectly logarithmic.
-
+Since Log and G.P. predict the wind speed too, we can compare their predictions to the measured wind speed. Notice that these methods are fitted on the wind speed at all levels, from 10 to 200 meters, but we evaluate them only on the three lowest levels, since that is where we compute the universal functions. Table \ref{tbl:model_wind_errors} shows the squared error between the modeled wind and the true wind speed at the three levels for both models. It is interesting to see that both models are quite accurate at all levels; this allows us to conclude that F.D. is not reliable at 10 meters.
 
 \begin{table}[]
 \centering
@@ -920,6 +914,7 @@ max & & 53.7541 & 212.3985 & & 106.5623 & 192.9434 & & 80.3531 & 43.4657 \\
 \end{table}
 
 
+Figure \ref{fig:gp_log_perc_err_wind_speed} shows the error as a function of the wind speed. It is interesting to see that G.P. becomes more and more reliable as the wind speed increases; not only does its error decrease, so does the variance of the error. It is possible to give an intuitive explanation for the error of Log: the measurement error of the wind speed is the maximum between \SI{0.1}{\meter\per\second} and 1\%, therefore the error of Log can be attributed almost entirely to uncertainty in the data, whereas G.P. is, possibly, overfitting.
 
 \begin{figure}
     \centering
@@ -929,42 +924,118 @@ max & & 53.7541 & 212.3985 & & 106.5623 & 192.9434 & & 80.3531 & 43.4657 \\
 \end{figure}
 
 
-
-\section{Monin-Obukhov Similarity Theory}
-performance of MOST in table \ref{tbl:most_results}
+Given that the final goal of finding the gradient is to compute the universal functions, for which we already have more or less agreed upon expressions (equation \ref{eq:phi_m_coeff}), it makes sense to compare the error of these expressions when predicting the universal functions (equation \ref{eq:phi_m}) computed with the gradients coming from the three different methods; the best method is, then, the one with the smallest error. Table \ref{tbl:gradient_errors} contains these errors, and shows that Log is the undisputed winner. Not considering the 10 meters level, F.D. is as good as Log, consistently with their very high correlation shown in table \ref{tbl:gradients_corr}.
 
 
 \begin{table}[]
 \centering
-\caption{Evaluation metrics for the Monin-Obukhov estimator}
-\label{tbl:most_results}
-\begin{tabular}{r|l|l}
- & Mean & Std.   \\ \hline
-Mean Squared Error 					& 0.672028  		& 0.031320  \\
-$R^2$ Score									& 0.705471    	& 0.008943   \\
-Mean Absolute Error 					& 0.540632  		& 0.013878   \\
-Median Absolute Error 				& 0.371569 		& 0.015601   \\
-Mean Absolute Percent Error  	& 252.925389 	& 196.086056  \\
-Median Absolute Percent Error	& 28.964847  	& 0.938811
+\caption{Mean squared error of $\phi_m$ (coefficients according to equation \ref{eq:phi_m_coeff}) when predicting the empirical flux-profile relationship (equation \ref{eq:phi_m}), computed with the three methods of calculating the gradient. The errors in second line (F.D. w/o z=10) were computed after discarding the data at the 10 meters level, because we argued the F.D. method is not reliable at that level. We show the error both in the range where the Monin-Obukhov similarity theory is known to be valid (84\% of the total), and the error using all data.}
+\label{tbl:gradient_errors}
+\begin{tabular}{r|c|c}
+Method & MSE ($-2\leq\xi\leq1$) & MSE \\ \hline
+F.D. & 1.994 & 9.322 \\
+F.D. (w/o z=10) & 0.627  & 11.832 \\
+Log & 0.660 & 8.498 \\
+G.P. & 1.213 & 8.899
 \end{tabular}
 \end{table}
+
+To conclude, although F.D. (equation \ref{eq:fd_gradient}) is the most accurate way of computing the profile gradient, it does not allow us to use data at the 10 meters level. Considering that Log (equation \ref{eq:log_gradient}) is very slightly worse, but allows us to include that level (increasing the data available by 50\%!), all the results presented from now on make use of it.
+
+
+\section{Flux-Profile Relationship}
+Figure \ref{fig:most_scatter} shows the wind shear versus the instability parameter, together with the commonly accepted flux-profile relationship and the relationship fitted on our dataset, and in figure \ref{fig:most_zoom} we see the flux-profile relationship restricted to the interval of instability parameter where the Monin-Obukhov similarity theory is valid. Qualitatively, the relationship behaves as expected, going to zero as $\xi$ decreases, linearly increasing in the $0\leq\xi\leq1$ interval, and leveling after that. Refer to section \ref{sec:most_estimator_results} for further details.
+
+negative phim with small |xi|
+
+
+\begin{figure}
+    \centering
+    \begin{subfigure}[t]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/most_full}
+        \caption{Full dataset}
+        \label{fig:most_full}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/most_zoom}
+        \caption{Validity region for the Monin-Obukhov similarity theor.}
+        \label{fig:most_zoom}
+    \end{subfigure}
+    \caption{Wind shear $\phi_m$ versus the instability parameter $\xi$, with the prediction according to equation \ref{eq:phi_m_coeff} in green, and our predictions, following equation \ref{eq:phi_general} with the coefficients being the median values in table \ref{tbl:most_coeffs}, in red.}
+	\label{fig:most_scatter}
+\end{figure}
+
 
 \section{Model Comparison}
 performance of the models
 
 
+\subsection{MOST Estimator}
+\label{sec:most_estimator_results}
+The performance of the MOST estimator is shown in table \ref{tbl:most_results}; the proportion of data for which $-2\leq\xi\leq 1$ is 83.6\%. We see a considerable increase in the MSE when the full dataset is used; this is not surprising, considering that, with $\xi>1$, $\phi_m$ tends to level off, and there are a considerable number of outliers in the range $-20\leq\xi\leq-2$ (see figure \ref{fig:most_full}) that cannot be fitted by the MOST estimator. Figure \ref{fig:most_scatter} shows $\phi_m$ as a function of $\xi$ as computed in our dataset, as well as the predictions of equation \ref{eq:phi_m_coeff} and the fitted MOST estimator.
+
+Table \ref{tbl:most_results} shows the values of the coefficients in equation \ref{eq:phi_general}, when fitted to the region of data where the Monin-Obukhov similarity theory is valid. We note a big difference with the values recommended in \cite{hogstrom88}, as well as most studies on the topic. However, \cite{cabauw_night_most} studied the stable, nocturnal boundary layer at Cabauw, and reported values varying between 0.81 and 0.95 for $a$ and between 2.7 and 3.2 for $b$, depending on the direction of the wind; there is no known explanation for this discrepancy. Although these values were obtained with linear regression, essentially the same method that we applied, no goodness of fit statistics, such as MSE or $R^2$, were reported.
+
 \begin{table}[]
 \centering
-\caption{Evaluation metrics for the Ridge linear regression estimator on F5 with trend}
-\label{tbl:ridge_results_f5t}
-\begin{tabular}{r|l|l}
- & Mean & Std.   \\ \hline
-Mean Squared Error 					& 0.593038  		& 0.048443  \\
-$R^2$ Score									& 0.734663     	& 0.017526   \\
-Mean Absolute Error 					& 0.509204  		& 0.018504   \\
-Median Absolute Error 				& 0.345660 		& 0.009037   \\
-Mean Absolute Percent Error  	& 264.613746 	& 298.463690 \\
-Median Absolute Percent Error	& 27.816959  	& 1.286721
+\caption{Evaluation metrics for the Monin-Obukhov estimator}
+\label{tbl:most_results}
+\begin{tabular}{r|c|c|c|c}
+& \multicolumn{2}{c|}{All} & \multicolumn{2}{c}{$-2\le\xi\le1$} \\
+ & Mean & Std.  & Mean & Std. \\ \hline
+Mean Squared Error 					& 0.672028  		& 0.031320  & 0.332056    & 0.017246     \\
+$R^2$ Score									& 0.705471    	& 0.008943 & 0.605013    & 0.010732       \\
+Mean Absolute Error 					& 0.540632  		& 0.013878 & 0.395410    & 0.007181      \\
+Median Absolute Error 				& 0.371569 		& 0.015601 & 0.282736    & 0.004304      \\
+Mean Absolute Percent Error  	& 252.925389 	& 196.086056 & 184.707665   & 48.260311    \\
+Median Absolute Percent Error	& 28.964847  	& 0.938811 & 24.618438    & 0.729602   
+\end{tabular}
+\end{table}
+
+\begin{table}[]
+\centering
+\caption{Values of the coefficients of the MOST estimator of equation \ref{eq:phi_general} fitted on the data with $-2\leq\xi\leq1$. The minimum values for $c$ and $d$ seem to be outliers, as well as the next smallest value, but the other 8 values are closely clustered together within an interval of about 0.15.}
+\label{tbl:most_coeffs}
+\begin{tabular}{r|c|c|c|c|c|c|c}
+   & Mean       & Std.       & Min.       & 25\%       & 50\%       & 75\%       & Max. \\ \hline
+$a$   & 0.943802  & 0.004228  & 0.935826  & 0.942926  & 0.944624  & 0.946017  & 0.950583 \\
+$b$   & 2.772180  & 0.008216  & 2.758320  & 2.769266  & 2.772188  & 2.778464  & 2.783730 \\
+$c$   & 2.452160  & 0.469983  & 1.246522  & 2.607285  & 2.646705  & 2.674603  & 2.713834 \\
+$d$   & -0.298687  & 0.109407 & -0.601655 & -0.261012 & -0.258147 & -0.255400 & -0.248226
+\end{tabular}
+\end{table}
+
+
+\subsection{Ridge Regression}
+
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{images/ridge_results}
+\caption{Performance of the Ridge regression estimator on the five feature sets with and without trend; the error bars are two standard deviations long in each direction. The solid yellow line is the performance attained by the MOST estimator, and the dashed yellow is that minus two standard deviations.}
+\label{fig:ridge_results}
+\end{figure}
+
+\begin{table}[]
+\centering
+\caption{Evaluation metrics for the Ridge linear regression estimator on the five feature sets augmented with trend.}
+\begin{tabular}{c|r|c|c|c|c}
+& & \multicolumn{2}{c|}{All} & \multicolumn{2}{c}{$-2\le\xi\le1$} \\
+&  & Mean & Std. & Mean & Std.   \\ \hline
+ \multirow{6}{*}{F5} & Mean Squared Error 					& 0.593038  		& 0.048443  & 0.168731    & 0.016571    \\
+& $R^2$ Score									& 0.734663     	& 0.017526 & 0.688497    & 0.029011      \\
+& Mean Absolute Error 					& 0.509204  		& 0.018504 & 0.284076    & 0.011686      \\
+& Median Absolute Error 				& 0.345660 		& 0.009037   & 0.204298    & 0.005318    \\
+& Mean Absolute Percent Error  	& 264.613746 	& 298.463690 & 79.669309   & 30.583787   \\
+& Median Absolute Percent Error	& 27.816959  	& 1.286721  & 19.301579    & 0.565164  \\ \hline
+ \multirow{6}{*}{F4} & Mean Squared Error 					& a & b & 0.168744   & 0.012348   \\
+& $R^2$ Score									& a & b & 0.689096   & 0.018279   \\
+& Mean Absolute Error 					& a & b & 0.284449   & 0.010863   \\
+& Median Absolute Error 				& a & b & 0.205146    & 0.006771   \\
+& Mean Absolute Percent Error  	& a & b & 80.805403  & 34.558653  \\
+& Median Absolute Percent Error	& a & b & 19.327348   & 0.538968  
 \end{tabular}
 \end{table}
 
@@ -972,50 +1043,72 @@ Median Absolute Percent Error	& 27.816959  	& 1.286721
 
 \begin{table}[]
 \centering
-\caption{Evaluation metrics for the k-nearest neighbors estimator on F5 with trend}
+\caption{Evaluation metrics for the k-nearest neighbors estimator on the five feature sets augmented with trend.}
 \label{tbl:knn_results_f5t}
-\begin{tabular}{r|l|l}
- & Mean & Std.   \\ \hline
-Mean Squared Error 					& 0.583102   	& 0.035314  \\ 
-$R^2$ Score									& 0.739219   	& 0.010517   \\
-Mean Absolute Error 					& 0.487180   	& 0.016797   \\
-Median Absolute Error 				& 0.300725   	& 0.011178     \\
-Mean Absolute Percent Error  	& 151.571688	&  55.287673  \\
-Median Absolute Percent Error	& 25.450125   	& 1.270630 
+\begin{tabular}{c|r|c|c|c|c}
+& & \multicolumn{2}{c|}{All} & \multicolumn{2}{c}{$-2\le\xi\le1$} \\
+& & Mean & Std. & Mean & Std.   \\ \hline
+\multirow{6}{*}{F5} & Mean Squared Error 					& 0.583102   	& 0.035314  & 0.187911    & 0.009168    \\ 
+& $R^2$ Score									& 0.739219   	& 0.010517 & 0.653668    & 0.009450      \\
+& Mean Absolute Error 					& 0.487180   	& 0.016797  & 0.314231    & 0.006526     \\
+& Median Absolute Error 				& 0.300725   	& 0.011178  & 0.237316    & 0.005357       \\
+& Mean Absolute Percent Error  	& 151.571688	&  55.287673 & 98.785002   & 39.723715    \\
+& Median Absolute Percent Error	& 25.450125   	& 1.270630  & 21.959704    & 0.538930 \\ \hline
+\multirow{6}{*}{F4} & Mean Squared Error 					& a & b & 0.197570   & 0.006350   \\ 
+& $R^2$ Score									& a & b & 0.635371   & 0.010965   \\
+& Mean Absolute Error 					& a & b & 0.321321   & 0.005622   \\
+& Median Absolute Error 				& a & b & 0.241515   & 0.004917   \\
+& Mean Absolute Percent Error  	& a & b & 98.139450  & 40.602436  \\
+& Median Absolute Percent Error	& a & b & 22.339853    & 0.829702  \\ \hline
 \end{tabular}
 \end{table}
 
 
 \begin{table}[]
 \centering
-\caption{Evaluation metrics for the gradient boosting estimator on F5 with trend}
+\caption{Evaluation metrics for the gradient boosting estimator on the five feature sets augmented with trend.}
 \label{tbl:gb_results_f5t}
-\begin{tabular}{r|l|l}
- & Mean & Std.   \\ \hline
-Mean Squared Error 					& 0.285956	& 0.012074 \\  
-$R^2$ Score									& 0.872323   & 0.006331   \\
-Mean Absolute Error 					& 0.319557   & 0.006457 \\
-Median Absolute Error 				& 0.180583  	& 0.003956   \\
-Mean Absolute Percent Error		& 88.093397	& 53.138612 \\
-Median Absolute Percent Error	& 15.888091	& 0.499692 \\
+\begin{tabular}{c|r|c|c|c|c}
+& & \multicolumn{2}{c|}{All} & \multicolumn{2}{c}{$-2\le\xi\le1$} \\
+\multirow{6}{*}{F5} & Mean & Std. & Mean & Std.   \\ \hline
+& Mean Squared Error 					& 0.285956	& 0.012074 & 0.087484    & 0.007147    \\  
+& $R^2$ Score									& 0.872323   & 0.006331   & 0.838710    & 0.008769    \\
+& Mean Absolute Error 					& 0.319557   & 0.006457 & 0.192329    & 0.007915    \\
+& Median Absolute Error 				& 0.180583  	& 0.003956   & 0.127258    & 0.006362   \\
+& Mean Absolute Percent Error		& 88.093397	& 53.138612  & 43.165082   & 13.711617   \\
+& Median Absolute Percent Error	& 15.888091	& 0.499692 & 12.523625    & 0.535662   \\ \hline
+\multirow{6}{*}{F4} & Mean Squared Error 					& a & b & 0.093117   & 0.006277   \\ 
+& $R^2$ Score									& a & b & 0.828070   & 0.006365   \\
+& Mean Absolute Error 					& a & b & 0.201683      & 0.007324   \\
+& Median Absolute Error 				& a & b & 0.136112   & 0.006557   \\
+& Mean Absolute Percent Error  	& a & b & 45.666477  & 10.974657  \\
+& Median Absolute Percent Error	& a & b & 13.447042   & 0.706335  \\ \hline
 \end{tabular}
 \end{table}
-
 
 
 
 
 \chapter{Discussion}
+even though we predicted phim, the actual interest is in u*. we predict phim to have a direct means of comparing with state of the art
+
 actual constants and coefficients (e.g. von karmans constant) dont really matter, because they are constant and do not affect the ml model 
 
-\section{Limitations and Future Work}
-one of the reasons why MOST is unreliable in stable conditions is because of the difficulty of measuring fluxes
+estimating parameters (von karman, roughness length etc) is very difficult, by using ml we can circumvent the problem (they need a supporting infrastructure even if they want to compute those constants, so not huge downside)
+
+outliers with xi between -20 and -2 mostly belong to z=40 in the morning (between 6 and 12); given what was said in [paper], there is the possibility that they are not in the surface layer, explaining why the c coefficient is higher than expected
+
+one of the reasons why MOST is unreliable in stable conditions is because of the difficulty of measuring fluxes. there are other methods to compute the turbulent fluxes (http://bibliotheek.knmi.nl/knmipubWR/WR87-02.pdf, ), we used eddy corr because that's what in the cesar database
 
 our models can only be used in conditions that are similar to cabauw. most importantly, they are not valid in the oceanic surface layer, because it is very different [citation]
 
-%\bibliographystyle{unsrt}
-\bibliographystyle{plainnat}
+\section{Limitations and Future Work}
+todo
 
+
+%\bibliographystyle{unsrt}
+%\bibliographystyle{plainnat}
+\bibliographystyle{agsm}
 \bibliography{thesis}
 
 \end{document}
