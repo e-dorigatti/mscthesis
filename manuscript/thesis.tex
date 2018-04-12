@@ -778,19 +778,35 @@ $$
 
 Where $f_n$ is the predicted value for the test sample $\bm x_n$ with true value $t_n$, the squared error is $(f_n-t_n)^2$, the absolute error is $\vert f_n-t_n\vert$, the absolute percent error is $100\vert 1-f_n/t_n\vert$. We present both mean and median scores because the former are heavily skewed by outliers. We also present both absolute and percent errors because the latter are easier to interpret, but tend to explode when the true value is very small,\footnote{predicting 1 for a true value of 100 gives a percent error of 99\%, but predicting 100 for a true value of 1 gives, somewhat unfairly, a percent error of 9900\%} a condition that frequently happens in our dataset.
 
-
 \begin{algorithm}
 \caption{Nested cross validation with random hyper-parameter search.}
-
 \label{alg:nested_cv}
+
+
+\algnewcommand\algorithmicinput{\textbf{Input:}}
+\algnewcommand\Input{\item[\algorithmicinput]}
+
+\algnewcommand\algorithmicoutput{\textbf{Output:}}
+\algnewcommand\Output{\item[\algorithmicoutput]}
+
 \begin{algorithmic}
+\Input \\
+\begin{itemize}
+\item[$D$] Dataset
+\item[$K_O$] Number of outer folds
+\item[$K_I$] Number of hidden folds
+\item[$R$] Number of random combinations to try
+\item[$model$] Model to train
+\item[$distrs$] Distribution of each hyper-parameter
+\end{itemize} \\
+\Output Summary statistics computed on the outer validation fold \\
 
 \For{$k_o\gets 1\ldots K_O$}\Comment{Outer $K_O$-fold cross validation}
 	\State{Generate $k_o$-th outer fold $(D^o_T,D^o_V)$ from the dataset $D$}
 	\State{$best\_mse\gets\inf$}
 	\State{$best\_params\gets\bot$}
 	\For{$r\gets 1\ldots R$}\Comment{Find best hyper-parameters on $D^o_T$}
-		\State{$params\gets$ a random hyper-parameter combination}
+		\State{$params\gets$ a random hyper-parameter combination from $distrs$}
 		\State{$params\_mse\gets 0$}
 		\For{$k_i\gets 1\ldots K_I$}\Comment{Evaluate $params$ with $K_I$-fold CV}
 			\State{Generate $k_i$-th inner fold $(D^i_T,D^i_V)$ from $D^o_T$}
