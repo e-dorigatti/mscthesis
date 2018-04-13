@@ -90,36 +90,7 @@ Given that we are considering tangible outcomes of these research projects, the 
 Due to the limited scope of this work, it is not possible to perform a full quantitative data analysis to determine the factors that affect adoption of a software product. Instead, we will perform a literature review to find studies that identified some of these factors, possibly in fields other than Computer Science, and relate these factors to our research question. The outcome can be seen as a set of guidelines that researchers can use to increase the impact of their work, inspired by empirical evidence, as well as the author's own experience. 
 
 * Results
-There are five categories of actions that the authors of an innovative project in Computer Science can take to increase the impact of their work, which are, in no particular order: open access, documentation, tutorials, technology, and use case.
-
-The following table summarizes the impact of these categories in Everett's framework for the diffusion of innovation, with an /x/ marking the cells where there is an effect. The row and column scores are the number of /x/'s that are present in each row or column.
-
-
-|                    | Open Access | Documentation | Tutorials | Technology | Use Case | Score |
-|--------------------+-------------+---------------+-----------+------------+----------+-------|
-|                  / | <           |               |           |            |          | <     |
-|                <r> | <c>         | <c>           | <c>       | <c>        | <c>      | <c>   |
-| Relative Advantage |             |               |           |            | x        | 1     |
-|      Compatibility |             |               |           | x          |          | 1     |
-|         Complexity |             | x             | x         | x          |          | 3     |
-|       Trialability | x           | x             | x         | x          |          | 4     |
-|      Observability | x           |               |           |            | x        | 2     |
-|--------------------+-------------+---------------+-----------+------------+----------+-------|
-|          Knowledge |             |               |           |            | x        | 1     |
-|         Persuasion | x           |               |           |            | x        | 2     |
-|           Decision | x           | x             |           | x          |          | 3     |
-|     Implementation | x           | x             |           | x          |          | 3     |
-|       Confirmation | x           |               |           |            |          | 1     |
-|--------------------+-------------+---------------+-----------+------------+----------+-------|
-|              Score | 6           | 4             | 2         | 5          | 4        |       |
-
-
-todo discuss scores
-todo should be in the conclusions?
-note: relative advantage is mainly argued in the publication
-almost everything can influence it
-
-These categories, and how exactly they impact the diffusion of innovation, are described in the next sections.
+todo write something
 
 ** Open Access
 Here, we adopt a more broad definition of open access than the one commonly used when talking about scientific work: we consider varying degrees of openness, according to what assets are made available by the authors, whereas the commonly used definition of open access refers only to the publication. Cumulatively, in order of importance, they are:
@@ -142,7 +113,6 @@ Nowadays, programmers rarely write everything from scratch; instead, they make h
 Often, there are many competing technologies that can be used to perform any given task; choosing one among them is very important, because they are not entirely compatible with one another. Switching to a new one later on often requires a lot of work, and, possibly, a redesign of the system, or parts thereof. This is very clearly related to the compatibility of an innovation with the existing system used by the potential adopters, as well as their knowledge about the technologies used to implement the innovation. This, in turn, reflects on the implementation stage of the innovation-decision process, as higher compatibility is reflected in less work to integrate the innovation with the other parts of the systems. These factors should also be considered in the decision of whether to adopt the innovation, although this heavily depends on the computer literacy of the decision makers themselves.
 
 Some technologies can be so innovative and disruptive that the hype surrounding them affects the knowledge and persuasion stage, as well. Recent examples of this phenomenon are the Blockchain and Deep Learning: everybody is talking about them, because they are the solution of every problem! Or so the saying goes... This cargo cult is, in part, the result of ignorance and/or irrationality on the part of potential adopters, and, in part, because of the very disruptiveness of these innovations, so the community has to learn proper use cases by applying them to all sorts of problems. In spite of this, we feel that evaluating the goodness of an innovation on the basis of the technologies it uses is very superficial, and using a specific technology in order to reach the largest amount of people is more of a marketing decision than research.
-
 
 ** Documentation and Comments
 In the Computer Science field, documentation refers to a textual description in natural language of the parts composing a software, describing how they work, what they need to work correctly, how they can fail, and so on. All of this is clear to the programmer who wrote a particular piece of code, but a programmer seeing this code for the first time often has to put considerable effort into understanding this information, which is obviously essential in order to be able to use and extend such software.
@@ -179,6 +149,34 @@ previous work showed that scientists do not share for altruistic reasons, but th
 
 
 * Discussion and Conclusion
+We introduced five categories of actions that the authors of an innovative project in Computer Science can take to increase the impact of their work, which are, in no particular order: open access, documentation, tutorials, technology, and use case. The following table summarizes the impact of these categories in Everett's framework for the diffusion of innovation, with an /x/ marking the cells where there is an effect. The row and column scores are the number of /x/'s that are present in each row or column.
+
+
+|                    | Open Access | Documentation | Tutorials | Technology | Use Case | Score |
+|--------------------+-------------+---------------+-----------+------------+----------+-------|
+|                  / | <           |               |           |            |          | <     |
+|                <r> | <c>         | <c>           | <c>       | <c>        | <c>      | <c>   |
+| Relative Advantage |             |               |           |            | x        | 1     |
+|      Compatibility |             |               |           | x          |          | 1     |
+|         Complexity |             | x             | x         | x          |          | 3     |
+|       Trialability | x           | x             | x         | x          |          | 4     |
+|      Observability | x           |               |           |            | x        | 2     |
+|--------------------+-------------+---------------+-----------+------------+----------+-------|
+|          Knowledge |             |               |           |            | x        | 1     |
+|         Persuasion | x           |               |           |            | x        | 2     |
+|           Decision | x           | x             |           | x          |          | 3     |
+|     Implementation | x           | x             |           | x          |          | 3     |
+|       Confirmation | x           |               |           |            |          | 1     |
+|--------------------+-------------+---------------+-----------+------------+----------+-------|
+|              Score | 6           | 4             | 2         | 5          | 4        |       |
+
+
+The score of each category can be understood as an informal measure of how big of an impact that category has on the diffusion of an innovation. Based on the scores, the most impactful thing that authors can do to favor the diffusion of their work is to embrace open access: the more things potential adopters can access, the less uncertainty they have about the merits of an innovation. The next most important thing is to use a technology that is well known and supported, otherwise the benefits of the innovation will be offset by the increased effort that adopters have to commit to use the innovation. Next, the authors should focus on providing good documentation, and a persuasive use case. They have the same impact, but on very different characteristics: the former mainly helps the adopters in making practical use of the innovation, whereas the latter mainly impacts the decision process. Finally, tutorials can reduce the complexity perceived by potential adopters, and guide them during the first steps of using the innovation. On the other hand, the presence of tutorials hardly influences the innovation-decision process.
+
+The scores computed across rows indicate how easy it is to influence a certain attribute of the innovation, or stage of the decision process, where easy refers to the number of actions that can be taken to influence it. It is much easier to improve the trialability of the innovation, than to increase its compatibility with other systems. Similarly, bringing the innovation to potential adopters is much harder than influence the decision stage. Note that, according to our scores, the relative advantage is very hard to argue to potential adopters. This is because it is mainly argued in the publication, which we did not consider. Moreover, the relative advantage can manifest under all these categories, depending on the adopters' attitude and the competing innovations: if all of them use arcane technologies, but the innovation uses modern and well known ones, then the technology is one of the relative advantages of such innovation. We also note that some attributes are correlated: for example, improved trialability translates to easier implementation, and the ease of implementation should be considered when deciding whether to adopt the innovation.
+
+A fundamental assumption that we made in computing the scores as a simple sum is that all characteristics of an innovation are equally important for its diffusion, which is arguable. Nonetheless, this is the best we can do without making even stronger assumptions, therefore we leave the weighting of the characteristics for future work. It should also be noted that each category takes a different amount of effort to be put into practice, so this is another factor that should be considered when weighting them. For example, providing a tutorial, although not important in our framework, can often be done in a few hours worth of work.
+
 Open science [citation] advocates for open access to publications, data, code, education, and peer review; in this work we follow a similar line of thought, but do not argue about open education nor open peer review, as they are not relevant to our research question.
 
 Because of the anecdotal nature of the results presented here, we stress the need of corroborating them with more solid evidence coming from qualitative investigations of this topic. Given that many guidelines are already being followed, to varying degrees, by many branches of computer science, there is ample opportunity for collecting data related to this topic.
