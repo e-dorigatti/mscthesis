@@ -110,6 +110,10 @@ problem: how to stand out among all the noise? (basically the knowledge part of 
     https://link.springer.com/article/10.1007/s10961-014-9375-6
         open science
         we align with the pragmatic view of open science
+    https://link.springer.com/chapter/10.1007/978-0-387-35404-0_11
+        "what's wrong with the DOI?"
+        focuses on EDI (electronic data interchange) in the IT field
+        we focus on much smaller systems, therefore the complexity in EDI is not our concern
     - reproducibility
           p-hacking, etc.
     - open source work (slightly related to the previous point)
