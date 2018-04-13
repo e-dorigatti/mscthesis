@@ -60,7 +60,7 @@ In stark contrast to the traditional, top-down approach of science, recent devel
 todo more fluff about ml ?
 
 \section{Research Question}
-Currently, limitations of the validity of the Monin-Obukhov similarity theory are not believed to be a likely explanation for the high scatter that is found in experimental studies, unless in highly stable conditions \cite{basicatm}. With the availability of micro-meteorological data from specialized observation sites such as Cabauw, in the Netherlands, and the recent developments in Machine Learning, this conjecture can be finally put to the test. More specifically, we pose the following \\
+Currently, limitations of the validity of the Monin-Obukhov similarity theory are not believed to be a likely explanation for the high scatter that is found in experimental studies, unless in highly stable conditions \citep{basicatm}. With the availability of micro-meteorological data from specialized observation sites such as Cabauw, in the Netherlands, and the recent developments in Machine Learning, this conjecture can be finally put to the test. More specifically, we pose the following \\
 
 \textbf{Research Question 1:} Is it possible to use the data from the Cesar database to improve the Monin-Obukhov model of the flux-profile relationships, by using more predictors besides the instability parameter? \\
 
@@ -446,7 +446,71 @@ f(\bm x)=\sum_{k=1}^K w_{(k)}\cdot\bm t_{(k)}
 Note that the k-nearest neighbors algorithm does not have parameters, only hyper\hyp{}parameters: $K$ itself, the distance function, and the weighting scheme. Typical distance functions are the Manhattan distance $d(\bm u,\bm v)=\sum_{d=1}^D\vert u_d-v_d\vert$ and the squared Euclidean distance $d(\bm u,\bm v)=\sum_{d=1}^D(u_d-v_d)^2$, and typical weights are uniform $w_{(k)}=1/K$ and based on distance $w_{(k)}=d(\bm x,\bm x_{(k)})/\sum_{k^\prime=1}^K d(\bm x,\bm x_{(k^\prime)})$.
 
 \subsection{Gradient Boosted Trees}
-todo
+Gradient boosting \citep{gradientboosting} is a general method of combining several weak predictors in order to obtain a stronger one. The final prediction for a sample is obtained as a weighted average of the predictions of the individual models:
+
+\begin{equation}
+\label{eq:gboost}
+f_M(\bm x)=\sum_{m=1}^M \beta_m h(\bm x;\bm\theta_m)
+\end{equation}
+
+Each model $h_m$ and its weight $\beta_m$ are found by improving the predictions of $f_{m-1}$:
+
+\begin{equation}
+\label{eq:gboostjoint}
+(\beta_m, \bm\theta_m)=\argmin_{\bm\theta,\beta}\sum_{n=1}^N L\left(
+t_n, f_{m-1}(\bm x_n)+\beta h(\bm x_n,\bm\theta)
+\right)
+\end{equation}
+
+Where $L$ is the loss function, such as the squared error introduced previously. This optimization problem can be challenging, depending on the specific form of $h_m$ and $L$. Actually, equation \ref{eq:gboostjoint} is equivalent to gradient descent in function space\footnote{meaning that you actually modify the function itself, not its parameters, as we did in section \ref{sec:regression_fit}. This provided that the parametric function $h$ is able to represent the gradient} \citep{boostinggd,greedyboosting}. This gradient can be computed explicitly on the $N$ training points, but we do not know how to compute it on the other points that are not in the training set\footnote{this is the essence of gradient descent in function space, since a function is defined for every point (at least the ones we consider in Machine Learning)}. The fundamental idea is to find a model that can predict this gradient, by training it on the dataset. This model is exactly $h$ with parameters $\bm\theta_m$:
+
+\begin{equation}
+\label{eq:gbtheta}
+\bm\theta_m=\argmin_{\bm\theta}\sum_{n=1}^N \left[
+-g_m(\bm x_n)-h(\bm x_n,\bm\theta)
+\right]^2
+\end{equation}
+
+With $g_m$ being the gradient of $L$ with respect to $f_{m-1}$:
+
+\begin{equation}
+\label{eq:gbgrad}
+g_m(\bm x_n)=\frac{\partial L(t_n,f_{m-1}(\bm x_n))}{\partial f_{m-1}(\bm x_n)}
+\end{equation}
+
+Then, the step size $\beta_m$ is obtained by line search, i.e. minimizing the loss function in the direction of the gradient:
+
+\begin{equation}
+\label{eq:gbbeta}
+\beta_m=\argmin_{\beta}\sum_{n=1}^N L(t_n, \beta h(\bm x_n,\theta_m))
+\end{equation}
+
+This is now a tractable problem, since \ref{eq:gbgrad} can be computed easily, and both \ref{eq:gbtheta} and \ref{eq:gbbeta} are simple regression problems.
+
+If $L(y_n,t_n)=(y_n-t_n)^2/2$, we have that $-g_m(\bm x_n)=f_{m-1}(\bm x_n)-t_n$, or, in other words, we are creating a new model by counteracting the errors of the current model! Other popular loss functions are the least absolute deviation, $L(y_n,t_n)=\vert y_n-t_n\vert$, in which case $-g_m=sign(t_n-f_{m-1}(\bm x_n))$, and the Huber loss:
+
+\begin{equation}
+\label{eq:huberloss}
+L_\delta(t_n,y_n)=\begin{cases}
+\frac{1}{2}(y_n-t_n)^2 & \vert y_n-t_n \vert \leq \delta \\
+\delta(\vert y_n-t_n\vert-\frac{1}{2}\delta) & \vert y_n-t_n \vert > \delta \\
+\end{cases}
+\end{equation}
+
+Which is robust to outliers as least absolute deviation, but does not penalize small errors too much, like least squares. WIn this case,
+
+\begin{equation}
+-g_m(\bm x_n)=\begin{cases}
+t_n-y_n & \vert t_n-y_n\vert\leq\delta \\
+\delta\cdot sign(t_n-y_n) & \vert t_n-y_n\vert>\delta
+\end{cases}
+\end{equation}
+
+In summary, the gradient boosting algorithm starts with a simple prediction $f_0$, such as the average of the true values, builds a model of the form in equation \ref{eq:gboost} by iteratively applying equations \ref{eq:gbtheta} and \ref{eq:gbbeta}.
+
+A popular choice is to use decision trees for $h$. Often, an additional \emph{learning rate} parameter is introduced to shrink the $\beta$ coefficients. Other hyper-parameters for this algorithm are $M$, the the number of boosting steps to perform, the number of examples to use to compute equations \ref{eq:gbtheta} and \ref{eq:gbbeta}, the number of features used to build the trees, their maximum depth, and so on.
+
+A popular extension to vanilla gradient boosting is \emph{extreme gradient boosting} \citep{xgboost}, which essentially adds regularization to the loss function, helping to reduce overfitting, and provides better scalability.
 
 \subsection{Gaussian Processes}
 todo also mention differentiation
@@ -745,7 +809,7 @@ Learning rate & log$_{10}$-uniform & From $10^{-3}$ to $10^0$ \\
 Number of features & Uniform & All possible values \\
 Maximum depth & Uniform & From 4 to 12 \\
 Sub-sampling factor & Uniform & From 25\% to 100\% \\
-Loss function & Uniform & Least squares, least absolute deviation, \newline Huber loss \\
+Loss function & Uniform & Least squares, least absolute deviation, \newline Huber loss (equation \ref{eq:huberloss}) \\
 $\delta$ (for the Huber loss) & Uniform & From 1\% to 99\%
 \end{tabularx}
 \end{table}
