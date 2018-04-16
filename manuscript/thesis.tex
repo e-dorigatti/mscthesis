@@ -23,6 +23,8 @@
 \DeclareMathOperator*{\argmin}{argmin}
 \DeclareMathOperator*{\argmax}{argmax}
 
+\setcitestyle{authoryear, open={(},close={)}}
+
 \begin{document}
 
 \title{Thesis}
@@ -332,7 +334,7 @@ The solution to this problem is to repeatedly perform this partitioning procedur
 
 Regardless of the method used, the final estimate of the performance is the average of the estimates obtained from the individual trials. Every method has different properties regarding both the bias and the variance of the estimates, and there is considerable controversy on which method should be used in which situation. For example, \cite{cv_bootstrap} recommends using 10-fold cross validation for comparing models, because, although its estimate of the performance is biased, it has lower variance compared to bootstrapping; however, \cite{no_unbiased_cv} show that it is not possible to obtain an universal unbiased estimate of the variance of k-fold cross validation. \cite{cvmyths} further discusses this issue, and debunks some myths and commonly held misconceptions about cross validation, including the belief, consequent \cite{cv_bootstrap}, that 10-fold cross validation is always the best choice. Generally, there is a tradeoff in choosing the value of k, as high values yield estimates with lower bias, but higher variance \citep{cv_survey}, and are more computationally intensive.
 
-nested cv \cite{nested_cv}
+todo nested cv \cite{nested_cv}
 
 \subsection{Parameter Estimation for Regression}
 \label{sec:regression_fit}
@@ -342,6 +344,7 @@ In this section, we describe a general framework, rooted in Bayesian statistics,
 A common assumption in the regression setting is that the observations are corrupted by additive Gaussian white noise, i.e. $t_n=y_n+\epsilon_n$, where $y_n$ is the "true" value, and $\epsilon_n\sim\mathcal{N}(0,\beta^{-1})$ is the noise. Let $f_n=f(\bm x_n;\bm{\theta})$ be the model's prediction for the sample $\bm x_n$, then we can write the probability of observing $t_n$, assuming that $f_n=y_n$, as:
 
 \begin{equation}
+\label{eq:model_pred_distrib}
 p(t_n\vert \bm{x_n},\bm\Theta)=\mathcal{N}(t_n\vert f(\bm{x_n};\bm\theta),\beta^{-1})
 \end{equation}
 
@@ -426,6 +429,7 @@ A simple way to approach this problem is to choose some possible values for each
 More sophisticated techniques treat hyper-parameter optimization as a regression problem, and use supervised machine learning to predict the performance of a given hyper-parameter combination, and to guide the search accordingly \citep{hyperopt}. Clearly, one should use models that are not sensitive to their own hyper-parameter setting, or the problem is just moved! For this reason, popular algorithms that are used for this are evolutionary algorithms and Bayesian non-parametric models.
 
 \subsection{Ridge Regression}
+\label{sec:ridge}
 A linear regression model has the form $f(\bm x_n;\bm\theta)=\bm\theta^\intercal\bm x_n$; ridge regression is simply L2-regularized linear regression. This model is simple enough that the solution for equation \ref{eq:least_squares} can be found analytically in closed form:
 
 \begin{equation}
@@ -433,7 +437,7 @@ A linear regression model has the form $f(\bm x_n;\bm\theta)=\bm\theta^\intercal
 \bm\theta^*=(\bm X^\intercal\bm X+\lambda\bm I)^{-1}\bm X^\intercal\bm t
 \end{equation}
 
-Notice that the term \emph{linear} in linear regression refers to linearity with respect to the parameters, not the features. In fact, new features can be added through the use of a possibly non-linear feature mapping $\phi:\mathbb{R}^D\rightarrow\mathbb{R}^M$, such that $\bm x^\prime_n=\phi(\bm x_n)=\left[\phi_1(\bm x_n),\ldots,\phi_M(\bm x_n)\right]^\intercal$. Then, the model parameters can be fitted to the augmented training set $\bm X^\prime$. A typical feature added is a bias $\phi_1(\bm x)=1$.
+Notice that the term \emph{linear} in linear regression refers to linearity with respect to the parameters, not the features. In fact, new features can be added through the use of a possibly non-linear feature mapping $\phi:\mathbb{R}^D\rightarrow\mathbb{R}^M$, such that $\bm x^\prime_n=\phi(\bm x_n)^\intercal=\left[\phi_1(\bm x_n),\ldots,\phi_M(\bm x_n)\right]^\intercal$. Then, the model parameters can be fitted to the augmented training set $\bm\Phi=\bm X^\prime$, where $\bm\Phi$ is called the \emph{design matrix}. A typical feature added is a bias $\phi_1(\bm x)=1$.
 
 \subsection{k-Nearest Neighbors}
 The k-nearest neighbor model \cite{knn} predicts a value for a sample $\bm x$ by averaging the target values of the $K$ training samples that are closest to $\bm x$, possibly weighted by distance or some other metric. Let $\bm t_{(1)},\ldots,\bm t_{(k)}$ be the target values of the $K$ training samples closest to $\bm x$ according to a distance metric $d:\mathbb{R}^D\rightarrow\mathbb{R}$, then we have
@@ -513,10 +517,69 @@ A popular choice is to use decision trees for $h$. Often, an additional \emph{le
 A popular extension to vanilla gradient boosting is \emph{extreme gradient boosting} \citep{xgboost}, which essentially adds regularization to the loss function, helping to reduce overfitting, and provides better scalability.
 
 \subsection{Gaussian Processes}
-todo also mention differentiation
+A Gaussian Process (GP) is a collection of an infinite number of random variables, such that the joint distribution of any finite subset of them is Gaussian. Intuitively, this allows us to define a distribution over functions, since there is a random variable for every point of the input space. We can sample a function out of a GP by obtaining the random variables at the points of interest; their distribution is a (multivariate) Gaussian, with a certain mean and covariance, and a sample from this distribution contains the values of the sampled function at the points we queried. This process is expressed as follows:
 
-\subsection{Neural Networks}
-todo
+\begin{equation}
+\label{eq:gp_marg}
+p(\bm y\vert\bm X)=\int p(\bm y\vert \bm f)p(\bm f\vert\bm X)\text{d}f
+\end{equation}
+
+Where $\bm X$ are the query points, $\bm f$ a function sampled from the GP, and $\bm y$ the values of the function. By definition of GP, all the distributions in equation \ref{eq:gp_marg} are Gaussian, since the Gaussian distribution is self-conjugate. A GP is just a way of computing the mean and covariance of $\bm f$ given $\bm X$, i.e. $p(\bm f\vert\bm X)$; $\bm f$ is then a multivariate Gaussian, which we can manipulate as usual.
+
+Consider the setting of ridge regression described in section \ref{sec:ridge}, where $\bm y=f(\bm X;\bm\theta)=\bm\Phi\bm\theta$, with $\bm\Phi$ being the design matrix. Recall that in section \ref{sec:regression_fit} we introduced the Maximum A Posteriori estimation method by using a prior distribution on the model parameters $\bm\theta$; this makes $\bm y$ a random variable itself. If we use an isotropic Gaussian for $\bm\theta$, we have that the distribution of $\bm y$ is again Gaussian with mean
+
+\begin{equation}
+\mathbb{E}[\bm y]=\mathbb{E}[\bm\Phi\bm\theta]=\bm\Phi\mathbb{E}[\bm\theta]=\bm 0
+\end{equation}
+
+and covariance
+
+\begin{equation}
+\text{cov}[\bm y]=\mathbb{E}[\bm y\bm y^\intercal]
+=\bm\Phi^\intercal\mathbb{E}[\bm\theta^\intercal\bm\theta]\bm\Phi
+=\alpha^{-1}\bm\Phi^\intercal\bm\Phi=\bm K
+\end{equation}
+
+Where $\alpha$ is the precision of the prior on $\bm\theta$. This is a simple GP with zero mean, and whose covariance between any two points can be computed as the dot product of their features.
+
+In general, we can use any function $k$ to compute the covariance between two input points, as long as the resulting matrix $\bm K$, with $K_{ij}=k(\bm x_i,\bm x_j)$ is symmetric and positive semi-definite\footnote{this means that $\bm K^\intercal=\bm K$ and $\bm v^\intercal\bm K\bm v\geq 0$ for any $\bm X$ (used to compute $\bm K$) and $\bm v$. This condition is necessary for $\bm K$ to be a valid covariance matrix}. We call any such function  \emph{kernel}, a function $k:\mathbb{R}^d\times\mathbb{R}^d\rightarrow\mathbb{R}$ that, intuitively, expresses the similarity of any two input vectors. Mercer's theorem guarantees that for every symmetric positive-definite kernel there exists a basis function $\phi$, such that the kernel corresponds to the dot product in the space generated by $\phi$. In practice, this means that we do not have to explicitly define $\phi$, and that we can even use basis functions that create an infinite dimensional space. Commonly used kernels are the radial basis function kernel:
+
+\begin{equation}
+k(\bm x, \bm x^\prime)=\exp\left(-\frac{\Vert\bm x-\bm x^\prime\Vert^2}{2\sigma^2}\right)
+\end{equation}
+
+where $\Vert\bm x-\bm x^\prime\Vert^2=\sum_d(\bm x_d-\bm x_d^\prime)^2$ is the squared Euclidean distance, and which incidentally corresponds to an infinite dimentional basis function, and the linear kernel:
+
+\begin{equation}
+k(\bm x, \bm x^\prime)=\sigma^2\bm x^\intercal\bm x^\prime
+\end{equation}
+
+Furthermore, certain operations on a kernel generate another valid kernel, and kernels can be combined in certain ways to produce a new kernel. For example, the product of a kernel with a positive constant is a valid kernel, the sum and product of two kernels are valid kernels, etc. Generally, a kernel can have parameters, which we denote, as usual, as $\bm\theta$.
+
+In order to use a Gaussian Process for inference (in the regression setting), we need to compute the predictive distribution $p(\bm y\vert\bm X, \bm t, \bm X^*,\bm\theta) $, where $\bm X^*$ is the matrix containing the vectors for which we want to predict the value $\bm y$. We know that the predictive distribution is Gaussian, therefore its mean $\bm\mu_{\bm y}$ and covariance $\bm\Sigma_{\bm y}$ can be obtained relatively easily, resulting in:
+
+\begin{equation}
+\label{eq:gp_pred_mean}
+\bm\mu_{\bm y}=K_{\bm\theta}(\bm X^*,\bm X) K_{\bm\theta}(\bm X,\bm X)^{-1}\bm t
+\end{equation}
+
+\begin{equation}
+\bm\Sigma_{\bm y}=K_{\bm\theta}(\bm X^*,\bm X^*)-K_{\bm\theta}(\bm X^*,\bm X)^\intercal K_{\bm\theta}(\bm X, \bm X)^{-1}K_{\bm\theta}(\bm X,\bm X^*)
+\end{equation}
+
+Where $K_{\bm\theta}(\bm A,\bm B)$ is a matrix whose $(i,j)$ cell equals to $k(A_i,B_j;\bm\theta)$. From these formulas, note that in order to use GPs, one needs to remember the kernel matrix, of size $N^2$ and invert it, an operation which has a computational complexity of $O(N^3)$; this makes GPs, and any method based on kernels, hard to scale up.
+
+Up until now, we assumed the kernel was fixed, and treated $\bm\theta$ as hyper-parameters. We could use one of the methods described in section \ref{sec:cv} to find their values, but the Bayesian framework that we used to derive GP allows us to find $\bm\theta$, too, by maximizing $\log p(\bm t\vert\bm X,\bm\theta)$\footnote{i.e. the logarithm of equation \ref{eq:gp_marg}, usually called log-marginal-likelihood since we marginalized $\bm f$} with respect to $\bm\theta$. This function often has many local maxima, and is usually optimized by means of gradient descent.
+
+Finally, the derivative of a GP is itself a GP, whose mean is \citep{gp_diff}:
+
+\begin{equation}
+\label{eq:gp_gradient}
+\frac{\partial\bm y}{\partial\bm X_*}=\frac{\partial K_{\bm\theta}(\bm X_*,\bm X)}{\partial\bm X_*}K_{\bm\theta}(\bm X,\bm X)^{-1}\bm t
+\end{equation}
+
+We invite the reader to refer to \cite[Chapter~6]{bishop} for an in-depth treatment of kernel methods, including Gaussian Processes.
+
 
 \chapter{Method}
 This chapter describes how the data is collected (section \ref{sec:data_collection}) and used to re-create the flux-profile relationships (section \ref{sec:profiles}), as well as their prediction based on the Monin-Obukhov similarity theory (section \ref{sec:most_fit}). Then, we describe the main contribution of this thesis, namely how their prediction can be improved using machine learning techniques (section \ref{sec:model_fit}). Finally, we describe how the evaluation is performed (section \ref{sec:perf_eval}), and explicitly state the necessary criteria for a successful answer to the research questions (section  \ref{sec:success}).
@@ -690,19 +753,11 @@ Where $\mathbbm{1}[P]$ is an indicator function whose value is 1 iff the predica
 	\label{fig:kernel}
 \end{figure}
 
-
-Our final goal is to obtain the derivative of the predictive posterior mean, and for this we need to derive equation \ref{eq:kernel} with respect to $z_1$:
+Our final goal is to obtain the derivative of the predictive posterior mean, which can be done using equation \ref{eq:gp_gradient}; for this we need to derive equation \ref{eq:kernel} with respect to $z_1$:
 
 \begin{equation}
 \label{eq:kernel_derivative}
 \frac{\partial k(z_1,z_2)}{\partial z_1}=\frac{z_2-z_1}{\sigma_0^2}\exp\left(-\frac{(z_1-z_2)^2}{\sigma_0^2}\right)+\frac{z_2}{2\sqrt{\sigma_1^2+z_1z_2}}+\sigma_2^2\mathbbm{1}[z_1=z_2]
-\end{equation}
-
-And plug this into equation \ref{todo} to obtain
-
-\begin{equation}
-\label{eq:gp_gradient}
-\frac{\partial\overline{f}(\bm x_*)}{\partial\bm x_*}=\frac{\partial K(\bm x_*,\bm X)}{\partial\bm x_*}K(\bm X,\bm X)^{-1}\bm t
 \end{equation}
 
 \section{Monin-Obukhov Similarity Theory}
@@ -898,7 +953,7 @@ Where $f_n$ is the predicted value for the test sample $\bm x_n$ with true value
 \label{sec:success}
 A successful answer to the first research question entails finding a model whose mean squared error on F5 with trend is smaller than the mean squared error of the Monin-Obukhov similarity theory estimator introduced in section \ref{sec:most_fit}.
 
-The second research question is answered by comparing the different evaluation metrics on the ten feature sets (F1 to F5, with and without trend). Note that we cannot use the output of a model to obtain the importance of the features, as this method is not reliable when some of them are correlated [citation], which is a very relevant issue in our case. Trivially, wind speed and temperature at the different levels are very strongly correlated (Pearson's $r$ is above 0.95), and there are other, more complex, correlations, such as between the net radiation and the soil heat flux, or between the soil temperature and the dew point (Pearson's $r$ is respectively 0.75 and 0.79). In spite of the correlations, all these variables contribute to the flux-profile relationships, often in very nuanced ways.
+The second research question is answered by comparing the different evaluation metrics on the ten feature sets (F1 to F5, with and without trend). Note that we cannot use the output of a model to obtain the importance of the features, as this method is not reliable when some of them are correlated \citep{rf_bias,rf_corr_imp}, which is a very relevant issue in our case. Trivially, wind speed and temperature at the different levels are very strongly correlated (Pearson's $r$ is above 0.95), and there are other, more complex, correlations, such as between the net radiation and the soil heat flux, or between the soil temperature and the dew point (Pearson's $r$ is respectively 0.75 and 0.79). In spite of the correlations, all these variables contribute to the flux-profile relationships, often in very nuanced ways.
 
 
 
