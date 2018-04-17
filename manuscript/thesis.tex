@@ -27,7 +27,7 @@
 
 \begin{document}
 
-\title{Thesis}
+\title{Predicting the momentum flux-profile relationship from large macro weather parameters}
 \author{Emilio Dorigatti}
 
 \maketitle
@@ -963,7 +963,35 @@ The second research question is answered by comparing the different evaluation m
 todo
 
 \section{Exploratory Data Analysis}
-The dataset consists of 17 years of measurements, from January 2001 to December 2017, for a total of 3 436 416 observations. Unfortunately, most of these observations contain unreliable measurements, as detailed in section \ref{sec:data_filter}, leaving only  1 561 973 usable records. Additionally, the turbulent fluxes measured in March 2016 exhibit a much wider range than the March measurements of other years. Roughly 15 to 20\% of the measurements in that month are suspicious; since the Cesar database contains a separate dataset every month, we decided to completely exclude the dataset of March 2016, fearing for a systematic error somewhere in the process. Moreover, 6 measurements of the turbulent latent heat are way above the acceptable range, 4538 do not have a dew point, and 247 656 do not have a soil temperature; this leaves 1 301 574 usable records.
+The dataset consists of 17 years of measurements, from January 2001 to December 2017, for a total of 3 436 416 observations. The Cesar database contains one tar-gzipped archive for every month, whose content is a single data file in the netCDF format \citep{netcdf}. The archives contain a subset of related variables, and we used the datasets containing surface fluxes, tower meteorological profiles, meteorological surface  data, and soil heat, for a total of 816 datasets covering 204 months.
+
+Unfortunately, most of these observations contain unreliable measurements, as detailed in section \ref{sec:data_filter}, leaving only  1 561 973 usable records. Additionally, the turbulent fluxes measured in March 2016 exhibit a much wider range than the March measurements of other years. Roughly 15 to 20\% of the measurements in that month are suspicious; since the Cesar database contains a separate dataset every month, we decided to completely exclude the dataset of March 2016, fearing for a systematic error somewhere in the process. Moreover, 6 measurements of the turbulent latent heat are way above the acceptable range, 4538 do not have a dew point, and 247 656 do not have a soil temperature; this leaves 1 301 568 usable records. Table \ref{tbl:col_summary} summarizes the weather parameters that were used to compute the similarity functions and/or as features for the models.
+
+\begin{table}[]
+\centering
+\caption{Basic descriptive statistics of the features in the Cesar database (top group), and features that were computed by us (bottom group).  Note that the relative humidity was computed by the Cesar consortium, and 16833 records  (1.3\%) have a relative humidity above 100\%.}
+\label{tbl:col_summary}
+\begin{tabular}{r|rrrrrrr}
+& \textbf{Mean} & \textbf{Std.} & \textbf{Min.} & \textbf{25\%} & \textbf{50\%} & \textbf{75\%} & \textbf{Max.} \\ \hline
+\textbf{H} & 3.66 & 47.44 & -460.00 & -25.96 & -14.84 & 28.06 & 479.64 \\
+\textbf{LE} & 74.76 & 114.18 & -392.71 & -5.02& 23.92 & 132.66 & 748.69 \\
+\textbf{$u_*$} & 0.31 & 0.15 & 0.10 & 0.20 & 0.28 & 0.39 & 1.55 \\
+\textbf{Wind} & 5.86 & 2.66 & 1.00 & 3.96 & 5.43 & 7.23 & 29.10 \\
+\textbf{Air Temp.} & 284.70 & 6.34 & 259.65 & 280.15 & 284.75 & 289.25 & 306.85 \\
+\textbf{Soil Temp.} & 284.32 & 5.65 & 271.89 & 279.602 & 284.201 & 289.039 & 302.586 \\
+\textbf{Dew Point} & 280.33 & 5.79 & 195.57 & 276.62 & 280.54 & 284.57 & 296.75 \\
+\textbf{Spec. Hum.} & 6.62 & 2.40 & 0.00 & 4.82 & 6.33 & 8.25 & 17.78 \\
+\textbf{Rel. Hum.} & 76.52 & 15.01 & 0.01 & 67.02 & 79.10 & 88.06 & 133.70 \\
+\textbf{Press.} & 1,014.31 & 9.84 & 960.90 & 1,008.50 & 1,015.00 & 1,020.80 & 1,046.40 \\
+\textbf{Rain} & 0.02 & 0.12 & -0.02 & 0.00 & 0.00 & 0.00 & 15.10 \\
+\textbf{$CO_2$ Flux} & -0.07 & 0.30 & -7.49 & -0.25 & 0.03 & 0.12 & 6.10 \\
+\textbf{Soil Heat Flux} & 2.43 & 13.64 & -60.65 & -6.14 & -0.62 & 7.85 & 123.16 \\
+\textbf{Net Rad.} & 81.14 & 165.63 & -158.47 & -35.43 & -2.73 & 170.60 & 919.05 \\ \hline
+\textbf{Air Dens.} & 0.27 & 0.10 & 0.10 & 0.20 & 0.26 & 0.32 & 1.30 \\
+\textbf{Virt. Temp} & 1,442.78 & 444.94 & 275.65 & 1,105.10 & 1,385.16 & 1,743.68 & 3,506.05 \\
+\end{tabular} 
+\end{table}
+
 
 Figure \ref{fig:le_season} shows the turbulent latent heat flux versus hour of day both in Winter and Summer, whereas figure \ref{fig:ustar_wind_temp} shows the friction velocity as a function of air temperature and wind speed. The dependency of $u_*$ with the wind speed of figure \ref{fig:ustar_wind} is quite complicated: there are three clear regions with different constant of proportionality and correlation coefficient. The group where the two quantities are almost perfectly correlated corresponds to imputed values for the friction velocity, derived from the wind speed. The three other groups differ widely in the values of the fluxes and radiation; for example, fitting an ordinary least squares model to 1000 bootstraps of the observations with negative net radiation yields an average proportionality coefficient of \num{0.051} with standard deviation \num{1.52e-05}, whereas the same procedure on the complementary set yields an average of \num{0.046} with standard deviation \num{1.40e-05}. Note that this dependency might be related to the observed imbalance in the surface energy budged, usually around 15\% during day time and 100\% during night time at the Cabauw observatory; \cite{cabauwinsitu} notes that the imbalance seems to depend on the speed of wind.
 
@@ -1239,9 +1267,9 @@ one of the reasons why MOST is unreliable in stable conditions is because of the
 
 wind direction is very important since different characteristics of the surface affect the measurements, see https://journals.ametsoc.org/doi/full/10.1175/2006JAMC1298.1 and somebody else on cabauw
 
-our models can only be used in conditions that are similar to cabauw. most importantly, they are not valid in the oceanic surface layer, because it is very different [citation]
+can generate new training samples at more altitude levels, since we have a model for wind and temp (need to interpolate spec. humidity too), according to the simulation that uses this model
 
-can generate new training samples at more altitude levels, since we have a model for wind and temp (need to interpolate spec. humidity too)
+our models can only be used in conditions that are similar to cabauw. most importantly, they are not valid in the oceanic surface layer, because it is very different [citation]
 
 \section{Limitations and Future Work}
 todo
