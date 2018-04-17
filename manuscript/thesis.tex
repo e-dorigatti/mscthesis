@@ -20,6 +20,7 @@
 \usepackage{tabto}
 \usepackage{natbib}
 \usepackage{subcaption}
+\usepackage{cleveref}
 
 \captionsetup[subfigure]{justification=raggedright}
 
@@ -997,11 +998,6 @@ Unfortunately, most of these observations contain unreliable measurements, as de
 
 Figure \ref{fig:le_season} shows the turbulent latent heat flux versus hour of day both in Winter and Summer, whereas figure \ref{fig:ustar_wind_temp} shows the friction velocity as a function of air temperature and wind speed. The dependency of $u_*$ with the wind speed of figure \ref{fig:ustar_wind} is quite complicated: there are three clear regions with different constant of proportionality and correlation coefficient. The group where the two quantities are almost perfectly correlated corresponds to imputed values for the friction velocity, derived from the wind speed. The three other groups differ widely in the values of the fluxes and radiation; for example, fitting an ordinary least squares model to 1000 bootstraps of the observations with negative net radiation yields an average proportionality coefficient of \num{0.051} with standard deviation \num{1.52e-05}, whereas the same procedure on the complementary set yields an average of \num{0.046} with standard deviation \num{1.40e-05}. Note that this dependency might be related to the observed imbalance in the surface energy budged, usually around 15\% during day time and 100\% during night time at the Cabauw observatory; \cite{cabauwinsitu} notes that the imbalance seems to depend on the speed of wind.
 
-todo describe tsne
- - tsne fitted on standardized features, shown in table col_summary
- - fitted on the same 250k samples that are shown (also outside of most validity region)
- - the colors were obtained on the unscaled features, but discarding the top and bottom 1\%
-
 \begin{figure}
 \subcaptionbox{Air Dens.\label{fig:tsne_air_dens}}{\includegraphics[width=0.25\textwidth]{images/tsne_air_dens}}\hfill
 \subcaptionbox{H\label{fig:tsne_H}}{\includegraphics[width=0.25\textwidth]{images/tsne_H}}\hfill
@@ -1033,10 +1029,16 @@ todo describe tsne
 \subcaptionbox{$\vert \text{Hr. Day}-12\vert$\label{fig:tsne_hday}}{\includegraphics[width=0.25\textwidth]{images/tsne_hday}}\hfill
 \subcaptionbox{k-Means\label{fig:tsne_clus}}{\includegraphics[width=0.25\textwidth]{images/tsne_clus}}\hfill
 
-    \caption{Results of the t-SNE dimensionality reduction algorithm applied to 250 000 samples (19.2\% of the total). Every figure uses a different feature to color the points (darker points have smaller values), except figure \ref{fig:tsne_clus}, where the colors represent the result of 2-means clustering (blue/orange) and 4-means clustering (the four shades). The colors are consistent, in the sense that light and dark shades of blue are placed in the same cluster by 2-means clustering, ditto for orange. (Best viewed in color)}
+    \caption{Results of the t-SNE dimensionality reduction algorithm; every figure uses a different feature to color the points (darker points have smaller values), except figure \ref{fig:tsne_clus}, where the colors represent the result of 2-means clustering (blue/orange) and 4-means clustering (the four shades). The colors are consistent, in the sense that light and dark shades of blue are placed in the same cluster by 2-means clustering, ditto for orange. (Best viewed in color)}
 	\label{fig:tsne}
 \end{figure}
 
+
+Figure \ref{fig:tsne} shows the result of the t-SNE dimensionality reduction algorithm \citep{tsne} applied to 250 000 samples (19.2\% of the total), using the same features of table \ref{tbl:col_summary}. The 250 000 samples were chosen uniformly at random and standardized with equation \ref{eq:standardization} before fitting, but the colors were computed using the raw features on a perceptually uniform color scale, after excluding the top and bottom 1\% values. Overall, the points cluster in a relatively uniform blob, which is not that surprising once you consider that the measurements were taken continuously, meaning that all physical quantities change smoothly, and all points close in time are also close in feature space.
+
+The colors reveal some structure, though: the left-hand side of the plots contain measurements taken in the Summer, and the right-hand side contains measurement in Winter (see the air temperature in figure \ref{fig:tsne_temp} and month in figure \ref{fig:tsne_month}). Moreover, unstable conditions are clustered in a stripe, centered vertically, that runs from left to right (see the fluxes of figures \cref{fig:tsne_H,fig:tsne_LE,fig:tsne_soilheat}, the radiation in figure \ref{fig:tsne_netrad}, and the hour of day in figure \ref{fig:tsne_hday}). In figure \ref{fig:tsne_z} we also a cluster on the top with all the observations at 40 meters, whereas the two lower levels are mixed somewhat uniformly in the bottom part of the plot.
+
+Finally, figure \ref{fig:tsne_clus} shows the result of k-means clustering in the standardized feature space, using $k=2$ (blue/orange) and $k=4$ (the four shades). This clustering is consistent with the qualitative division above, with the dark orange and blue clusters corresponding to Summer and Winter respectively, light orange corresponding to unstable conditions of free convection, and light blue corresponding to strong horizontal winds with little turbulence. Stably stratified conditions seem to occur at the boundary of the blob, where $\phi_m$ takes the highest values (see figure \ref{fig:tsne_phi_m}). This is also not surprising, since stable stratification tend to happen at night throughout the year, unlike free convection or z-less scaling, which only happen in specific conditions.
 
 Talking about speed of wind, figure \ref{fig:ustar_wind} shows some measurements exceeding \SI{25}{\meter\per\second}; according to the Beaufort scale, holding umbrellas and walking become hard with wind at \SI{15}{\meter\per\second}. Those measurements are not issues with the data: figure \ref{fig:cyclone_jeanett} shows the highest wind speed present in the Cesar database to date, corresponding to cyclone Jeanett.
 
