@@ -31,7 +31,7 @@
 
 \begin{document}
 
-\title{Predicting the momentum flux-profile relationship from large macro weather parameters}
+\title{Predicting the momentum flux-profile relationship from  macro weather parameters}
 \author{Emilio Dorigatti}
 
 \maketitle
@@ -615,44 +615,28 @@ We invite the reader to refer to \cite[Chapter~6]{bishop} for an in-depth treatm
 \label{ch:method}
 This chapter describes how the data is collected (section \ref{sec:data_collection}) and used to re-create the flux-profile relationships (section \ref{sec:profiles}), as well as their prediction based on the Monin-Obukhov similarity theory (section \ref{sec:most_fit}). Then, we describe the main contribution of this thesis, namely how their prediction can be improved using machine learning techniques (section \ref{sec:model_fit}). Finally, we describe how the evaluation is performed (section \ref{sec:perf_eval}), and explicitly state the necessary criteria for a successful answer to the research questions (section  \ref{sec:success}).
 
-\section{Data Collection}
+\section{Data Collection and Preparation}
 \label{sec:data_collection}
 The Cabauw Experimental Site for Atmospheric Research\footnote{\url{http://www.cesar-database.nl/}} (Cesar) is a consortium formed by eight Dutch institutes and universities, which collaborate to operate and maintain an observatory for micro-meteorological conditions near the village of Cabauw, the Netherlands. The data collected characterizes the state of the atmosphere and the soil, and their interaction via radiation and surface fluxes.
 
 The observatory is surrounded by fields and no urban agglomerations is present within 15 kilometers; the land is flat with changes of altitude within a few meters over 20 kilometers. The main mast is 213 meters high and offers measurement levels every 20 meters; at each level there are three booms of length 10 meters that allow observations unobstructed by the main mast. There are three additional smaller masts of height 10 and 20 meters located close to the main mast, in order to obtain undisturbed measurements at the lower levels, and facilities to perform soil and surface observations.
 
-The main focus of this project is on wind and temperature profiles, and the turbulent fluxes of sensible and latent heat. Additional variables, such as temperature and humidity, are needed to compute quantities of interest, most importantly the Obukhov length, and as possible predictors for the universal functions. There is one measurement for each variable every ten minutes, and missing measurements are gap-filled with a number of techniques. The data collected is always visually validated by an operator, which marks suspect or invalid sections of data
+The main focus of this project is on wind and temperature profiles, and the turbulent fluxes of sensible and latent heat. Additional variables, such as temperature and humidity, are needed to compute quantities of interest, most importantly the Obukhov length, and as possible predictors for the universal functions. There is one measurement for each variable every ten minutes, and missing measurements are gap-filled with a number of techniques. The data collected is always visually validated by an operator, which marks suspect or invalid sections of data.
 
+Following, we describe the instruments used to collect the measurements (section \ref{sec:measurement}), the techniques used to impute missing or invalid measurements (section \ref{sec:gap_filling}), and the criteria applied to filter low quality data (section \ref{sec:data_filter}).
+
+\subsection{Measurement}
+\label{sec:measurement}
 The Cesar observatory provides full information regarding data collection\footnote{\url{http://projects.knmi.nl/cabauw/insitu/observations/documentation}}, see in particular \cite{cabauwinsitu}, what follows is a brief summary of the most relevant sections.
 
-\begin{figure}
-\caption{Sonic anemometer to measure wind and optical open-path sensor to measure humidity at the 180m level of the Cabauw mast.}
-\label{fig:cabauw_180m_instruments}
-\centering
-\includegraphics[width=0.75\textwidth]{images/cabauw_turbulence_instruments}
-% https://www.knmi.nl/research/observations-data-technology/projects/cabauw-in-situ-measurements
-\end{figure}
-
-\subsection{Wind Speed Measurement}
+\subsubsection{Wind Speed Measurement}
 Wind speed and direction are measured at heights of 200, 140, 80, 40, 20 and 10 meters, in either two or all three booms available. The wind vane that measures direction has a resolution of $1.5^\circ$, and the cup anemometer that measures wind speed has an accuracy of the largest between 1\% and \SI{0.1}{\meter\per\second}. \cite{windinstr} studied the threshold sensitivity of both instruments, and fount it lower than \SI{0.5}{\meter\per\second}, even though the measurements are inaccurate up to \SI{3}{\meter\per\second}.
 
 For every ten minutes interval, the measurement comes from the instrument that is best exposed to the wind, and less affected by the obstruction caused by the mast. Corrections are then applied to the raw measurements to further attenuate the disturbance by the tower, following \cite{winddistortion}.
 
-\subsection{Air Temperature and Dew Point Measurement}
-Both air temperature and dew point are measured at heights of 200, 140, 80, 40, 20, 10 and 1.5 meters. The instruments at the highest four levels are located on the main tower, whereas 20 and 10 meters are measured in the smaller mast, and 1.5 meters is measured by the weather station. The resolution of the instruments is of \SI{0.1}{\celsius}, whereas the accuracy is \SI{0.1}{\celsius} for temperature and 3.5\% of relative humidity for the dew point (1.5\% after 2014). Low wind speed and high irradiation can result result in a few \SI{0.1}{\celsius} overestimate of the temperature \citep{tempoverestimate}, whereas the humidity can be over estimated when drying after dew, fog, or rain \citep{cabauwinsitu}.
-
-\subsection{Net Radiation Measurement}
-The Cabauw observatory measures both incoming and outgoing long- and short-wave radiation, and the net radiation is simply the combination of these four components. The basic operating principle of an instrument that measures radiation is to have a device coated with paint that is highly absorbing towards a certain range of frequencies; the temperature difference between the surface of this sensor and the body of the whole instrument generates an electrical potential that is proportional to the radiation absorbed by the sensor, after appropriate corrections.  The instruments that measure short-wave radiation are called \emph{pyranometers}, while long-wave radiation is measured by \emph{pyrgeometer}.  The instrument used to measure the net radiation has a pair or pyrgeometers, one facing up and one facing down, to measure the net long-wave radiation, and a pair of pyranometers arranged similarly to measure net short-wave radiation.
-
-This instrument is positioned at \SI{1.5}{\meter} height, and is ventilated and heated to prevent formation of dew, that can make the measurements invalid.
-
-\subsection{Soil Heat and $CO_2$ Flux}
-todo
-https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2005JD006932
-
-\subsection{Eddy Correlation}
+\subsubsection{Eddy Correlation}
 \label{sec:eddy_correlation}
-The eddy correlation technique is used to compute the turbulent surface fluxes of sensible and latent heat $H$ and $\lambda E$, as well as momentum and $CO_2$, starting from fluctuations in wind, temperature, and humidity.
+The eddy correlation technique is used to compute the turbulent surface fluxes of sensible and latent heat $H$ and $\lambda E$, as well as momentum and $CO_2$, starting from fluctuations in wind, temperature, humidity, and $CO_2$ content.
 
 These measurements are obtained with, respectively, a sonic anemometer, a sonic thermometer, and an optical open-path sensor. Sonic anemometers measure the wind speed by leveraging the fact that the speed of sound in free air is affected by the speed of the air itself; since the speed of sound is known, the wind speed can be easily recovered from the time a sound impulse takes to travel a short distance. By measuring the wind velocity along three orthogonal paths, the full wind vector can be recovered. Sonic thermometers work similarly, by leveraging the fact that the speed of sound is affected by the temperature of the medium it travels in. These instruments can take up to 100 measurements per second. Optical open-path sensors quantify the amount of water vapor and carbon dioxide in the air by emitting a ray of infrared light and measuring its intensity 10 to 20 centimeters further away. $H_2O$ and $CO_2$ molecules in the air absorb electromagnetic radiation at known frequencies, thus the concentration of water vapor and carbon dioxide can be inferred by measuring the attenuation at these wavelengths.
 
@@ -665,6 +649,76 @@ $$
 Where $\overline{w}$ and $\overline{a}$ are the averages of $w_t$ and $a_t$ for $T_1\leq t\leq T_2$. The fluxes in the Cesar database are computed every ten minutes, with 10 measurements per second.
 
 The eddy correlation technique is far from perfect, see e.g. \citep{microhandbook, ed_co2}. Other methods can be used to compute $H$ and $u_*$; for example, \cite{cabauw_abl} uses an iterative method to estimate these quantities from $L$, starting from an initial guess and refining the result, alternating improvements of $u_*$ and $H$ with improvements of $L$.
+
+\subsubsection{Air Temperature and Dew Point Measurement}
+Both air temperature and dew point\footnote{the temperature the air needs to be to reach a relative humidity of 100\%} are measured at heights of 200, 140, 80, 40, 20, 10 and 1.5 meters, and the dew point is computed from the air temperature and the humidity obtained with the open-path sensor described previously. The instruments at the highest four levels are located on the main tower, whereas 20 and 10 meters are measured in the smaller mast, and 1.5 meters is measured by the weather station. The resolution of the instruments is of \SI{0.1}{\celsius}, whereas the accuracy is \SI{0.1}{\celsius} for temperature and 3.5\% of relative humidity for the dew point (1.5\% after 2014). Low wind speed and high irradiation can result result in a few \SI{0.1}{\celsius} overestimate of the temperature \citep{tempoverestimate}, whereas the humidity can be over estimated when drying after dew, fog, or rain \citep{cabauwinsitu}.
+
+
+\begin{figure}
+    \centering
+    \begin{subfigure}[t]{0.48\textwidth}
+        \centering
+		\includegraphics[width=\textwidth]{images/cabauw_turbulence_instruments}
+		% https://www.knmi.nl/research/observations-data-technology/projects/cabauw-in-situ-measurements
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.48\textwidth}
+        \centering
+		\includegraphics[width=\textwidth]{images/cabauw_turbulence_instruments_2}
+		% http://www.knmi.nl/kennis-en-datacentrum/project/cesar-cabauw-and-wind
+    \end{subfigure}
+\caption{Two of the three sonic anemometers, that measure turbulence, and optical open-path sensor, that measure humidity and $CO_2$, at the 180m level of the Cabauw mast.}
+\label{fig:cabauw_180m_instruments}
+\end{figure}
+
+
+\subsubsection{Net Radiation Measurement}
+The Cabauw observatory measures both incoming and outgoing long- and short-wave radiation, and the net radiation is simply the combination of these four components. The basic operating principle of an instrument that measures radiation is to have a device coated with paint that is highly absorbing towards a certain range of frequencies; the temperature difference between the surface of this sensor and the body of the whole instrument generates an electrical potential that is proportional to the radiation absorbed by the sensor, after appropriate corrections.  The instruments that measure short-wave radiation are called \emph{pyranometers}, while long-wave radiation is measured by \emph{pyrgeometer}.  The instrument used to measure the net radiation has a pair or pyrgeometers, one facing up and one facing down, to measure the net long-wave radiation, and a pair of pyranometers arranged similarly to measure net short-wave radiation (see figure \ref{fig:net_radiometer}).
+
+This instrument is positioned at \SI{1.5}{\meter} height, and is ventilated and heated to prevent formation of dew, that can make the measurements invalid.
+
+
+\begin{figure}
+    \centering
+    \begin{subfigure}[t]{0.4\textwidth}
+        \centering
+        % https://en.wikipedia.org/wiki/File:Hukseflux_netto_radiometer_nr01_photo.jpg
+        \includegraphics[width=\textwidth]{images/net_radiometer}
+        \caption{Net Radiometer}
+        \label{fig:net_radiometer}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.28\textwidth}
+        \centering
+        % https://en.wikipedia.org/wiki/File:Hukseflux_netto_radiometer_nr01_photo.jpg
+        \includegraphics[width=\textwidth]{images/rain_gauge_shield}
+        \caption{Rain Gauge with Wind Shield}
+        \label{fig:rain_gauge_shield}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.18\textwidth}
+        \centering
+        % http://projects.knmi.nl/hawa/pdf/Handbook_H01_H06.pdf
+        % aka \citep{rain}
+        \includegraphics[width=\textwidth]{images/rain_gauge}
+        \caption{Rain Gauge Schematic}
+        \label{fig:rain_gauge_schematic}
+    \end{subfigure}
+    \caption[Some instruments used at the Cabauw observatory.]{Some instruments used at the Cabauw observatory. Credits: picture \subref{fig:net_radiometer} - Wikimedia Commons\protect\footnotemark, picture \subref{fig:rain_gauge_shield} - \cite{windsheld_rain}, picture \subref{fig:rain_gauge_schematic} - \cite{rain}.}
+	\label{fig:cabauw_instruments}
+\end{figure}
+
+% https://tex.stackexchange.com/a/67030
+% essentially, cannot have a footnote in a caption or you screw up the lisf of figures at the beginning
+% this is latex's simple and intuitive way of saying not to bother about the footnote in the list of figures
+\footnotetext{\url{https://en.wikipedia.org/wiki/File:Hukseflux_netto_radiometer_nr01_photo.jpg}}
+
+\subsubsection{Surface Soil Heat Flux}
+The surface soil heat flux, measured in \si{\watt\per\square\meter}, is extrapolated from the average fluxes measured at depths of \SI{5}{\centi\meter} and \SI{10}{\centi\meter}; under the assumption of homogeneous soil, the amplitude of the flux in the frequency domain decays exponentially with depth. In order to increase the temporal resolution, the amplitude of the surface soil heat flux is then related to the amplitude of the soil temperature gradient, obtained as the difference between the soil temperature at \SI{0}{\centi\meter} and \SI{2}{\centi\meter}. An inverse Fourier transform converts this surface soil heat flux into the time domain \citep[Appendix~A]{surface_soilheat}. The heat flux is computed by dividing the temperature difference at the top and bottom sides of a plate-shaped sensor\footnote{because of conduction, the temperature of the sensor would tend to homogenize; the higher the difference in temperature, the more energy is hitting the warmer side.} with the horizontal area of the sensor. A \emph{thermocouple} is a device that generates a voltage proportional to this temperature difference, and self-calibrating sensor converts this voltage into a heat flux measurement in \si{\watt\per\square\meter}  \citep{soilheat_sensor}.
+
+
+\subsubsection{Rain Amount}
+The KNMI electronic rain gauge \citep{rain,windsheld_rain} records the average precipitation intensity of the last 12 seconds in \si{\milli\meter\per\second} every 12 seconds, and the rain amount, in \si{\milli\meter}, is derived for every 10 minutes interval. The rain gauge is composed by a heated container in which precipitation accumulates and which is emptied every 12 seconds; the flow of outgoing liquid is measured by a floater connected to a potentiometer, and its value divided by 12 gives the precipitation intensity. The accuracy of the precipitation meter is \SI{0.2}{\milli\meter}, and the precision is \SI{0.1}{\milli\meter}. Figure \ref{fig:rain_gauge_shield} shows the rain gauge with the wind shield \citep{windsheld_rain}, and figure \ref{fig:rain_gauge_schematic} shows a diagram of the instrument \citep{rain}.
 
 \subsection{Gap Filling}
 \label{sec:gap_filling}
@@ -682,7 +736,6 @@ Following other works in this field, such as \cite{boulder} and \cite{hogstrom88
 \item The wind speed $\overline{u}$ is lower than \SI{1}{\meter\per\second}.
 \end{itemize}
 
-todo also mention dew point, soil heat (and that missing values are not imputed), net radiation, rain
 
 \section{Flux-Profile Relationships}
 \label{sec:profiles}
