@@ -61,11 +61,12 @@ Climate science is an extremely difficult field, for a number of reasons. First,
 
 The troposphere contains most of the air mass in the atmosphere, and occupies the lowest 10 to 12 kilometers of the atmosphere. This is where weather happens, and it can be divided in a number of sub-layers, the lowest of which is the \emph{atmospheric boundary layer}: it is the region of the atmosphere that is affected by the conditions of the surface. Most human activities happen in this layer, and it is responsible for a large part of the diffusion and transport of aerosol such as, among others, pollutants. Yet, the physics governing the atmospheric boundary layer is not fully understood, and the theory is lacking. One important issues in the study of the atmospheric boundary layer is the derivation of flux-profile relationships for wind and temperature: they essentially relate the transport of momentum and heat by the turbulence (flux) with the change of wind speed/temperature with altitude (profile). The state of the art relationships are defined by the Monin-Obukhov Similarity theory in terms of the instability parameter $\xi$, computed as the height above surface scaled by turbulence due to horizontal wind and vertical air movement due to variations in heat. Difficulties in measurements of relevant quantities make this theory accurate only up to 10-20\%, and applicable in a restricted set of conditions.
 
-In stark contrast to the traditional, top-down approach of science, recent developments in information technology made bottom-up approaches possible. In this new way of thinking, existing data is used to automatically infer the "best" explanation for the measurements at hand, the underlying laws that originated that data. The field that makes this possible is called Machine Learning: it takes advantage of several methods coming from statistics, information theory, optimization theory, etc., to make computers learn from examples. Together with Natural Language Processing and Automated Planning, it is one of the three main branches of Artificial Intelligence, the sub-field of Computer Science that studies ways of making machines behave intelligently.
+In stark contrast to the traditional, top-down approach of science, recent developments in information technology made bottom-up approaches possible. In this new way of thinking, existing data is used to automatically infer the "best" explanation for the measurements at hand, the underlying laws that originated that data. The field that makes this possible is called \emph{Machine Learning}: it takes advantage of several methods coming from statistics, information theory, optimization theory, etc., to make computers learn from examples. Together with Natural Language Processing and Automated Planning, it is one of the three main branches of Artificial Intelligence, the sub-field of Computer Science that studies ways of making machines behave intelligently.
 
-todo more fluff about ml ?
+An even broader field, called \emph{Data Mining}, is concerned with finding interesting patterns, structures, and regularities in large datasets, where the definition of interesting depends on the specific goals. Data Mining makes use of techniques from Machine Learning, as well as other statistical models, such as ANOVA, and visualization techniques.
 
 \section{Research Question}
+\label{sec:research_question}
 Currently, limitations of the validity of the Monin-Obukhov similarity theory are not believed to be a likely explanation for the high scatter that is found in experimental studies, unless in highly stable conditions \citep{basicatm}. With the availability of micro-meteorological data from specialized observation sites such as Cabauw, in the Netherlands, and the recent developments in Machine Learning, this conjecture can be finally put to the test. More specifically, we pose the following \\
 
 \textbf{Research Question 1:} Is it possible to use the data from the Cesar database to improve the Monin-Obukhov model of the flux-profile relationships, by using more predictors besides the instability parameter? \\
@@ -75,14 +76,38 @@ Currently, limitations of the validity of the Monin-Obukhov similarity theory ar
 Affirmative answers to these question would contribute to improve the quality of current global circulation models (large scale climate simulations). \cite{sheba} shows that, at least in difficult conditions, several simulation models produce flux estimates that are highly inaccurate, presenting low correlation (mostly below 0.3) and errors that are as large as the fluxes themselves. Since errors in the simulation accumulate over time, even slight improvements can greatly improve the accuracy of the results after years of simulated time. Improved flux-profile relationship can, therefore, yield more accurate estimates of the fluxes.
 
 \section{Research Methodology}
-todo
+\label{sec:research_methodology}
+The two most widely used research methodologies in data mining are CRISP-DM, the cross-industry standard process for data mining, by \cite{crispdm}, and KDD, knowledge discovery in databases, by \cite{kdd}. Despite the difference in terminology, they essentially describe the same process for extracting useful information, or \emph{patterns}, from one or more raw data sources. This process is composed by the following steps (we use the nomenclature of CRISP-DM):
+
+\begin{enumerate}
+\item \emph{Business Understanding:} Get familiar with the application domain, obtaining necessary background knowledge, then identify the goals of the process from the customer's perspective and translate them to data mining tasks;
+\label{ol:dm_biz_understanding}
+
+\item \emph{Data Understanding:} Obtain and clean the data that is necessary to conduct the data mining tasks, appropriately dealing with empty, missing and outlier values, then conduct simple analysis and visualizations to inspect the overall quality and gain further understanding of the data itself;
+\label{ol:dm_data_understanding}
+
+\item \emph{Data Preparation:} Transform the data in the format needed to conduct the data mining tasks, e.g. by performing feature selection and/or extraction, such as joins, aggregates, etc.
+\label{ol:dm_data_prep}
+
+\item \emph{Modeling:} Conduct the data mining tasks, using the data prepared in step \ref{ol:dm_data_prep};
+\label{ol:dm_modeling}
+
+\item \emph{Evaluation:} Interpret and evaluate the results obtained in step \ref{ol:dm_modeling}, both from a data mining perspective and from a business perspective, and quantify to what extent the goals defined in step \ref{ol:dm_biz_understanding} were achieved;
+\label{ol:dm_eval}
+
+\item \emph{Deployment:} Act on the outcome of the data mining tasks, report it and possibly take action based on the results and/or deploy models to support live decision making, etc.
+\label{ol:deploy}
+\end{enumerate}
+
+It is important to mention that these steps are not strictly sequential, but heavily interact with one another: insights gained from the data can give rise to new questions, the evaluation of the results can highlight flaws in earlier steps, etc.
 
 \section{Ethics and Sustainability}
-
 reproducibility: using open data, following standards of reproducible research (open source and jupyter notebooks)
 
 \section{Outline}
 The thesis is organized as follows: in chapter \ref{ch:background}, we introduce the relevant background in climate science and machine learning, then, in chapter \ref{ch:method}, we describe how the data is collected and used to answer the research question, chapter \ref{ch:results} contains the results of such investigation, and, finally, chapter \ref{ch:discussion} discusses the results, pointing out limitations and possible future directions.
+
+Relating to the research methodology process outlined in section \ref{sec:research_methodology}, business understanding is achieved through the research questions in section \ref{sec:research_question} and the background knowledge in chapter \ref{ch:background}, while data understanding, data preparation and modeling are described in chapter \ref{ch:method}; chapter \ref{ch:results} reports the outcome of these steps, and, finally, the evaluation and deployment steps are in chapter \ref{ch:discussion}.
 
 \chapter{Background}
 \label{ch:background}
@@ -1175,7 +1200,7 @@ To conclude, although F.D. (equation \ref{eq:fd_gradient}) is the most accurate 
 
 
 \section{Flux-Profile Relationship}
-Figure \ref{fig:most_scatter} shows the wind shear versus the instability parameter, together with the commonly accepted flux-profile relationship and the relationship fitted on our dataset, and in figure \ref{fig:most_zoom} we see the flux-profile relationship restricted to the interval of instability parameter where the Monin-Obukhov similarity theory is valid. Qualitatively, the relationship behaves as expected, going to zero as $\xi$ decreases, linearly increasing in the $0\leq\xi\leq1$ interval, and leveling after that. Refer to section \ref{sec:most_estimator_results} for further details.
+Figure \ref{fig:most_scatter} shows the wind shear versus the instability parameter, together with the commonly accepted flux-profile relationship and the relationship fitted on our dataset, and in figure \ref{fig:most_zoom} we see the flux-profile relationship restricted to the interval of instability parameter where the Monin-Obukhov similarity theory is valid. Qualitatively, the relationship behaves as expected, going to zero as $\xi$ decreases, linearly increasing in the $0\leq\xi\leq1$ interval, and leveling after that, possibly approaching the $\xi^{1/3}$ form proposed by \cite{sheba_phim}. Refer to section \ref{sec:most_estimator_results} for further details.
 
 negative phim with small |xi|
 
