@@ -1,13 +1,16 @@
-\documentclass[12pt]{book}
+\documentclass[a4paper]{book}
 \usepackage{graphicx}
-\usepackage[a4paper,inner=36mm,outer=18mm,top=30mm,]{geometry}
-%\usepackage[doublespacing]{setspace} 
+%\usepackage[a4paper,inner=36mm,outer=18mm,top=30mm,]{geometry}
+\usepackage[a4paper]{geometry}
 \usepackage{bm}
 \usepackage{siunitx}
 \usepackage{titling}
+\usepackage{booktabs}
 \usepackage{tabularx}
+\usepackage{makecell}
 \usepackage{hyphenat}
 \usepackage{amsmath,amsfonts,amssymb,amsthm,mathtools}
+\usepackage{rotating}
 \usepackage{hyperref}
 \usepackage{algpseudocode}
 \usepackage{algorithm}
@@ -34,7 +37,10 @@
 \title{Predicting the momentum flux-profile relationship from  macro weather parameters}
 \author{Emilio Dorigatti}
 
+
+\newgeometry{hmarginratio=1:1} %centered title page
 \maketitle
+\restoregeometry
 
 
 \section*{Acknowledgments}
@@ -54,7 +60,7 @@ todo
 \chapter{Introduction}
 
 \section{Problem}
-
+\label{sec:problem}
 Climatology, or climate science, studies the long-term average weather conditions. In the last few decades, climate scientists found evidence of ongoing changes in Earth's climate, most notably, a general increase in average temperature; in the long run, this and other changes can potentially have a devastating impact on life on our planet. Regardless of the causal effect of human activities on it, having a solid understanding of the climate allows us to find the best way to mitigate its change, and to preserve our planet.
 
 Climate science is an extremely difficult field, for a number of reasons. First, climate is evident, by definition, only over long periods of time and large distances, making the usual scientific approach of testing hypotheses by conducting experiments inapplicable; instead, climate scientists have to rely on historical data. Second, the atmosphere is a complex and chaotic system, which must be described through systems of nonlinear differential equation. They can be used to create numerical simulations, and the resulting predictions compared to historical data to assess the accuracy of the theory. Furthermore, the chaotic character of the atmosphere makes it impossible to study parts of it in isolation from others, as small scale phenomena affect large scale ones, and vice versa. In spite of this, it is useful to split the atmosphere in vertical layers and horizontal zones, in order to differentiate among conditions and phenomena typically occurring in one area or the other.
@@ -107,7 +113,7 @@ reproducibility: using open data, following standards of reproducible research (
 \section{Outline}
 The thesis is organized as follows: in chapter \ref{ch:background}, we introduce the relevant background in climate science and machine learning, then, in chapter \ref{ch:method}, we describe how the data is collected and used to answer the research question, chapter \ref{ch:results} contains the results of such investigation, and, finally, chapter \ref{ch:discussion} discusses the results, pointing out limitations and possible future directions.
 
-Relating to the research methodology process outlined in section \ref{sec:research_methodology}, business understanding is achieved through the research questions in section \ref{sec:research_question} and the background knowledge in chapter \ref{ch:background}, while data understanding, data preparation and modeling are described in chapter \ref{ch:method}; chapter \ref{ch:results} reports the outcome of these steps, and, finally, the evaluation and deployment steps are in chapter \ref{ch:discussion}.
+Relating to the research methodology process outlined in section \ref{sec:research_methodology}, business understanding is achieved through the problem description, the research questions and the background knowledge in sections \ref{sec:problem} and \ref{sec:research_question} and chapter \ref{ch:background}, while data understanding, data preparation and modeling are described in chapter \ref{ch:method}; chapter \ref{ch:results} reports the outcome of these steps, and, finally, the evaluation and deployment steps are in chapter \ref{ch:discussion}.
 
 \chapter{Background}
 \label{ch:background}
@@ -554,7 +560,7 @@ A Gaussian Process (GP) is a collection of an infinite number of random variable
 p(\bm y\vert\bm X)=\int p(\bm y\vert \bm f)p(\bm f\vert\bm X)\text{d}f
 \end{equation}
 
-Where $\bm X$ are the query points, $\bm f$ a function sampled from the GP, and $\bm y$ the values of the function. By definition of GP, all the distributions in equation \ref{eq:gp_marg} are Gaussian, since the Gaussian distribution is self-conjugate. A GP is just a way of computing the mean and covariance of $\bm f$ given $\bm X$, i.e. $p(\bm f\vert\bm X)$; $\bm f$ is then a multivariate Gaussian, which we can manipulate as usual.
+Where $\bm X$ are the query points, $\bm f$ a function sampled from the GP, and $\bm y$ the values of the function. By definition of GP, all the distributions in equation \ref{eq:gp_marg} are Gaussian, since the Gaussian distribution is self-conjugate\footnote{referring to equation \ref{eq:map}, the prior is said to be conjugate to the likelihood if the posterior has the same algebraic form of the prior; the Gaussian distribution is self-conjugate, because a Gaussian prior with a Gaussian likelihood results in a Gaussian posterior. Conjugate distributions are mostly used for convenience.}. A GP is just a way of computing the mean and covariance of $\bm f$ given $\bm X$, i.e. $p(\bm f\vert\bm X)$; $\bm f$ is then a multivariate Gaussian, which we can manipulate as usual.
 
 Consider the setting of ridge regression described in section \ref{sec:ridge}, where $\bm y=f(\bm X;\bm\theta)=\bm\Phi\bm\theta$, with $\bm\Phi$ being the design matrix. Recall that in section \ref{sec:regression_fit} we introduced the Maximum A Posteriori estimation method by using a prior distribution on the model parameters $\bm\theta$; this makes $\bm y$ a random variable itself. If we use an isotropic Gaussian for $\bm\theta$, we have that the distribution of $\bm y$ is again Gaussian with mean
 
@@ -601,7 +607,7 @@ Where $K_{\bm\theta}(\bm A,\bm B)$ is a matrix whose $(i,j)$ cell equals to $k(A
 
 Up until now, we assumed the kernel was fixed, and treated $\bm\theta$ as hyper-parameters. We could use one of the methods described in section \ref{sec:cv} to find their values, but the Bayesian framework that we used to derive GP allows us to find $\bm\theta$, too, by maximizing $\log p(\bm t\vert\bm X,\bm\theta)$\footnote{obtained as in equation \ref{eq:gp_marg}, usually called log-marginal-likelihood, since we marginalized $\bm f$} with respect to $\bm\theta$. This function often has many local maxima, and is usually optimized by means of gradient descent.
 
-Finally, the derivative of a GP is itself a GP, whose mean is \citep{gp_diff}:
+Finally, the derivative of a GP is itself a GP, whose mean is obtained simply by deriving equation \ref{eq:gp_pred_mean} \citep{gp_diff}:
 
 \begin{equation}
 \label{eq:gp_gradient}
@@ -903,7 +909,7 @@ All the features come from the Cesar database, refer to section \ref{sec:data_co
 
 These sets are used cumulatively in the order they are listed, meaning that, for example, F3 is used in conjunction with F2 and F1. Derived features that can be computed from others, such as the virtual temperature (equation \ref{eq:vtemp}), are not included. The reason is that the less inputs the models require, the more useful and "agile" they can be when used as a component in a larger system, such as climate simulations.
 
-This division was decided based on domain knowledge, so that the level of a feature reflects both its expected impact on the performance and how desirable it is to include it. An example of the former reasoning is with F4, where the effect of moisture is expected to be captured by the soil heat flux, and to be generally negligible in all but the most extreme conditions. An example of the latter reasoning is with F5, because turbulent fluxes are hard to measure accurately (see section \ref{sec:eddy_correlation}), and current simulation models are known to be quite inaccurate in their estimation of these fluxes \citep{sheba}. Similarly, the friction velocity was not included, because the point of predicting $\phi_m$ is to use it to estimate $u_*$ from the wind gradient, which is readily measured both in real life and in simulations. \cite{cabauw_z0} has shown that the direction of the wind affects the universal functions at Cabauw, because of the different covers of the surface, changing the roughness length, and disturbances by the main mast, preventing accurate wind speed measurement. Nonetheless, we decided not to include the wind direction in the features, as this is very specific to the Cabauw observatory, and would reduce the generality of our models.
+This division was decided based on domain knowledge, so that the level of a feature reflects both its expected impact on the performance and how desirable it is to include it. An example of the former reasoning is with F4, where the effect of moisture is expected to be already captured by the soil heat flux (in F3), and to be generally negligible in all but the most extreme conditions. An example of the latter reasoning is with F5, because turbulent fluxes are hard to measure accurately (see section \ref{sec:eddy_correlation}), and current simulation models are known to be quite inaccurate in their estimation of these fluxes \citep{sheba}. Similarly, the friction velocity was not included, because the point of predicting $\phi_m$ is to use it to estimate $u_*$ from the wind gradient, which is readily measured both in real life and in simulations. \cite{cabauw_z0} has shown that the direction of the wind affects the universal functions at Cabauw, because of the different covers of the surface, changing the roughness length, and disturbances by the main mast, preventing accurate wind speed measurement. Nonetheless, we decided not to include the wind direction in the features, as this is very specific to the Cabauw observatory, and would reduce the generality of our models.
 
 We also create a second version of each feature set, augmented with the hourly trend of each variable, except for the altitude $z$. The reason for including the trend is that it can give an indication of, for example, the time of the day, or other complex phenomena for which there is no measurement. The interval for the trend (one hour) is used because it is enough to capture local variations, but not too large so as to contain irrelevant information. The hourly trend is computed simply as the difference between the current value and the value measured one hour before, divided by one hour. Given the goal of this work, namely to produce a model to be used in climate simulations, it would not make sense to use future values to compute the trend.
 
@@ -916,9 +922,9 @@ x^\prime_{i,j}=\frac{x_{i,j}-\mu_j}{\sigma_j}
 
 This method is not robust to outliers, since they heavily affect mean and standard deviation; this can be prevented by subtracting the median and normalizing with the interquartile range instead. These two methods give similar results in our datasets, therefore we follow equation \ref{eq:standardization}, since it it the most widely used in practice. Obviously, every $\mu_j$ and $\sigma_j$ are computed only on the training data, and used to normalize both training and testing data.
 
-\subsection{Models}
+\subsection{Estimators}
 
-The models that we use are ridge regression, k-nearest neighbors, gradient boosted trees, and neural networks. Due to the size of the dataset, we cannot use kernel-based algorithms such as SVM and Gaussian Processes, as they require $\Theta(N^2)$ memory to store the kernel matrix, and $O(N^3)$ time to invert it. Gradient boosted trees were used instead of random forests because they were shown to work slightly better [citation], and small-scale experiments on our dataset showed they can be fit almost an order of magnitude more quickly.
+The models that we use are ridge regression, k-nearest neighbors, gradient boosted trees, and neural networks. Due to the size of the dataset, we cannot use kernel-based algorithms such as SVM and Gaussian Processes, as they require $\Theta(N^2)$ memory to store the kernel matrix, and $O(N^3)$ time to invert it.
 
 All models but neural networks are fitted using nested cross validation with random hyper-parameter search. This procedure detailed in section \ref{sec:perf_eval}, but we list here the distributions of the hyper-parameters that we use in the random search:
 
@@ -941,14 +947,16 @@ todo talk about nnets
 \caption{Distribution of the hyper-parameters for gradient boosted trees}
 \label{tbl:gb_hyperparams}
 \begin{tabularx}{\textwidth}{r|l|X}
-\textbf{Hyper-parameter} & \textbf{Distribution} & \textbf{Values} \\ \hline
+\toprule
+\textbf{Hyper-parameter} & \textbf{Distribution} & \textbf{Values} \\ \midrule
 Number of estimators & log$_{10}$-uniform & From $10^1$ to $10^4$ \\
 Learning rate & log$_{10}$-uniform & From $10^{-3}$ to $10^0$ \\
 Number of features & Uniform & All possible values \\
 Maximum depth & Uniform & From 4 to 12 \\
 Sub-sampling factor & Uniform & From 25\% to 100\% \\
 Loss function & Uniform & Least squares, least absolute deviation, \newline Huber loss (equation \ref{eq:huberloss}) \\
-$\delta$ (for the Huber loss) & Uniform & From 1\% to 99\%
+$\delta$ (for the Huber loss) & Uniform & From 1\% to 99\% \\
+\bottomrule
 \end{tabularx}
 \end{table}
 
@@ -967,11 +975,11 @@ A fundamental assumption underlying hold-out evaluation methods is that the samp
 The main evaluation metric is the mean squared error, since that is what we are optimizing for, but we compute other metrics in the outer cross validation loop to get a more complete idea of the performance of the estimators:
 
 \begin{itemize}
-\item Mean Squared Error
-\item Mean Absolute Error
-\item Median Absolute Error
-\item Mean Absolute Percent Error
-\item Median Absolute Percent Error
+\item Mean Squared Error (MSE);
+\item Mean Absolute Error (MAE);
+\item Median Absolute Error (mAE);
+\item Mean Absolute Percent Error (MAPE);
+\item Median Absolute Percent Error (mAPE);
 \item $R^2$ Score:
 $$
 1-\frac{\sum (f_n-t_n)^2}{\sum (t_n-\overline{t})^2}
@@ -1051,10 +1059,11 @@ Unfortunately, most of these observations contain unreliable measurements, as de
 
 \begin{table}[]
 \centering
-\caption{Basic descriptive statistics of the features in the Cesar database (top group), and features that were computed by us (bottom group).  Note that the relative humidity was computed by the Cesar consortium using values from other measurements, and 16,833 records  (1.3\%) have a relative humidity above 100\%.}
+\caption{Basic descriptive statistics of the features in the Cesar database  and features that were computed by us (last two).  Note that the relative humidity was computed by the Cesar consortium using values from other measurements, and 16,833 records  (1.3\%) have a relative humidity above 100\%.}
 \label{tbl:col_summary}
-\begin{tabular}{r|rrrrrrr}
-& \textbf{Mean} & \textbf{Std.} & \textbf{Min.} & \textbf{25\%} & \textbf{50\%} & \textbf{75\%} & \textbf{Max.} \\ \hline
+\begin{tabular*}{\textwidth}{l| @{\extracolsep{\fill}} rrrrrrr}
+\toprule
+& \textbf{Mean} & \textbf{Std.} & \textbf{Min.} & \textbf{25\%} & \textbf{50\%} & \textbf{75\%} & \textbf{Max.} \\ \midrule
 \textbf{$H$} & 3.66 & 47.44 & -460.00 & -25.96 & -14.84 & 28.06 & 479.64 \\
 \textbf{$\lambda E$} & 74.76 & 114.18 & -392.71 & -5.02& 23.92 & 132.66 & 748.69 \\
 \textbf{$u_*$} & 0.31 & 0.15 & 0.10 & 0.20 & 0.28 & 0.39 & 1.55 \\
@@ -1068,19 +1077,21 @@ Unfortunately, most of these observations contain unreliable measurements, as de
 \textbf{Rain Amount} & 0.02 & 0.12 & -0.02 & 0.00 & 0.00 & 0.00 & 15.10 \\
 \textbf{$CO_2$ Flux} & -0.07 & 0.30 & -7.49 & -0.25 & 0.03 & 0.12 & 6.10 \\
 \textbf{Soil Heat Flux} & 2.43 & 13.64 & -60.65 & -6.14 & -0.62 & 7.85 & 123.16 \\
-\textbf{Net Rad.} & 81.14 & 165.63 & -158.47 & -35.43 & -2.73 & 170.60 & 919.05 \\ \hline
+\textbf{Net Rad.} & 81.14 & 165.63 & -158.47 & -35.43 & -2.73 & 170.60 & 919.05 \\
 \textbf{Air Dens.} & 0.27 & 0.10 & 0.10 & 0.20 & 0.26 & 0.32 & 1.30 \\
 \textbf{Virt. Temp} & 1,442.78 & 444.94 & 275.65 & 1,105.10 & 1,385.16 & 1,743.68 & 3,506.05 \\
-\end{tabular} 
+\bottomrule
+\end{tabular*}
 \end{table}
 
 
 \begin{table}[]
 \centering
-\caption{Number of measurements by gap filling method, for the quantities that have this information. Due to inconsistencies in the Cabauw Documentation \citep{cabauw_gapfilling}, we cannot be sure of the meaning of the columns, but this is our interpretation: 0 - Missing, 2 - Cabauw In situ, 3- Automatic Weather Station in Cabauw, 4 - Computed from profiles, 5- Interpolated, 6- Cabauw-based model, 7 - De Bilt-based model. The net radiation cannot be obtained from the profiles, therefore 4 and 5 should probably be 6 and 7 for that quantity.}
+\caption{Number of measurements by gap filling method, for the quantities that have this information. Due to inconsistencies in the Cabauw Documentation \citep{cabauw_gapfilling}, we cannot be sure of the meaning of the columns, but this is our interpretation: 0 - Unknown, 2 - Cabauw In situ (i.e. from the masts, not gapfilled), 3 - Automatic Weather Station in Cabauw (also not gapfilled, but sometimes secondary source), 4 - Computed from profiles, 5- Interpolated, 6- Cabauw-based model, 7 - De Bilt-based model. The net radiation cannot be obtained from the profiles, therefore 4 and 5 should probably be 6 and 7 for that quantity.}
 \label{tbl:col_gapfilled}
-\begin{tabular}{r|rrrrrrr}
-& \textbf{0} & \textbf{2} & \textbf{3} & \textbf{4} & \textbf{5}  & \textbf{6}  & \textbf{7} \\ \hline
+\begin{tabular*}{\textwidth}{l| @{\extracolsep{\fill}} rrrrrrr}
+\toprule
+& \textbf{0} & \textbf{2} & \textbf{3} & \textbf{4} & \textbf{5}  & \textbf{6}  & \textbf{7} \\ \midrule
 \textbf{$H$} & - &  1,192,346 & - & - &  17,291 &  97,720 &  1,005 \\
 \textbf{$\lambda E$} & - &  1,180,434 & - & - &  18,503 &  97,846 &  11,579 \\
 \textbf{$u_*$} & - &  1,174,593 & - &  132,461 &  465 &  618 &  225 \\
@@ -1092,7 +1103,8 @@ Unfortunately, most of these observations contain unreliable measurements, as de
 \textbf{$CO_2$ Flux} & - &  964,749 & - & - &  48,983 &  287,855 &  6,775 \\
 \textbf{Soil Heat Flux} & - &  1,232,822 & - & - & - &  72,256 &  3,284 \\
 \textbf{Net Radiation} & - &  1,274,106 & -&  20,962 &  1,715 & - &  11,579 \\
-\end{tabular} 
+\bottomrule
+\end{tabular*}
 \end{table}
 
 
@@ -1198,10 +1210,12 @@ Section \ref{sec:gradients} introduced three different ways to compute the gradi
 \caption{Pearson correlation coefficient between the gradients predicted by the different methods, divided by level. The F.D. gradient is poorly correlated with the other two methods at the 10 meters level, but is very well correlated with the Log gradient at the other levels. The Log and G.P. gradients disagree on the lower levels, but it appears their predictions converge as altitude increases.}
 \label{tbl:gradients_corr}
 \begin{tabular}{c|c|c|c}
-z & F.D. / G.P. & Log / F.D. & Log / G.P. \\ \hline
+\toprule
+z & F.D. / G.P. & Log / F.D. & Log / G.P. \\ \midrule
  	10 & 	0.192 & 0.480 &	0.317 \\
  	20 &	0.645 	& 0.991 &	0.640 \\
  	40 &	0.863 & 0.981 &	0.835 \\
+\bottomrule
 \end{tabular}
 \end{table}
 
@@ -1211,16 +1225,18 @@ Since Log and G.P. predict the wind speed too, we can compare their predictions 
 \centering
 \caption{Absolute percent error of the wind speed modeled by the Log and G.P. methods at each altitude level. The altitude does not affect the error, and the G.P. wind speed is closer to the true wind speed than the Log model in the vast majority of cases, although the difference is negligible, often less than a few percents.}
 \label{tbl:model_wind_errors}
-\begin{tabular}{c|ccc|ccc|ccc}
-& z & Log & G.P. & z & Log & G.P. & z & Log & G.P. \\\hline
-mean & \multirow{7}{*}{ 10 } & 1.2250 & 1.0329 & \multirow{7}{*}{ 20 } & 2.2605 & 1.4217 & \multirow{7}{*}{ 40 } & 1.3878 & 1.0364 \\
-std & & 1.4033 & 1.1169 & & 2.3432 & 1.4658 & & 1.4783 & 1.1208 \\
-min & & 0.0000 & 0.0000 & & 0.0000 & 0.0000 & & 0.0000 & 0.0000 \\
+\begin{tabular*}{\textwidth}{l @{\extracolsep{\fill}} |ccc|ccc|ccc}
+\toprule
+& z & Log & G.P. & z & Log & G.P. & z & Log & G.P. \\\midrule
+Mean & \multirow{7}{*}{ 10 } & 1.2250 & 1.0329 & \multirow{7}{*}{ 20 } & 2.2605 & 1.4217 & \multirow{7}{*}{ 40 } & 1.3878 & 1.0364 \\
+Std. & & 1.4033 & 1.1169 & & 2.3432 & 1.4658 & & 1.4783 & 1.1208 \\
+Min. & & 0.0000 & 0.0000 & & 0.0000 & 0.0000 & & 0.0000 & 0.0000 \\
 25\% & & 0.3714 & 0.3249 & & 0.7447 & 0.4549 & & 0.4744 & 0.3037 \\
 50\% & & 0.8217 & 0.7608 & & 1.6251 & 1.0595 & & 1.0263 & 0.7265 \\
 75\% & & 1.5505 & 1.4179 & & 2.9642 & 1.9693 & & 1.8413 & 1.4143 \\
-max & & 53.7541 & 212.3985 & & 106.5623 & 192.9434 & & 80.3531 & 43.4657 \\
-\end{tabular} 
+Max. & & 53.7541 & 212.3985 & & 106.5623 & 192.9434 & & 80.3531 & 43.4657 \\
+\bottomrule
+\end{tabular*} 
 \end{table}
 
 
@@ -1241,11 +1257,13 @@ Given that the final goal of finding the gradient is to compute the universal fu
 \caption{Mean squared error of $\phi_m$ (coefficients according to equation \ref{eq:phi_m_coeff}) when predicting the empirical flux-profile relationship (equation \ref{eq:phi_m}), computed with the three methods of calculating the gradient. The errors in second line (F.D. w/o z=10) were computed after discarding the data at the 10 meters level, because we argued the F.D. method is not reliable at that level. We show the error both in the range where the Monin-Obukhov similarity theory is known to be valid (84\% of the total), and the error using all data.}
 \label{tbl:gradient_errors}
 \begin{tabular}{r|c|c}
-Method & MSE ($-2\leq\xi\leq1$) & MSE \\ \hline
+\toprule
+Method & MSE ($-2\leq\xi\leq1$) & MSE \\ \midrule
 F.D. & 1.994 & 9.322 \\
 F.D. (w/o z=10) & 0.627  & 11.832 \\
 Log & 0.660 & 8.498 \\
-G.P. & 1.213 & 8.899
+G.P. & 1.213 & 8.899 \\
+\bottomrule
 \end{tabular}
 \end{table}
 
@@ -1308,93 +1326,88 @@ Median Absolute Percent Error	& 28.964847  	& 0.938811 & 24.618438    & 0.729602
 \centering
 \caption{Values of the coefficients of the MOST estimator of equation \ref{eq:phi_general} fitted on the data with $-2\leq\xi\leq1$. The minimum values for $c$ and $d$ seem to be outliers, as well as the next smallest value, but the other 8 values are closely clustered together within an interval of about 0.15.}
 \label{tbl:most_coeffs}
-\begin{tabular}{r|c|c|c|c|c|c|c}
-   & Mean       & Std.       & Min.       & 25\%       & 50\%       & 75\%       & Max. \\ \hline
+\begin{tabular*}{\textwidth}{r  |@{\extracolsep{\fill}}ccccccc}
+\toprule
+   & Mean       & Std.       & Min.       & 25\%       & 50\%       & 75\%       & Max. \\ \midrule
 $a$   & 0.943802  & 0.004228  & 0.935826  & 0.942926  & 0.944624  & 0.946017  & 0.950583 \\
 $b$   & 2.772180  & 0.008216  & 2.758320  & 2.769266  & 2.772188  & 2.778464  & 2.783730 \\
 $c$   & 2.452160  & 0.469983  & 1.246522  & 2.607285  & 2.646705  & 2.674603  & 2.713834 \\
-$d$   & -0.298687  & 0.109407 & -0.601655 & -0.261012 & -0.258147 & -0.255400 & -0.248226
-\end{tabular}
+$d$   & -0.298687  & 0.109407 & -0.601655 & -0.261012 & -0.258147 & -0.255400 & -0.248226 \\
+\bottomrule
+\end{tabular*}
 \end{table}
 
 
-\subsection{Ridge Regression}
+\subsection{Other Estimators}
+
 
 \begin{figure}
-\centering
-\includegraphics[width=\textwidth]{images/ridge_results}
-\caption{Performance of the Ridge regression estimator on the five feature sets with and without trend; the error bars are two standard deviations long in each direction. The solid yellow line is the performance attained by the MOST estimator, and the dashed yellow is that minus two standard deviations.}
-\label{fig:ridge_results}
+\subcaptionbox{Mean Squared Error\label{fig:result_Ridge_most_mean_squared_error}}{\includegraphics[width=0.5\textwidth]{images/result_Ridge_most_mean_squared_error}}\hfill
+\subcaptionbox{$R^2$ Score \label{fig:result_Ridge_most_r2_score}}{\includegraphics[width=0.49\textwidth]{images/result_Ridge_most_r2_score}}\\
+
+\subcaptionbox{Mean Absolute Error\label{fig:result_Ridge_most_mean_absolute_error}}{\includegraphics[width=0.49\textwidth]{images/result_Ridge_most_mean_absolute_error}}
+\subcaptionbox{Median Absolute Error\label{fig:result_Ridge_most_median_absolute_error}}{\includegraphics[width=0.49\textwidth]{images/result_Ridge_most_median_absolute_error}}\\
+
+\subcaptionbox{Mean Absolute Percent Error\label{fig:result_Ridge_most_mean_abs_percent_error}}{\includegraphics[width=0.49\textwidth]{images/result_Ridge_most_mean_abs_percent_error}}\hfill
+\subcaptionbox{Median Absolute Percent Error\label{fig:result_Ridge_most_median_abs_percent_error}}{\includegraphics[width=0.49\textwidth]{images/result_Ridge_most_median_abs_percent_error}}\\
+
+    \caption{Evaluation metrics of the Ridge Regression Estimator; the feature sets with trend are blue, those without trend are green.}
+	\label{fig:ridge_results}
 \end{figure}
 
+
 \begin{table}[]
-\centering
-\caption{Evaluation metrics for the Ridge linear regression estimator on the five feature sets augmented with trend.}
-\begin{tabular}{c|r|c|c|c|c}
-& & \multicolumn{2}{c|}{All} & \multicolumn{2}{c}{$-2\le\xi\le1$} \\
-&  & Mean & Std. & Mean & Std.   \\ \hline
- \multirow{6}{*}{F5} & Mean Squared Error 					& 0.593038  		& 0.048443  & 0.168731    & 0.016571    \\
-& $R^2$ Score									& 0.734663     	& 0.017526 & 0.688497    & 0.029011      \\
-& Mean Absolute Error 					& 0.509204  		& 0.018504 & 0.284076    & 0.011686      \\
-& Median Absolute Error 				& 0.345660 		& 0.009037   & 0.204298    & 0.005318    \\
-& Mean Absolute Percent Error  	& 264.613746 	& 298.463690 & 79.669309   & 30.583787   \\
-& Median Absolute Percent Error	& 27.816959  	& 1.286721  & 19.301579    & 0.565164  \\ \hline
- \multirow{6}{*}{F4} & Mean Squared Error 					& a & b & 0.168744   & 0.012348   \\
-& $R^2$ Score									& a & b & 0.689096   & 0.018279   \\
-& Mean Absolute Error 					& a & b & 0.284449   & 0.010863   \\
-& Median Absolute Error 				& a & b & 0.205146    & 0.006771   \\
-& Mean Absolute Percent Error  	& a & b & 80.805403  & 34.558653  \\
-& Median Absolute Percent Error	& a & b & 19.327348   & 0.538968  
-\end{tabular}
+\caption{Evaluation metrics for the Ridge estimator. }
+\label{tbl:ridge_results}
+\input{include/results_Ridge}
 \end{table}
 
 
 
-\begin{table}[]
-\centering
-\caption{Evaluation metrics for the k-nearest neighbors estimator on the five feature sets augmented with trend.}
-\label{tbl:knn_results_f5t}
-\begin{tabular}{c|r|c|c|c|c}
-& & \multicolumn{2}{c|}{All} & \multicolumn{2}{c}{$-2\le\xi\le1$} \\
-& & Mean & Std. & Mean & Std.   \\ \hline
-\multirow{6}{*}{F5} & Mean Squared Error 					& 0.583102   	& 0.035314  & 0.187911    & 0.009168    \\ 
-& $R^2$ Score									& 0.739219   	& 0.010517 & 0.653668    & 0.009450      \\
-& Mean Absolute Error 					& 0.487180   	& 0.016797  & 0.314231    & 0.006526     \\
-& Median Absolute Error 				& 0.300725   	& 0.011178  & 0.237316    & 0.005357       \\
-& Mean Absolute Percent Error  	& 151.571688	&  55.287673 & 98.785002   & 39.723715    \\
-& Median Absolute Percent Error	& 25.450125   	& 1.270630  & 21.959704    & 0.538930 \\ \hline
-\multirow{6}{*}{F4} & Mean Squared Error 					& a & b & 0.197570   & 0.006350   \\ 
-& $R^2$ Score									& a & b & 0.635371   & 0.010965   \\
-& Mean Absolute Error 					& a & b & 0.321321   & 0.005622   \\
-& Median Absolute Error 				& a & b & 0.241515   & 0.004917   \\
-& Mean Absolute Percent Error  	& a & b & 98.139450  & 40.602436  \\
-& Median Absolute Percent Error	& a & b & 22.339853    & 0.829702  \\ \hline
-\end{tabular}
-\end{table}
+\begin{figure}
+\subcaptionbox{Mean Squared Error\label{fig:result_KNeighborsRegressor_most_mean_squared_error}}{\includegraphics[width=0.49\textwidth]{images/result_KNeighborsRegressor_most_mean_squared_error}}\hfill
+\subcaptionbox{$R^2$ Score \label{fig:result_KNeighborsRegressor_most_r2_score}}{\includegraphics[width=0.49\textwidth]{images/result_KNeighborsRegressor_most_r2_score}}\\
+
+\subcaptionbox{Mean Absolute Error\label{fig:result_KNeighborsRegressor_most_mean_absolute_error}}{\includegraphics[width=0.49\textwidth]{images/result_KNeighborsRegressor_most_mean_absolute_error}}
+\subcaptionbox{Median Absolute Error\label{fig:result_KNeighborsRegressor_most_median_absolute_error}}{\includegraphics[width=0.49\textwidth]{images/result_KNeighborsRegressor_most_median_absolute_error}}\\
+
+\subcaptionbox{Mean Absolute Percent Error\label{fig:result_KNeighborsRegressor_most_mean_abs_percent_error}}{\includegraphics[width=0.49\textwidth]{images/result_KNeighborsRegressor_most_mean_abs_percent_error}}\hfill
+\subcaptionbox{Median Absolute Percent Error\label{fig:result_KNeighborsRegressor_most_median_abs_percent_error}}{\includegraphics[width=0.49\textwidth]{images/result_KNeighborsRegressor_most_median_abs_percent_error}}\\
+
+    \caption{Evaluation metrics of the k-Nearest Neighbors Regressor Estimator; the feature sets with trend are blue, those without trend are green.}
+	\label{fig:knn_results}
+\end{figure}
+
 
 
 \begin{table}[]
-\centering
-\caption{Evaluation metrics for the gradient boosting estimator on the five feature sets augmented with trend.}
-\label{tbl:gb_results_f5t}
-\begin{tabular}{c|r|c|c|c|c}
-& & \multicolumn{2}{c|}{All} & \multicolumn{2}{c}{$-2\le\xi\le1$} \\
-\multirow{6}{*}{F5} & Mean & Std. & Mean & Std.   \\ \hline
-& Mean Squared Error 					& 0.285956	& 0.012074 & 0.087484    & 0.007147    \\  
-& $R^2$ Score									& 0.872323   & 0.006331   & 0.838710    & 0.008769    \\
-& Mean Absolute Error 					& 0.319557   & 0.006457 & 0.192329    & 0.007915    \\
-& Median Absolute Error 				& 0.180583  	& 0.003956   & 0.127258    & 0.006362   \\
-& Mean Absolute Percent Error		& 88.093397	& 53.138612  & 43.165082   & 13.711617   \\
-& Median Absolute Percent Error	& 15.888091	& 0.499692 & 12.523625    & 0.535662   \\ \hline
-\multirow{6}{*}{F4} & Mean Squared Error 					& a & b & 0.093117   & 0.006277   \\ 
-& $R^2$ Score									& a & b & 0.828070   & 0.006365   \\
-& Mean Absolute Error 					& a & b & 0.201683      & 0.007324   \\
-& Median Absolute Error 				& a & b & 0.136112   & 0.006557   \\
-& Mean Absolute Percent Error  	& a & b & 45.666477  & 10.974657  \\
-& Median Absolute Percent Error	& a & b & 13.447042   & 0.706335  \\ \hline
-\end{tabular}
+\caption{Evaluation metrics for the k-Nearest Neighbors Regressor estimator.}
+\label{tbl:knn_results}
+\input{include/results_KNeighborsRegressor}
 \end{table}
 
+
+
+\begin{figure}
+\subcaptionbox{Mean Squared Error\label{fig:result_GradientBoostingRegressor_most_mean_squared_error}}{\includegraphics[width=0.49\textwidth]{images/result_GradientBoostingRegressor_most_mean_squared_error}}\hfill
+\subcaptionbox{$R^2$ Score \label{fig:result_GradientBoostingRegressor_most_r2_score}}{\includegraphics[width=0.49\textwidth]{images/result_GradientBoostingRegressor_most_r2_score}}\\
+
+\subcaptionbox{Mean Absolute Error\label{fig:result_GradientBoostingRegressor_most_mean_absolute_error}}{\includegraphics[width=0.49\textwidth]{images/result_GradientBoostingRegressor_most_mean_absolute_error}}
+\subcaptionbox{Median Absolute Error\label{fig:result_GradientBoostingRegressor_most_median_absolute_error}}{\includegraphics[width=0.49\textwidth]{images/result_GradientBoostingRegressor_most_median_absolute_error}}\\
+
+\subcaptionbox{Mean Absolute Percent Error\label{fig:result_GradientBoostingRegressor_most_mean_abs_percent_error}}{\includegraphics[width=0.49\textwidth]{images/result_GradientBoostingRegressor_most_mean_abs_percent_error}}\hfill
+\subcaptionbox{Median Absolute Percent Error\label{fig:result_GradientBoostingRegressor_most_median_abs_percent_error}}{\includegraphics[width=0.49\textwidth]{images/result_GradientBoostingRegressor_most_median_abs_percent_error}}\\
+
+    \caption{Evaluation metrics of the Gradient Boosted Trees Estimator; the feature sets with trend are blue, those without trend are green.}
+	\label{fig:gbr_results}
+\end{figure}
+
+
+\begin{table}[]
+\caption{Evaluation metrics for the Gradient Boosted Trees Estimator estimator.}
+\label{tbl:gbr_results}
+\input{include/results_GradientBoostingRegressor}
+\end{table}
 
 
 
