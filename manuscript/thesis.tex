@@ -1271,7 +1271,7 @@ To conclude, although F.D. (equation \ref{eq:fd_gradient}) is the most accurate 
 
 
 \section{Flux-Profile Relationship}
-Figure \ref{fig:most_scatter} shows the wind shear versus the instability parameter, together with the commonly accepted flux-profile relationship and the relationship fitted on our dataset, and in figure \ref{fig:most_zoom} we see the flux-profile relationship restricted to the interval of instability parameter where the Monin-Obukhov similarity theory is valid. Qualitatively, the relationship behaves as expected, going to zero as $\xi$ decreases, linearly increasing in the $0\leq\xi\leq1$ interval, and leveling after that, possibly approaching the $\xi^{1/3}$ form proposed by \cite{sheba_phim}. Refer to section \ref{sec:most_estimator_results} for further details.
+Figure \ref{fig:most_scatter} shows the wind shear versus the instability parameter, together with the commonly accepted flux-profile relationship in green and the relationship fitted on our dataset in red.
 
 negative phim with small |xi|
 
@@ -1302,23 +1302,26 @@ performance of the models
 
 \subsection{MOST Estimator}
 \label{sec:most_estimator_results}
-The performance of the MOST estimator is shown in table \ref{tbl:most_results}; the proportion of data for which $-2\leq\xi\leq 1$ is 83.6\%. We see a considerable increase in the MSE when the full dataset is used; this is not surprising, considering that, with $\xi>1$, $\phi_m$ tends to level off, and there are a considerable number of outliers in the range $-20\leq\xi\leq-2$ (see figure \ref{fig:most_full}) that cannot be fitted by the MOST estimator. Figure \ref{fig:most_scatter} shows $\phi_m$ as a function of $\xi$ as computed in our dataset, as well as the predictions of equation \ref{eq:phi_m_coeff} and the fitted MOST estimator.
+The performance of the MOST estimator is shown in table \ref{tbl:most_results}; the proportion of data for which $-2\leq\xi\leq 1$ is 83.6\%. We see a considerable increase in the MSE when the full dataset is used; this is not surprising, considering that, with $\xi>1$, $\phi_m$ tends to level off, and there are a considerable number of outliers in the range $-20\leq\xi\leq-2$ (see figure \ref{fig:most_full}) that cannot be fitted by the MOST estimator. Figure \ref{fig:most_scatter} shows $\phi_m$ as a function of $\xi$ as computed in our dataset, as well as the predictions of equation \ref{eq:phi_m_coeff} and the fitted MOST estimator. Qualitatively, the relationship behaves as expected, going to zero as $\xi$ decreases, linearly increasing in the $0\leq\xi\leq1$ interval, and leveling after that, possibly approaching the $\xi^{1/3}$ form proposed by \cite{sheba_phim}.
 
-Table \ref{tbl:most_results} shows the values of the coefficients in equation \ref{eq:phi_general}, when fitted to the region of data where the Monin-Obukhov similarity theory is valid. We note a big difference with the values recommended in \cite{hogstrom88}, as well as most studies on the topic. However, \cite{cabauw_night_most} studied the stable, nocturnal boundary layer at Cabauw, and reported values varying between 0.81 and 0.95 for $a$ and between 2.7 and 3.2 for $b$, depending on the direction of the wind; there is no known explanation for this discrepancy. Although these values were obtained with linear regression, essentially the same method that we applied, no goodness of fit statistics, such as MSE or $R^2$, were reported.
+
+Table \ref{tbl:most_results} shows the values of the coefficients in equation \ref{eq:phi_general}, when fitted to the region of data where the Monin-Obukhov similarity theory is valid. We note a big difference with the values recommended in \cite{hogstrom88}, as well as most studies on the topic. However, \cite{cabauw_night_most} studied the stable, nocturnal boundary layer at Cabauw, and reported values varying between 0.81 and 0.95 for $a$ and between 2.7 and 3.2 for $b$, depending on the direction of the wind; there is no known explanation for this discrepancy. Although \cite{cabauw_night_most} used the same method that we applied to find the coefficients, no goodness of fit statistics, such as MSE or $R^2$, were reported.
 
 \begin{table}[]
 \centering
-\caption{Evaluation metrics for the Monin-Obukhov estimator}
+\caption{Evaluation metrics for the MOST estimator}
 \label{tbl:most_results}
-\begin{tabular}{r|c|c|c|c}
-& \multicolumn{2}{c|}{All} & \multicolumn{2}{c}{$-2\le\xi\le1$} \\
- & Mean & Std.  & Mean & Std. \\ \hline
-Mean Squared Error 					& 0.672028  		& 0.031320  & 0.332056    & 0.017246     \\
-$R^2$ Score									& 0.705471    	& 0.008943 & 0.605013    & 0.010732       \\
-Mean Absolute Error 					& 0.540632  		& 0.013878 & 0.395410    & 0.007181      \\
-Median Absolute Error 				& 0.371569 		& 0.015601 & 0.282736    & 0.004304      \\
-Mean Absolute Percent Error  	& 252.925389 	& 196.086056 & 184.707665   & 48.260311    \\
-Median Absolute Percent Error	& 28.964847  	& 0.938811 & 24.618438    & 0.729602   
+%\begin{tabular*}{\textwidth}{r  |@{\extracolsep{\fill}}cc}
+\begin{tabular}{r|cc}
+\toprule
+& All & $-2\le\xi\le1$ \\ \midrule
+Mean Squared Error 					& 0.6720 (0.03132)  & 0.3321  (0.0172)     \\
+$R^2$ Score									& 0.7055 (0.0089) & 0.6050 (0.0107)       \\
+Mean Absolute Error 					& 0.5406 (0.0139) & 0.3954 (0.0072)      \\
+Median Absolute Error 				& 0.3716 (0.0156) & 0.2827 (0.0043)      \\
+Mean Absolute Percent Error  	& 252.9254 (196.0861) & 184.7077 (48.2603)    \\
+Median Absolute Percent Error	& 28.9648 (0.9388) & 24.6184    (0.7296)   \\
+\bottomrule
 \end{tabular}
 \end{table}
 
@@ -1351,7 +1354,22 @@ $d$   & -0.298687  & 0.109407 & -0.601655 & -0.261012 & -0.258147 & -0.255400 & 
 \subcaptionbox{Mean Absolute Percent Error\label{fig:result_Ridge_most_mean_abs_percent_error}}{\includegraphics[width=0.49\textwidth]{images/result_Ridge_most_mean_abs_percent_error}}\hfill
 \subcaptionbox{Median Absolute Percent Error\label{fig:result_Ridge_most_median_abs_percent_error}}{\includegraphics[width=0.49\textwidth]{images/result_Ridge_most_median_abs_percent_error}}\\
 
-    \caption{Evaluation metrics of the Ridge Regression Estimator; the feature sets with trend are blue, those without trend are green.}
+    \caption{Evaluation metrics of the Ridge Regression Estimator in the MOST validity range; the feature sets with trend are blue, those without trend are green.}
+	\label{fig:ridge_results}
+\end{figure}
+
+
+\begin{figure}
+\subcaptionbox{Mean Squared Error\label{fig:result_Ridge_nomost_mean_squared_error}}{\includegraphics[width=0.5\textwidth]{images/result_Ridge_nomost_mean_squared_error}}\hfill
+\subcaptionbox{$R^2$ Score \label{fig:result_Ridge_nomost_r2_score}}{\includegraphics[width=0.49\textwidth]{images/result_Ridge_nomost_r2_score}}\\
+
+\subcaptionbox{Mean Absolute Error\label{fig:result_Ridge_nomost_mean_absolute_error}}{\includegraphics[width=0.49\textwidth]{images/result_Ridge_nomost_mean_absolute_error}}
+\subcaptionbox{Median Absolute Error\label{fig:result_Ridge_nomost_median_absolute_error}}{\includegraphics[width=0.49\textwidth]{images/result_Ridge_nomost_median_absolute_error}}\\
+
+\subcaptionbox{Mean Absolute Percent Error\label{fig:result_Ridge_nomost_mean_abs_percent_error}}{\includegraphics[width=0.49\textwidth]{images/result_Ridge_nomost_mean_abs_percent_error}}\hfill
+\subcaptionbox{Median Absolute Percent Error\label{fig:result_Ridge_nomost_median_abs_percent_error}}{\includegraphics[width=0.49\textwidth]{images/result_Ridge_nomost_median_abs_percent_error}}\\
+
+    \caption{Evaluation metrics of the Ridge Regression Estimator on all the data; the feature sets with trend are blue, those without trend are green.}
 	\label{fig:ridge_results}
 \end{figure}
 
@@ -1362,7 +1380,7 @@ $d$   & -0.298687  & 0.109407 & -0.601655 & -0.261012 & -0.258147 & -0.255400 & 
 \input{include/results_Ridge}
 \end{table}
 
-
+% ---------------------------------------------------------------
 
 \begin{figure}
 \subcaptionbox{Mean Squared Error\label{fig:result_KNeighborsRegressor_most_mean_squared_error}}{\includegraphics[width=0.49\textwidth]{images/result_KNeighborsRegressor_most_mean_squared_error}}\hfill
@@ -1374,10 +1392,24 @@ $d$   & -0.298687  & 0.109407 & -0.601655 & -0.261012 & -0.258147 & -0.255400 & 
 \subcaptionbox{Mean Absolute Percent Error\label{fig:result_KNeighborsRegressor_most_mean_abs_percent_error}}{\includegraphics[width=0.49\textwidth]{images/result_KNeighborsRegressor_most_mean_abs_percent_error}}\hfill
 \subcaptionbox{Median Absolute Percent Error\label{fig:result_KNeighborsRegressor_most_median_abs_percent_error}}{\includegraphics[width=0.49\textwidth]{images/result_KNeighborsRegressor_most_median_abs_percent_error}}\\
 
-    \caption{Evaluation metrics of the k-Nearest Neighbors Regressor Estimator; the feature sets with trend are blue, those without trend are green.}
+    \caption{Evaluation metrics of the k-Nearest Neighbors Regressor Estimator in the MOST validity range; the feature sets with trend are blue, those without trend are green.}
 	\label{fig:knn_results}
 \end{figure}
 
+
+\begin{figure}
+\subcaptionbox{Mean Squared Error\label{fig:result_KNeighborsRegressor_nomost_mean_squared_error}}{\includegraphics[width=0.49\textwidth]{images/result_KNeighborsRegressor_nomost_mean_squared_error}}\hfill
+\subcaptionbox{$R^2$ Score \label{fig:result_KNeighborsRegressor_nomost_r2_score}}{\includegraphics[width=0.49\textwidth]{images/result_KNeighborsRegressor_nomost_r2_score}}\\
+
+\subcaptionbox{Mean Absolute Error\label{fig:result_KNeighborsRegressor_nomost_mean_absolute_error}}{\includegraphics[width=0.49\textwidth]{images/result_KNeighborsRegressor_nomost_mean_absolute_error}}
+\subcaptionbox{Median Absolute Error\label{fig:result_KNeighborsRegressor_nomost_median_absolute_error}}{\includegraphics[width=0.49\textwidth]{images/result_KNeighborsRegressor_nomost_median_absolute_error}}\\
+
+\subcaptionbox{Mean Absolute Percent Error\label{fig:result_KNeighborsRegressor_nomost_mean_abs_percent_error}}{\includegraphics[width=0.49\textwidth]{images/result_KNeighborsRegressor_nomost_mean_abs_percent_error}}\hfill
+\subcaptionbox{Median Absolute Percent Error\label{fig:result_KNeighborsRegressor_nomost_median_abs_percent_error}}{\includegraphics[width=0.49\textwidth]{images/result_KNeighborsRegressor_nomost_median_abs_percent_error}}\\
+
+    \caption{Evaluation metrics of the k-Nearest Neighbors Regressor Estimator on all the data; the feature sets with trend are blue, those without trend are green.}
+	\label{fig:knn_results}
+\end{figure}
 
 
 \begin{table}[]
@@ -1387,6 +1419,7 @@ $d$   & -0.298687  & 0.109407 & -0.601655 & -0.261012 & -0.258147 & -0.255400 & 
 \end{table}
 
 
+% ---------------------------------------------------------------
 
 \begin{figure}
 \subcaptionbox{Mean Squared Error\label{fig:result_GradientBoostingRegressor_most_mean_squared_error}}{\includegraphics[width=0.49\textwidth]{images/result_GradientBoostingRegressor_most_mean_squared_error}}\hfill
@@ -1398,9 +1431,11 @@ $d$   & -0.298687  & 0.109407 & -0.601655 & -0.261012 & -0.258147 & -0.255400 & 
 \subcaptionbox{Mean Absolute Percent Error\label{fig:result_GradientBoostingRegressor_most_mean_abs_percent_error}}{\includegraphics[width=0.49\textwidth]{images/result_GradientBoostingRegressor_most_mean_abs_percent_error}}\hfill
 \subcaptionbox{Median Absolute Percent Error\label{fig:result_GradientBoostingRegressor_most_median_abs_percent_error}}{\includegraphics[width=0.49\textwidth]{images/result_GradientBoostingRegressor_most_median_abs_percent_error}}\\
 
-    \caption{Evaluation metrics of the Gradient Boosted Trees Estimator; the feature sets with trend are blue, those without trend are green.}
+    \caption{Evaluation metrics of the Gradient Boosted Trees Estimator in the MOST validity range; the feature sets with trend are blue, those without trend are green.}
 	\label{fig:gbr_results}
 \end{figure}
+
+todo add plots for gbr nomost
 
 
 \begin{table}[]
@@ -1409,6 +1444,8 @@ $d$   & -0.298687  & 0.109407 & -0.601655 & -0.261012 & -0.258147 & -0.255400 & 
 \input{include/results_GradientBoostingRegressor}
 \end{table}
 
+
+% ---------------------------------------------------------------
 
 
 \chapter{Discussion}
