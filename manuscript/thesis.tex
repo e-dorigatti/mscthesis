@@ -938,10 +938,6 @@ All models but neural networks are fitted using nested cross validation with ran
 
 We use log-uniform distributions for parameters with a high range of possible values to reflect the intuition that small values are as likely as large values, and to avoid the samples being dominated by the larger values. Samples from an uniform distribution from $10^0$ to $10^3$ are ten times more likely to be from $[10^2,10^3]$ than from $[10^1,10^2]$, and, on average, only one in 100 samples will be in $[10^0,10^1]$. Log$_{10}$-uniform distributions do not have this problem, and a sample is equally likely to belong to any of the three intervals.
 
-todo talk about nnets
- - use prelu instead of relu because relus get stuck
- - use dropout instead of batch norm + l2 regu because works better
-
 \begin{table}[]
 \centering
 \caption{Distribution of the hyper-parameters for gradient boosted trees}
@@ -960,33 +956,6 @@ $\delta$ (for the Huber loss) & Uniform & From 1\% to 99\% \\
 \end{tabularx}
 \end{table}
 
-
-
-\section{Performance Evaluation}
-\label{sec:perf_eval}
-The goal of performance evaluation is to obtain a realistic and unbiased estimate of the performance of a model on unseen data. Because the Monin-Obukhov similarity theory is only valid in the $-2\leq\xi\leq1$ range, we will use this data as the primary target for evaluation. We will also evaluate the models on the full dataset, to see what kind of performance can be expected outside of the typical range where the similarity theory is employed.
-
-We are actually not interested in the optimal values of the hyper-parameters; for this reason, we perform nested cross validation, with the inner loop used to optimize the hyper-parameters through random search \citep{random_search}, and the outer loop used to evaluate the model. We use 10 folds in both the inner and outer CV, and test 10 different hyper-parameter combinations for all estimators. Limits in the available computational resources prevent us from testing more combinations; the possibility that this number is too low can manifest itself in the high variance of the nested cross validation results. Algorithm \ref{alg:nested_cv} shows in detail how nested cross validation with random search works.
-
-In practice, we need to run $2\cdot5\cdot2=20$ nested cross validation rounds for each model, meaning that it is fit $20(10\cdot10\cdot10+10)=20200$ times in total. According to the model and its hyper-parameters, fitting can take from a few seconds up to more than 24 hours; in order to make the process feasible, we implemented algorithm \ref{alg:nested_cv} using Apache Spark \citep{spark}. Since the number of stragglers is very low\footnote{for gradient boosted trees, the slowest method, the median fitting time in our experiments is around half a minute, the third quartile is around ten minutes, and the maximum is between 20 and 30 hours}, running multiple nested cross validation jobs at the same time can reduce the duration of the whole process by five to ten times.
-
-A fundamental assumption underlying hold-out evaluation methods is that the samples in the training set are independent and identically distributed, so that the distribution in the two partitions are equal. This is not our case, since there is a inherent time dependency in the data, meaning that samples obtained close in time are very similar. This can be confirmed by training and evaluating a k-nearest neighbors classifier with $k=1$ on random splits: the resulting mean squared error is in the order of $10^{-3}$, which is clearly unrealistic. To circumvent this problem, the CV folds are created on \emph{months}: all the samples in a given month and year are either in the training set or in the validation set. We choose months instead of days because the weather often does not change significantly in the span of 24 hours, whereas in a month there are around three weeks worth of samples that are independent from the conditions at the start and end of the month.
-
-The main evaluation metric is the mean squared error, since that is what we are optimizing for, but we compute other metrics in the outer cross validation loop to get a more complete idea of the performance of the estimators:
-
-\begin{itemize}
-\item Mean Squared Error (MSE);
-\item Mean Absolute Error (MAE);
-\item Median Absolute Error (mAE);
-\item Mean Absolute Percent Error (MAPE);
-\item Median Absolute Percent Error (mAPE);
-\item $R^2$ Score:
-$$
-1-\frac{\sum (f_n-t_n)^2}{\sum (t_n-\overline{t})^2}
-$$
-\end{itemize}
-
-Where $f_n$ is the predicted value for the test sample $\bm x_n$ with true value $t_n$, the squared error is $(f_n-t_n)^2$, the absolute error is $\vert f_n-t_n\vert$, the absolute percent error is $100\vert 1-f_n/t_n\vert$. We present both mean and median scores because the former are heavily skewed by outliers. We also present both absolute and percent errors because the latter are easier to interpret, but tend to explode when the true value is very small,\footnote{predicting 1 for a true value of 100 gives a percent error of 99\%, but predicting 100 for a true value of 1 gives, somewhat unfairly, a percent error of 9900\%, whereas their absolute error is identical.} a condition that frequently happens in our dataset.
 
 \begin{algorithm}
 \caption{Nested cross validation with random hyper-parameter search.}
@@ -1040,12 +1009,62 @@ Where $f_n$ is the predicted value for the test sample $\bm x_n$ with true value
 \end{algorithmic}
 \end{algorithm}
 
+\section{Performance Evaluation}
+\label{sec:perf_eval}
+The goal of performance evaluation is to obtain a realistic and unbiased estimate of the performance of a model on unseen data. Because the Monin-Obukhov similarity theory is only valid in the $-2\leq\xi\leq1$ range, we will use this data as the primary target for evaluation. We will also evaluate the models on the full dataset, to see what kind of performance can be expected outside of the typical range where the similarity theory is employed.
+
+We are actually not interested in the optimal values of the hyper-parameters; for this reason, we perform nested cross validation, with the inner loop used to optimize the hyper-parameters through random search \citep{random_search}, and the outer loop used to evaluate the model. We use 10 folds in both the inner and outer CV, and test 10 different hyper-parameter combinations for all estimators. Limits in the available computational resources prevent us from testing more combinations; the possibility that this number is too low can manifest itself in the high variance of the nested cross validation results. Algorithm \ref{alg:nested_cv} shows in detail how nested cross validation with random search works.
+
+In practice, we need to run $2\cdot5\cdot2=20$ nested cross validation rounds for each model, meaning that it is fit $20(10\cdot10\cdot10+10)=20200$ times in total. According to the model and its hyper-parameters, fitting can take from a few seconds up to more than 24 hours; in order to make the process feasible, we implemented algorithm \ref{alg:nested_cv} using Apache Spark \citep{spark}. Since the number of stragglers is very low\footnote{for gradient boosted trees, the slowest method, the median fitting time in our experiments is around half a minute, the third quartile is around ten minutes, and the maximum is between 20 and 30 hours}, running multiple nested cross validation jobs at the same time can reduce the duration of the whole process by five to ten times.
+
+A fundamental assumption underlying hold-out evaluation methods is that the samples in the training set are independent and identically distributed, so that the distribution in the two partitions are equal. This is not our case, since there is a inherent time dependency in the data, meaning that samples obtained close in time are very similar. This can be confirmed by training and evaluating a k-nearest neighbors classifier with $k=1$ on random splits: the resulting mean squared error is in the order of $10^{-3}$, which is clearly unrealistic. To circumvent this problem, the CV folds are created on \emph{months}: all the samples in a given month and year are either in the training set or in the validation set. We choose months instead of days because the weather often does not change significantly in the span of 24 hours, whereas in a month there are around three weeks worth of samples that are independent from the conditions at the start and end of the month.
+
+The main evaluation metric is the mean squared error, since that is what we are optimizing for, but we compute other metrics in the outer cross validation loop to get a more complete idea of the performance of the estimators:
+
+\begin{itemize}
+\item Mean Squared Error (MSE);
+\item Mean Absolute Error (MAE);
+\item Median Absolute Error (mAE);
+\item Mean Absolute Percent Error (MAPE);
+\item Median Absolute Percent Error (mAPE);
+\item $R^2$ Score:
+$$
+1-\frac{\sum (f_n-t_n)^2}{\sum (t_n-\overline{t})^2}
+$$
+\end{itemize}
+
+Where $f_n$ is the predicted value for the test sample $\bm x_n$ with true value $t_n$, the squared error is $(f_n-t_n)^2$, the absolute error is $\vert f_n-t_n\vert$, the absolute percent error is $100\vert 1-f_n/t_n\vert$. We present both mean and median scores because the former are heavily skewed by outliers. We also present both absolute and percent errors because the latter are easier to interpret, but tend to explode when the true value is very small,\footnote{predicting 1 for a true value of 100 gives a percent error of 99\%, but predicting 100 for a true value of 1 gives, somewhat unfairly, a percent error of 9900\%, whereas their absolute error is identical.} a condition that frequently happens in our dataset.
+
+
 \section{Success Criteria}
 \label{sec:success}
-A successful answer to the first research question entails finding a model whose mean squared error on any feature set, with or without trend, is smaller than the mean squared error of the MOST estimator introduced in section \ref{sec:most_fit}.
+A successful answer to the first research question entails finding a model whose mean squared error on any feature set, with or without trend, is smaller than the mean squared error of the MOST estimator introduced in section \ref{sec:most_fit}. The second research question is answered by comparing the different evaluation metrics on the ten feature sets (F1 to F5, with and without trend). Note that we cannot use the output of a model to obtain the importance of the features, as this method is not reliable when some of them are correlated \citep{rf_bias,rf_corr_imp}, which is a very relevant issue in our case. Trivially, wind speed and temperature at the different levels are very strongly correlated (Pearson's $r$ is above 0.95), and there are other, more complex, correlations, such as between the net radiation and the soil heat flux, or between the soil temperature and the dew point (Pearson's $r$ is respectively 0.75 and 0.79). In spite of the correlations, all these variables contribute to the flux-profile relationships, often in very nuanced ways.
 
-The second research question is answered by comparing the different evaluation metrics on the ten feature sets (F1 to F5, with and without trend). Note that we cannot use the output of a model to obtain the importance of the features, as this method is not reliable when some of them are correlated \citep{rf_bias,rf_corr_imp}, which is a very relevant issue in our case. Trivially, wind speed and temperature at the different levels are very strongly correlated (Pearson's $r$ is above 0.95), and there are other, more complex, correlations, such as between the net radiation and the soil heat flux, or between the soil temperature and the dew point (Pearson's $r$ is respectively 0.75 and 0.79). In spite of the correlations, all these variables contribute to the flux-profile relationships, often in very nuanced ways.
+The differences are quantified using a linear contrast of means, and the 95\% confidence interval for the population effect size. We use the formula suggested by \cite{effect_size}, which do not assume that the samples originate from two populations with the same variance, which is hardly the case in our setting since we are comparing different estimators and/or different feature sets. Given two independent samples of $n_1$ and $n_2$ observations, with sample mean $\mu_1$ and $\mu_2$ and standard deviations $\hat{\sigma_1}$, $\hat{\sigma_2}$, the effect size is computed as follows:
 
+\begin{equation}
+\label{eq:effect_size}
+\hat{\delta}=\frac{\mu_1-\mu_2}{\hat{\sigma}}
+\end{equation}
+
+where $\hat{\sigma}$ is the average standard deviation: $\hat{\sigma}=[(\hat{\sigma_1}^2+\hat{\sigma_2}^2)/2]^{1/2}$. The variance of \ref{eq:effect_size} is given by
+
+
+\begin{equation}
+\text{Var}[\hat{\delta}]=\frac{\hat{\delta}^2}{8\hat{\sigma}^4}\left(
+\frac{\hat{\sigma_1}^4}{n_1-1} + \frac{\hat{\sigma_2}^4}{n_2-1}
+\right)
++\frac{\hat{\sigma_1}^2}{\hat{\sigma}^2(n_1-1)}
++\frac{\hat{\sigma_2}^2}{\hat{\sigma}^2(n_2-1)}
+\end{equation}
+
+and an approximate $100(1-\alpha)\%$ confidence interval can be obtained with
+
+\begin{equation}
+\hat{\delta}\pm\bm\Phi^{-1}\left(1-\frac{\alpha}{2}\right)\cdot\sqrt{\text{Var}[\hat\delta]}
+\end{equation}
+
+where $\bm\Phi$ is the cumulative distribution function of the standardized Normal.
 
 
 \chapter{Results}
@@ -1256,7 +1275,7 @@ Given that the final goal of finding the gradient is to compute the universal fu
 \centering
 \caption{Mean squared error of $\phi_m$ (coefficients according to equation \ref{eq:phi_m_coeff}) when predicting the empirical flux-profile relationship (equation \ref{eq:phi_m}), computed with the three methods of calculating the gradient. The errors in second line (F.D. w/o z=10) were computed after discarding the data at the 10 meters level, because we argued the F.D. method is not reliable at that level. We show the error both in the range where the Monin-Obukhov similarity theory is known to be valid (84\% of the total), and the error using all data.}
 \label{tbl:gradient_errors}
-\begin{tabular}{r|c|c}
+\begin{tabular}{l|r|r}
 \toprule
 Method & MSE ($-2\leq\xi\leq1$) & MSE \\ \midrule
 F.D. & 1.994 & 9.322 \\
@@ -1270,7 +1289,7 @@ G.P. & 1.213 & 8.899 \\
 To conclude, although F.D. (equation \ref{eq:fd_gradient}) is the most accurate way of computing the profile gradient, it does not allow us to use data at the 10 meters level. Considering that Log (equation \ref{eq:log_gradient}) is just slightly worse, but allows us to include that level (increasing the data available by 50\%!), all the results presented from now on make use of it.
 
 
-\section{Flux-Profile Relationship}
+\section{Computing the Flux-Profile Relationship}
 Figure \ref{fig:most_scatter} shows the wind shear versus the instability parameter, together with the commonly accepted flux-profile relationship in green and the relationship fitted on our dataset in red. Qualitatively, the scatter plot looks sas expected, going to zero as $\xi$ decreases, linearly increasing in the $0\leq\xi\leq1$ interval, and leveling after that, possibly approaching the $\xi^{1/3}$ form proposed by \cite{sheba_phim}.
 
 negative phim with small |xi|
@@ -1296,11 +1315,11 @@ negative phim with small |xi|
 \end{figure}
 
 
-\section{Model Comparison}
-In this section, we present the evaluation metrics obtained by the estimators on the different configurations of features and data. We will refer to the interval $-2\leq\xi\leq1$ as the \emph{MOST validity range}; the proportion of data falling in this interval is 83.6\%. Unless specified otherwise, the metrics are presented as the mean over the ten outer validation folds and the standard deviation in parenthesis.
+\section{Predicting the Flux-Profile Relationship}
+In this section, we present and compare the evaluation metrics obtained by the estimators on the different configurations of features and data. We will refer to the interval $-2\leq\xi\leq1$ as the \emph{MOST validity range}, abbreviated as \textbf{MOST} in the tables; the proportion of data falling in this interval is 83.6\%. Unless specified otherwise, the metrics are presented as the mean over the ten outer validation folds followed by the standard deviation, in parenthesis, whereas the effect sizes are presented followed by the 95\% confidence interval in parenthesis.
 
 
-\subsection{MOST Estimator}
+\subsection{MOST Estimator Baseline}
 \label{sec:most_estimator_results}
 The performance of the MOST estimator is shown in table \ref{tbl:most_results}; we see a considerable increase in the MSE when the full dataset is used; this is not surprising, considering that, with $\xi>1$, $\phi_m$ tends to level off, and there are a considerable number of outliers in the range $-20\leq\xi\leq-2$ (see figure \ref{fig:most_full}) that cannot be fitted by the MOST estimator. Figure \ref{fig:most_scatter} shows $\phi_m$ as a function of $\xi$ as computed in our dataset, as well as the predictions of equation \ref{eq:phi_m_coeff} and the fitted MOST estimator.
 
@@ -1310,40 +1329,51 @@ Table \ref{tbl:most_results} shows the values of the coefficients in equation \r
 \centering
 \caption{Evaluation metrics for the MOST estimator}
 \label{tbl:most_results}
-%\begin{tabular*}{\textwidth}{r  |@{\extracolsep{\fill}}cc}
-\begin{tabular}{l|cc}
-\toprule
-& All & $-2\le\xi\le1$ \\ \midrule
-MSE & 0.6720 (0.03132)  & 0.3321  (0.0172)     \\
-$R^2$ & 0.7055 (0.0089) & 0.6050 (0.0107)       \\
-MAE & 0.5406 (0.0139) & 0.3954 (0.0072)      \\
-mAE & 0.3716 (0.0156) & 0.2827 (0.0043)      \\
-MAPE & 252.9254 (196.0861) & 184.7077 (48.2603)    \\
-mAPE & 28.9648 (0.9388) & 24.6184    (0.7296)   \\
-\bottomrule
-\end{tabular}
+\input{include/most_est_results}
 \end{table}
 
 \begin{table}[]
 \centering
-\caption{Values of the coefficients of the MOST estimator of equation \ref{eq:phi_general} fitted on the data with $-2\leq\xi\leq1$. The minimum values for $c$ and $d$ seem to be outliers, as well as the next smallest value, but the other 8 values are closely clustered together within an interval of about 0.15.}
+\caption{Values of the coefficients of the MOST estimator of equation \ref{eq:phi_general} fitted in the MOST validity range. The minimum values for $c$ and $d$ seem to be outliers, as well as the next smallest value, but the other 8 values are closely clustered together within an interval of about 0.15.}
 \label{tbl:most_coeffs}
-\begin{tabular*}{\textwidth}{r  |@{\extracolsep{\fill}}ccccccc}
+\begin{tabular}{r|rrrrrrr}
 \toprule
-   & Mean       & Std.       & Min.       & 25\%       & 50\%       & 75\%       & Max. \\ \midrule
-$a$   & 0.943802  & 0.004228  & 0.935826  & 0.942926  & 0.944624  & 0.946017  & 0.950583 \\
-$b$   & 2.772180  & 0.008216  & 2.758320  & 2.769266  & 2.772188  & 2.778464  & 2.783730 \\
-$c$   & 2.452160  & 0.469983  & 1.246522  & 2.607285  & 2.646705  & 2.674603  & 2.713834 \\
-$d$   & -0.298687  & 0.109407 & -0.601655 & -0.261012 & -0.258147 & -0.255400 & -0.248226 \\
+   & \textbf{Mean} & \textbf{Std.} & \textbf{Min.} & \textbf{25\%} & \textbf{50\%} & \textbf{75\%} & \textbf{Max.} \\ \midrule
+$a$ & 0.94 & 0.00 & 0.94 & 0.94 & 0.94 & 0.95 & 0.95 \\
+$b$ & 2.77 & 0.01 & 2.76 & 2.77 & 2.77 & 2.78 & 2.78 \\
+$c$ & 2.45 & 0.47 & 1.25 & 2.61 & 2.65 & 2.67 & 2.71 \\
+$d$ & -0.30 & 0.11 & -0.60 & -0.26 & -0.26 & -0.26 & -0.25 \\
 \bottomrule
-\end{tabular*}
+\end{tabular}
 \end{table}
 
 
 \subsection{Other Estimators}
+The averaged evaluation metrics for the Ridge, kNN and GB estimators are presented in tables \ref{tbl:ridge_results}, \ref{tbl:knn_results}
+and \ref{tbl:gbr_results}, while figures \ref{fig:ridge_results_most}, \ref{fig:knn_results_most} and \ref{fig:gbr_results_most} show boxplots of these metrics for the MOST validity range, and figures \ref{fig:ridge_results_all}, \ref{fig:knn_results_all} and \ref{fig:gbr_results_all} do so for the whole dataset. Table \ref{tbl:baseline_comparison} compares each estimator and feature set combination with the MOST baseline for both the full dataset and the data in the MOST validity range, while table \ref{tbl:fset_comparison} compares the errors of successive feature sets, and finally table \ref{tbl:trend_comparison} shows the error difference when the the feature sets are augmented with the trend information.
+
+\begin{table}
+\caption{Effect sizes comparing the MSE scores of the MOST estimator with each combination of estimator, feature set, and dataset; each comparison used the trend only if it resulted in a lower error. A positive effect size indicates that the estimator is better than the MOST baseline.}
+\label{tbl:baseline_comparison}
+\input{include/baseline_comparison}
+\end{table}
 
 
-\begin{figure}
+\begin{table}
+\caption{Effect sizes comparing the MSE scores of each feature set with the previous set (i.e. F2 is compared with F1, F3 with F2, and so on). A positive effect size indicates that the feature set has a lower error than the previous one.}
+\label{tbl:fset_comparison}
+\input{include/fset_comparison}
+\end{table}
+
+
+\begin{table}
+\caption{Effect sizes comparing the MSE scores of each feature set with and without trend. A positive effect size indicates that the trend reduces the error.}
+\label{tbl:trend_comparison}
+\input{include/trend_comparison}
+\end{table}
+
+
+\begin{figure}[h]
 \subcaptionbox{Mean Squared Error\label{fig:result_Ridge_most_mean_squared_error}}{\includegraphics[width=0.5\textwidth]{images/result_Ridge_most_mean_squared_error}}\hfill
 \subcaptionbox{$R^2$ Score \label{fig:result_Ridge_most_r2_score}}{\includegraphics[width=0.49\textwidth]{images/result_Ridge_most_r2_score}}\\
 
@@ -1358,7 +1388,7 @@ $d$   & -0.298687  & 0.109407 & -0.601655 & -0.261012 & -0.258147 & -0.255400 & 
 \end{figure}
 
 
-\begin{figure}
+\begin{figure}[h]
 \subcaptionbox{Mean Squared Error\label{fig:result_Ridge_nomost_mean_squared_error}}{\includegraphics[width=0.5\textwidth]{images/result_Ridge_nomost_mean_squared_error}}\hfill
 \subcaptionbox{$R^2$ Score \label{fig:result_Ridge_nomost_r2_score}}{\includegraphics[width=0.49\textwidth]{images/result_Ridge_nomost_r2_score}}\\
 
@@ -1373,7 +1403,7 @@ $d$   & -0.298687  & 0.109407 & -0.601655 & -0.261012 & -0.258147 & -0.255400 & 
 \end{figure}
 
 
-\begin{table}[]
+\begin{table}[h]
 \caption{Evaluation metrics for the Ridge estimator. }
 \label{tbl:ridge_results}
 \input{include/results_Ridge}
@@ -1382,7 +1412,7 @@ $d$   & -0.298687  & 0.109407 & -0.601655 & -0.261012 & -0.258147 & -0.255400 & 
 
 % ---------------------------------------------------------------
 
-\begin{figure}
+\begin{figure}[h]
 \subcaptionbox{Mean Squared Error\label{fig:result_KNeighborsRegressor_most_mean_squared_error}}{\includegraphics[width=0.49\textwidth]{images/result_kNN_most_mean_squared_error}}\hfill
 \subcaptionbox{$R^2$ Score \label{fig:result_kNN_most_r2_score}}{\includegraphics[width=0.49\textwidth]{images/result_kNN_most_r2_score}}\\
 
@@ -1397,7 +1427,7 @@ $d$   & -0.298687  & 0.109407 & -0.601655 & -0.261012 & -0.258147 & -0.255400 & 
 \end{figure}
 
 
-\begin{figure}
+\begin{figure}[h]
 \subcaptionbox{Mean Squared Error\label{fig:result_kNN_nomost_mean_squared_error}}{\includegraphics[width=0.49\textwidth]{images/result_kNN_nomost_mean_squared_error}}\hfill
 \subcaptionbox{$R^2$ Score \label{fig:result_kNN_nomost_r2_score}}{\includegraphics[width=0.49\textwidth]{images/result_kNN_nomost_r2_score}}\\
 
@@ -1412,7 +1442,7 @@ $d$   & -0.298687  & 0.109407 & -0.601655 & -0.261012 & -0.258147 & -0.255400 & 
 \end{figure}
 
 
-\begin{table}[]
+\begin{table}[h]
 \caption{Evaluation metrics for the k-Nearest Neighbors Regressor estimator.}
 \label{tbl:knn_results}
 \input{include/results_kNN}
@@ -1421,7 +1451,7 @@ $d$   & -0.298687  & 0.109407 & -0.601655 & -0.261012 & -0.258147 & -0.255400 & 
 
 % ---------------------------------------------------------------
 
-\begin{figure}
+\begin{figure}[h]
 \subcaptionbox{Mean Squared Error\label{fig:result_GB_most_mean_squared_error}}{\includegraphics[width=0.49\textwidth]{images/result_GB_most_mean_squared_error}}\hfill
 \subcaptionbox{$R^2$ Score \label{fig:result_GB_most_r2_score}}{\includegraphics[width=0.49\textwidth]{images/result_GB_most_r2_score}}\\
 
@@ -1437,7 +1467,7 @@ $d$   & -0.298687  & 0.109407 & -0.601655 & -0.261012 & -0.258147 & -0.255400 & 
 
 
 
-\begin{figure}
+\begin{figure}[h]
 \subcaptionbox{Mean Squared Error\label{fig:result_GB_nomost_mean_squared_error}}{\includegraphics[width=0.49\textwidth]{images/result_GB_nomost_mean_squared_error}}\hfill
 \subcaptionbox{$R^2$ Score \label{fig:result_GB_nomost_r2_score}}{\includegraphics[width=0.49\textwidth]{images/result_GB_nomost_r2_score}}\\
 
@@ -1448,15 +1478,17 @@ $d$   & -0.298687  & 0.109407 & -0.601655 & -0.261012 & -0.258147 & -0.255400 & 
 \subcaptionbox{Median Absolute Percent Error\label{fig:result_GB_nomost_median_abs_percent_error}}{\includegraphics[width=0.49\textwidth]{images/result_GB_nomost_median_abs_percent_error}}\\
 
     \caption{Evaluation metrics of the Gradient Boosted Trees Estimator on all the data; the feature sets with trend are blue, those without trend are green, and he leftmost black box is the MOST estimator baseline.}
-	\label{fig:gbr_results_nomost}
+	\label{fig:gbr_results_all}
 \end{figure}
 
 
-\begin{table}[]
+\begin{table}[h]
 \caption{Evaluation metrics for the Gradient Boosted Trees Estimator estimator.}
-\label{tbl:gbr_results_most}
+\label{tbl:gbr_results}
 \input{include/results_GB}
 \end{table}
+
+
 
 
 % ---------------------------------------------------------------

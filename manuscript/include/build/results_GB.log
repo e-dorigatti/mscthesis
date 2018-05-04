@@ -1,0 +1,1137 @@
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Arch Linux) (preloaded format=pdflatex 2018.3.20)  4 MAY 2018 19:25
+entering extended mode
+ restricted \write18 enabled.
+ %&-line parsing enabled.
+**results_GB.tex
+(./results_GB.tex
+LaTeX2e <2017-04-15>
+Babel <3.18> and hyphenation patterns for 84 language(s) loaded.
+! Undefined control sequence.
+l.1 \setcellgapes
+                 {0.15ex}\makegapedcells\begin{tabular}{lcc|ccccc}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+
+! LaTeX Error: Missing \begin{document}.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.1 \setcellgapes{0
+                   .15ex}\makegapedcells\begin{tabular}{lcc|ccccc}
+You're in trouble here.  Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+Missing character: There is no 0 in font nullfont!
+Missing character: There is no . in font nullfont!
+Missing character: There is no 1 in font nullfont!
+Missing character: There is no 5 in font nullfont!
+Missing character: There is no e in font nullfont!
+Missing character: There is no x in font nullfont!
+! Undefined control sequence.
+l.1 \setcellgapes{0.15ex}\makegapedcells
+                                        \begin{tabular}{lcc|ccccc}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <7> on input line 1.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <5> on input line 1.
+! Undefined control sequence.
+l.2 \toprule
+            
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+Missing character: There is no F in font nullfont!
+Missing character: There is no 1 in font nullfont!
+Missing character: There is no F in font nullfont!
+Missing character: There is no 2 in font nullfont!
+Missing character: There is no F in font nullfont!
+Missing character: There is no 3 in font nullfont!
+Missing character: There is no F in font nullfont!
+Missing character: There is no 4 in font nullfont!
+Missing character: There is no F in font nullfont!
+Missing character: There is no 5 in font nullfont!
+! Undefined control sequence.
+<recently read> \midrule 
+                         
+l.5 \midrule
+            
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Undefined control sequence.
+l.6 \multirowcell
+                 {8}[0.75ex][c]{\textbf{$R^2$}} & \multirowcell{4}[0.75ex][c...
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+Missing character: There is no 8 in font nullfont!
+Missing character: There is no [ in font nullfont!
+Missing character: There is no 0 in font nullfont!
+Missing character: There is no . in font nullfont!
+Missing character: There is no 7 in font nullfont!
+Missing character: There is no 5 in font nullfont!
+Missing character: There is no e in font nullfont!
+Missing character: There is no x in font nullfont!
+Missing character: There is no ] in font nullfont!
+Missing character: There is no [ in font nullfont!
+Missing character: There is no c in font nullfont!
+Missing character: There is no ] in font nullfont!
+! Undefined control sequence.
+l.6 ...[0.75ex][c]{\textbf{$R^2$}} & \multirowcell
+                                                  {4}[0.75ex][c]{\textbf{N}}...
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+Missing character: There is no 4 in font nullfont!
+Missing character: There is no [ in font nullfont!
+Missing character: There is no 0 in font nullfont!
+Missing character: There is no . in font nullfont!
+Missing character: There is no 7 in font nullfont!
+Missing character: There is no 5 in font nullfont!
+Missing character: There is no e in font nullfont!
+Missing character: There is no x in font nullfont!
+Missing character: There is no ] in font nullfont!
+Missing character: There is no [ in font nullfont!
+Missing character: There is no c in font nullfont!
+Missing character: There is no ] in font nullfont!
+Missing character: There is no N in font nullfont!
+Missing character: There is no o in font nullfont!
+Missing character: There is no n in font nullfont!
+Missing character: There is no e in font nullfont!
+! Undefined control sequence.
+l.6 ...extbf{N}} & \textbf{N} &  None &  \makecell
+                                                  [c]{0.79\\(0.05)} &  None ...
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+Missing character: There is no [ in font nullfont!
+Missing character: There is no c in font nullfont!
+Missing character: There is no ] in font nullfont!
+Missing character: There is no 0 in font nullfont!
+Missing character: There is no . in font nullfont!
+Missing character: There is no 7 in font nullfont!
+Missing character: There is no 9 in font nullfont!
+! Missing } inserted.
+<inserted text> 
+                }
+l.6 ... \textbf{N} &  None &  \makecell[c]{0.79\\(
+                                                  0.05)} &  None &  None &  ...
+I've put in what seems to be necessary to fix
+the current column of the current alignment.
+Try to go on, since this might almost work.
+
+Missing character: There is no ( in font nullfont!
+Missing character: There is no 0 in font nullfont!
+Missing character: There is no . in font nullfont!
+Missing character: There is no 0 in font nullfont!
+Missing character: There is no 5 in font nullfont!
+Missing character: There is no ) in font nullfont!
+! Missing { inserted.
+<inserted text> 
+                {
+l.6 ...{N} &  None &  \makecell[c]{0.79\\(0.05)} &
+                                                    None &  None &  None \\
+I've put in what seems to be necessary to fix
+the current column of the current alignment.
+Try to go on, since this might almost work.
+
+Missing character: There is no N in font nullfont!
+Missing character: There is no o in font nullfont!
+Missing character: There is no n in font nullfont!
+Missing character: There is no e in font nullfont!
+Missing character: There is no N in font nullfont!
+Missing character: There is no o in font nullfont!
+Missing character: There is no n in font nullfont!
+Missing character: There is no e in font nullfont!
+Missing character: There is no N in font nullfont!
+Missing character: There is no o in font nullfont!
+Missing character: There is no n in font nullfont!
+Missing character: There is no e in font nullfont!
+! Undefined control sequence.
+l.7       &   & \textbf{Y} &  \makecell
+                                       [c]{0.79\\(0.06)} &  \makecell[c]{0.8...
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+Missing character: There is no [ in font nullfont!
+Missing character: There is no c in font nullfont!
+Missing character: There is no ] in font nullfont!
+Missing character: There is no 0 in font nullfont!
+Missing character: There is no . in font nullfont!
+Missing character: There is no 7 in font nullfont!
+Missing character: There is no 9 in font nullfont!
+! Missing } inserted.
+<inserted text> 
+                }
+l.7       &   & \textbf{Y} &  \makecell[c]{0.79\\(
+                                                  0.06)} &  \makecell[c]{0.8...
+I've put in what seems to be necessary to fix
+the current column of the current alignment.
+Try to go on, since this might almost work.
+
+Missing character: There is no ( in font nullfont!
+Missing character: There is no 0 in font nullfont!
+Missing character: There is no . in font nullfont!
+Missing character: There is no 0 in font nullfont!
+Missing character: There is no 6 in font nullfont!
+Missing character: There is no ) in font nullfont!
+! Missing { inserted.
+<inserted text> 
+                {
+l.7 ... \textbf{Y} &  \makecell[c]{0.79\\(0.06)} &
+                                                    \makecell[c]{0.80\\(0.05...
+I've put in what seems to be necessary to fix
+the current column of the current alignment.
+Try to go on, since this might almost work.
+
+! Undefined control sequence.
+l.7 ... &  \makecell[c]{0.79\\(0.06)} &  \makecell
+                                                  [c]{0.80\\(0.05)} &  \make...
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+Missing character: There is no [ in font nullfont!
+Missing character: There is no c in font nullfont!
+Missing character: There is no ] in font nullfont!
+Missing character: There is no 0 in font nullfont!
+Missing character: There is no . in font nullfont!
+Missing character: There is no 8 in font nullfont!
+Missing character: There is no 0 in font nullfont!
+! Missing } inserted.
+<inserted text> 
+                }
+l.7 ...ll[c]{0.79\\(0.06)} &  \makecell[c]{0.80\\(
+                                                  0.05)} &  \makecell[c]{0.7...
+I've put in what seems to be necessary to fix
+the current column of the current alignment.
+Try to go on, since this might almost work.
+
+Missing character: There is no ( in font nullfont!
+Missing character: There is no 0 in font nullfont!
+Missing character: There is no . in font nullfont!
+Missing character: There is no 0 in font nullfont!
+Missing character: There is no 5 in font nullfont!
+Missing character: There is no ) in font nullfont!
+! Missing { inserted.
+<inserted text> 
+                {
+l.7 ...79\\(0.06)} &  \makecell[c]{0.80\\(0.05)} &
+                                                    \makecell[c]{0.78\\(0.08...
+I've put in what seems to be necessary to fix
+the current column of the current alignment.
+Try to go on, since this might almost work.
+
+! Undefined control sequence.
+l.7 ... &  \makecell[c]{0.80\\(0.05)} &  \makecell
+                                                  [c]{0.78\\(0.08)} &  \make...
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+Missing character: There is no [ in font nullfont!
+Missing character: There is no c in font nullfont!
+Missing character: There is no ] in font nullfont!
+Missing character: There is no 0 in font nullfont!
+Missing character: There is no . in font nullfont!
+Missing character: There is no 7 in font nullfont!
+Missing character: There is no 8 in font nullfont!
+! Missing } inserted.
+<inserted text> 
+                }
+l.7 ...ll[c]{0.80\\(0.05)} &  \makecell[c]{0.78\\(
+                                                  0.08)} &  \makecell[c]{0.8...
+I've put in what seems to be necessary to fix
+the current column of the current alignment.
+Try to go on, since this might almost work.
+
+Missing character: There is no ( in font nullfont!
+Missing character: There is no 0 in font nullfont!
+Missing character: There is no . in font nullfont!
+Missing character: There is no 0 in font nullfont!
+Missing character: There is no 8 in font nullfont!
+Missing character: There is no ) in font nullfont!
+! Missing { inserted.
+<inserted text> 
+                {
+l.7 ...80\\(0.05)} &  \makecell[c]{0.78\\(0.08)} &
+                                                    \makecell[c]{0.84\\(0.01...
+I've put in what seems to be necessary to fix
+the current column of the current alignment.
+Try to go on, since this might almost work.
+
+! Undefined control sequence.
+l.7 ... &  \makecell[c]{0.78\\(0.08)} &  \makecell
+                                                  [c]{0.84\\(0.01)} &  \make...
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+Missing character: There is no [ in font nullfont!
+Missing character: There is no c in font nullfont!
+Missing character: There is no ] in font nullfont!
+Missing character: There is no 0 in font nullfont!
+Missing character: There is no . in font nullfont!
+Missing character: There is no 8 in font nullfont!
+Missing character: There is no 4 in font nullfont!
+! Missing } inserted.
+<inserted text> 
+                }
+l.7 ...ll[c]{0.78\\(0.08)} &  \makecell[c]{0.84\\(
+                                                  0.01)} &  \makecell[c]{0.8...
+I've put in what seems to be necessary to fix
+the current column of the current alignment.
+Try to go on, since this might almost work.
+
+Missing character: There is no ( in font nullfont!
+Missing character: There is no 0 in font nullfont!
+Missing character: There is no . in font nullfont!
+Missing character: There is no 0 in font nullfont!
+Missing character: There is no 1 in font nullfont!
+Missing character: There is no ) in font nullfont!
+! Missing { inserted.
+<inserted text> 
+                {
+l.7 ...78\\(0.08)} &  \makecell[c]{0.84\\(0.01)} &
+                                                    \makecell[c]{0.80\\(0.09...
+I've put in what seems to be necessary to fix
+the current column of the current alignment.
+Try to go on, since this might almost work.
+
+! Undefined control sequence.
+l.7 ... &  \makecell[c]{0.84\\(0.01)} &  \makecell
+                                                  [c]{0.80\\(0.09)} \\
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+Missing character: There is no [ in font nullfont!
+Missing character: There is no c in font nullfont!
+Missing character: There is no ] in font nullfont!
+Missing character: There is no 0 in font nullfont!
+Missing character: There is no . in font nullfont!
+Missing character: There is no 8 in font nullfont!
+Missing character: There is no 0 in font nullfont!
+! Missing } inserted.
+<inserted text> 
+                }
+l.7 ...ll[c]{0.84\\(0.01)} &  \makecell[c]{0.80\\(
+                                                  0.09)} \\
+I've put in what seems to be necessary to fix
+the current column of the current alignment.
+Try to go on, since this might almost work.
+
+Missing character: There is no ( in font nullfont!
+Missing character: There is no 0 in font nullfont!
+Missing character: There is no . in font nullfont!
+Missing character: There is no 0 in font nullfont!
+Missing character: There is no 9 in font nullfont!
+Missing character: There is no ) in font nullfont!
+! Missing { inserted.
+<inserted text> 
+                {
+l.8 \cline
+          {2-8}
+I've put in what seems to be necessary to fix
+the current column of the current alignment.
+Try to go on, since this might almost work.
+
+! Undefined control sequence.
+l.9       & \multirowcell
+                         {4}[0.75ex][c]{\textbf{Y}} & \textbf{N} &  \makecel...
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+Missing character: There is no 4 in font nullfont!
+Missing character: There is no [ in font nullfont!
+Missing character: There is no 0 in font nullfont!
+Missing character: There is no . in font nullfont!
+Missing character: There is no 7 in font nullfont!
+Missing character: There is no 5 in font nullfont!
+Missing character: There is no e in font nullfont!
+Missing character: There is no x in font nullfont!
+Missing character: There is no ] in font nullfont!
+Missing character: There is no [ in font nullfont!
+Missing character: There is no c in font nullfont!
+Missing character: There is no ] in font nullfont!
+! Undefined control sequence.
+l.9 ...x][c]{\textbf{Y}} & \textbf{N} &  \makecell
+                                                  [c]{0.70\\(0.12)} &  \make...
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+Missing character: There is no [ in font nullfont!
+Missing character: There is no c in font nullfont!
+Missing character: There is no ] in font nullfont!
+Missing character: There is no 0 in font nullfont!
+Missing character: There is no . in font nullfont!
+Missing character: There is no 7 in font nullfont!
+Missing character: There is no 0 in font nullfont!
+! Missing } inserted.
+<inserted text> 
+                }
+l.9 ...bf{Y}} & \textbf{N} &  \makecell[c]{0.70\\(
+                                                  0.12)} &  \makecell[c]{0.7...
+I've put in what seems to be necessary to fix
+the current column of the current alignment.
+Try to go on, since this might almost work.
+
+Missing character: There is no ( in font nullfont!
+Missing character: There is no 0 in font nullfont!
+Missing character: There is no . in font nullfont!
+Missing character: There is no 1 in font nullfont!
+Missing character: There is no 2 in font nullfont!
+Missing character: There is no ) in font nullfont!
+! Missing { inserted.
+<inserted text> 
+                {
+l.9 ... \textbf{N} &  \makecell[c]{0.70\\(0.12)} &
+                                                    \makecell[c]{0.73\\(0.07...
+I've put in what seems to be necessary to fix
+the current column of the current alignment.
+Try to go on, since this might almost work.
+
+! Undefined control sequence.
+l.9 ... &  \makecell[c]{0.70\\(0.12)} &  \makecell
+                                                  [c]{0.73\\(0.07)} &  \make...
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+Missing character: There is no [ in font nullfont!
+Missing character: There is no c in font nullfont!
+Missing character: There is no ] in font nullfont!
+Missing character: There is no 0 in font nullfont!
+Missing character: There is no . in font nullfont!
+Missing character: There is no 7 in font nullfont!
+Missing character: There is no 3 in font nullfont!
+! Missing } inserted.
+<inserted text> 
+                }
+l.9 ...ll[c]{0.70\\(0.12)} &  \makecell[c]{0.73\\(
+                                                  0.07)} &  \makecell[c]{0.7...
+I've put in what seems to be necessary to fix
+the current column of the current alignment.
+Try to go on, since this might almost work.
+
+Missing character: There is no ( in font nullfont!
+Missing character: There is no 0 in font nullfont!
+Missing character: There is no . in font nullfont!
+Missing character: There is no 0 in font nullfont!
+Missing character: There is no 7 in font nullfont!
+Missing character: There is no ) in font nullfont!
+! Missing { inserted.
+<inserted text> 
+                {
+l.9 ...70\\(0.12)} &  \makecell[c]{0.73\\(0.07)} &
+                                                    \makecell[c]{0.76\\(0.05...
+I've put in what seems to be necessary to fix
+the current column of the current alignment.
+Try to go on, since this might almost work.
+
+! Undefined control sequence.
+l.9 ... &  \makecell[c]{0.73\\(0.07)} &  \makecell
+                                                  [c]{0.76\\(0.05)} &  \make...
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+Missing character: There is no [ in font nullfont!
+Missing character: There is no c in font nullfont!
+Missing character: There is no ] in font nullfont!
+Missing character: There is no 0 in font nullfont!
+Missing character: There is no . in font nullfont!
+Missing character: There is no 7 in font nullfont!
+Missing character: There is no 6 in font nullfont!
+! Missing } inserted.
+<inserted text> 
+                }
+l.9 ...ll[c]{0.73\\(0.07)} &  \makecell[c]{0.76\\(
+                                                  0.05)} &  \makecell[c]{0.7...
+I've put in what seems to be necessary to fix
+the current column of the current alignment.
+Try to go on, since this might almost work.
+
+Missing character: There is no ( in font nullfont!
+Missing character: There is no 0 in font nullfont!
+Missing character: There is no . in font nullfont!
+Missing character: There is no 0 in font nullfont!
+Missing character: There is no 5 in font nullfont!
+Missing character: There is no ) in font nullfont!
+! Missing { inserted.
+<inserted text> 
+                {
+l.9 ...73\\(0.07)} &  \makecell[c]{0.76\\(0.05)} &
+                                                    \makecell[c]{0.74\\(0.07...
+I've put in what seems to be necessary to fix
+the current column of the current alignment.
+Try to go on, since this might almost work.
+
+! Undefined control sequence.
+l.9 ... &  \makecell[c]{0.76\\(0.05)} &  \makecell
+                                                  [c]{0.74\\(0.07)} &  \make...
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+Missing character: There is no [ in font nullfont!
+Missing character: There is no c in font nullfont!
+Missing character: There is no ] in font nullfont!
+Missing character: There is no 0 in font nullfont!
+Missing character: There is no . in font nullfont!
+Missing character: There is no 7 in font nullfont!
+Missing character: There is no 4 in font nullfont!
+! Missing } inserted.
+<inserted text> 
+                }
+l.9 ...ll[c]{0.76\\(0.05)} &  \makecell[c]{0.74\\(
+                                                  0.07)} &  \makecell[c]{0.7...
+I've put in what seems to be necessary to fix
+the current column of the current alignment.
+Try to go on, since this might almost work.
+
+Missing character: There is no ( in font nullfont!
+Missing character: There is no 0 in font nullfont!
+Missing character: There is no . in font nullfont!
+Missing character: There is no 0 in font nullfont!
+Missing character: There is no 7 in font nullfont!
+Missing character: There is no ) in font nullfont!
+! Missing { inserted.
+<inserted text> 
+                {
+l.9 ...76\\(0.05)} &  \makecell[c]{0.74\\(0.07)} &
+                                                    \makecell[c]{0.71\\(0.18...
+I've put in what seems to be necessary to fix
+the current column of the current alignment.
+Try to go on, since this might almost work.
+
+! Undefined control sequence.
+l.9 ... &  \makecell[c]{0.74\\(0.07)} &  \makecell
+                                                  [c]{0.71\\(0.18)} \\
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+Missing character: There is no [ in font nullfont!
+Missing character: There is no c in font nullfont!
+Missing character: There is no ] in font nullfont!
+Missing character: There is no 0 in font nullfont!
+Missing character: There is no . in font nullfont!
+Missing character: There is no 7 in font nullfont!
+Missing character: There is no 1 in font nullfont!
+! Missing } inserted.
+<inserted text> 
+                }
+l.9 ...ll[c]{0.74\\(0.07)} &  \makecell[c]{0.71\\(
+                                                  0.18)} \\
+I've put in what seems to be necessary to fix
+the current column of the current alignment.
+Try to go on, since this might almost work.
+
+Missing character: There is no ( in font nullfont!
+Missing character: There is no 0 in font nullfont!
+Missing character: There is no . in font nullfont!
+Missing character: There is no 1 in font nullfont!
+Missing character: There is no 8 in font nullfont!
+Missing character: There is no ) in font nullfont!
+! Misplaced \cr.
+\reserved@c ->\ifnum 0=`{\fi }\cr 
+                                  
+l.10       &
+               & \textbf{Y} &  \makecell[c]{0.70\\(0.13)} &  \makecell[c]{0....
+I can't figure out why you would want to use a tab mark
+or \cr or \span just now. If something like a right brace
+up above has ended a previous alignment prematurely,
+you're probably due for more error messages, and you
+might try typing `S' now just to see what is salvageable.
+
+! Missing \cr inserted.
+<inserted text> 
+                \cr 
+l.10       &
+               & \textbf{Y} &  \makecell[c]{0.70\\(0.13)} &  \makecell[c]{0....
+I'm guessing that you meant to end an alignment here.
+
+! Misplaced \cr.
+<inserted text> \cr 
+                    
+l.10       &
+               & \textbf{Y} &  \makecell[c]{0.70\\(0.13)} &  \makecell[c]{0....
+I can't figure out why you would want to use a tab mark
+or \cr or \span just now. If something like a right brace
+up above has ended a previous alignment prematurely,
+you're probably due for more error messages, and you
+might try typing `S' now just to see what is salvageable.
+
+! Missing \cr inserted.
+<inserted text> 
+                \cr 
+l.10       &
+               & \textbf{Y} &  \makecell[c]{0.70\\(0.13)} &  \makecell[c]{0....
+I'm guessing that you meant to end an alignment here.
+
+! Misplaced \cr.
+<inserted text> \cr 
+                    
+l.10       &
+               & \textbf{Y} &  \makecell[c]{0.70\\(0.13)} &  \makecell[c]{0....
+I can't figure out why you would want to use a tab mark
+or \cr or \span just now. If something like a right brace
+up above has ended a previous alignment prematurely,
+you're probably due for more error messages, and you
+might try typing `S' now just to see what is salvageable.
+
+! Missing \cr inserted.
+<inserted text> 
+                \cr 
+l.10       &
+               & \textbf{Y} &  \makecell[c]{0.70\\(0.13)} &  \makecell[c]{0....
+I'm guessing that you meant to end an alignment here.
+
+! Misplaced \cr.
+<inserted text> \cr 
+                    
+l.10       &
+               & \textbf{Y} &  \makecell[c]{0.70\\(0.13)} &  \makecell[c]{0....
+I can't figure out why you would want to use a tab mark
+or \cr or \span just now. If something like a right brace
+up above has ended a previous alignment prematurely,
+you're probably due for more error messages, and you
+might try typing `S' now just to see what is salvageable.
+
+! Missing \cr inserted.
+<inserted text> 
+                \cr 
+l.10       &
+               & \textbf{Y} &  \makecell[c]{0.70\\(0.13)} &  \makecell[c]{0....
+I'm guessing that you meant to end an alignment here.
+
+! Misplaced \cr.
+<inserted text> \cr 
+                    
+l.10       &
+               & \textbf{Y} &  \makecell[c]{0.70\\(0.13)} &  \makecell[c]{0....
+I can't figure out why you would want to use a tab mark
+or \cr or \span just now. If something like a right brace
+up above has ended a previous alignment prematurely,
+you're probably due for more error messages, and you
+might try typing `S' now just to see what is salvageable.
+
+! Missing \cr inserted.
+<inserted text> 
+                \cr 
+l.10       &
+               & \textbf{Y} &  \makecell[c]{0.70\\(0.13)} &  \makecell[c]{0....
+I'm guessing that you meant to end an alignment here.
+
+! Misplaced \cr.
+<inserted text> \cr 
+                    
+l.10       &
+               & \textbf{Y} &  \makecell[c]{0.70\\(0.13)} &  \makecell[c]{0....
+I can't figure out why you would want to use a tab mark
+or \cr or \span just now. If something like a right brace
+up above has ended a previous alignment prematurely,
+you're probably due for more error messages, and you
+might try typing `S' now just to see what is salvageable.
+
+! Missing \cr inserted.
+<inserted text> 
+                \cr 
+l.10       &
+               & \textbf{Y} &  \makecell[c]{0.70\\(0.13)} &  \makecell[c]{0....
+I'm guessing that you meant to end an alignment here.
+
+! Misplaced \cr.
+<inserted text> \cr 
+                    
+l.10       &
+               & \textbf{Y} &  \makecell[c]{0.70\\(0.13)} &  \makecell[c]{0....
+I can't figure out why you would want to use a tab mark
+or \cr or \span just now. If something like a right brace
+up above has ended a previous alignment prematurely,
+you're probably due for more error messages, and you
+might try typing `S' now just to see what is salvageable.
+
+! Missing \cr inserted.
+<inserted text> 
+                \cr 
+l.10       &
+               & \textbf{Y} &  \makecell[c]{0.70\\(0.13)} &  \makecell[c]{0....
+I'm guessing that you meant to end an alignment here.
+
+! Misplaced \cr.
+<inserted text> \cr 
+                    
+l.10       &
+               & \textbf{Y} &  \makecell[c]{0.70\\(0.13)} &  \makecell[c]{0....
+I can't figure out why you would want to use a tab mark
+or \cr or \span just now. If something like a right brace
+up above has ended a previous alignment prematurely,
+you're probably due for more error messages, and you
+might try typing `S' now just to see what is salvageable.
+
+! Missing \cr inserted.
+<inserted text> 
+                \cr 
+l.10       &
+               & \textbf{Y} &  \makecell[c]{0.70\\(0.13)} &  \makecell[c]{0....
+I'm guessing that you meant to end an alignment here.
+
+! Misplaced \cr.
+<inserted text> \cr 
+                    
+l.10       &
+               & \textbf{Y} &  \makecell[c]{0.70\\(0.13)} &  \makecell[c]{0....
+I can't figure out why you would want to use a tab mark
+or \cr or \span just now. If something like a right brace
+up above has ended a previous alignment prematurely,
+you're probably due for more error messages, and you
+might try typing `S' now just to see what is salvageable.
+
+! Missing \cr inserted.
+<inserted text> 
+                \cr 
+l.10       &
+               & \textbf{Y} &  \makecell[c]{0.70\\(0.13)} &  \makecell[c]{0....
+I'm guessing that you meant to end an alignment here.
+
+! Misplaced \cr.
+<inserted text> \cr 
+                    
+l.10       &
+               & \textbf{Y} &  \makecell[c]{0.70\\(0.13)} &  \makecell[c]{0....
+I can't figure out why you would want to use a tab mark
+or \cr or \span just now. If something like a right brace
+up above has ended a previous alignment prematurely,
+you're probably due for more error messages, and you
+might try typing `S' now just to see what is salvageable.
+
+! Missing \cr inserted.
+<inserted text> 
+                \cr 
+l.10       &
+               & \textbf{Y} &  \makecell[c]{0.70\\(0.13)} &  \makecell[c]{0....
+I'm guessing that you meant to end an alignment here.
+
+! Misplaced \cr.
+<inserted text> \cr 
+                    
+l.10       &
+               & \textbf{Y} &  \makecell[c]{0.70\\(0.13)} &  \makecell[c]{0....
+I can't figure out why you would want to use a tab mark
+or \cr or \span just now. If something like a right brace
+up above has ended a previous alignment prematurely,
+you're probably due for more error messages, and you
+might try typing `S' now just to see what is salvageable.
+
+! Missing \cr inserted.
+<inserted text> 
+                \cr 
+l.10       &
+               & \textbf{Y} &  \makecell[c]{0.70\\(0.13)} &  \makecell[c]{0....
+I'm guessing that you meant to end an alignment here.
+
+! Misplaced \cr.
+<inserted text> \cr 
+                    
+l.10       &
+               & \textbf{Y} &  \makecell[c]{0.70\\(0.13)} &  \makecell[c]{0....
+I can't figure out why you would want to use a tab mark
+or \cr or \span just now. If something like a right brace
+up above has ended a previous alignment prematurely,
+you're probably due for more error messages, and you
+might try typing `S' now just to see what is salvageable.
+
+! Missing \cr inserted.
+<inserted text> 
+                \cr 
+l.10       &
+               & \textbf{Y} &  \makecell[c]{0.70\\(0.13)} &  \makecell[c]{0....
+I'm guessing that you meant to end an alignment here.
+
+! Misplaced \cr.
+<inserted text> \cr 
+                    
+l.10       &
+               & \textbf{Y} &  \makecell[c]{0.70\\(0.13)} &  \makecell[c]{0....
+I can't figure out why you would want to use a tab mark
+or \cr or \span just now. If something like a right brace
+up above has ended a previous alignment prematurely,
+you're probably due for more error messages, and you
+might try typing `S' now just to see what is salvageable.
+
+! Missing \cr inserted.
+<inserted text> 
+                \cr 
+l.10       &
+               & \textbf{Y} &  \makecell[c]{0.70\\(0.13)} &  \makecell[c]{0....
+I'm guessing that you meant to end an alignment here.
+
+! Misplaced \cr.
+<inserted text> \cr 
+                    
+l.10       &
+               & \textbf{Y} &  \makecell[c]{0.70\\(0.13)} &  \makecell[c]{0....
+I can't figure out why you would want to use a tab mark
+or \cr or \span just now. If something like a right brace
+up above has ended a previous alignment prematurely,
+you're probably due for more error messages, and you
+might try typing `S' now just to see what is salvageable.
+
+! Missing \cr inserted.
+<inserted text> 
+                \cr 
+l.10       &
+               & \textbf{Y} &  \makecell[c]{0.70\\(0.13)} &  \makecell[c]{0....
+I'm guessing that you meant to end an alignment here.
+
+! Misplaced \cr.
+<inserted text> \cr 
+                    
+l.10       &
+               & \textbf{Y} &  \makecell[c]{0.70\\(0.13)} &  \makecell[c]{0....
+I can't figure out why you would want to use a tab mark
+or \cr or \span just now. If something like a right brace
+up above has ended a previous alignment prematurely,
+you're probably due for more error messages, and you
+might try typing `S' now just to see what is salvageable.
+
+! Missing \cr inserted.
+<inserted text> 
+                \cr 
+l.10       &
+               & \textbf{Y} &  \makecell[c]{0.70\\(0.13)} &  \makecell[c]{0....
+I'm guessing that you meant to end an alignment here.
+
+! Misplaced \cr.
+<inserted text> \cr 
+                    
+l.10       &
+               & \textbf{Y} &  \makecell[c]{0.70\\(0.13)} &  \makecell[c]{0....
+I can't figure out why you would want to use a tab mark
+or \cr or \span just now. If something like a right brace
+up above has ended a previous alignment prematurely,
+you're probably due for more error messages, and you
+might try typing `S' now just to see what is salvageable.
+
+! Missing \cr inserted.
+<inserted text> 
+                \cr 
+l.10       &
+               & \textbf{Y} &  \makecell[c]{0.70\\(0.13)} &  \makecell[c]{0....
+I'm guessing that you meant to end an alignment here.
+
+! Misplaced \cr.
+<inserted text> \cr 
+                    
+l.10       &
+               & \textbf{Y} &  \makecell[c]{0.70\\(0.13)} &  \makecell[c]{0....
+I can't figure out why you would want to use a tab mark
+or \cr or \span just now. If something like a right brace
+up above has ended a previous alignment prematurely,
+you're probably due for more error messages, and you
+might try typing `S' now just to see what is salvageable.
+
+! Missing \cr inserted.
+<inserted text> 
+                \cr 
+l.10       &
+               & \textbf{Y} &  \makecell[c]{0.70\\(0.13)} &  \makecell[c]{0....
+I'm guessing that you meant to end an alignment here.
+
+! Misplaced \cr.
+<inserted text> \cr 
+                    
+l.10       &
+               & \textbf{Y} &  \makecell[c]{0.70\\(0.13)} &  \makecell[c]{0....
+I can't figure out why you would want to use a tab mark
+or \cr or \span just now. If something like a right brace
+up above has ended a previous alignment prematurely,
+you're probably due for more error messages, and you
+might try typing `S' now just to see what is salvageable.
+
+! Missing \cr inserted.
+<inserted text> 
+                \cr 
+l.10       &
+               & \textbf{Y} &  \makecell[c]{0.70\\(0.13)} &  \makecell[c]{0....
+I'm guessing that you meant to end an alignment here.
+
+! Misplaced \cr.
+<inserted text> \cr 
+                    
+l.10       &
+               & \textbf{Y} &  \makecell[c]{0.70\\(0.13)} &  \makecell[c]{0....
+I can't figure out why you would want to use a tab mark
+or \cr or \span just now. If something like a right brace
+up above has ended a previous alignment prematurely,
+you're probably due for more error messages, and you
+might try typing `S' now just to see what is salvageable.
+
+! Missing \cr inserted.
+<inserted text> 
+                \cr 
+l.10       &
+               & \textbf{Y} &  \makecell[c]{0.70\\(0.13)} &  \makecell[c]{0....
+I'm guessing that you meant to end an alignment here.
+
+! Misplaced \cr.
+<inserted text> \cr 
+                    
+l.10       &
+               & \textbf{Y} &  \makecell[c]{0.70\\(0.13)} &  \makecell[c]{0....
+I can't figure out why you would want to use a tab mark
+or \cr or \span just now. If something like a right brace
+up above has ended a previous alignment prematurely,
+you're probably due for more error messages, and you
+might try typing `S' now just to see what is salvageable.
+
+! Missing \cr inserted.
+<inserted text> 
+                \cr 
+l.10       &
+               & \textbf{Y} &  \makecell[c]{0.70\\(0.13)} &  \makecell[c]{0....
+I'm guessing that you meant to end an alignment here.
+
+! Misplaced \cr.
+<inserted text> \cr 
+                    
+l.10       &
+               & \textbf{Y} &  \makecell[c]{0.70\\(0.13)} &  \makecell[c]{0....
+I can't figure out why you would want to use a tab mark
+or \cr or \span just now. If something like a right brace
+up above has ended a previous alignment prematurely,
+you're probably due for more error messages, and you
+might try typing `S' now just to see what is salvageable.
+
+! Missing \cr inserted.
+<inserted text> 
+                \cr 
+l.10       &
+               & \textbf{Y} &  \makecell[c]{0.70\\(0.13)} &  \makecell[c]{0....
+I'm guessing that you meant to end an alignment here.
+
+! Misplaced \cr.
+<inserted text> \cr 
+                    
+l.10       &
+               & \textbf{Y} &  \makecell[c]{0.70\\(0.13)} &  \makecell[c]{0....
+I can't figure out why you would want to use a tab mark
+or \cr or \span just now. If something like a right brace
+up above has ended a previous alignment prematurely,
+you're probably due for more error messages, and you
+might try typing `S' now just to see what is salvageable.
+
+! Missing \cr inserted.
+<inserted text> 
+                \cr 
+l.10       &
+               & \textbf{Y} &  \makecell[c]{0.70\\(0.13)} &  \makecell[c]{0....
+I'm guessing that you meant to end an alignment here.
+
+! Misplaced \cr.
+<inserted text> \cr 
+                    
+l.10       &
+               & \textbf{Y} &  \makecell[c]{0.70\\(0.13)} &  \makecell[c]{0....
+I can't figure out why you would want to use a tab mark
+or \cr or \span just now. If something like a right brace
+up above has ended a previous alignment prematurely,
+you're probably due for more error messages, and you
+might try typing `S' now just to see what is salvageable.
+
+! Missing \cr inserted.
+<inserted text> 
+                \cr 
+l.10       &
+               & \textbf{Y} &  \makecell[c]{0.70\\(0.13)} &  \makecell[c]{0....
+I'm guessing that you meant to end an alignment here.
+
+! Misplaced \cr.
+<inserted text> \cr 
+                    
+l.10       &
+               & \textbf{Y} &  \makecell[c]{0.70\\(0.13)} &  \makecell[c]{0....
+I can't figure out why you would want to use a tab mark
+or \cr or \span just now. If something like a right brace
+up above has ended a previous alignment prematurely,
+you're probably due for more error messages, and you
+might try typing `S' now just to see what is salvageable.
+
+! Missing \cr inserted.
+<inserted text> 
+                \cr 
+l.10       &
+               & \textbf{Y} &  \makecell[c]{0.70\\(0.13)} &  \makecell[c]{0....
+I'm guessing that you meant to end an alignment here.
+
+! Misplaced \cr.
+<inserted text> \cr 
+                    
+l.10       &
+               & \textbf{Y} &  \makecell[c]{0.70\\(0.13)} &  \makecell[c]{0....
+I can't figure out why you would want to use a tab mark
+or \cr or \span just now. If something like a right brace
+up above has ended a previous alignment prematurely,
+you're probably due for more error messages, and you
+might try typing `S' now just to see what is salvageable.
+
+! Missing \cr inserted.
+<inserted text> 
+                \cr 
+l.10       &
+               & \textbf{Y} &  \makecell[c]{0.70\\(0.13)} &  \makecell[c]{0....
+I'm guessing that you meant to end an alignment here.
+
+! Misplaced \cr.
+<inserted text> \cr 
+                    
+l.10       &
+               & \textbf{Y} &  \makecell[c]{0.70\\(0.13)} &  \makecell[c]{0....
+I can't figure out why you would want to use a tab mark
+or \cr or \span just now. If something like a right brace
+up above has ended a previous alignment prematurely,
+you're probably due for more error messages, and you
+might try typing `S' now just to see what is salvageable.
+
+! Missing \cr inserted.
+<inserted text> 
+                \cr 
+l.10       &
+               & \textbf{Y} &  \makecell[c]{0.70\\(0.13)} &  \makecell[c]{0....
+I'm guessing that you meant to end an alignment here.
+
+! Misplaced \cr.
+<inserted text> \cr 
+                    
+l.10       &
+               & \textbf{Y} &  \makecell[c]{0.70\\(0.13)} &  \makecell[c]{0....
+I can't figure out why you would want to use a tab mark
+or \cr or \span just now. If something like a right brace
+up above has ended a previous alignment prematurely,
+you're probably due for more error messages, and you
+might try typing `S' now just to see what is salvageable.
+
+! Missing \cr inserted.
+<inserted text> 
+                \cr 
+l.10       &
+               & \textbf{Y} &  \makecell[c]{0.70\\(0.13)} &  \makecell[c]{0....
+I'm guessing that you meant to end an alignment here.
+
+! Misplaced \cr.
+<inserted text> \cr 
+                    
+l.10       &
+               & \textbf{Y} &  \makecell[c]{0.70\\(0.13)} &  \makecell[c]{0....
+I can't figure out why you would want to use a tab mark
+or \cr or \span just now. If something like a right brace
+up above has ended a previous alignment prematurely,
+you're probably due for more error messages, and you
+might try typing `S' now just to see what is salvageable.
+
+! Missing \cr inserted.
+<inserted text> 
+                \cr 
+l.10       &
+               & \textbf{Y} &  \makecell[c]{0.70\\(0.13)} &  \makecell[c]{0....
+I'm guessing that you meant to end an alignment here.
+
+! Misplaced \cr.
+<inserted text> \cr 
+                    
+l.10       &
+               & \textbf{Y} &  \makecell[c]{0.70\\(0.13)} &  \makecell[c]{0....
+I can't figure out why you would want to use a tab mark
+or \cr or \span just now. If something like a right brace
+up above has ended a previous alignment prematurely,
+you're probably due for more error messages, and you
+might try typing `S' now just to see what is salvageable.
+
+! Missing \cr inserted.
+<inserted text> 
+                \cr 
+l.10       &
+               & \textbf{Y} &  \makecell[c]{0.70\\(0.13)} &  \makecell[c]{0....
+I'm guessing that you meant to end an alignment here.
+
+! Misplaced \cr.
+<inserted text> \cr 
+                    
+l.10       &
+               & \textbf{Y} &  \makecell[c]{0.70\\(0.13)} &  \makecell[c]{0....
+I can't figure out why you would want to use a tab mark
+or \cr or \span just now. If something like a right brace
+up above has ended a previous alignment prematurely,
+you're probably due for more error messages, and you
+might try typing `S' now just to see what is salvageable.
+
+! Missing \cr inserted.
+<inserted text> 
+                \cr 
+l.10       &
+               & \textbf{Y} &  \makecell[c]{0.70\\(0.13)} &  \makecell[c]{0....
+(That makes 100 errors; please try again.) 
+Here is how much of TeX's memory you used:
+ 15 strings out of 492982
+ 249 string characters out of 6138579
+ 56251 words of memory out of 5000000
+ 3679 multiletter control sequences out of 15000+600000
+ 3948 words of font info for 15 fonts, out of 8000000 for 9000
+ 1141 hyphenation exceptions out of 8191
+ 19i,7n,12p,250b,145s stack positions out of 5000i,500n,10000p,200000b,80000s
+
+!  ==> Fatal error occurred, no output PDF file produced!
