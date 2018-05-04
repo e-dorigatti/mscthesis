@@ -625,7 +625,7 @@ This chapter describes how the data is collected (section \ref{sec:data_collecti
 \label{sec:data_collection}
 The Cabauw Experimental Site for Atmospheric Research\footnote{\url{http://www.cesar-database.nl/}} (Cesar) is a consortium formed by eight Dutch institutes and universities, which collaborate to operate and maintain an observatory for micro-meteorological conditions near the village of Cabauw, the Netherlands. The data collected characterizes the state of the atmosphere and the soil, and their interaction via radiation and surface fluxes.
 
-The observatory is surrounded by fields and no urban agglomerations is present within 15 kilometers; the land is flat with changes of altitude within a few meters over 20 kilometers. The main mast is 213 meters high and offers measurement levels every 20 meters; at each level there are three booms of length 10 meters that allow observations unobstructed by the main mast. There are three additional smaller masts of height 10 and 20 meters located close to the main mast, in order to obtain undisturbed measurements at the lower levels, and facilities to perform soil and surface observations.
+The observatory is surrounded by fields and no urban agglomerations is present within 15 kilometers; the land is flat with changes of altitude within a few meters over 20 kilometers. The main mast is 213 meters high and offers measurement levels every 20 meters; at each level there are three booms of length 10 meters that allow observations as unobstructed by the main mast as possible, although some disturbance remains. There are three additional smaller masts of height 10 and 20 meters located close to the main mast, in order to obtain undisturbed measurements at the lower levels, and facilities to perform soil and surface observations.
 
 The main focus of this project is on wind and temperature profiles, and the turbulent fluxes of sensible and latent heat. Additional variables, such as temperature and humidity, are needed to compute quantities of interest, most importantly the Obukhov length, and as possible predictors for the universal functions. There is one measurement for each variable every ten minutes, and missing measurements are gap-filled with a number of techniques. The data collected is always visually validated by an operator, which marks suspect or invalid sections of data.
 
@@ -642,11 +642,11 @@ For every ten minutes interval, the measurement comes from the instrument that i
 
 \subsubsection{Eddy Correlation}
 \label{sec:eddy_correlation}
-The eddy correlation technique is used to compute the turbulent surface fluxes of sensible and latent heat $H$ and $\lambda E$, as well as momentum and $CO_2$, starting from fluctuations in wind, temperature, humidity, and $CO_2$ content.
+The eddy correlation technique is used to compute the turbulent surface fluxes of sensible and latent heat $H$ and $\lambda E$, as well as the momentum flux, starting from fluctuations in wind, temperature, humidity, and $CO_2$ content.
 
-These measurements are obtained with, respectively, a sonic anemometer, a sonic thermometer, and an optical open-path sensor. Sonic anemometers measure the wind speed by leveraging the fact that the speed of sound in free air is affected by the speed of the air itself; since the speed of sound is known, the wind speed can be easily recovered from the time a sound impulse takes to travel a short distance. By measuring the wind velocity along three orthogonal paths, the full wind vector can be recovered. Sonic thermometers work similarly, by leveraging the fact that the speed of sound is affected by the temperature of the medium it travels in. These instruments can take up to 100 measurements per second. Optical open-path sensors quantify the amount of water vapor and carbon dioxide in the air by emitting a ray of infrared light and measuring its intensity 10 to 20 centimeters further away. $H_2O$ and $CO_2$ molecules in the air absorb electromagnetic radiation at known frequencies, thus the concentration of water vapor and carbon dioxide can be inferred by measuring the attenuation at these wavelengths.
+These measurements are obtained with a sonic anemometer and and an optical open-path sensor. Sonic anemometers measure the wind speed by leveraging the fact that the speed of sound in free air is affected by the speed of the air itself; since the speed of sound is known, the wind speed can be easily recovered from the time a sound impulse takes to travel a short distance. By measuring the wind velocity along three orthogonal paths, the full wind vector can be recovered. This measure can then be used to compute the temperature, by leveraging the fact that the speed of sound is affected by the temperature of the medium it travels in. Optical open-path sensors quantify the amount of water vapor and carbon dioxide in the air by emitting a ray of infrared light and measuring its intensity 10 to 20 centimeters further. $H_2O$ and $CO_2$ molecules in the air absorb electromagnetic radiation at known frequencies, thus the concentration of water vapor and carbon dioxide can be inferred by measuring the attenuation at these wavelengths. Some of these instruments are shown in figure \ref{fig:cabauw_180m_instruments}.
 
-The eddy correlation technique measures fluxes by computing their sample covariance with the vertical wind speed. Let $w_t$ be the vertical wind speed at time $t$, then the turbulent vertical flux for the quantity $a$ is computed as follows:
+All these instruments can take up to 100 measurements per second, necessary in order to compute the turbulence. The eddy correlation technique measures fluxes by computing their sample covariance with the vertical wind speed. Let $w_t$ be the vertical wind speed at time $t$, then the turbulent vertical flux for the quantity $a$ is computed as follows:
 
 $$
 F_a=\frac{1}{T_2-T_1}\sum_{t=T_1}^{T_2}(w_t-\overline{w})(a_t-\overline{a})
@@ -1042,7 +1042,7 @@ Where $f_n$ is the predicted value for the test sample $\bm x_n$ with true value
 
 \section{Success Criteria}
 \label{sec:success}
-A successful answer to the first research question entails finding a model whose mean squared error on F5 with trend is smaller than the mean squared error of the Monin-Obukhov similarity theory estimator introduced in section \ref{sec:most_fit}.
+A successful answer to the first research question entails finding a model whose mean squared error on any feature set, with or without trend, is smaller than the mean squared error of the MOST estimator introduced in section \ref{sec:most_fit}.
 
 The second research question is answered by comparing the different evaluation metrics on the ten feature sets (F1 to F5, with and without trend). Note that we cannot use the output of a model to obtain the importance of the features, as this method is not reliable when some of them are correlated \citep{rf_bias,rf_corr_imp}, which is a very relevant issue in our case. Trivially, wind speed and temperature at the different levels are very strongly correlated (Pearson's $r$ is above 0.95), and there are other, more complex, correlations, such as between the net radiation and the soil heat flux, or between the soil temperature and the dew point (Pearson's $r$ is respectively 0.75 and 0.79). In spite of the correlations, all these variables contribute to the flux-profile relationships, often in very nuanced ways.
 
@@ -1059,27 +1059,27 @@ Unfortunately, most of these observations contain unreliable measurements, as de
 
 \begin{table}[]
 \centering
-\caption{Basic descriptive statistics of the features in the Cesar database  and features that were computed by us (last two).  Note that the relative humidity was computed by the Cesar consortium using values from other measurements, and 16,833 records  (1.3\%) have a relative humidity above 100\%.}
+\caption{Basic descriptive statistics of the features in the Cesar database, except for the air density and virtual air temperature, which were computed by us.  Note that the relative humidity was computed by the Cesar consortium using values from other measurements, and 16,833 records  (1.3\%) have a relative humidity above 100\%.}
 \label{tbl:col_summary}
 \begin{tabular*}{\textwidth}{l| @{\extracolsep{\fill}} rrrrrrr}
 \toprule
 & \textbf{Mean} & \textbf{Std.} & \textbf{Min.} & \textbf{25\%} & \textbf{50\%} & \textbf{75\%} & \textbf{Max.} \\ \midrule
-\textbf{$H$} & 3.66 & 47.44 & -460.00 & -25.96 & -14.84 & 28.06 & 479.64 \\
-\textbf{$\lambda E$} & 74.76 & 114.18 & -392.71 & -5.02& 23.92 & 132.66 & 748.69 \\
-\textbf{$u_*$} & 0.31 & 0.15 & 0.10 & 0.20 & 0.28 & 0.39 & 1.55 \\
-\textbf{Wind Speed} & 5.86 & 2.66 & 1.00 & 3.96 & 5.43 & 7.23 & 29.10 \\
-\textbf{Air Temp.} & 284.70 & 6.34 & 259.65 & 280.15 & 284.75 & 289.25 & 306.85 \\
-\textbf{Soil Temp.} & 284.32 & 5.65 & 271.89 & 279.602 & 284.201 & 289.039 & 302.586 \\
-\textbf{Dew Point} & 280.33 & 5.79 & 195.57 & 276.62 & 280.54 & 284.57 & 296.75 \\
-\textbf{Spec. Hum.} & 6.62 & 2.40 & 0.00 & 4.82 & 6.33 & 8.25 & 17.78 \\
-\textbf{Rel. Hum.} & 76.52 & 15.01 & 0.01 & 67.02 & 79.10 & 88.06 & 133.70 \\
-\textbf{Air Press.} & 1,014.31 & 9.84 & 960.90 & 1,008.50 & 1,015.00 & 1,020.80 & 1,046.40 \\
-\textbf{Rain Amount} & 0.02 & 0.12 & -0.02 & 0.00 & 0.00 & 0.00 & 15.10 \\
-\textbf{$CO_2$ Flux} & -0.07 & 0.30 & -7.49 & -0.25 & 0.03 & 0.12 & 6.10 \\
-\textbf{Soil Heat Flux} & 2.43 & 13.64 & -60.65 & -6.14 & -0.62 & 7.85 & 123.16 \\
-\textbf{Net Rad.} & 81.14 & 165.63 & -158.47 & -35.43 & -2.73 & 170.60 & 919.05 \\
-\textbf{Air Dens.} & 0.27 & 0.10 & 0.10 & 0.20 & 0.26 & 0.32 & 1.30 \\
-\textbf{Virt. Temp} & 1,442.78 & 444.94 & 275.65 & 1,105.10 & 1,385.16 & 1,743.68 & 3,506.05 \\
+\textbf{$H$} & 3.7 & 47.3 & -460.0 & -25.8 & -14.7 & 28.2 & 479.6 \\
+\textbf{$\lambda E$} & 74.7 & 114.9 & -534.8 & -4.9 & 23.8 & 132.9 & 6,940.8 \\
+\textbf{$u_*$} & 0.3 & 0.1 & 0.1 & 0.2 & 0.3 & 0.4 & 1.8 \\
+\textbf{Wind Speed} & 5.9 & 2.6 & 1.0 & 4.0 & 5.4 & 7.2 & 29.4 \\
+\textbf{Air Temp.} & 284.7 & 6.4 & 259.6 & 280.1 & 284.8 & 289.4 & 306.9 \\
+\textbf{Soil Temp.} & 284.4 & 5.7 & 271.9 & 279.6 & 284.3 & 289.1 & 302.6 \\
+\textbf{Dew Point} & 280.3 & 6.1 & 188.0 & 276.6 & 280.6 & 284.7 & 296.7 \\
+\textbf{Spec. Hum.} & 6.6 & 2.5 & -0.9 & 4.8 & 6.4 & 8.3 & 17.8 \\
+\textbf{Rel. Hum.} & 76.5 & 15.2 & 0.0 & 66.9 & 79.2 & 88.3 & 133.7 \\
+\textbf{Air Press.} & 1,009.6 & 69.0 & 0.0 & 1,008.3 & 1,014.8 & 1,020.7 & 1,046.4 \\
+\textbf{Rain Amount} & 0.0 & 0.1 & 0.0 & 0.0 & 0.0 & 0.0 & 15.1 \\
+\textbf{$CO_2$ Flux} & -0.1 & 0.3 & -7.5 & -0.2 & 0.0 & 0.1 & 6.1 \\
+\textbf{Soil Heat Flux} & 2.9 & 15.6 & -77.8 & -6.5 & -0.7 & 8.9 & 1,139.0 \\
+\textbf{Net Rad.} & 81.8 & 167.2 & -158.5 & -35.4 & -3.0 & 172.5 & 7,775.4 \\
+\textbf{Air Dens.} & 0.3 & 0.1 & 0.0 & 0.2 & 0.3 & 0.3 & 2.8 \\
+\textbf{Virt. Air Temp.} & 1,443.8 & 454.9 & 124.8 & 1,104.2 & 1,391.0 & 1,753.2 & 3,506.0 \\
 \bottomrule
 \end{tabular*}
 \end{table}
@@ -1148,11 +1148,11 @@ Figure \ref{fig:le_season} shows the turbulent latent heat flux versus hour of d
 
 Figure \ref{fig:tsne} shows the result of the t-SNE dimensionality reduction algorithm \citep{tsne} applied to 250,000 samples (19.2\% of the total), using the same features of table \ref{tbl:col_summary}. The 250,000 samples were chosen uniformly at random and standardized with equation \ref{eq:standardization} before fitting, but the colors were computed using the raw features on a perceptually uniform color scale, after excluding the top and bottom 1\% values. Overall, the points cluster in a relatively uniform blob, which is not that surprising once you consider that the measurements were taken continuously, meaning that all physical quantities change smoothly, and all points close in time are also close in feature space.
 
-The colors reveal some structure, though: the left-hand side of the plots contain measurements taken in the Summer, and the right-hand side contains measurement in Winter (see the air temperature in figure \ref{fig:tsne_temp} and month in figure \ref{fig:tsne_month}). Moreover, unstable conditions are clustered in a stripe, centered vertically, that runs from left to right (see the fluxes of figures \cref{fig:tsne_H,fig:tsne_LE,fig:tsne_soilheat}, the radiation in figure \ref{fig:tsne_netrad}, and the hour of day in figure \ref{fig:tsne_hday}). In figure \ref{fig:tsne_z} we also a cluster on the top with all the observations at 40 meters, whereas the two lower levels are mixed somewhat uniformly in the bottom part of the plot.
+The colors reveal some structure, though: the left-hand side of the plots contain measurements taken in the Summer, and the right-hand side contains measurement in Winter (see the air temperature in figure \ref{fig:tsne_temp} and month in figure \ref{fig:tsne_month}). Moreover, unstable conditions are clustered in a stripe, centered vertically, that runs from left to right (see the fluxes of figures \cref{fig:tsne_H,fig:tsne_LE,fig:tsne_soilheat}, the radiation in figure \ref{fig:tsne_netrad}, and the hour of day in figure \ref{fig:tsne_hday}). In figure \ref{fig:tsne_z} we also a see cluster on the top with all the observations at 40 meters, whereas the two lower levels are mixed somewhat uniformly in the bottom part of the plot.
 
-Finally, figure \ref{fig:tsne_clus} shows the result of k-means clustering in the standardized feature space, using $k=2$ (blue/orange) and $k=4$ (the four shades). This clustering is consistent with the qualitative division above, with the dark orange and blue clusters corresponding to Summer and Winter respectively, light orange corresponding to unstable conditions of free convection, and light blue corresponding to strong horizontal winds with little turbulence. Stably stratified conditions seem to occur at the boundary of the blob, where $\phi_m$ takes the highest values (see figure \ref{fig:tsne_phi_m}). This is also not surprising, since stable stratification tend to happen at night throughout the year, unlike free convection or z-less scaling, which only happen in specific conditions.
+Finally, figure \ref{fig:tsne_clus} shows the result of k-means clustering in the standardized feature space, using $k=2$ (blue/orange) and $k=4$ (the four shades). This clustering is consistent with the qualitative division above, with the dark orange and blue clusters corresponding to Summer and Winter respectively, light orange corresponding to unstable conditions with considerable vertical movement of air, and light blue corresponding to strong horizontal winds with little movement in the vertical. Stably stratified conditions seem to occur at the boundary of the blob, where $\phi_m$ takes the highest values (see figure \ref{fig:tsne_phi_m}). This is also not surprising, since stable stratification tend to happen at night throughout the year, unlike free convection or z-less scaling, which only happen in specific conditions.
 
-Talking about speed of wind, figure \ref{fig:ustar_wind} shows some measurements exceeding \SI{25}{\meter\per\second}; according to the Beaufort scale, holding umbrellas and walking become hard with wind at \SI{15}{\meter\per\second}. Those measurements are not issues with the data: figure \ref{fig:cyclone_jeanett} shows the highest wind speed present in the Cesar database to date, corresponding to cyclone Jeanett.
+Talking about speed of wind, figure \ref{fig:ustar_wind} shows some measurements exceeding \SI{25}{\meter\per\second}; according to the Beaufort scale, holding umbrellas and walking become hard at \SI{15}{\meter\per\second}. Those measurements are not issues with the data: figure \ref{fig:cyclone_jeanett} shows the highest wind speed present in the Cesar database to date, corresponding to cyclone Jeanett.
 
 \begin{figure}
     \centering
@@ -1169,7 +1169,7 @@ Talking about speed of wind, figure \ref{fig:ustar_wind} shows some measurements
         \caption{Summer}
         \label{fig:le_summer}
     \end{subfigure}
-    \caption{Turbulent latent heat flux versus hour of day in Winter (left) and Summer (right). One can see both the difference in day duration, and the effect of increased temperature on evaporation. The sensible heat flux follows a very similar pattern, with lower absolute values.}
+    \caption{Turbulent latent heat flux versus hour of day in Winter (left) and Summer (right). One can see both the difference in day duration, and the effect of increased temperature on evaporation and transpiration. The sensible heat flux follows a very similar pattern, with lower absolute values.}
 	\label{fig:le_season}
 \end{figure}
 
@@ -1271,7 +1271,7 @@ To conclude, although F.D. (equation \ref{eq:fd_gradient}) is the most accurate 
 
 
 \section{Flux-Profile Relationship}
-Figure \ref{fig:most_scatter} shows the wind shear versus the instability parameter, together with the commonly accepted flux-profile relationship in green and the relationship fitted on our dataset in red.
+Figure \ref{fig:most_scatter} shows the wind shear versus the instability parameter, together with the commonly accepted flux-profile relationship in green and the relationship fitted on our dataset in red. Qualitatively, the scatter plot looks sas expected, going to zero as $\xi$ decreases, linearly increasing in the $0\leq\xi\leq1$ interval, and leveling after that, possibly approaching the $\xi^{1/3}$ form proposed by \cite{sheba_phim}.
 
 negative phim with small |xi|
 
@@ -1297,13 +1297,12 @@ negative phim with small |xi|
 
 
 \section{Model Comparison}
-performance of the models
+In this section, we present the evaluation metrics obtained by the estimators on the different configurations of features and data. We will refer to the interval $-2\leq\xi\leq1$ as the \emph{MOST validity range}; the proportion of data falling in this interval is 83.6\%. Unless specified otherwise, the metrics are presented as the mean over the ten outer validation folds and the standard deviation in parenthesis.
 
 
 \subsection{MOST Estimator}
 \label{sec:most_estimator_results}
-The performance of the MOST estimator is shown in table \ref{tbl:most_results}; the proportion of data for which $-2\leq\xi\leq 1$ is 83.6\%. We see a considerable increase in the MSE when the full dataset is used; this is not surprising, considering that, with $\xi>1$, $\phi_m$ tends to level off, and there are a considerable number of outliers in the range $-20\leq\xi\leq-2$ (see figure \ref{fig:most_full}) that cannot be fitted by the MOST estimator. Figure \ref{fig:most_scatter} shows $\phi_m$ as a function of $\xi$ as computed in our dataset, as well as the predictions of equation \ref{eq:phi_m_coeff} and the fitted MOST estimator. Qualitatively, the relationship behaves as expected, going to zero as $\xi$ decreases, linearly increasing in the $0\leq\xi\leq1$ interval, and leveling after that, possibly approaching the $\xi^{1/3}$ form proposed by \cite{sheba_phim}.
-
+The performance of the MOST estimator is shown in table \ref{tbl:most_results}; we see a considerable increase in the MSE when the full dataset is used; this is not surprising, considering that, with $\xi>1$, $\phi_m$ tends to level off, and there are a considerable number of outliers in the range $-20\leq\xi\leq-2$ (see figure \ref{fig:most_full}) that cannot be fitted by the MOST estimator. Figure \ref{fig:most_scatter} shows $\phi_m$ as a function of $\xi$ as computed in our dataset, as well as the predictions of equation \ref{eq:phi_m_coeff} and the fitted MOST estimator.
 
 Table \ref{tbl:most_results} shows the values of the coefficients in equation \ref{eq:phi_general}, when fitted to the region of data where the Monin-Obukhov similarity theory is valid. We note a big difference with the values recommended in \cite{hogstrom88}, as well as most studies on the topic. However, \cite{cabauw_night_most} studied the stable, nocturnal boundary layer at Cabauw, and reported values varying between 0.81 and 0.95 for $a$ and between 2.7 and 3.2 for $b$, depending on the direction of the wind; there is no known explanation for this discrepancy. Although \cite{cabauw_night_most} used the same method that we applied to find the coefficients, no goodness of fit statistics, such as MSE or $R^2$, were reported.
 
@@ -1312,15 +1311,15 @@ Table \ref{tbl:most_results} shows the values of the coefficients in equation \r
 \caption{Evaluation metrics for the MOST estimator}
 \label{tbl:most_results}
 %\begin{tabular*}{\textwidth}{r  |@{\extracolsep{\fill}}cc}
-\begin{tabular}{r|cc}
+\begin{tabular}{l|cc}
 \toprule
 & All & $-2\le\xi\le1$ \\ \midrule
-Mean Squared Error 					& 0.6720 (0.03132)  & 0.3321  (0.0172)     \\
-$R^2$ Score									& 0.7055 (0.0089) & 0.6050 (0.0107)       \\
-Mean Absolute Error 					& 0.5406 (0.0139) & 0.3954 (0.0072)      \\
-Median Absolute Error 				& 0.3716 (0.0156) & 0.2827 (0.0043)      \\
-Mean Absolute Percent Error  	& 252.9254 (196.0861) & 184.7077 (48.2603)    \\
-Median Absolute Percent Error	& 28.9648 (0.9388) & 24.6184    (0.7296)   \\
+MSE & 0.6720 (0.03132)  & 0.3321  (0.0172)     \\
+$R^2$ & 0.7055 (0.0089) & 0.6050 (0.0107)       \\
+MAE & 0.5406 (0.0139) & 0.3954 (0.0072)      \\
+mAE & 0.3716 (0.0156) & 0.2827 (0.0043)      \\
+MAPE & 252.9254 (196.0861) & 184.7077 (48.2603)    \\
+mAPE & 28.9648 (0.9388) & 24.6184    (0.7296)   \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -1354,8 +1353,8 @@ $d$   & -0.298687  & 0.109407 & -0.601655 & -0.261012 & -0.258147 & -0.255400 & 
 \subcaptionbox{Mean Absolute Percent Error\label{fig:result_Ridge_most_mean_abs_percent_error}}{\includegraphics[width=0.49\textwidth]{images/result_Ridge_most_mean_abs_percent_error}}\hfill
 \subcaptionbox{Median Absolute Percent Error\label{fig:result_Ridge_most_median_abs_percent_error}}{\includegraphics[width=0.49\textwidth]{images/result_Ridge_most_median_abs_percent_error}}\\
 
-    \caption{Evaluation metrics of the Ridge Regression Estimator in the MOST validity range; the feature sets with trend are blue, those without trend are green.}
-	\label{fig:ridge_results}
+    \caption{Evaluation metrics of the Ridge Regression Estimator in the MOST validity range; the feature sets with trend are blue, those without trend are green, and he leftmost black box is the MOST estimator baseline.}
+	\label{fig:ridge_results_most}
 \end{figure}
 
 
@@ -1369,8 +1368,8 @@ $d$   & -0.298687  & 0.109407 & -0.601655 & -0.261012 & -0.258147 & -0.255400 & 
 \subcaptionbox{Mean Absolute Percent Error\label{fig:result_Ridge_nomost_mean_abs_percent_error}}{\includegraphics[width=0.49\textwidth]{images/result_Ridge_nomost_mean_abs_percent_error}}\hfill
 \subcaptionbox{Median Absolute Percent Error\label{fig:result_Ridge_nomost_median_abs_percent_error}}{\includegraphics[width=0.49\textwidth]{images/result_Ridge_nomost_median_abs_percent_error}}\\
 
-    \caption{Evaluation metrics of the Ridge Regression Estimator on all the data; the feature sets with trend are blue, those without trend are green.}
-	\label{fig:ridge_results}
+    \caption{Evaluation metrics of the Ridge Regression Estimator on all the data; the feature sets with trend are blue, those without trend are green, and he leftmost black box is the MOST estimator baseline.}
+	\label{fig:ridge_results_all}
 \end{figure}
 
 
@@ -1380,68 +1379,83 @@ $d$   & -0.298687  & 0.109407 & -0.601655 & -0.261012 & -0.258147 & -0.255400 & 
 \input{include/results_Ridge}
 \end{table}
 
+
 % ---------------------------------------------------------------
 
 \begin{figure}
-\subcaptionbox{Mean Squared Error\label{fig:result_KNeighborsRegressor_most_mean_squared_error}}{\includegraphics[width=0.49\textwidth]{images/result_KNeighborsRegressor_most_mean_squared_error}}\hfill
-\subcaptionbox{$R^2$ Score \label{fig:result_KNeighborsRegressor_most_r2_score}}{\includegraphics[width=0.49\textwidth]{images/result_KNeighborsRegressor_most_r2_score}}\\
+\subcaptionbox{Mean Squared Error\label{fig:result_KNeighborsRegressor_most_mean_squared_error}}{\includegraphics[width=0.49\textwidth]{images/result_kNN_most_mean_squared_error}}\hfill
+\subcaptionbox{$R^2$ Score \label{fig:result_kNN_most_r2_score}}{\includegraphics[width=0.49\textwidth]{images/result_kNN_most_r2_score}}\\
 
-\subcaptionbox{Mean Absolute Error\label{fig:result_KNeighborsRegressor_most_mean_absolute_error}}{\includegraphics[width=0.49\textwidth]{images/result_KNeighborsRegressor_most_mean_absolute_error}}
-\subcaptionbox{Median Absolute Error\label{fig:result_KNeighborsRegressor_most_median_absolute_error}}{\includegraphics[width=0.49\textwidth]{images/result_KNeighborsRegressor_most_median_absolute_error}}\\
+\subcaptionbox{Mean Absolute Error\label{fig:result_kNN_most_mean_absolute_error}}{\includegraphics[width=0.49\textwidth]{images/result_kNN_most_mean_absolute_error}}
+\subcaptionbox{Median Absolute Error\label{fig:result_kNN_most_median_absolute_error}}{\includegraphics[width=0.49\textwidth]{images/result_kNN_most_median_absolute_error}}\\
 
-\subcaptionbox{Mean Absolute Percent Error\label{fig:result_KNeighborsRegressor_most_mean_abs_percent_error}}{\includegraphics[width=0.49\textwidth]{images/result_KNeighborsRegressor_most_mean_abs_percent_error}}\hfill
-\subcaptionbox{Median Absolute Percent Error\label{fig:result_KNeighborsRegressor_most_median_abs_percent_error}}{\includegraphics[width=0.49\textwidth]{images/result_KNeighborsRegressor_most_median_abs_percent_error}}\\
+\subcaptionbox{Mean Absolute Percent Error\label{fig:result_kNN_most_mean_abs_percent_error}}{\includegraphics[width=0.49\textwidth]{images/result_kNN_most_mean_abs_percent_error}}\hfill
+\subcaptionbox{Median Absolute Percent Error\label{fig:result_kNN_most_median_abs_percent_error}}{\includegraphics[width=0.49\textwidth]{images/result_kNN_most_median_abs_percent_error}}\\
 
-    \caption{Evaluation metrics of the k-Nearest Neighbors Regressor Estimator in the MOST validity range; the feature sets with trend are blue, those without trend are green.}
-	\label{fig:knn_results}
+    \caption{Evaluation metrics of the k-Nearest Neighbors Regressor Estimator in the MOST validity range; the feature sets with trend are blue, those without trend are green, and he leftmost black box is the MOST estimator baseline.}
+	\label{fig:knn_results_most}
 \end{figure}
 
 
 \begin{figure}
-\subcaptionbox{Mean Squared Error\label{fig:result_KNeighborsRegressor_nomost_mean_squared_error}}{\includegraphics[width=0.49\textwidth]{images/result_KNeighborsRegressor_nomost_mean_squared_error}}\hfill
-\subcaptionbox{$R^2$ Score \label{fig:result_KNeighborsRegressor_nomost_r2_score}}{\includegraphics[width=0.49\textwidth]{images/result_KNeighborsRegressor_nomost_r2_score}}\\
+\subcaptionbox{Mean Squared Error\label{fig:result_kNN_nomost_mean_squared_error}}{\includegraphics[width=0.49\textwidth]{images/result_kNN_nomost_mean_squared_error}}\hfill
+\subcaptionbox{$R^2$ Score \label{fig:result_kNN_nomost_r2_score}}{\includegraphics[width=0.49\textwidth]{images/result_kNN_nomost_r2_score}}\\
 
-\subcaptionbox{Mean Absolute Error\label{fig:result_KNeighborsRegressor_nomost_mean_absolute_error}}{\includegraphics[width=0.49\textwidth]{images/result_KNeighborsRegressor_nomost_mean_absolute_error}}
-\subcaptionbox{Median Absolute Error\label{fig:result_KNeighborsRegressor_nomost_median_absolute_error}}{\includegraphics[width=0.49\textwidth]{images/result_KNeighborsRegressor_nomost_median_absolute_error}}\\
+\subcaptionbox{Mean Absolute Error\label{fig:result_kNN_nomost_mean_absolute_error}}{\includegraphics[width=0.49\textwidth]{images/result_kNN_nomost_mean_absolute_error}}
+\subcaptionbox{Median Absolute Error\label{fig:result_kNN_nomost_median_absolute_error}}{\includegraphics[width=0.49\textwidth]{images/result_kNN_nomost_median_absolute_error}}\\
 
-\subcaptionbox{Mean Absolute Percent Error\label{fig:result_KNeighborsRegressor_nomost_mean_abs_percent_error}}{\includegraphics[width=0.49\textwidth]{images/result_KNeighborsRegressor_nomost_mean_abs_percent_error}}\hfill
-\subcaptionbox{Median Absolute Percent Error\label{fig:result_KNeighborsRegressor_nomost_median_abs_percent_error}}{\includegraphics[width=0.49\textwidth]{images/result_KNeighborsRegressor_nomost_median_abs_percent_error}}\\
+\subcaptionbox{Mean Absolute Percent Error\label{fig:result_kNN_nomost_mean_abs_percent_error}}{\includegraphics[width=0.49\textwidth]{images/result_kNN_nomost_mean_abs_percent_error}}\hfill
+\subcaptionbox{Median Absolute Percent Error\label{fig:result_kNN_nomost_median_abs_percent_error}}{\includegraphics[width=0.49\textwidth]{images/result_kNN_nomost_median_abs_percent_error}}\\
 
-    \caption{Evaluation metrics of the k-Nearest Neighbors Regressor Estimator on all the data; the feature sets with trend are blue, those without trend are green.}
-	\label{fig:knn_results}
+    \caption{Evaluation metrics of the k-Nearest Neighbors Regressor Estimator on all the data; the feature sets with trend are blue, those without trend are green, and he leftmost black box is the MOST estimator baseline.}
+	\label{fig:knn_results_all}
 \end{figure}
 
 
 \begin{table}[]
 \caption{Evaluation metrics for the k-Nearest Neighbors Regressor estimator.}
 \label{tbl:knn_results}
-\input{include/results_KNeighborsRegressor}
+\input{include/results_kNN}
 \end{table}
 
 
 % ---------------------------------------------------------------
 
 \begin{figure}
-\subcaptionbox{Mean Squared Error\label{fig:result_GradientBoostingRegressor_most_mean_squared_error}}{\includegraphics[width=0.49\textwidth]{images/result_GradientBoostingRegressor_most_mean_squared_error}}\hfill
-\subcaptionbox{$R^2$ Score \label{fig:result_GradientBoostingRegressor_most_r2_score}}{\includegraphics[width=0.49\textwidth]{images/result_GradientBoostingRegressor_most_r2_score}}\\
+\subcaptionbox{Mean Squared Error\label{fig:result_GB_most_mean_squared_error}}{\includegraphics[width=0.49\textwidth]{images/result_GB_most_mean_squared_error}}\hfill
+\subcaptionbox{$R^2$ Score \label{fig:result_GB_most_r2_score}}{\includegraphics[width=0.49\textwidth]{images/result_GB_most_r2_score}}\\
 
-\subcaptionbox{Mean Absolute Error\label{fig:result_GradientBoostingRegressor_most_mean_absolute_error}}{\includegraphics[width=0.49\textwidth]{images/result_GradientBoostingRegressor_most_mean_absolute_error}}
-\subcaptionbox{Median Absolute Error\label{fig:result_GradientBoostingRegressor_most_median_absolute_error}}{\includegraphics[width=0.49\textwidth]{images/result_GradientBoostingRegressor_most_median_absolute_error}}\\
+\subcaptionbox{Mean Absolute Error\label{fig:result_GB_most_mean_absolute_error}}{\includegraphics[width=0.49\textwidth]{images/result_GB_most_mean_absolute_error}}
+\subcaptionbox{Median Absolute Error\label{fig:result_GB_most_median_absolute_error}}{\includegraphics[width=0.49\textwidth]{images/result_GB_most_median_absolute_error}}\\
 
-\subcaptionbox{Mean Absolute Percent Error\label{fig:result_GradientBoostingRegressor_most_mean_abs_percent_error}}{\includegraphics[width=0.49\textwidth]{images/result_GradientBoostingRegressor_most_mean_abs_percent_error}}\hfill
-\subcaptionbox{Median Absolute Percent Error\label{fig:result_GradientBoostingRegressor_most_median_abs_percent_error}}{\includegraphics[width=0.49\textwidth]{images/result_GradientBoostingRegressor_most_median_abs_percent_error}}\\
+\subcaptionbox{Mean Absolute Percent Error\label{fig:result_GB_most_mean_abs_percent_error}}{\includegraphics[width=0.49\textwidth]{images/result_GB_most_mean_abs_percent_error}}\hfill
+\subcaptionbox{Median Absolute Percent Error\label{fig:result_GB_most_median_abs_percent_error}}{\includegraphics[width=0.49\textwidth]{images/result_GB_most_median_abs_percent_error}}\\
 
-    \caption{Evaluation metrics of the Gradient Boosted Trees Estimator in the MOST validity range; the feature sets with trend are blue, those without trend are green.}
-	\label{fig:gbr_results}
+    \caption{Evaluation metrics of the Gradient Boosted Trees Estimator in the MOST validity range; the feature sets with trend are blue, those without trend are green, and he leftmost black box is the MOST estimator baseline.}
+	\label{fig:gbr_results_most}
 \end{figure}
 
-todo add plots for gbr nomost
+
+
+\begin{figure}
+\subcaptionbox{Mean Squared Error\label{fig:result_GB_nomost_mean_squared_error}}{\includegraphics[width=0.49\textwidth]{images/result_GB_nomost_mean_squared_error}}\hfill
+\subcaptionbox{$R^2$ Score \label{fig:result_GB_nomost_r2_score}}{\includegraphics[width=0.49\textwidth]{images/result_GB_nomost_r2_score}}\\
+
+\subcaptionbox{Mean Absolute Error\label{fig:result_GB_nomost_mean_absolute_error}}{\includegraphics[width=0.49\textwidth]{images/result_GB_nomost_mean_absolute_error}}
+\subcaptionbox{Median Absolute Error\label{fig:result_GB_nomost_median_absolute_error}}{\includegraphics[width=0.49\textwidth]{images/result_GB_nomost_median_absolute_error}}\\
+
+\subcaptionbox{Mean Absolute Percent Error\label{fig:result_GB_nomost_mean_abs_percent_error}}{\includegraphics[width=0.49\textwidth]{images/result_GB_nomost_mean_abs_percent_error}}\hfill
+\subcaptionbox{Median Absolute Percent Error\label{fig:result_GB_nomost_median_abs_percent_error}}{\includegraphics[width=0.49\textwidth]{images/result_GB_nomost_median_abs_percent_error}}\\
+
+    \caption{Evaluation metrics of the Gradient Boosted Trees Estimator on all the data; the feature sets with trend are blue, those without trend are green, and he leftmost black box is the MOST estimator baseline.}
+	\label{fig:gbr_results_nomost}
+\end{figure}
 
 
 \begin{table}[]
 \caption{Evaluation metrics for the Gradient Boosted Trees Estimator estimator.}
-\label{tbl:gbr_results}
-\input{include/results_GradientBoostingRegressor}
+\label{tbl:gbr_results_most}
+\input{include/results_GB}
 \end{table}
 
 
