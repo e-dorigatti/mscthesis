@@ -365,12 +365,66 @@ The solution to this problem is to repeatedly perform this partitioning procedur
 \begin{itemize}
 \item in random subsampling, the procedure above is simply repeated many times, by using two thirds random examples for training, and the remaining one third for validation;
 \item In bootstrapping \citep{bootstrap}, the training set is created by taking $N=\vert D\vert$ examples \emph{with replacement} from $D$, and using the remaining examples for validation. This means that the validation set contains on average approximately 36.8\% of the samples in $D$, and the training set the remaining 63.2\%, with many duplicates;
-\item In k-fold cross validation \citep{kfold}, $D$ is partitioned in $k$ subsets, and each of them is used in turn as validation set, while the others are used for training. This produces $k$ estimates of the true risk, coming from the $k$ subsets.
+\item In $k$-fold cross validation \citep{kfold}, $D$ is partitioned in $k$ subsets, and each of them is used in turn as validation set, while the others are used for training. This produces $k$ estimates of the true risk, coming from the $k$ subsets.
 \end{itemize}
 
-Regardless of the method used, the final estimate of the performance is the average of the estimates obtained from the individual trials. Every method has different properties regarding both the bias and the variance of the estimates, and there is considerable controversy on which method should be used in which situation. For example, \cite{cv_bootstrap} recommends using 10-fold cross validation for comparing models, because, although its estimate of the performance is biased, it has lower variance compared to bootstrapping; however, \cite{no_unbiased_cv} show that it is not possible to obtain an universal unbiased estimate of the variance of k-fold cross validation. \cite{cvmyths} further discusses this issue, and debunks some myths and commonly held misconceptions about cross validation, including the belief, consequent \cite{cv_bootstrap}, that 10-fold cross validation is always the best choice. Generally, there is a tradeoff in choosing the value of k, as high values yield estimates with lower bias, but higher variance \citep{cv_survey}, and are more computationally intensive.
+Regardless of the method used, the final estimate of the performance is the average of the estimates obtained from the individual trials. Every method has different properties regarding both the bias and the variance of the estimates, and there is considerable controversy on which method should be used in which situation. For example, \cite{cv_bootstrap} recommends using 10-fold CV for comparing models, because, although its estimate of the performance is biased, it has lower variance compared to bootstrapping; however, \cite{no_unbiased_cv} show that it is not possible to obtain an universal unbiased estimate of the variance of $k$-fold CV. \cite{cvmyths} further discusses this issue, and debunks some myths and commonly held misconceptions about CV, including the belief, consequent \cite{cv_bootstrap}, that 10-fold cross validation is always the best choice. Generally, there is a tradeoff in choosing the value of $k$, as high values yield estimates with lower bias, but higher variance \citep{cv_survey}, and are more computationally intensive.
 
-todo nested cv \cite{nested_cv}
+Cross validation can be used to perform two distinct tasks: \emph{estimation} and \emph{identification}. The goal of the former is to accurately estimate the best performance attainable on a prediction problem, whereas the goal of the latter is to identify the parameters and hyper-parameters that give rise to the best possible estimators. Consequently, when the goal is estimation we want to eliminate bias, whereas in identification we need low variance. Estimation is best performed with nested CV\citep{nested_cv_stone,nested_cv_varma}, in which there is an inner CV loop done on every training fold of the outer CV loop. This procedure is formalized in algorithm \ref{alg:nested_cv}, where random hyper-parameter search \citep{random_search} is used in the inner CV loop to find good values for the hyper-parameters. \cite{cv_pitfalls} advocates for repeated nested CV (i.e. repeating nested CV) for optimal estimation, since plain nested CV produces estimates with fairly high variance, but the computational cost of such procedure can be prohibitively high.
+
+
+\begin{algorithm}
+\caption{Nested cross validation with random hyper-parameter search.}
+\label{alg:nested_cv}
+
+
+\algnewcommand\algorithmicinput{\textbf{Input:}}
+\algnewcommand\Input{\item[\algorithmicinput]}
+
+\algnewcommand\algorithmicoutput{\textbf{Output:}}
+\algnewcommand\Output{\item[\algorithmicoutput]}
+
+\begin{algorithmic}
+\Input \\
+\begin{itemize}
+\item[$D$] Dataset
+\item[$K_O$] Number of outer folds
+\item[$K_I$] Number of inner folds
+\item[$R$] Number of random combinations to try
+\item[$model$] Model to train
+\item[$distrs$] Distribution of each hyper-parameter
+\end{itemize} \\
+\Output Summary statistics computed on each outer validation fold \\
+
+\For{$k_o\gets 1\ldots K_O$}\Comment{Outer $K_O$-fold cross validation}
+	\State{Generate $k_o$-th outer fold $(D^o_T,D^o_V)$ from the dataset $D$}
+	\State{$best\_mse\gets\inf$}
+	\State{$best\_params\gets\bot$}
+	\For{$r\gets 1\ldots R$}\Comment{Find best hyper-parameters on $D^o_T$}
+		\State{$params\gets$ a random hyper-parameter combination from $distrs$}
+		\State{$params\_mse\gets 0$}
+		\For{$k_i\gets 1\ldots K_I$}\Comment{Evaluate $params$ with $K_I$-fold CV}
+			\State{Generate $k_i$-th inner fold $(D^i_T,D^i_V)$ from $D^o_T$}
+			\State{$model\gets$ a new instance of the model with parameters $params$}
+			\State{Train $model$ on $D^i_T$}
+			\State{$mse\gets$ result of the evaluation of $model$ on $D^i_V$}
+			\State{$params\_mse\gets params\_mse+mse$}
+		\EndFor
+
+		\If{$params\_mse<best\_mse$}\Comment{MSE comparison on $K_i$-fold CV result}
+			\State{$best\_mse\gets params\_mse$}
+			\State{$best\_params\gets params$}
+		\EndIf		
+	\EndFor
+
+	\State{$model\gets$ a new instance of the model with parameters $best\_params$}
+	\State{Train $model$ on $D^o_T$}
+	\State{Evaluate $model$ on $D^o_V$ and compute evaluation metrics}
+\EndFor
+\State{Compute summary of the metrics obtained in the outer loop}
+\end{algorithmic}
+\end{algorithm}
+
 
 \subsection{Parameter Estimation for Regression}
 \label{sec:regression_fit}
@@ -957,63 +1011,12 @@ $\delta$ (for the Huber loss) & Uniform & From 1\% to 99\% \\
 \end{table}
 
 
-\begin{algorithm}
-\caption{Nested cross validation with random hyper-parameter search.}
-\label{alg:nested_cv}
-
-
-\algnewcommand\algorithmicinput{\textbf{Input:}}
-\algnewcommand\Input{\item[\algorithmicinput]}
-
-\algnewcommand\algorithmicoutput{\textbf{Output:}}
-\algnewcommand\Output{\item[\algorithmicoutput]}
-
-\begin{algorithmic}
-\Input \\
-\begin{itemize}
-\item[$D$] Dataset
-\item[$K_O$] Number of outer folds
-\item[$K_I$] Number of inner folds
-\item[$R$] Number of random combinations to try
-\item[$model$] Model to train
-\item[$distrs$] Distribution of each hyper-parameter
-\end{itemize} \\
-\Output Summary statistics computed on each outer validation fold \\
-
-\For{$k_o\gets 1\ldots K_O$}\Comment{Outer $K_O$-fold cross validation}
-	\State{Generate $k_o$-th outer fold $(D^o_T,D^o_V)$ from the dataset $D$}
-	\State{$best\_mse\gets\inf$}
-	\State{$best\_params\gets\bot$}
-	\For{$r\gets 1\ldots R$}\Comment{Find best hyper-parameters on $D^o_T$}
-		\State{$params\gets$ a random hyper-parameter combination from $distrs$}
-		\State{$params\_mse\gets 0$}
-		\For{$k_i\gets 1\ldots K_I$}\Comment{Evaluate $params$ with $K_I$-fold CV}
-			\State{Generate $k_i$-th inner fold $(D^i_T,D^i_V)$ from $D^o_T$}
-			\State{$model\gets$ a new instance of the model with parameters $params$}
-			\State{Train $model$ on $D^i_T$}
-			\State{$mse\gets$ result of the evaluation of $model$ on $D^i_V$}
-			\State{$params\_mse\gets params\_mse+mse$}
-		\EndFor
-
-		\If{$params\_mse<best\_mse$}\Comment{MSE comparison on $K_i$-fold CV result}
-			\State{$best\_mse\gets params\_mse$}
-			\State{$best\_params\gets params$}
-		\EndIf		
-	\EndFor
-
-	\State{$model\gets$ a new instance of the model with parameters $best\_params$}
-	\State{Train $model$ on $D^o_T$}
-	\State{Evaluate $model$ on $D^o_V$ and compute evaluation metrics}
-\EndFor
-\State{Compute summary of the metrics obtained in the outer loop}
-\end{algorithmic}
-\end{algorithm}
 
 \section{Performance Evaluation}
 \label{sec:perf_eval}
 The goal of performance evaluation is to obtain a realistic and unbiased estimate of the performance of a model on unseen data. Because the Monin-Obukhov similarity theory is only valid in the $-2\leq\xi\leq1$ range, we will use this data as the primary target for evaluation. We will also evaluate the models on the full dataset, to see what kind of performance can be expected outside of the typical range where the similarity theory is employed.
 
-We are actually not interested in the optimal values of the hyper-parameters; for this reason, we perform nested cross validation, with the inner loop used to optimize the hyper-parameters through random search \citep{random_search}, and the outer loop used to evaluate the model. We use 10 folds in both the inner and outer CV, and test 10 different hyper-parameter combinations for all estimators. Limits in the available computational resources prevent us from testing more combinations; the possibility that this number is too low can manifest itself in the high variance of the nested cross validation results. Algorithm \ref{alg:nested_cv} shows in detail how nested cross validation with random search works.
+We are actually not interested in the optimal values of the hyper-parameters; for this reason, we perform nested cross validation, with the inner loop used to optimize the hyper-parameters through random search \citep{random_search}, and the outer loop used to evaluate the model. We use 10 folds in both the inner and outer CV, and test 10 different hyper-parameter combinations for all estimators. Limits in the available computational resources prevent us from testing more combinations; the possibility that this number is too low can manifest itself in the high variance of the nested cross validation results.
 
 In practice, we need to run $2\cdot5\cdot2=20$ nested cross validation rounds for each model, meaning that it is fit $20(10\cdot10\cdot10+10)=20200$ times in total. According to the model and its hyper-parameters, fitting can take from a few seconds up to more than 24 hours; in order to make the process feasible, we implemented algorithm \ref{alg:nested_cv} using Apache Spark \citep{spark}. Since the number of stragglers is very low\footnote{for gradient boosted trees, the slowest method, the median fitting time in our experiments is around half a minute, the third quartile is around ten minutes, and the maximum is between 20 and 30 hours}, running multiple nested cross validation jobs at the same time can reduce the duration of the whole process by five to ten times.
 
