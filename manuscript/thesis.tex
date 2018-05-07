@@ -1,6 +1,6 @@
 \documentclass[a4paper]{book}
 \usepackage{graphicx}
-%\usepackage[a4paper,inner=36mm,outer=18mm,top=30mm,]{geometry}
+\usepackage[a4paper,inner=36mm,outer=18mm,top=30mm,]{geometry}
 \usepackage[a4paper]{geometry}
 \usepackage{bm}
 \usepackage{siunitx}
@@ -49,7 +49,13 @@ todo
 \newpage
 
 \section*{Summary}
-todo
+The study of climate heavily relies on simulations. In order to successfully simulate the evolution of the global climate over long periods of time, the simulations have to use a relatively coarse grid, in which points are horizontally separated by several kilometers. Many important phenomena of the atmosphere, though, happen at much smaller scales, and the only way to incorporate them in the simulation is to rely on parametrizations, i.e. describing their effect based on macro parameters.
+
+The turbulence resulting from the interaction between the atmosphere and the surface is an example of such phenomena that happens at spatial and temporal scales too small to be simulated. One of the quantities of interest arising from turbulence is the momentum flux-profile relationship, which relates the transport of momentum (flux) and the change of wind speed with altitude (profile). This quantity can be computed following the Monin-Obukhov Similarity Theory, according to which it is a function of the altitude divided by a characteristic length scale derived from other turbulence parameters. However, this theory is only applicable in a restricted range of conditions, and produces predictions that are accurate only up to 10-20\%.
+
+The goal of this thesis is to compute the momentum flux-profile relationship using only macro weather parameters, which are readily available in climate simulations; this is done using Data Mining techniques on 17 years of weather data collected from the Cabauw meteorological tower in the Netherlands. Moreover, we asses the impact of different sets of features on the prediction error.
+
+Results show that ...
 
 \tableofcontents
 
@@ -65,7 +71,7 @@ Climatology, or climate science, studies the long-term average weather condition
 
 Climate science is an extremely difficult field, for a number of reasons. First, climate is evident, by definition, only over long periods of time and large distances, making the usual scientific approach of testing hypotheses by conducting experiments inapplicable; instead, climate scientists have to rely on historical data. Second, the atmosphere is a complex and chaotic system, which must be described through systems of nonlinear differential equation. They can be used to create numerical simulations, and the resulting predictions compared to historical data to assess the accuracy of the theory. Furthermore, the chaotic character of the atmosphere makes it impossible to study parts of it in isolation from others, as small scale phenomena affect large scale ones, and vice versa. In spite of this, it is useful to split the atmosphere in vertical layers and horizontal zones, in order to differentiate among conditions and phenomena typically occurring in one area or the other.
 
-The troposphere contains most of the air mass in the atmosphere, and occupies the lowest 10 to 12 kilometers of the atmosphere. This is where weather happens, and it can be divided in a number of sub-layers, the lowest of which is the \emph{atmospheric boundary layer}: it is the region of the atmosphere that is affected by the conditions of the surface. Most human activities happen in this layer, and it is responsible for a large part of the diffusion and transport of aerosol such as, among others, pollutants. Yet, the physics governing the atmospheric boundary layer is not fully understood, and the theory is lacking. One important issues in the study of the atmospheric boundary layer is the derivation of flux-profile relationships for wind and temperature: they essentially relate the transport of momentum and heat by the turbulence (flux) with the change of wind speed/temperature with altitude (profile). The state of the art relationships are defined by the Monin-Obukhov Similarity theory in terms of the instability parameter $\xi$, computed as the height above surface scaled by turbulence due to horizontal wind and vertical air movement due to variations in heat. Difficulties in measurements of relevant quantities make this theory accurate only up to 10-20\%, and applicable in a restricted set of conditions.
+The troposphere contains most of the air mass in the atmosphere, and occupies the lowest 10 to 12 kilometers of the atmosphere. This is where weather happens, and it can be divided in a number of sub-layers, the lowest of which is the \emph{atmospheric boundary layer}: it is the region of the atmosphere that is affected by the conditions of the surface. Most human activities happen in this layer, and it is responsible for a large part of the diffusion and transport of aerosol such as, among others, pollutants. Yet, the physics governing the atmospheric boundary layer is not fully understood, and the theory is lacking. One important issues in the study of the atmospheric boundary layer is the derivation of flux-profile relationships for wind and temperature: they essentially relate the transport of momentum and heat by the turbulence (flux)\footnote{the flux of momentum is the rate of change of momentum (mass times velocity) per unit of area. Keeping the area constant, the momentum flux increases if the mass increases (e.g. because of changes in temperature, pressure, or humidity) or if the speed of wind increases.} with the change of wind speed/temperature with altitude (profile). The state of the art relationships are defined by the Monin-Obukhov Similarity theory in terms of the instability parameter $\xi$, computed as the height above surface scaled by turbulence due to horizontal wind and vertical air movement due to variations in heat. Difficulties in measurements of relevant quantities make this theory accurate only up to 10-20\%, and applicable in a restricted set of conditions.
 
 In stark contrast to the traditional, top-down approach of science, recent developments in information technology made bottom-up approaches possible. In this new way of thinking, existing data is used to automatically infer the "best" explanation for the measurements at hand, the underlying laws that originated that data. The field that makes this possible is called \emph{Machine Learning}: it takes advantage of several methods coming from statistics, information theory, optimization theory, etc., to make computers learn from examples. Together with Natural Language Processing and Automated Planning, it is one of the three main branches of Artificial Intelligence, the sub-field of Computer Science that studies ways of making machines behave intelligently.
 
@@ -108,6 +114,7 @@ The two most widely used research methodologies in data mining are CRISP-DM, the
 It is important to mention that these steps are not strictly sequential, but heavily interact with one another: insights gained from the data can give rise to new questions, the evaluation of the results can highlight flaws in earlier steps, etc.
 
 \section{Ethics and Sustainability}
+todo
 reproducibility: using open data, following standards of reproducible research (open source and jupyter notebooks)
 
 \section{Outline}
@@ -671,6 +678,35 @@ Finally, the derivative of a GP is itself a GP, whose mean is obtained simply by
 We invite the reader to refer to \cite[Chapter~6]{bishop} for an in-depth treatment of kernel methods, including Gaussian Processes.
 
 
+\subsection{Robust Effect Size}
+\label{sec:effect_size}
+todo
+%https://digitalcommons.wayne.edu/cgi/viewcontent.cgi?article=1256&context=jmasm
+%http://fmipa.umri.ac.id/wp-content/uploads/2016/03/Rand_R._Wilcox_Fundamentals_of_Modern_StatisticaBookZZ.org_.pdf
+%http://psych.colorado.edu/~willcutt/pdfs/Wilcox_2003.pdf
+
+
+\begin{figure}
+    \centering
+    \begin{subfigure}[t]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/small_es}
+%        \caption{The treatment has standard deviation of 0.5, and the effect size is 3.93}
+        \label{fig:small_es}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/large_es}
+%        \caption{The treatment has standard deviation of 0255, and the effect size is 7.77}
+		\label{fig:large_es}
+    \end{subfigure}
+    \caption{Graphical explanation of why the effect size is normalized with the standard deviation of the treatment, when the control has a mean of 0 and standard deviation of 1 and the treatment has a mean of 2; inarguably, the treatment in the right figure the best of the two.}
+	\label{fig:effect_size}
+\end{figure}
+
+
+
 \chapter{Method}
 \label{ch:method}
 This chapter describes how the data is collected (section \ref{sec:data_collection}) and used to re-create the flux-profile relationships (section \ref{sec:profiles}), as well as their prediction based on the Monin-Obukhov similarity theory (section \ref{sec:most_fit}). Then, we describe the main contribution of this thesis, namely how their prediction can be improved using machine learning techniques (section \ref{sec:model_fit}). Finally, we describe how the evaluation is performed (section \ref{sec:perf_eval}), and explicitly state the necessary criteria for a successful answer to the research questions (section  \ref{sec:success}).
@@ -1043,36 +1079,12 @@ Where $f_n$ is the predicted value for the test sample $\bm x_n$ with true value
 \label{sec:success}
 A successful answer to the first research question entails finding a model whose mean squared error on any feature set, with or without trend, is smaller than the mean squared error of the MOST estimator introduced in section \ref{sec:most_fit}. The second research question is answered by comparing the different evaluation metrics on the ten feature sets (F1 to F5, with and without trend). Note that we cannot use the output of a model to obtain the importance of the features, as this method is not reliable when some of them are correlated \citep{rf_bias,rf_corr_imp}, which is a very relevant issue in our case. Trivially, wind speed and temperature at the different levels are very strongly correlated (Pearson's $r$ is above 0.95), and there are other, more complex, correlations, such as between the net radiation and the soil heat flux, or between the soil temperature and the dew point (Pearson's $r$ is respectively 0.75 and 0.79). In spite of the correlations, all these variables contribute to the flux-profile relationships, often in very nuanced ways.
 
-The differences are quantified using a linear contrast of means, and the 95\% confidence interval for the population effect size. We use the formula suggested by \cite{effect_size}, which do not assume that the samples originate from two populations with the same variance, which is hardly the case in our setting since we are comparing different estimators and/or different feature sets. Given two independent samples of $n_1$ and $n_2$ observations, with sample mean $\mu_1$ and $\mu_2$ and standard deviations $\hat{\sigma_1}$, $\hat{\sigma_2}$, the effect size is computed as follows:
-
-\begin{equation}
-\label{eq:effect_size}
-\hat{\delta}=\frac{\mu_1-\mu_2}{\hat{\sigma}}
-\end{equation}
-
-where $\hat{\sigma}$ is the average standard deviation: $\hat{\sigma}=[(\hat{\sigma_1}^2+\hat{\sigma_2}^2)/2]^{1/2}$. The variance of \ref{eq:effect_size} is given by
-
-
-\begin{equation}
-\text{Var}[\hat{\delta}]=\frac{\hat{\delta}^2}{8\hat{\sigma}^4}\left(
-\frac{\hat{\sigma_1}^4}{n_1-1} + \frac{\hat{\sigma_2}^4}{n_2-1}
-\right)
-+\frac{\hat{\sigma_1}^2}{\hat{\sigma}^2(n_1-1)}
-+\frac{\hat{\sigma_2}^2}{\hat{\sigma}^2(n_2-1)}
-\end{equation}
-
-and an approximate $100(1-\alpha)\%$ confidence interval can be obtained with
-
-\begin{equation}
-\hat{\delta}\pm\bm\Phi^{-1}\left(1-\frac{\alpha}{2}\right)\cdot\sqrt{\text{Var}[\hat\delta]}
-\end{equation}
-
-where $\bm\Phi$ is the cumulative distribution function of the standardized Normal.
-
+The differences are quantified using the effect size, as detailed in section \ref{sec:effect_size}.
 
 \chapter{Results}
 \label{ch:results}
 todo
+also mention python libraries used
 
 \section{Exploratory Data Analysis}
 The dataset consists of 17 years of measurements, from January 2001 to December 2017, for a total of 3,436,416 observations. The Cesar database contains one tar-gzipped archive for every month, whose content is a single data file in the netCDF format \citep{netcdf}. The archives contain a subset of related variables, and we used the datasets containing surface fluxes, tower meteorological profiles, meteorological surface  data, and soil heat, for a total of 816 datasets covering 204 months.
@@ -1330,7 +1342,7 @@ Table \ref{tbl:most_results} shows the values of the coefficients in equation \r
 
 \begin{table}[]
 \centering
-\caption{Evaluation metrics for the MOST estimator}
+\caption{Evaluation metrics for the MOST estimator on both datasets.}
 \label{tbl:most_results}
 \input{include/most_est_results}
 \end{table}
@@ -1353,24 +1365,24 @@ $d$ & -0.30 & 0.11 & -0.60 & -0.26 & -0.26 & -0.26 & -0.25 \\
 
 \subsection{Other Estimators}
 The averaged evaluation metrics for the Ridge, kNN and GB estimators are presented in tables \ref{tbl:ridge_results}, \ref{tbl:knn_results}
-and \ref{tbl:gbr_results}, while figures \ref{fig:ridge_results_most}, \ref{fig:knn_results_most} and \ref{fig:gbr_results_most} show boxplots of these metrics for the MOST validity range, and figures \ref{fig:ridge_results_all}, \ref{fig:knn_results_all} and \ref{fig:gbr_results_all} do so for the whole dataset. Table \ref{tbl:baseline_comparison} compares each estimator and feature set combination with the MOST baseline for both the full dataset and the data in the MOST validity range, while table \ref{tbl:fset_comparison} compares the errors of successive feature sets, and finally table \ref{tbl:trend_comparison} shows the error difference when the the feature sets are augmented with the trend information.
+and \ref{tbl:gbr_results}, while figures \ref{fig:ridge_results_most}, \ref{fig:knn_results_most} and \ref{fig:gbr_results_most} show boxplots of these metrics for the MOST validity range, and figures \ref{fig:ridge_results_all}, \ref{fig:knn_results_all} and \ref{fig:gbr_results_all} do so for the whole dataset. Table \ref{tbl:baseline_comparison} compares each estimator with the MOST baseline for both the full dataset and the data in the MOST validity range, while table \ref{tbl:fset_comparison} compares the errors of successive feature sets, and finally table \ref{tbl:trend_comparison} shows the error difference when the the feature sets are augmented with the trend information.
 
 \begin{table}
-\caption{Effect sizes comparing the MSE scores of the MOST estimator with each combination of estimator, feature set, and dataset; each comparison used the trend only if it resulted in a lower error. A positive effect size indicates that the estimator is better than the MOST baseline.}
+\caption{Best MSE achieved by each estimator, and effect size comparing it with the MOST baseline (positive effect size denotes improvement, in the 95\% confidence interval is in parenthesis)}
 \label{tbl:baseline_comparison}
 \input{include/baseline_comparison}
 \end{table}
 
 
 \begin{table}
-\caption{Effect sizes comparing the MSE scores of each feature set with the previous set (i.e. F2 is compared with F1, F3 with F2, and so on). A positive effect size indicates that the feature set has a lower error than the previous one.}
+\caption{Effect sizes and their 95\% confidence interval comparing the MSE scores of each feature set with the previous set (i.e. F2 is compared with F1, F3 with F2, and so on). A positive effect size indicates that the feature set has a lower error than the previous one.}
 \label{tbl:fset_comparison}
 \input{include/fset_comparison}
 \end{table}
 
 
 \begin{table}
-\caption{Effect sizes comparing the MSE scores of each feature set with and without trend. A positive effect size indicates that the trend reduces the error.}
+\caption{Effect sizes and their 95\% confidence interval comparing the MSE scores of each feature set with and without trend. A positive effect size indicates that the trend reduces the error.}
 \label{tbl:trend_comparison}
 \input{include/trend_comparison}
 \end{table}

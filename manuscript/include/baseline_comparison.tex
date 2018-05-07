@@ -1,14 +1,16 @@
-\setcellgapes{1ex}\makegapedcells\centering\begin{tabular*}{\textwidth}{l @{\extracolsep{\fill}} c|ccccc}
+\setcellgapes{1ex}\makegapedcells\centering\begin{tabular*}{\textwidth}{c @{\extracolsep{\fill}} r|rrrrrrrr}
 \toprule
-  & \textbf{Features} &                                 F1 &                                 F2 &                                 F3 &                                 F4 &                                 F5 \\
-\textbf{MOST} & \textbf{Estimator} &                                    &                                    &                                    &                                    &                                    \\
+    &      & \textbf{Mean} & \textbf{Std.} & \textbf{Min.} & \textbf{25\%} & \textbf{50\%} & \textbf{75\%} & \textbf{Max.} &                      \textbf{E.S.} \\
+\textbf{Dataset} & \textbf{Model} &               &               &               &               &               &               &               &                                    \\
 \midrule
-\multirowcell{6}[0.75ex][c]{\textbf{N}} & \textbf{GB} &  \makecell[c]{1.71\\(0.53; 2.89)} &  \makecell[c]{2.37\\(1.01; 3.73)} &  \makecell[c]{3.61\\(1.95; 5.28)} &  \makecell[c]{8.06\\(5.26; 10.87)} &  \makecell[c]{4.98\\(2.88; 7.08)} \\
-  & \textbf{Ridge} &  \makecell[c]{0.17\\(-0.76; 1.09)} &  \makecell[c]{0.07\\(-0.85; 1.00)} &  \makecell[c]{0.34\\(-0.59; 1.27)} &  \makecell[c]{0.21\\(-0.72; 1.13)} &  \makecell[c]{0.36\\(-0.57; 1.30)} \\
-  & \textbf{kNN} &  \makecell[c]{4.77\\(2.93; 6.60)} &  \makecell[c]{4.22\\(2.56; 5.88)} &  \makecell[c]{5.35\\(3.36; 7.34)} &  \makecell[c]{4.21\\(2.55; 5.86)} &  \makecell[c]{4.33\\(2.61; 6.05)} \\
-\cline{1-7}
-\multirowcell{6}[0.75ex][c]{\textbf{Y}} & \textbf{GB} &  \makecell[c]{1.23\\(0.16; 2.31)} &  \makecell[c]{2.19\\(0.87; 3.50)} &  \makecell[c]{8.87\\(5.71; 12.02)} &  \makecell[c]{2.50\\(1.09; 3.90)} &  \makecell[c]{4.94\\(2.90; 6.99)} \\
-  & \textbf{Ridge} &  \makecell[c]{2.90\\(1.56; 4.24)} &  \makecell[c]{2.39\\(1.18; 3.60)} &  \makecell[c]{3.01\\(1.63; 4.38)} &  \makecell[c]{2.92\\(1.58; 4.26)} &  \makecell[c]{2.67\\(1.40; 3.94)} \\
-  & \textbf{kNN} &  \makecell[c]{6.05\\(3.78; 8.33)} &  \makecell[c]{5.34\\(3.06; 7.62)} &  \makecell[c]{4.84\\(3.00; 6.69)} &  \makecell[c]{4.13\\(2.49; 5.78)} &  \makecell[c]{3.63\\(2.13; 5.14)} \\
+\multirowcell{8}[3ex][c]{\textbf{All}} & \textbf{MOST} &  0.64 &  0.04 &  0.58 &  0.63 &  0.63 &  0.64 &  0.71 &  - \\
+    & \textbf{GB} &  0.36 &  0.07 &  0.28 &  0.31 &  0.34 &  0.40 &  0.50 &  \makecell[c]{4.27 (2.28; 9.29)} \\
+    & \textbf{kNN} &  0.45 &  0.05 &  0.38 &  0.42 &  0.43 &  0.48 &  0.53 &  \makecell[c]{4.70 (2.55; 9.83)} \\
+    & \textbf{Ridge} &  0.62 &  0.08 &  0.53 &  0.57 &  0.60 &  0.64 &  0.80 &  \makecell[c]{0.52 (-0.28; 1.87)} \\
+\cline{1-10}
+\multirowcell{8}[3ex][c]{\textbf{MOST}} & \textbf{MOST} &  0.32 &  0.02 &  0.29 &  0.31 &  0.32 &  0.34 &  0.34 &  - \\
+    & \textbf{GB} &  0.18 &  0.01 &  0.15 &  0.17 &  0.18 &  0.19 &  0.19 &  \makecell[c]{11.15 (6.53; 21.45)} \\
+    & \textbf{kNN} &  0.22 &  0.01 &  0.21 &  0.22 &  0.22 &  0.23 &  0.25 &  \makecell[c]{7.87 (4.58; 20.54)} \\
+    & \textbf{Ridge} &  0.27 &  0.02 &  0.24 &  0.25 &  0.27 &  0.28 &  0.31 &  \makecell[c]{2.83 (1.41; 5.16)} \\
 \bottomrule
 \end{tabular*}
