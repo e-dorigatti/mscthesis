@@ -116,6 +116,8 @@ It is important to mention that these steps are not strictly sequential, but hea
 \section{Ethics and Sustainability}
 todo
 reproducibility: using open data, following standards of reproducible research (open source and jupyter notebooks)
+lots of stuff about climate change etc.
+
 
 \section{Outline}
 The thesis is organized as follows: in chapter \ref{ch:background}, we introduce the relevant background in climate science and machine learning, then, in chapter \ref{ch:method}, we describe how the data is collected and used to answer the research question, chapter \ref{ch:results} contains the results of such investigation, and, finally, chapter \ref{ch:discussion} discusses the results, pointing out limitations and possible future directions.
@@ -165,18 +167,18 @@ By definition, $\overline{a'}=0$, which means that all the effects of turbulence
 \subsection{The Boundary Layer}
 In the context of fluid dynamics, the boundary layer is the region where a fluid flows close to a solid surface. Imagine a laminar flow close to a solid surface; because of viscosity, the molecules flowing near the surface move slower, and, in the limit, the velocity of the molecules in direct contact with the surface is 0 (this is called the \emph{non-slip condition}). Thus, the velocity of the fluid increases smoothly, continuously and monotonously with the distance from the solid, until it reaches the \emph{free-flow} velocity, after which it stays constant. The region close to the surface, where the fluid moves slower, is called the \emph{boundary layer}, and is the region where the viscosity of the fluid influences its motion. Its height $\delta$ can be defined when the local velocity surpasses a certain threshold, such as 99\% of the free-flow velocity.
 
+The variation of velocity with distance from the surface, $\partial\overline{u}/\partial z$, is called \emph{shear}, and, together with viscosity, determines the materialization of turbulence in the flow. Every layer of fluid is squeezed between a faster moving layer above and a slower moving below; in high shear conditions, this causes high stress on the particles, and prevents them from moving orderly, thus leading to turbulent motion. Figure \ref{fig:bl} shows turbulence forming close to the wall in a canal, where the water flows from right to left. Viscosity and the no-slip condition prevent this phenomenon to arise in a region very close to the solid surface, called the \emph{laminar (or viscuous) sub-layer}, where we still find laminar motion.
+
+The strength of the turbulence is proportional to $u_{rms}=(\overline{u'^2})^{1/2}$, which is, in turn, proportional to the shear. Again, because of the no-slip condition, $u_{rms}$ is zero at $z=0$, increases in the laminar sub-layer, and decreases to 0 at the end of the boundary layer, assuming laminar flow outside of it. Higher free-stream velocity generates higher shear, more turbulence, and a thinner laminar sub-layer. The strength of turbulence can be written in units of velocity, resulting in the \emph{friction velocity}, computed as $u_*=(\tau/\rho)^{1/2}=(\nu\cdot\partial\overline{u}/\partial z)^{1/2}$, where $\tau$ is the shear stress, $\rho$ is the density of the fluid, $\nu=\mu/\rho$ is the kinematic viscosity, and $\mu$ the dynamic viscosity. Therefore, the friction velocity increases with shear and viscosity, and decreases with density; it is proportional to the free-stream velocity and the turbulence strength, and inversely proportional to the height of the laminar sub-layer.
+
+The mean velocity $\overline{u}$ increases linearly within the laminar sub-layer, then logarithmically until the end of the boundary layer, thus the shear decreases further away from the surface. In the logarithmic sub-layer, the velocity is computed as $\overline{u}(z)=u_*(\log z - \log z_0)/\kappa$, where $z_0$ is the characteristic roughness of the surface, and $\kappa$ is the von Karman's constant, whose value is around 0.4 [citation needed]. The characteristic roughness depends on the texture of the surface, and its relationship with the height $\delta_s$ of the laminar sub-layer; if the roughness scale is smaller than $\delta_s$, the logarithmic velocity profile is not affected by the texture, because the laminar sub-layer completely covers the variations on the surface, and we have the so-called smooth turbulent flow. If, on the contrary, the bumps in the surface are larger than $\delta_s$, the laminar sub-layer follow the profile of the surface, and the logarithmic velocity profile is altered depending on the texture, a regime called rough turbulent flow.
+
 \begin{figure}
 \caption{Turbulent boundary layer at the edge of a canal; water flows from right to left.}
 \label{fig:bl}
 \centering
 \includegraphics[width=\textwidth]{images/bl}
 \end{figure}
-
-The variation of velocity with distance from the surface, $\partial\overline{u}/\partial z$, is called \emph{shear}, and, together with viscosity, determines the materialization of turbulence in the flow. Every layer of fluid is squeezed between a faster moving layer above and a slower moving below; in high shear conditions, this causes high stress on the particles, and prevents them from moving orderly, thus leading to turbulent motion. Figure \ref{fig:bl} shows turbulence forming close to the wall in a canal, where the water flows from right to left. Viscosity and the no-slip condition prevent this phenomenon to arise in a region very close to the solid surface, called the \emph{laminar (or viscuous) sub-layer}, where we still find laminar motion.
-
-The strength of the turbulence is proportional to $u_{rms}=(\overline{u'^2})^{1/2}$, which is, in turn, proportional to the shear. Again, because of the no-slip condition, $u_{rms}$ is zero at $z=0$, increases in the laminar sub-layer, and decreases to 0 at the end of the boundary layer, assuming laminar flow outside of it. Higher free-stream velocity generates higher shear, more turbulence, and a thinner laminar sub-layer. The strength of turbulence can be written in units of velocity, resulting in the \emph{friction velocity}, computed as $u_*=(\tau/\rho)^{1/2}=(\nu\cdot\partial\overline{u}/\partial z)^{1/2}$, where $\tau$ is the shear stress, $\rho$ is the density of the fluid, $\nu=\mu/\rho$ is the kinematic viscosity, and $\mu$ the dynamic viscosity. Therefore, the friction velocity increases with shear and viscosity, and decreases with density; it is proportional to the free-stream velocity and the turbulence strength, and inversely proportional to the height of the laminar sub-layer.
-
-The mean velocity $\overline{u}$ increases linearly within the laminar sub-layer, then logarithmically until the end of the boundary layer, thus the shear decreases further away from the surface. In the logarithmic sub-layer, the velocity is computed as $\overline{u}(z)=u_*(\log z - \log z_0)/\kappa$, where $z_0$ is the characteristic roughness of the surface, and $\kappa$ is the von Karman's constant, whose value is around 0.4 [citation needed]. The characteristic roughness depends on the texture of the surface, and its relationship with the height $\delta_s$ of the laminar sub-layer; if the roughness scale is smaller than $\delta_s$, the logarithmic velocity profile is not affected by the texture, because the laminar sub-layer completely covers the variations on the surface, and we have the so-called smooth turbulent flow. If, on the contrary, the bumps in the surface are larger than $\delta_s$, the laminar sub-layer follow the profile of the surface, and the logarithmic velocity profile is altered depending on the texture, a regime called rough turbulent flow.
 
 \section{The Atmospheric Boundary Layer}
 \label{sec:abl}
@@ -689,7 +691,7 @@ The effect size is a statistic used to compare the means of two populations, usu
 
 Where $\mu_t$ and $\mu_c$ are the means of the treatment and control groups respectively, and $\sigma$ is a standard error that can be computed in a great deal of ways. Generally, the effect size is computed to be positive when the treatment group represent an improvement over the control group.
 
-Following the American Psychological Association’s Task Force on Statistical Inference [citation], there is a departure from the standard procedure of reporting p-values, test statistics and critical values resulting from hypothesis testing towards reporting effect sizes and their confidence intervals, in addition or in alternative to the usual statistics. However, effect sizes can be as misleading as significance testing when the assumptions underlying its expression are violated; commonly used effect size measures, such as Cohen's $d$ [citation], assume both populations are normally distributed and have the same standard deviation\footnote{a property called \emph{homoscedasticity} (contrary: heteroscedasticity)}. Alternatives that do not assume equal standard deviation exist [citation 1,2,3], but they all require normality, and generally use approximate distributions of the standard error and/or the confidence interval (or both).
+Recently, there is a departure from the standard procedure of reporting p-values, test statistics and critical values resulting from hypothesis testing towards reporting effect sizes and their confidence intervals, in addition or in alternative to the usual statistics, see for example \cite{apa} and \cite{aera}.  However, effect sizes can be as misleading as significance testing when the assumptions underlying its expression are violated; commonly used effect size measures, such as Cohen's $d$ [citation], assume both populations are normally distributed and have the same standard deviation\footnote{a property called \emph{homoscedasticity} (contrary: heteroscedasticity)}. Alternatives that do not assume equal standard deviation exist \citep{es1,es2,es3}, but they all require normality, and generally use approximate distributions of the standard error and/or the confidence interval (or both).
 
 In order not to assume normality, we compute the confidence interval for the effect size using the bootstrap percentile method. This method estimates the population value of any statistic $\theta$ and its confidence interval using a single sample of $N$ observations, by extracting $M$ new samples (with replacement) of size $N$ from it and computing $\theta$ on each resample. The population statistic is estimated by the average of the $m$ sample statistics, and the extremes of the (central) $100(1-\alpha)\%$ confidence interval are respectively the $100(\alpha/2)$ and $100(1-\alpha/2)$ percentiles of those values. Usually $M$ is in the order of $10^2$ or $10^3$, enough to guarantee a certain degree of stability in these estimates.
 
@@ -729,7 +731,7 @@ The standard error of $\overline{X}_\gamma$ is the usual $(\text{Var}[\overline{
 =(1-2\gamma)\frac{\overline{T}_\gamma-\overline{C}_\gamma}{\hat{\sigma}_W^2}
 \end{equation}
 
-where $T_1,\ldots,T_N$ and $C_1,\ldots,C_M$ are the \emph{independent} samples of treatment and control groups respectively. See \cite{modern_stat} for an introduction to robust statistical methods, including the ones just described.
+where $T_1,\ldots,T_N$ and $C_1,\ldots,C_M$ are the \emph{independent} samples of treatment and control groups respectively. See  \cite{robust_stat} and \cite{modern_stat}for an introduction to robust statistical methods, including the ones just described.
 
 \begin{figure}
     \centering
@@ -1136,10 +1138,14 @@ The differences are quantified using the effect size, as detailed in section \re
 
 \chapter{Results}
 \label{ch:results}
-todo
-also mention python libraries used
+
+This chapter presents the results obtained following the procedures outlined in chapter \ref{ch:method}. Section \ref{sec:eda} describes the dataset and shows some of its peculiarities, then section \ref{sec:res_gradient} identifies the best method to compute the gradient of the profile, while section \ref{sec:res_compute_most} details the computation of the momentum flux-profile relationship, and, finally, section \ref{sec:res_predict_most} presents the results of the estimators and the metrics needed to answer the research questions.
+
+All the processing was done using the Python programming language\footnote{\url{https://www.python.org/}} and the usual Data Science library stack, in no particular order: Pandas \citep{pandas}, scikit-learn \citep{sklearn}, SymPy \citep{sympy}, Matplotlib \citep{matplotlib}, Seaborn\footnote{\url{https://doi.org/10.5281/zenodo.883859}}, NumPy \citep{numpy}, Jupyter Notebook \citep{jupyter}, IPython \citep{ipython}, Spark \citep{spark}, with the crucial support of Hops\footnote{\url{http://www.hops.io/}}.
+
 
 \section{Exploratory Data Analysis}
+\label{sec:eda}
 The dataset consists of 17 years of measurements, from January 2001 to December 2017, for a total of 3,436,416 observations. The Cesar database contains one tar-gzipped archive for every month, whose content is a single data file in the netCDF format \citep{netcdf}. The archives contain a subset of related variables, and we used the datasets containing surface fluxes, tower meteorological profiles, meteorological surface  data, and soil heat, for a total of 816 datasets covering 204 months.
 
 Unfortunately, most of these observations contain unreliable measurements, as detailed in section \ref{sec:data_filter}, leaving only  1,561,973 usable records. Additionally, the turbulent fluxes measured in March 2016 exhibit a much wider range than the March measurements of other years. Roughly 15 to 20\% of the measurements in that month are suspicious; since the Cesar database contains a separate dataset every month, we decided to completely exclude the dataset of March 2016, fearing for a systematic error somewhere in the process. Moreover, 6 measurements of the turbulent latent heat are way above the acceptable range, 4,538 do not have a dew point, and 247,656 do not have a soil temperature; this leaves 1,308,362 usable records. Table \ref{tbl:col_summary} summarizes the weather parameters that were used to compute the similarity functions and/or as features for the models, and table \ref{tbl:col_gapfilled} presents the number of observations that were gap-filled with each method, for the measurements for which this information was provided.
@@ -1195,51 +1201,8 @@ Unfortunately, most of these observations contain unreliable measurements, as de
 \end{table}
 
 
+
 Figure \ref{fig:le_season} shows the turbulent latent heat flux versus hour of day both in Winter and Summer, whereas figure \ref{fig:ustar_wind_temp} shows the friction velocity as a function of air temperature and wind speed. The dependency of $u_*$ with the wind speed of figure \ref{fig:ustar_wind} is quite complicated: there are three clear regions with different constant of proportionality and correlation coefficient. The group where the two quantities are almost perfectly correlated corresponds to imputed values for the friction velocity, derived from the wind speed. The three other groups differ widely in the values of the fluxes and radiation; for example, fitting an ordinary least squares model to 1000 bootstraps of the observations with negative net radiation yields an average proportionality coefficient of \num{0.051} with standard deviation \num{1.52e-05}, whereas the same procedure on the complementary set yields an average of \num{0.046} with standard deviation \num{1.40e-05}. Note that this dependency might be related to the observed imbalance in the surface energy budged, usually around 15\% during day time and 100\% during night time at the Cabauw observatory; \cite{cabauwinsitu} notes that the imbalance seems to depend on the speed of wind.
-
-\begin{figure}
-\subcaptionbox{Air Dens.\label{fig:tsne_air_dens}}{\includegraphics[width=0.25\textwidth]{images/tsne_air_dens}}\hfill
-\subcaptionbox{H\label{fig:tsne_H}}{\includegraphics[width=0.25\textwidth]{images/tsne_H}}\hfill
-\subcaptionbox{LE\label{fig:tsne_LE}}{\includegraphics[width=0.25\textwidth]{images/tsne_LE}}\hfill
-\subcaptionbox{Wind\label{fig:tsne_wind}}{\includegraphics[width=0.25\textwidth]{images/tsne_wind}}\\
-
-\subcaptionbox{Air Temp.\label{fig:tsne_temp}}{\includegraphics[width=0.25\textwidth]{images/tsne_temp}}\hfill
-\subcaptionbox{Virtual Temp.\label{fig:tsne_virtual_temp}}{\includegraphics[width=0.25\textwidth]{images/tsne_virtual_temp}}\hfill
-\subcaptionbox{Soil Temp.\label{fig:tsne_soil_temp}}{\includegraphics[width=0.25\textwidth]{images/tsne_soil_temp}}\hfill
-\subcaptionbox{$z$\label{fig:tsne_z}}{\includegraphics[width=0.25\textwidth]{images/tsne_z}}\\
-
-\subcaptionbox{$L$\label{fig:tsne_lval}}{\includegraphics[width=0.25\textwidth]{images/tsne_lval}}\hfill
-\subcaptionbox{$\xi$\label{fig:tsne_zL}}{\includegraphics[width=0.25\textwidth]{images/tsne_zL}}\hfill
-\subcaptionbox{$\partial\overline{u}/\partial{z}$\label{fig:tsne_dwdz}}{\includegraphics[width=0.25\textwidth]{images/tsne_dwdz}}\hfill
-\subcaptionbox{$\phi_m$\label{fig:tsne_phi_m}}{\includegraphics[width=0.25\textwidth]{images/tsne_phi_m}}\\
-
-\subcaptionbox{$\partial\overline{\theta_v}/\partial{z}$\label{fig:tsne_dtdz}}{\includegraphics[width=0.25\textwidth]{images/tsne_dtdz}}\hfill
-\subcaptionbox{Dew Point\label{fig:tsne_dewpoint}}{\includegraphics[width=0.25\textwidth]{images/tsne_dewpoint}}\hfill
-\subcaptionbox{Spec. Hum.\label{fig:tsne_spec_hum}}{\includegraphics[width=0.25\textwidth]{images/tsne_spec_hum}}\hfill
-\subcaptionbox{Rel. Hum.\label{fig:tsne_rel_hum}}{\includegraphics[width=0.25\textwidth]{images/tsne_rel_hum}}\\
-
-\subcaptionbox{Air Pressure\label{fig:tsne_press}}{\includegraphics[width=0.25\textwidth]{images/tsne_press}}\hfill
-\subcaptionbox{Rain\label{fig:tsne_rain}}{\includegraphics[width=0.25\textwidth]{images/tsne_rain}}\hfill
-\subcaptionbox{$CO_2$ Flux\label{fig:tsne_co2flux}}{\includegraphics[width=0.25\textwidth]{images/tsne_co2flux}}\hfill
-\subcaptionbox{Soil Heat Flux\label{fig:tsne_soilheat}}{\includegraphics[width=0.25\textwidth]{images/tsne_soilheat}}\\
-
-\subcaptionbox{Net Rad.\label{fig:tsne_netrad}}{\includegraphics[width=0.25\textwidth]{images/tsne_netrad}}\hfill
-\subcaptionbox{$\vert \text{Month}-6\vert$\label{fig:tsne_month}}{\includegraphics[width=0.25\textwidth]{images/tsne_month}}\hfill
-\subcaptionbox{$\vert \text{Hr. Day}-12\vert$\label{fig:tsne_hday}}{\includegraphics[width=0.25\textwidth]{images/tsne_hday}}\hfill
-\subcaptionbox{k-Means\label{fig:tsne_clus}}{\includegraphics[width=0.25\textwidth]{images/tsne_clus}}\hfill
-
-    \caption{Results of the t-SNE dimensionality reduction algorithm; every figure uses a different feature to color the points (darker points have smaller values), except figure \ref{fig:tsne_clus}, where the colors represent the result of 2-means clustering (blue/orange) and 4-means clustering (the four shades). The colors are consistent, in the sense that light and dark shades of blue are placed in the same cluster by 2-means clustering, ditto for orange. The points were drawn in random order. (Best viewed in color)}
-	\label{fig:tsne}
-\end{figure}
-
-
-Figure \ref{fig:tsne} shows the result of the t-SNE dimensionality reduction algorithm \citep{tsne} applied to 250,000 samples (19.2\% of the total), using the same features of table \ref{tbl:col_summary}. The 250,000 samples were chosen uniformly at random and standardized with equation \ref{eq:standardization} before fitting, but the colors were computed using the raw features on a perceptually uniform color scale, after excluding the top and bottom 1\% values. Overall, the points cluster in a relatively uniform blob, which is not that surprising once you consider that the measurements were taken continuously, meaning that all physical quantities change smoothly, and all points close in time are also close in feature space.
-
-The colors reveal some structure, though: the left-hand side of the plots contain measurements taken in the Summer, and the right-hand side contains measurement in Winter (see the air temperature in figure \ref{fig:tsne_temp} and month in figure \ref{fig:tsne_month}). Moreover, unstable conditions are clustered in a stripe, centered vertically, that runs from left to right (see the fluxes of figures \cref{fig:tsne_H,fig:tsne_LE,fig:tsne_soilheat}, the radiation in figure \ref{fig:tsne_netrad}, and the hour of day in figure \ref{fig:tsne_hday}). In figure \ref{fig:tsne_z} we also a see cluster on the top with all the observations at 40 meters, whereas the two lower levels are mixed somewhat uniformly in the bottom part of the plot.
-
-Finally, figure \ref{fig:tsne_clus} shows the result of k-means clustering in the standardized feature space, using $k=2$ (blue/orange) and $k=4$ (the four shades). This clustering is consistent with the qualitative division above, with the dark orange and blue clusters corresponding to Summer and Winter respectively, light orange corresponding to unstable conditions with considerable vertical movement of air, and light blue corresponding to strong horizontal winds with little movement in the vertical. Stably stratified conditions seem to occur at the boundary of the blob, where $\phi_m$ takes the highest values (see figure \ref{fig:tsne_phi_m}). This is also not surprising, since stable stratification tend to happen at night throughout the year, unlike free convection or z-less scaling, which only happen in specific conditions.
-
-Talking about speed of wind, figure \ref{fig:ustar_wind} shows some measurements exceeding \SI{25}{\meter\per\second}; according to the Beaufort scale, holding umbrellas and walking become hard at \SI{15}{\meter\per\second}. Those measurements are not issues with the data: figure \ref{fig:cyclone_jeanett} shows the highest wind speed present in the Cesar database to date, corresponding to cyclone Jeanett.
 
 \begin{figure}
     \centering
@@ -1280,6 +1243,52 @@ Talking about speed of wind, figure \ref{fig:ustar_wind} shows some measurements
 	\label{fig:ustar_wind_temp}
 \end{figure}
 
+
+
+Figure \ref{fig:tsne} shows the result of the t-SNE dimensionality reduction algorithm \citep{tsne} applied to 250,000 samples (19.2\% of the total), using the same features of table \ref{tbl:col_summary}. The 250,000 samples were chosen uniformly at random and standardized with equation \ref{eq:standardization} before fitting, but the colors were computed using the raw features on a perceptually uniform color scale, after excluding the top and bottom 1\% values. Overall, the points cluster in a relatively uniform blob, which is not that surprising once you consider that the measurements were taken continuously, meaning that all physical quantities change smoothly, and all points close in time are also close in feature space.
+
+The colors reveal some structure, though: the left-hand side of the plots contain measurements taken in the Summer, and the right-hand side contains measurement in Winter (see the air temperature in figure \ref{fig:tsne_temp} and month in figure \ref{fig:tsne_month}). Moreover, unstable conditions are clustered in a stripe, centered vertically, that runs from left to right (see the fluxes of figures \cref{fig:tsne_H,fig:tsne_LE,fig:tsne_soilheat}, the radiation in figure \ref{fig:tsne_netrad}, and the hour of day in figure \ref{fig:tsne_hday}). In figure \ref{fig:tsne_z} we also a see cluster on the top with all the observations at 40 meters, whereas the two lower levels are mixed somewhat uniformly in the bottom part of the plot.
+
+Finally, figure \ref{fig:tsne_clus} shows the result of k-means clustering in the standardized feature space, using $k=2$ (blue/orange) and $k=4$ (the four shades). This clustering is consistent with the qualitative division above, with the dark orange and blue clusters corresponding to Summer and Winter respectively, light orange corresponding to unstable conditions with considerable vertical movement of air, and light blue corresponding to strong horizontal winds with little movement in the vertical. Stably stratified conditions seem to occur at the boundary of the blob, where $\phi_m$ takes the highest values (see figure \ref{fig:tsne_phi_m}). This is also not surprising, since stable stratification tend to happen at night throughout the year, unlike free convection or z-less scaling, which only happen in specific conditions.
+
+\begin{figure}
+\subcaptionbox{Air Dens.\label{fig:tsne_air_dens}}{\includegraphics[width=0.25\textwidth]{images/tsne_air_dens}}\hfill
+\subcaptionbox{H\label{fig:tsne_H}}{\includegraphics[width=0.25\textwidth]{images/tsne_H}}\hfill
+\subcaptionbox{LE\label{fig:tsne_LE}}{\includegraphics[width=0.25\textwidth]{images/tsne_LE}}\hfill
+\subcaptionbox{Wind\label{fig:tsne_wind}}{\includegraphics[width=0.25\textwidth]{images/tsne_wind}}\\
+
+\subcaptionbox{Air Temp.\label{fig:tsne_temp}}{\includegraphics[width=0.25\textwidth]{images/tsne_temp}}\hfill
+\subcaptionbox{Virtual Temp.\label{fig:tsne_virtual_temp}}{\includegraphics[width=0.25\textwidth]{images/tsne_virtual_temp}}\hfill
+\subcaptionbox{Soil Temp.\label{fig:tsne_soil_temp}}{\includegraphics[width=0.25\textwidth]{images/tsne_soil_temp}}\hfill
+\subcaptionbox{$z$\label{fig:tsne_z}}{\includegraphics[width=0.25\textwidth]{images/tsne_z}}\\
+
+\subcaptionbox{$L$\label{fig:tsne_lval}}{\includegraphics[width=0.25\textwidth]{images/tsne_lval}}\hfill
+\subcaptionbox{$\xi$\label{fig:tsne_zL}}{\includegraphics[width=0.25\textwidth]{images/tsne_zL}}\hfill
+\subcaptionbox{$\partial\overline{u}/\partial{z}$\label{fig:tsne_dwdz}}{\includegraphics[width=0.25\textwidth]{images/tsne_dwdz}}\hfill
+\subcaptionbox{$\phi_m$\label{fig:tsne_phi_m}}{\includegraphics[width=0.25\textwidth]{images/tsne_phi_m}}\\
+
+\subcaptionbox{$\partial\overline{\theta_v}/\partial{z}$\label{fig:tsne_dtdz}}{\includegraphics[width=0.25\textwidth]{images/tsne_dtdz}}\hfill
+\subcaptionbox{Dew Point\label{fig:tsne_dewpoint}}{\includegraphics[width=0.25\textwidth]{images/tsne_dewpoint}}\hfill
+\subcaptionbox{Spec. Hum.\label{fig:tsne_spec_hum}}{\includegraphics[width=0.25\textwidth]{images/tsne_spec_hum}}\hfill
+\subcaptionbox{Rel. Hum.\label{fig:tsne_rel_hum}}{\includegraphics[width=0.25\textwidth]{images/tsne_rel_hum}}\\
+
+\subcaptionbox{Air Pressure\label{fig:tsne_press}}{\includegraphics[width=0.25\textwidth]{images/tsne_press}}\hfill
+\subcaptionbox{Rain\label{fig:tsne_rain}}{\includegraphics[width=0.25\textwidth]{images/tsne_rain}}\hfill
+\subcaptionbox{$CO_2$ Flux\label{fig:tsne_co2flux}}{\includegraphics[width=0.25\textwidth]{images/tsne_co2flux}}\hfill
+\subcaptionbox{Soil Heat Flux\label{fig:tsne_soilheat}}{\includegraphics[width=0.25\textwidth]{images/tsne_soilheat}}\\
+
+\subcaptionbox{Net Rad.\label{fig:tsne_netrad}}{\includegraphics[width=0.25\textwidth]{images/tsne_netrad}}\hfill
+\subcaptionbox{$\vert \text{Month}-6\vert$\label{fig:tsne_month}}{\includegraphics[width=0.25\textwidth]{images/tsne_month}}\hfill
+\subcaptionbox{$\vert \text{Hr. Day}-12\vert$\label{fig:tsne_hday}}{\includegraphics[width=0.25\textwidth]{images/tsne_hday}}\hfill
+\subcaptionbox{k-Means\label{fig:tsne_clus}}{\includegraphics[width=0.25\textwidth]{images/tsne_clus}}\hfill
+
+    \caption{Results of the t-SNE dimensionality reduction algorithm; every figure uses a different feature to color the points (darker points have smaller values), except figure \ref{fig:tsne_clus}, where the colors represent the result of 2-means clustering (blue/orange) and 4-means clustering (the four shades). The colors are consistent, in the sense that light and dark shades of blue are placed in the same cluster by 2-means clustering, ditto for orange. The points were drawn in random order. (Best viewed in color)}
+	\label{fig:tsne}
+\end{figure}
+
+
+Talking about speed of wind, figure \ref{fig:ustar_wind} shows some measurements exceeding \SI{25}{\meter\per\second}; according to the Beaufort scale, holding umbrellas and walking become hard at \SI{15}{\meter\per\second}. Those measurements are not issues with the data: figure \ref{fig:cyclone_jeanett} shows the highest wind speed present in the Cesar database to date, corresponding to cyclone Jeanett.
+
 \begin{figure}
     \centering
 	\includegraphics[width=0.95\textwidth]{images/cyclone_jeanett}
@@ -1290,6 +1299,7 @@ Talking about speed of wind, figure \ref{fig:ustar_wind} shows some measurements
 
 
 \section{Gradient Computation}
+\label{sec:res_gradient}
 Section \ref{sec:gradients} introduced three different ways to compute the gradient, but we need to choose one to compute the universal functions. In this section, we refer to equation \ref{eq:fd_gradient} as \emph{F.D.}, equation \ref{eq:log_gradient} as \emph{Log} and equation \ref{eq:gp_gradient} as \emph{G.P.} Table \ref{tbl:gradients_corr} shows the Pearson correlation coefficient between the three methods, separately for every altitude level. It is clear that the F.D. gradient is inadequate at the lowest level; this can be explained by considering that equation \ref{eq:fd_gradient} with $z=10$ reduces to the wind speed at 20 meters divided by 20. This method appears to be too naive, especially since it does not take the roughness length into consideration, but, as \cite{cabauw_z0} showed, finding a value for $z_0$ is far from trivial. In spite of this, the F.D. and the Log gradients strongly agree on all levels, and are quite different from the gradients by G.P.
 
 \begin{table}[]
@@ -1331,7 +1341,7 @@ Figure \ref{fig:gp_log_perc_err_wind_speed} shows the error as a function of the
 
 \begin{figure}
     \centering
-	\includegraphics[width=0.75\textwidth]{images/gp_log_perc_err_wind_speed}
+	\includegraphics[width=0.6\textwidth]{images/gp_log_perc_err_wind_speed}
 	\caption{Mean absolute percent error of the wind modeled by the Log and G.P. models as a function of the true wind speed; the lines are the average, and the shaded regions enclose the average plus or minus the standard deviation. Both quantities are computed by binning the wind by its integral part. Notice that slightly less than 5\% are above \SI{11}{\meter\per\second}, and only 656 observations, or 0.04\% of the total, are above \SI{20}{\meter\per\second} (\SI{72}{\kilo\meter\per\hour})}
 	\label{fig:gp_log_perc_err_wind_speed}
 \end{figure}
@@ -1357,7 +1367,8 @@ G.P. & 1.213 & 8.899 \\
 To conclude, although F.D. (equation \ref{eq:fd_gradient}) is the most accurate way of computing the profile gradient, it does not allow us to use data at the 10 meters level. Considering that Log (equation \ref{eq:log_gradient}) is just slightly worse, but allows us to include that level (increasing the data available by 50\%!), all the results presented from now on make use of it.
 
 
-\section{Computing the Flux-Profile Relationship}
+\section{Flux-Profile Relationship}
+\label{sec:res_most}
 Figure \ref{fig:most_scatter} shows the wind shear versus the instability parameter, together with the commonly accepted flux-profile relationship in green and the relationship fitted on our dataset in red. Qualitatively, the scatter plot looks sas expected, going to zero as $\xi$ decreases, linearly increasing in the $0\leq\xi\leq1$ interval, and leveling after that, possibly approaching the $\xi^{1/3}$ form proposed by \cite{sheba_phim}.
 
 negative phim with small |xi|
@@ -1378,17 +1389,13 @@ negative phim with small |xi|
         \caption{Validity region for the Monin-Obukhov similarity theory.}
         \label{fig:most_zoom}
     \end{subfigure}
-    \caption{Wind shear $\phi_m$ versus the instability parameter $\xi$, with the prediction according to equation \ref{eq:phi_m_coeff} in green, and our predictions, following equation \ref{eq:phi_general} with the coefficients being the median values in table \ref{tbl:most_coeffs}, in red. Refer to section \ref{sec:most_estimator_results} for a discussion of the difference.}
+    \caption{Wind shear $\phi_m$ versus the instability parameter $\xi$, with the prediction according to equation \ref{eq:phi_m_coeff} in green, and our predictions, following equation \ref{eq:phi_general} with the coefficients being the median values in table \ref{tbl:most_coeffs}, in red. Refer to the main text for a discussion of the difference.}
 	\label{fig:most_scatter}
 \end{figure}
 
 
-\section{Predicting the Flux-Profile Relationship}
 In this section, we present and compare the evaluation metrics obtained by the estimators on the different configurations of features and data. We will refer to the interval $-2\leq\xi\leq1$ as the \emph{MOST validity range}, abbreviated as \textbf{MOST} in the tables; the proportion of data falling in this interval is 83.6\%. Unless specified otherwise, the metrics are presented as the mean over the ten outer validation folds followed by the standard deviation, in parenthesis, whereas the effect sizes are presented followed by the 95\% confidence interval in parenthesis.
 
-
-\subsection{MOST Estimator Baseline}
-\label{sec:most_estimator_results}
 The performance of the MOST estimator is shown in table \ref{tbl:most_results}; we see a considerable increase in the MSE when the full dataset is used; this is not surprising, considering that, with $\xi>1$, $\phi_m$ tends to level off, and there are a considerable number of outliers in the range $-20\leq\xi\leq-2$ (see figure \ref{fig:most_full}) that cannot be fitted by the MOST estimator. Figure \ref{fig:most_scatter} shows $\phi_m$ as a function of $\xi$ as computed in our dataset, as well as the predictions of equation \ref{eq:phi_m_coeff} and the fitted MOST estimator.
 
 Table \ref{tbl:most_results} shows the values of the coefficients in equation \ref{eq:phi_general}, when fitted to the region of data where the Monin-Obukhov similarity theory is valid. We note a big difference with the values recommended in \cite{hogstrom88}, as well as most studies on the topic. However, \cite{cabauw_night_most} studied the stable, nocturnal boundary layer at Cabauw, and reported values varying between 0.81 and 0.95 for $a$ and between 2.7 and 3.2 for $b$, depending on the direction of the wind; there is no known explanation for this discrepancy. Although \cite{cabauw_night_most} used the same method that we applied to find the coefficients, no goodness of fit statistics, such as MSE or $R^2$, were reported.
@@ -1416,27 +1423,14 @@ $d$ & -0.30 & 0.11 & -0.60 & -0.26 & -0.26 & -0.26 & -0.25 \\
 \end{table}
 
 
-\subsection{Other Estimators}
 The averaged evaluation metrics for the Ridge, kNN and GB estimators are presented in tables \ref{tbl:ridge_results}, \ref{tbl:knn_results}
 and \ref{tbl:gbr_results}, while figures \ref{fig:ridge_results_most}, \ref{fig:knn_results_most} and \ref{fig:gbr_results_most} show boxplots of these metrics for the MOST validity range, and figures \ref{fig:ridge_results_all}, \ref{fig:knn_results_all} and \ref{fig:gbr_results_all} do so for the whole dataset. Table \ref{tbl:baseline_comparison} compares each estimator with the MOST baseline for both the full dataset and the data in the MOST validity range, while table \ref{tbl:fset_comparison} compares the errors of successive feature sets, and finally table \ref{tbl:trend_comparison} shows the error difference when the the feature sets are augmented with the trend information.
 
+
 \begin{table}
-\caption{Descriptive statistics of the best MSE achieved by each estimator among all feature sets with and without trend, and effect size comparing it with the MOST baseline. A positive effect size denotes improvement, and its 95\% confidence interval is in parenthesis.}
+\caption{Descriptive statistics of the best MSE achieved by each estimator among all feature sets with and without trend, and effect size comparing it with the MOST baseline. A positive effect size denotes improvement, and its 95\% confidence interval is in parenthesis. Note that we selected the best feature set comparing only the mean MSE, it is possible that another feature set with a slightly higher average but lower variance would generate a larger effect size.}
 \label{tbl:baseline_comparison}
 \input{include/baseline_comparison}
-\end{table}
-
-
-\begin{table}
-\caption{Effect sizes and their 95\% confidence interval comparing the MSE scores of all pairs of feature sets, for each estimator and for the MOST dataset. The control is on rows and the treatment is on columns, and the effect size is positive when the treatment has a smaller MSE than the control; in bold are the combinations whose confidence interval does not contain 0.}
-\label{tbl:fset_comparison}
-\input{include/fset_comparison_most}
-\end{table}
-
-\begin{table}
-\caption{Effect sizes and their 95\% confidence interval comparing the MSE scores of all pairs of feature sets, for each estimator and for the full dataset. The control is on rows and the treatment is on columns, and the effect size is positive when the treatment has a smaller MSE than the control; in bold are the combinations whose confidence interval does not contain 0.}
-\label{tbl:fset_comparison}
-\input{include/fset_comparison_nomost}
 \end{table}
 
 
@@ -1446,6 +1440,45 @@ and \ref{tbl:gbr_results}, while figures \ref{fig:ridge_results_most}, \ref{fig:
 \input{include/trend_comparison}
 \end{table}
 
+
+\begin{table}
+\caption{Effect sizes and their 95\% confidence interval comparing the MSE scores of all pairs of feature sets, for each estimator and for the MOST dataset. The control is on rows and the treatment is on columns, and the effect size is positive when the treatment has a smaller MSE than the control; in bold are the combinations whose confidence interval does not contain 0.}
+\label{tbl:fset_comparison_most}
+\input{include/fset_comparison_most}
+\end{table}
+
+\begin{table}
+\caption{Effect sizes and their 95\% confidence interval comparing the MSE scores of all pairs of feature sets, for each estimator and for the full dataset. The control is on rows and the treatment is on columns, and the effect size is positive when the treatment has a smaller MSE than the control; in bold are the combinations whose confidence interval does not contain 0.}
+\label{tbl:fset_comparison_nomost}
+\input{include/fset_comparison_nomost}
+\end{table}
+
+
+\chapter{Discussion}
+\label{ch:discussion}
+even though we predicted phim, the actual interest is in u*. we predict phim to have a direct means of comparing with state of the art (?), \cite{weber1999} computes u* from the standard deviations obtaining rmse between 0.05 and 0.1
+
+actual constants and coefficients (e.g. von karmans constant) dont really matter, because they are constant and do not affect the ml model 
+
+estimating parameters (von karman, roughness length etc) is very difficult, by using ml we can circumvent the problem (they need a supporting infrastructure even if they want to compute those constants, so not huge downside)
+
+outliers with xi between -20 and -2 mostly belong to z=40 in the morning (between 6 and 12); given what was said in [paper], there is the possibility that they are not in the surface layer, explaining why the c coefficient is higher than expected
+
+one of the reasons why MOST is unreliable in stable conditions is because of the difficulty of measuring fluxes. there are other methods to compute the turbulent fluxes (http://bibliotheek.knmi.nl/knmipubWR/WR87-02.pdf, ), we used eddy corr because that's what in the cesar database
+
+wind direction is very important since different characteristics of the surface affect the measurements, see https://journals.ametsoc.org/doi/full/10.1175/2006JAMC1298.1 and somebody else on cabauw
+
+can generate new training samples at more altitude levels, since we have a model for wind and temp (need to interpolate spec. humidity too), according to the simulation that uses this model
+
+our models can only be used in conditions that are similar to cabauw. most importantly, they are not valid in the oceanic surface layer, because it is very different [citation]
+
+\section{Limitations and Future Work}
+todo
+
+
+
+\appendix
+\chapter{Detailed Results}
 
 \begin{figure}[h]
 \subcaptionbox{Mean Squared Error\label{fig:result_Ridge_most_mean_squared_error}}{\includegraphics[width=0.5\textwidth]{images/result_Ridge_most_mean_squared_error}}\hfill
@@ -1563,31 +1596,7 @@ and \ref{tbl:gbr_results}, while figures \ref{fig:ridge_results_most}, \ref{fig:
 \end{table}
 
 
-
-
 % ---------------------------------------------------------------
-
-
-\chapter{Discussion}
-\label{ch:discussion}
-even though we predicted phim, the actual interest is in u*. we predict phim to have a direct means of comparing with state of the art (?), \cite{weber1999} computes u* from the standard deviations obtaining rmse between 0.05 and 0.1
-
-actual constants and coefficients (e.g. von karmans constant) dont really matter, because they are constant and do not affect the ml model 
-
-estimating parameters (von karman, roughness length etc) is very difficult, by using ml we can circumvent the problem (they need a supporting infrastructure even if they want to compute those constants, so not huge downside)
-
-outliers with xi between -20 and -2 mostly belong to z=40 in the morning (between 6 and 12); given what was said in [paper], there is the possibility that they are not in the surface layer, explaining why the c coefficient is higher than expected
-
-one of the reasons why MOST is unreliable in stable conditions is because of the difficulty of measuring fluxes. there are other methods to compute the turbulent fluxes (http://bibliotheek.knmi.nl/knmipubWR/WR87-02.pdf, ), we used eddy corr because that's what in the cesar database
-
-wind direction is very important since different characteristics of the surface affect the measurements, see https://journals.ametsoc.org/doi/full/10.1175/2006JAMC1298.1 and somebody else on cabauw
-
-can generate new training samples at more altitude levels, since we have a model for wind and temp (need to interpolate spec. humidity too), according to the simulation that uses this model
-
-our models can only be used in conditions that are similar to cabauw. most importantly, they are not valid in the oceanic surface layer, because it is very different [citation]
-
-\section{Limitations and Future Work}
-todo
 
 
 %\bibliographystyle{unsrt}
