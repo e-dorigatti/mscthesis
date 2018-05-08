@@ -691,9 +691,9 @@ The effect size is a statistic used to compare the means of two populations, usu
 
 Where $\mu_t$ and $\mu_c$ are the means of the treatment and control groups respectively, and $\sigma$ is a standard error that can be computed in a great deal of ways. Generally, the effect size is computed to be positive when the treatment group represent an improvement over the control group.
 
-Recently, there is a departure from the standard procedure of reporting p-values, test statistics and critical values resulting from hypothesis testing towards reporting effect sizes and their confidence intervals, in addition or in alternative to the usual statistics, see for example \cite{apa} and \cite{aera}.  However, effect sizes can be as misleading as significance testing when the assumptions underlying its expression are violated; commonly used effect size measures, such as Cohen's $d$ [citation], assume both populations are normally distributed and have the same standard deviation\footnote{a property called \emph{homoscedasticity} (contrary: heteroscedasticity)}. Alternatives that do not assume equal standard deviation exist \citep{es1,es2,es3}, but they all require normality, and generally use approximate distributions of the standard error and/or the confidence interval (or both).
+Recently, there is a departure from the standard procedure of reporting p-values, test statistics and critical values resulting from hypothesis testing towards reporting effect sizes and their confidence intervals, in addition or in alternative to the usual statistics, see for example \cite{apa} and \cite{aera}.  However, effect sizes can be as misleading as significance testing when the assumptions underlying its expression are violated; commonly used effect size measures, such as Cohen's $d$ [citation], assume both populations are normally distributed and have the same standard deviation\footnote{a property called \emph{homoscedasticity} (contrary: heteroscedasticity)}. Alternatives that do not assume equal standard deviation exist \citep{es1,es2,es3}, but they all require normality, and generally use approximate distributions of the standard error and/or the CI (or both).
 
-In order not to assume normality, we compute the confidence interval for the effect size using the bootstrap percentile method. This method estimates the population value of any statistic $\theta$ and its confidence interval using a single sample of $N$ observations, by extracting $M$ new samples (with replacement) of size $N$ from it and computing $\theta$ on each resample. The population statistic is estimated by the average of the $m$ sample statistics, and the extremes of the (central) $100(1-\alpha)\%$ confidence interval are respectively the $100(\alpha/2)$ and $100(1-\alpha/2)$ percentiles of those values. Usually $M$ is in the order of $10^2$ or $10^3$, enough to guarantee a certain degree of stability in these estimates.
+In order not to assume normality, we compute the CI for the effect size using the bootstrap percentile method. This method estimates the population value of any statistic $\theta$ and its CI using a single sample of $N$ observations, by extracting $M$ new samples (with replacement) of size $N$ from it and computing $\theta$ on each resample. The population statistic is estimated by the average of the $m$ sample statistics, and the extremes of the (central) $100(1-\alpha)\%$ CI are respectively the $100(\alpha/2)$ and $100(1-\alpha/2)$ percentiles of those values. Usually $M$ is in the order of $10^2$ or $10^3$, enough to guarantee a certain degree of stability in these estimates.
 
 The sample effect size of equation \ref{eq:base_es} is not robust to outliers when it is computed with the sample means and standard deviations. Since we do not assume normality outliers are expected, therefore we use measures of location that are not heavily affected by them, namely the sample trimmed mean and the sample Winsorized standard error. The $100\gamma \%$ trimmed mean $\overline{X}_\gamma$ of a sample is simply the mean of that sample after discarding the $100\gamma\%$ largest and the $100\gamma\%$ smallest observations\footnote{this is common practice, for example, when scoring in the modern Olympiads, where the smallest and largest scores are not considered.}. The standard error of the sample trimmed mean is obtained from the Winsorized sample standard deviation; let $X_{(\gamma)}$ and $X_{(1-\gamma)}$ be the $100\gamma$ and $100(1-\gamma)$ percentiles, and define the Winsorized observations as follows:
 
@@ -971,7 +971,7 @@ Where $\mathbbm{1}[P]$ is an indicator function whose value is 1 iff the predica
     \begin{subfigure}[t]{0.45\textwidth}
         \centering
         \includegraphics[width=\textwidth]{images/profile_kernel_prior}
-        \caption{Prior distribution and some samples; the grey area is the 95\% confidence interval.}
+        \caption{Prior distribution and some samples; the grey area is the 95\% CI.}
         \label{fig:kernel_prior}
     \end{subfigure}
     \hfill
@@ -1134,7 +1134,7 @@ Where $f_n$ is the predicted value for the test sample $\bm x_n$ with true value
 \label{sec:success}
 A successful answer to the first research question entails finding a model whose mean squared error on any feature set, with or without trend, is smaller than the mean squared error of the MOST estimator introduced in section \ref{sec:most_fit}. The second research question is answered by comparing the different evaluation metrics on the ten feature sets (F1 to F5, with and without trend). Note that we cannot use the output of a model to obtain the importance of the features, as this method is not reliable when some of them are correlated \citep{rf_bias,rf_corr_imp}, which is a very relevant issue in our case. Trivially, wind speed and temperature at the different levels are very strongly correlated (Pearson's $r$ is above 0.95), and there are other, more complex, correlations, such as between the net radiation and the soil heat flux, or between the soil temperature and the dew point (Pearson's $r$ is respectively 0.75 and 0.79). In spite of the correlations, all these variables contribute to the flux-profile relationships, often in very nuanced ways.
 
-The differences are quantified using the effect size, as detailed in section \ref{sec:effect_size}.
+The differences are quantified using the effect size, as detailed in section \ref{sec:effect_size}; since we are looking for an improvement, we compute right CI for the population effect size, i.e. we only compute a (probabilistic) lower bound.
 
 \chapter{Results}
 \label{ch:results}
@@ -1394,7 +1394,7 @@ negative phim with small |xi|
 \end{figure}
 
 
-In this section, we present and compare the evaluation metrics obtained by the estimators on the different configurations of features and data. We will refer to the interval $-2\leq\xi\leq1$ as the \emph{MOST validity range}, abbreviated as \textbf{MOST} in the tables; the proportion of data falling in this interval is 83.6\%. Unless specified otherwise, the metrics are presented as the mean over the ten outer validation folds followed by the standard deviation, in parenthesis, whereas the effect sizes are presented followed by the 95\% confidence interval in parenthesis.
+In this section, we present and compare the evaluation metrics obtained by the estimators on the different configurations of features and data. We will refer to the interval $-2\leq\xi\leq1$ as the \emph{MOST validity range}, abbreviated as \textbf{MOST} in the tables; the proportion of data falling in this interval is 83.6\%. Unless specified otherwise, the metrics are presented as the mean over the ten outer validation folds followed by the standard deviation, in parenthesis, whereas the effect sizes are presented followed by the 95\% CI in parenthesis.
 
 The performance of the MOST estimator is shown in table \ref{tbl:most_results}; we see a considerable increase in the MSE when the full dataset is used; this is not surprising, considering that, with $\xi>1$, $\phi_m$ tends to level off, and there are a considerable number of outliers in the range $-20\leq\xi\leq-2$ (see figure \ref{fig:most_full}) that cannot be fitted by the MOST estimator. Figure \ref{fig:most_scatter} shows $\phi_m$ as a function of $\xi$ as computed in our dataset, as well as the predictions of equation \ref{eq:phi_m_coeff} and the fitted MOST estimator.
 
@@ -1428,27 +1428,27 @@ and \ref{tbl:gbr_results}, while figures \ref{fig:ridge_results_most}, \ref{fig:
 
 
 \begin{table}
-\caption{Descriptive statistics of the best MSE achieved by each estimator among all feature sets with and without trend, and effect size comparing it with the MOST baseline. A positive effect size denotes improvement, and its 95\% confidence interval is in parenthesis. Note that we selected the best feature set comparing only the mean MSE, it is possible that another feature set with a slightly higher average but lower variance would generate a larger effect size.}
+\caption{Descriptive statistics of the best MSE achieved by each estimator among all feature sets with and without trend, and effect size comparing it with the MOST baseline. A positive effect size denotes improvement, and its 95\% right CI is in parenthesis. Note that we selected the best feature set comparing only the mean MSE, it is possible that another feature set with a slightly higher average but lower variance would generate a larger effect size.}
 \label{tbl:baseline_comparison}
 \input{include/baseline_comparison}
 \end{table}
 
 
 \begin{table}
-\caption{Effect sizes and their 95\% confidence interval comparing the MSE scores of each feature set with and without trend. A positive effect size indicates that the trend reduces the error; in bold are the combinations whose confidence interval does not contain 0.}
+\caption{Effect sizes and their 95\% right CI comparing the MSE scores of each feature set with and without trend. A positive effect size indicates that the trend reduces the error; in bold are the combinations whose CI does not contain 0.}
 \label{tbl:trend_comparison}
 \input{include/trend_comparison}
 \end{table}
 
 
 \begin{table}
-\caption{Effect sizes and their 95\% confidence interval comparing the MSE scores of all pairs of feature sets, for each estimator and for the MOST dataset. The control is on rows and the treatment is on columns, and the effect size is positive when the treatment has a smaller MSE than the control; in bold are the combinations whose confidence interval does not contain 0.}
+\caption{Effect sizes and their 95\% right CI comparing the MSE scores of all pairs of feature sets, for each estimator and for the MOST dataset. The control is on rows and the treatment is on columns, and the effect size is positive when the treatment has a smaller MSE than the control; in bold are the combinations whose CI  does not contain 0.}
 \label{tbl:fset_comparison_most}
 \input{include/fset_comparison_most}
 \end{table}
 
 \begin{table}
-\caption{Effect sizes and their 95\% confidence interval comparing the MSE scores of all pairs of feature sets, for each estimator and for the full dataset. The control is on rows and the treatment is on columns, and the effect size is positive when the treatment has a smaller MSE than the control; in bold are the combinations whose confidence interval does not contain 0.}
+\caption{Effect sizes and their 95\% right CI comparing the MSE scores of all pairs of feature sets, for each estimator and for the full dataset. The control is on rows and the treatment is on columns, and the effect size is positive when the treatment has a smaller MSE than the control; in bold are the combinations whose CI does not contain 0.}
 \label{tbl:fset_comparison_nomost}
 \input{include/fset_comparison_nomost}
 \end{table}
