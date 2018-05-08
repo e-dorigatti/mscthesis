@@ -680,11 +680,56 @@ We invite the reader to refer to \cite[Chapter~6]{bishop} for an in-depth treatm
 
 \subsection{Robust Effect Size}
 \label{sec:effect_size}
-todo
-%https://digitalcommons.wayne.edu/cgi/viewcontent.cgi?article=1256&context=jmasm
-%http://fmipa.umri.ac.id/wp-content/uploads/2016/03/Rand_R._Wilcox_Fundamentals_of_Modern_StatisticaBookZZ.org_.pdf
-%http://psych.colorado.edu/~willcutt/pdfs/Wilcox_2003.pdf
+The effect size is a statistic used to compare the means of two populations, usually called \emph{control} and \emph{treatment}, that is computed as the standardized difference of the means:
 
+\begin{equation}
+\label{eq:base_es}
+\delta=\frac{\mu_t-\mu_c}{\sigma}
+\end{equation}
+
+Where $\mu_t$ and $\mu_c$ are the means of the treatment and control groups respectively, and $\sigma$ is a standard error that can be computed in a great deal of ways. Generally, the effect size is computed to be positive when the treatment group represent an improvement over the control group.
+
+Following the American Psychological Association’s Task Force on Statistical Inference [citation], there is a departure from the standard procedure of reporting p-values, test statistics and critical values resulting from hypothesis testing towards reporting effect sizes and their confidence intervals, in addition or in alternative to the usual statistics. However, effect sizes can be as misleading as significance testing when the assumptions underlying its expression are violated; commonly used effect size measures, such as Cohen's $d$ [citation], assume both populations are normally distributed and have the same standard deviation\footnote{a property called \emph{homoscedasticity} (contrary: heteroscedasticity)}. Alternatives that do not assume equal standard deviation exist [citation 1,2,3], but they all require normality, and generally use approximate distributions of the standard error and/or the confidence interval (or both).
+
+In order not to assume normality, we compute the confidence interval for the effect size using the bootstrap percentile method. This method estimates the population value of any statistic $\theta$ and its confidence interval using a single sample of $N$ observations, by extracting $M$ new samples (with replacement) of size $N$ from it and computing $\theta$ on each resample. The population statistic is estimated by the average of the $m$ sample statistics, and the extremes of the (central) $100(1-\alpha)\%$ confidence interval are respectively the $100(\alpha/2)$ and $100(1-\alpha/2)$ percentiles of those values. Usually $M$ is in the order of $10^2$ or $10^3$, enough to guarantee a certain degree of stability in these estimates.
+
+The sample effect size of equation \ref{eq:base_es} is not robust to outliers when it is computed with the sample means and standard deviations. Since we do not assume normality outliers are expected, therefore we use measures of location that are not heavily affected by them, namely the sample trimmed mean and the sample Winsorized standard error. The $100\gamma \%$ trimmed mean $\overline{X}_\gamma$ of a sample is simply the mean of that sample after discarding the $100\gamma\%$ largest and the $100\gamma\%$ smallest observations\footnote{this is common practice, for example, when scoring in the modern Olympiads, where the smallest and largest scores are not considered.}. The standard error of the sample trimmed mean is obtained from the Winsorized sample standard deviation; let $X_{(\gamma)}$ and $X_{(1-\gamma)}$ be the $100\gamma$ and $100(1-\gamma)$ percentiles, and define the Winsorized observations as follows:
+
+\begin{equation}
+W_n=\begin{cases}
+X_{(\gamma)} & \text{if }X_n\leq X_{(\gamma)} \\
+X_{(1-\gamma)} & \text{if }X_n\geq X_{(1-\gamma)} \\
+X_n &\text{otherwise}
+\end{cases}
+\end{equation}
+
+then we have the Winsorized sample mean
+
+\begin{equation}
+\overline{X}_W=\frac{1}{N}\sum_{n=1}^N W_n
+\end{equation}
+
+the Winsorized sample variance
+
+\begin{equation}
+\hat{\sigma}_W=\frac{1}{N-1}\sum_{n=1}^N (W_n-\overline{X}_W)^2
+\end{equation}
+
+and the estimated variance of the trimmed mean
+
+\begin{equation}
+\text{Var}[\overline{X}_\gamma]=\frac{\hat{\sigma}^2_W}{N(1-2\gamma)^2}
+\end{equation}
+
+The standard error of $\overline{X}_\gamma$ is the usual $(\text{Var}[\overline{X}_\gamma]/N)^{1/2}$. Plugging everything into equation \ref{eq:base_es} and normalizing with the treatment Winsorized sample standard error gives the sample effect size
+
+\begin{equation}
+\label{eq:effect_size}
+\hat{\delta}=(\overline{T}_\gamma-\overline{C}_\gamma)\cdot\sqrt{\frac{N}{\text{Var}[\overline{T}_\gamma]}}
+=(1-2\gamma)\frac{\overline{T}_\gamma-\overline{C}_\gamma}{\hat{\sigma}_W^2}
+\end{equation}
+
+where $T_1,\ldots,T_N$ and $C_1,\ldots,C_M$ are the \emph{independent} samples of treatment and control groups respectively. See \cite{modern_stat} for an introduction to robust statistical methods, including the ones just described.
 
 \begin{figure}
     \centering
@@ -701,9 +746,17 @@ todo
 %        \caption{The treatment has standard deviation of 0255, and the effect size is 7.77}
 		\label{fig:large_es}
     \end{subfigure}
-    \caption{Graphical explanation of why the effect size is normalized with the standard deviation of the treatment, when the control has a mean of 0 and standard deviation of 1 and the treatment has a mean of 2; inarguably, the treatment in the right figure the best of the two.}
+    \caption{Graphical explanation of why the effect size is normalized with the standard deviation of the treatment, when the control has a mean of 0 and standard deviation of 1 and the treatment has a mean of 2; inarguably, the treatment in the right figure the best of the two. Of course, one could perform the same experiment but keeping the treatment fixed and varying the standard deviation of the control: in that case, the effect size would not change. Refer to the main text for a discussion.}
 	\label{fig:effect_size}
 \end{figure}
+
+
+Figure \ref{fig:effect_size} shows the effect size computed according to \ref{eq:effect_size}, and tries to provide an intuitive explanation as to why we normalize with the treatment standard deviation. Note that we cannot use an average (weighted or unweighted) as normalizer since it corresponds to assuming homogeneity of \emph{population} variances, an assumption that we wanted to avoid in the first place. Since the goal is to assess the improvement caused by the treatment, it would not make sense to normalize with the standard deviation of the control group, because it would not allow us to discriminate between treatments with the same mean but different standard deviations; given two treatments with the same mean, we prefer the one with the smaller standard deviation. Of course, this reasoning can be applied in the opposite direction: normalizing by the control standard deviation would give a larger effect size when the control group has a smaller standard deviation, which is certainly a desirable property, since a control group with a smaller standard deviation is more clearly separated from the treatment. However, the control group is considered to be fixed, and we will never need to compare two control groups against the same treatment.
+
+
+%https://digitalcommons.wayne.edu/cgi/viewcontent.cgi?article=1256&context=jmasm
+%http://fmipa.umri.ac.id/wp-content/uploads/2016/03/Rand_R._Wilcox_Fundamentals_of_Modern_StatisticaBookZZ.org_.pdf
+%http://psych.colorado.edu/~willcutt/pdfs/Wilcox_2003.pdf
 
 
 
@@ -1368,21 +1421,27 @@ The averaged evaluation metrics for the Ridge, kNN and GB estimators are present
 and \ref{tbl:gbr_results}, while figures \ref{fig:ridge_results_most}, \ref{fig:knn_results_most} and \ref{fig:gbr_results_most} show boxplots of these metrics for the MOST validity range, and figures \ref{fig:ridge_results_all}, \ref{fig:knn_results_all} and \ref{fig:gbr_results_all} do so for the whole dataset. Table \ref{tbl:baseline_comparison} compares each estimator with the MOST baseline for both the full dataset and the data in the MOST validity range, while table \ref{tbl:fset_comparison} compares the errors of successive feature sets, and finally table \ref{tbl:trend_comparison} shows the error difference when the the feature sets are augmented with the trend information.
 
 \begin{table}
-\caption{Best MSE achieved by each estimator, and effect size comparing it with the MOST baseline (positive effect size denotes improvement, in the 95\% confidence interval is in parenthesis)}
+\caption{Descriptive statistics of the best MSE achieved by each estimator among all feature sets with and without trend, and effect size comparing it with the MOST baseline. A positive effect size denotes improvement, and its 95\% confidence interval is in parenthesis.}
 \label{tbl:baseline_comparison}
 \input{include/baseline_comparison}
 \end{table}
 
 
 \begin{table}
-\caption{Effect sizes and their 95\% confidence interval comparing the MSE scores of each feature set with the previous set (i.e. F2 is compared with F1, F3 with F2, and so on). A positive effect size indicates that the feature set has a lower error than the previous one.}
+\caption{Effect sizes and their 95\% confidence interval comparing the MSE scores of all pairs of feature sets, for each estimator and for the MOST dataset. The control is on rows and the treatment is on columns, and the effect size is positive when the treatment has a smaller MSE than the control; in bold are the combinations whose confidence interval does not contain 0.}
 \label{tbl:fset_comparison}
-\input{include/fset_comparison}
+\input{include/fset_comparison_most}
+\end{table}
+
+\begin{table}
+\caption{Effect sizes and their 95\% confidence interval comparing the MSE scores of all pairs of feature sets, for each estimator and for the full dataset. The control is on rows and the treatment is on columns, and the effect size is positive when the treatment has a smaller MSE than the control; in bold are the combinations whose confidence interval does not contain 0.}
+\label{tbl:fset_comparison}
+\input{include/fset_comparison_nomost}
 \end{table}
 
 
 \begin{table}
-\caption{Effect sizes and their 95\% confidence interval comparing the MSE scores of each feature set with and without trend. A positive effect size indicates that the trend reduces the error.}
+\caption{Effect sizes and their 95\% confidence interval comparing the MSE scores of each feature set with and without trend. A positive effect size indicates that the trend reduces the error; in bold are the combinations whose confidence interval does not contain 0.}
 \label{tbl:trend_comparison}
 \input{include/trend_comparison}
 \end{table}
