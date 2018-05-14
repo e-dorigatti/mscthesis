@@ -4,6 +4,7 @@
 \usepackage[a4paper]{geometry}
 \usepackage{bm}
 \usepackage{siunitx}
+\usepackage{tcolorbox}
 \usepackage{titling}
 \usepackage{booktabs}
 \usepackage{tabularx}
@@ -69,31 +70,52 @@ Results show that ...
 \listoftables
 
 \chapter{Introduction}
+This chapter briefly introduces the area for this project, and formally defines and motivates the problem that is tackled. Section \ref{sec:intro_bg} introduces Climate Science, Machine Learning and Data Mining, then section \ref{sec:problem} formally defines the research questions that is work sets to answer, and section \ref{sec:purpose} explains why these questions are relevant and which benefits a successful answer would bring. Next, section \ref{sec:ethics} discusses potential ethical issues and sustainability aspects of this project, then section \ref{sec:research_methodology} explains the research methodology followed to answer the research questions, and, finally, section \ref{sec:outline} describes how the remainder of the report is organized.
 
-\section{Problem}
-\label{sec:problem}
+\section{Background}
+\label{sec:intro_bg}
 Climatology, or climate science, studies the long-term average weather conditions. In the last few decades, climate scientists found evidence of ongoing changes in Earth's climate, most notably, a general increase in average temperature; in the long run, this and other changes can potentially have a devastating impact on life on our planet. Regardless of the causal effect of human activities on it, having a solid understanding of the climate allows us to find the best way to mitigate its change, and to preserve our planet.
 
-Climate science is an extremely difficult field, for a number of reasons. First, climate is evident, by definition, only over long periods of time and large distances, making the usual scientific approach of testing hypotheses by conducting experiments inapplicable; instead, climate scientists have to rely on historical data. Second, the atmosphere is a complex and chaotic system, which must be described through systems of nonlinear differential equation. They can be used to create numerical simulations, and the resulting predictions compared to historical data to assess the accuracy of the theory. Furthermore, the chaotic character of the atmosphere makes it impossible to study parts of it in isolation from others, as small scale phenomena affect large scale ones, and vice versa. In spite of this, it is useful to split the atmosphere in vertical layers and horizontal zones, in order to differentiate among conditions and phenomena typically occurring in one area or the other.
+Climate science is an extremely difficult field, for a number of reasons. First, climate is evident, by definition, only over long periods of time and large distances, making the usual scientific approach of testing hypotheses by conducting experiments inapplicable; instead, climate scientists have to rely on historical data. Second, the atmosphere is a complex and chaotic system, which must be described through systems of nonlinear differential equation. They can be used to create numerical simulations, and the resulting predictions compared to historical data to assess the accuracy of the theory. Furthermore, the chaotic character of the atmosphere makes it impossible to study parts of it in isolation from others, as small scale phenomena affect large scale ones, and vice versa. In spite of this, it is useful to split the atmosphere in vertical layers and horizontal zones, in order to differentiate among conditions and phenomena typically occurring in one area or the other. 
 
-The troposphere contains most of the air mass in the atmosphere, and occupies the lowest 10 to 12 kilometers of the atmosphere. This is where weather happens, and it can be divided in a number of sub-layers, the lowest of which is the \emph{atmospheric boundary layer}: it is the region of the atmosphere that is affected by the conditions of the surface. Most human activities happen in this layer, and it is responsible for a large part of the diffusion and transport of aerosol such as, among others, pollutants. Yet, the physics governing the atmospheric boundary layer is not fully understood, and the theory is lacking. One important issues in the study of the atmospheric boundary layer is the derivation of flux-profile relationships for wind and temperature: they essentially relate the transport of momentum and heat by the turbulence (flux)\footnote{the flux of momentum is the rate of change of momentum (mass times velocity) per unit of area. Keeping the area constant, the momentum flux increases if the mass of the air increases (e.g. because of changes in temperature, pressure, or humidity) or if the speed of wind increases.} with the change of wind speed/temperature with altitude (profile). The state of the art relationships are defined by the Monin-Obukhov Similarity theory in terms of the instability parameter $\xi$, computed as the height above surface scaled by turbulence due to horizontal wind and vertical air movement due to variations in heat. Difficulties in measurements of relevant quantities make this theory accurate only up to 10-20\%, and applicable in a restricted set of conditions.
+The troposphere contains most of the air mass in the atmosphere, and occupies the lowest 10 to 12 kilometers of the atmosphere. This is where weather happens, and it can be divided in a number of sub-layers, the lowest of which is the \emph{atmospheric boundary layer}: it is the region of the atmosphere that is affected by the conditions of the surface. Most human activities happen in this layer, and it is responsible for a large part of the diffusion and transport of aerosol such as, among others, pollutants. Yet, the physics governing the atmospheric boundary layer is not fully understood, and the theory is lacking.
 
 In stark contrast to the traditional, top-down approach of science, recent developments in information technology made bottom-up approaches possible. In this new way of thinking, existing data is used to automatically infer the "best" explanation for the measurements at hand, the underlying laws that originated that data. The field that makes this possible is called \emph{Machine Learning}: it takes advantage of several methods coming from statistics, information theory, optimization theory, etc., to make computers learn from examples. Together with Natural Language Processing and Automated Planning, it is one of the three main branches of Artificial Intelligence, the sub-field of Computer Science that studies ways of making machines behave intelligently.
 
 An even broader field, called \emph{Data Mining}, is concerned with finding interesting patterns, structures, and regularities in large datasets, where the definition of interesting depends on the specific goals. Data Mining makes use of techniques from Machine Learning, as well as other statistical models, such as ANOVA, and visualization techniques.
 
+\section{Problem}
+\label{sec:problem}
+One important issues in the study of the atmospheric boundary layer is the derivation of flux-profile relationships for wind and temperature: they essentially relate the transport of momentum and heat by the turbulence (flux) with the change of wind speed/temperature with altitude (profile). The flux of momentum is the rate of change of momentum (mass times velocity) per unit of area. Keeping the area constant, the momentum flux increases if the mass of the air increases (e.g. because of changes in temperature, pressure, or humidity) or if the speed of wind increases.
+
+The state of the art relationships are defined by the Monin-Obukhov Similarity theory in terms of the instability parameter $\xi$, computed as the height above surface scaled by turbulence due to horizontal wind and vertical air movement due to variations in heat. Difficulties in measurements of relevant quantities make this theory accurate only up to 10-20\%, and applicable in a restricted set of conditions.
+
+\cite{sheba} shows that, at least in difficult conditions, several simulation models produce flux estimates that are highly inaccurate, presenting low correlation (mostly below 0.3) and errors that are as large as the fluxes themselves. Since errors in the simulation accumulate over time, even slight improvements can greatly improve the accuracy of the results after years of simulated time. Improved flux-profile relationship can, therefore, yield more accurate estimates of the fluxes.
+
+Currently, limitations of the validity of the Monin-Obukhov similarity theory are not believed to be a likely explanation for the high scatter that is found in experimental studies, unless in highly stable conditions, where measurement challenges arise \citep{basicatm}. With the availability of macro- and micro-meteorological data from specialized observation sites such as Cabauw, in the Netherlands, and the recent developments in Machine Learning, this conjecture can be finally put to the test. More specifically, we pose the following \\
+
+\begin{tcolorbox}
+\textbf{Research Question 1:} How can the data from the Cesar database be used to predict the momentum flux-profile relationship more accurately than the Monin-Obukhov similarity theory, by using only macro weather parameters? \\
+
+\textbf{Research Question 2:} What impact do different macro-weather parameters have on the quality of the predictions obtained?
+\end{tcolorbox}
+
+
 \section{Purpose}
-todo
+\label{sec:purpose}
+Affirmative answers to the research questions would contribute to improve the quality of current global circulation models (large scale climate simulations), allowing them to obtain more accurate predictions of the momentum flux-profile relationship, leading to more precise long term climate forecasts.
 
-\section{Research Question}
-\label{sec:research_question}
-Currently, limitations of the validity of the Monin-Obukhov similarity theory are not believed to be a likely explanation for the high scatter that is found in experimental studies, unless in highly stable conditions \citep{basicatm}. With the availability of micro-meteorological data from specialized observation sites such as Cabauw, in the Netherlands, and the recent developments in Machine Learning, this conjecture can be finally put to the test. More specifically, we pose the following \\
 
-\textbf{Research Question 1:} Is it possible to use the data from the Cesar database to improve the Monin-Obukhov model of the flux-profile relationships, by using more predictors besides the instability parameter? \\
+\section{Goals}
+The first research question is answered by proposing one or more data mining methods, i.e. feature selection and extraction, a model and its parameters, that obtain sufficient predictive performance, whereas the second research question is answered by a comparison of the performance of the models when using certain subsets of features.
 
-\textbf{Research Question 2:} (in case of an affirmative answer to the first research question): What impact do the different features have on the quality of the prediction? \\
 
-Affirmative answers to these question would contribute to improve the quality of current global circulation models (large scale climate simulations). \cite{sheba} shows that, at least in difficult conditions, several simulation models produce flux estimates that are highly inaccurate, presenting low correlation (mostly below 0.3) and errors that are as large as the fluxes themselves. Since errors in the simulation accumulate over time, even slight improvements can greatly improve the accuracy of the results after years of simulated time. Improved flux-profile relationship can, therefore, yield more accurate estimates of the fluxes.
+\section{Ethics and Sustainability}
+\label{sec:ethics}
+The author strongly aligns with the Open Science movement, according to which scientific research should be made as open and accessible as possible, so that it can be examined, extended and improved by as many people as possible. This is what allowed mankind to become what it is today, and it should not change. For this reason, this work was performed entirely with Free and Open Source tools, providing a low barrier to entry, and focusing on reproducibility of the results. The entirety of the analysis, from the very data to the generation of plots and tables, is openly accessible\footnote{\url{https://github.com/e-dorigatti/mscthesis}} and can be performed by anyone with enough computational resources.
+
+Some of the analysis performed in this work required a considerable amount of computational resources, in the order of hundreds of cores and terabytes of memory. Such resources are power hungry and require electricity to run and to be kept at an appropriate temperature [todo some stats about internet power usage etc], as well as proper support infrastructure, e.g. for networking. In an effort to reduce the energy requirements, only the necessary experiments were performed, and care was taken not to do unnecessary work, for example by reusing results of previous experiments where possible.
+
 
 \section{Research Methodology}
 \label{sec:research_methodology}
@@ -121,20 +143,10 @@ The two most widely used research methodologies in data mining are CRISP-DM, the
 
 It is important to mention that these steps are not strictly sequential, but heavily interact with one another: insights gained from the data can give rise to new questions, the evaluation of the results can highlight flaws in earlier steps, etc.
 
-\section{Ethics and Sustainability}
-The author strongly aligns with the Open Science movement, according to which scientific research should be made as open and accessible as possible, so that it can be examined, extended and improved by as many people as possible. This is what allowed mankind to become what it is today, and it should not change. For this reason, this work was performed entirely with Free and Open Source tools, providing a low barrier to entry, and focusing on reproducibility of the results. The entirety of the analysis, from the very data to the generation of plots and tables, is openly accessible\footnote{\url{https://github.com/e-dorigatti/mscthesis}} and can be performed by anyone with enough computational resources.
-
-[todo is this paragraph necessary?] As noted in the introduction, climate scientists have found evidence of a recent change in our planet's climate, which is predicted to considerably impact life on Earth in the coming centuries [check and cite]: understanding climate is very important, for it could suggest ways of preserving our only home.
-
-Some of the analysis performed in this work required a considerable amount of computational resources, in the order of hundreds of cores and terabytes of memory. Such resources are power hungry and require electricity to run and to be kept at an appropriate temperature [todo some stats about internet power usage etc], as well as proper support infrastructure, e.g. for networking. In an effort to reduce the energy requirements, only the necessary experiments were performed, and care was taken not to do unnecessary work, for example by reusing results of previous experiments where possible.
-
-ethics: fair share of cluster resources? XD
-
 
 \section{Outline}
+\label{sec:outline}
 The thesis is organized as follows: in chapter \ref{ch:background}, we introduce the relevant background in climate science and machine learning, then, in chapter \ref{ch:method}, we describe how the data is collected and used to answer the research question, chapter \ref{ch:results} contains the results of such investigation, and, finally, chapter \ref{ch:discussion} discusses the results, pointing out limitations and possible future directions.
-
-Relating to the research methodology process outlined in section \ref{sec:research_methodology}, business understanding is achieved through the problem description, the research questions and the background knowledge in sections \ref{sec:problem} and \ref{sec:research_question} and chapter \ref{ch:background}, while data understanding, data preparation and modeling are described in chapter \ref{ch:method}; chapter \ref{ch:results} reports the outcome of these steps, and, finally, the evaluation and deployment steps are in chapter \ref{ch:discussion}.
 
 \chapter{Background}
 \label{ch:background}
@@ -320,7 +332,7 @@ The universal functions $\phi_m$ and $\phi_h$ must be determined experimentally.
 
 The Monin-Obukhov similarity theory is only applicable in the surface layer, at heights much larger than the aerodynamic roughness length, and with $\vert\xi\vert<2$; even under ideal conditions, the predictions of this theory are accurate up to 10-20\% \citep{50years}. Iintuitively, when $\vert\xi\vert$ is too large, the eddies do not feel the effect of the surface anymore, and, under very stable stratification ($\xi>>1$), vertical motion is hampered, so the height $z$ does not play a role. Recent attempts \citep{sheba_phim,most_teal,Wilson2008} try to extend, or altogether replace, this similarity theory.
 
-\section{Machine Learning}
+\section{Statistics and Machine Learning}
 \label{sec:ml}
 The goal of Machine learning is to develop algorithms that allow computers to learn from examples. Learning is intended as the ability of inferring general rules from the available examples, so that new, previously unseen examples can be correctly characterized. The set of samples from which the computer is supposed to learn is called the \emph{training set}, and each sample is a sequence of numbers describing its attributes, or \emph{features}. There are three approaches in machine learning:
 
@@ -701,13 +713,13 @@ The effect size is a statistic used to compare the means of two populations, usu
 \delta=\frac{\mu_t-\mu_c}{\sigma}
 \end{equation}
 
-Where $\mu_t$ and $\mu_c$ are the means of the treatment and control groups respectively, and $\sigma$ is a standard error that can be computed in a great deal of ways. Generally, the effect size is computed to be positive when the treatment group represent an improvement over the control group.
+Where $\mu_t$ and $\mu_c$ are the means of the treatment and control groups respectively, and $\sigma$ is a normalizer that can be computed in essentially three ways; when the standard deviations of the control and treatment populations can be assumed to be equal, then $\sigma$ should be the pooled standard deviation\footnote{the average standard deviation of the control and treatment groups, weighted by the degrees of freedom (one less than the number of observations) of each group}, otherwise it should be either the standard deviation of the control or treatment group. Generally, the effect size is computed to be positive when the treatment group represent an improvement over the control group.
 
 Recently, there is a departure from the standard procedure of reporting p-values, test statistics and critical values resulting from hypothesis testing towards reporting effect sizes and their confidence intervals, in addition or in alternative to the usual statistics, see for example \cite{apa} and \cite{aera}.  However, effect sizes can be as misleading as significance testing when the assumptions underlying its expression are violated; commonly used effect size measures, such as Cohen's $d$ [citation], assume both populations are normally distributed and have the same standard deviation\footnote{a property called \emph{homoscedasticity} (contrary: heteroscedasticity)}. Alternatives that do not assume equal standard deviation exist \citep{es1,es2,es3}, but they all require normality, and generally use approximate distributions of the standard error and/or the CI (or both).
 
 In order not to assume normality, we compute the CI for the effect size using the bootstrap percentile method. This method estimates the population value of any statistic $\theta$ and its CI using a single sample of $N$ observations, by extracting $M$ new samples (with replacement) of size $N$ from it and computing $\theta$ on each resample. The population statistic is estimated by the average of the $m$ sample statistics, and the extremes of the (central) $100(1-\alpha)\%$ CI are respectively the $100(\alpha/2)$ and $100(1-\alpha/2)$ percentiles of those values. Usually $M$ is in the order of $10^2$ or $10^3$, enough to guarantee a certain degree of stability in these estimates.
 
-The sample effect size of equation \ref{eq:base_es} is not robust to outliers when it is computed with the sample means and standard deviations. Since we do not assume normality outliers are expected, therefore we use measures of location that are not heavily affected by them, namely the sample trimmed mean and the sample Winsorized standard error. The $100\gamma \%$ trimmed mean $\overline{X}_\gamma$ of a sample is simply the mean of that sample after discarding the $100\gamma\%$ largest and the $100\gamma\%$ smallest observations\footnote{this is common practice, for example, when scoring in the modern Olympiads, where the smallest and largest scores are not considered.}. The standard error of the sample trimmed mean is obtained from the Winsorized sample standard deviation; let $X_{(\gamma)}$ and $X_{(1-\gamma)}$ be the $100\gamma$ and $100(1-\gamma)$ percentiles, and define the Winsorized observations as follows:
+The sample effect size of equation \ref{eq:base_es} is not robust to outliers when it is computed with the sample means and standard deviations. Since we do not assume normality outliers are expected, therefore we use measures of location that are not heavily affected by them, namely the sample trimmed mean and the sample Winsorized standard error. The $100\gamma \%$ trimmed mean $\overline{X}_\gamma$ of a sample is simply the mean of that sample after discarding the $100\gamma\%$ largest and the $100\gamma\%$ smallest observations\footnote{this is common practice, for example, when scoring in the modern Olympiads, where the smallest and largest scores are not considered.}; a common value for $\gamma$ is 0.2. The standard error of the sample trimmed mean is obtained from the Winsorized sample standard deviation; let $X_{(\gamma)}$ and $X_{(1-\gamma)}$ be the $100\gamma$ and $100(1-\gamma)$ percentiles, and define the Winsorized observations as follows:
 
 \begin{equation}
 W_n=\begin{cases}
@@ -1146,12 +1158,12 @@ Where $f_n$ is the predicted value for the test sample $\bm x_n$ with true value
 \label{sec:success}
 A successful answer to the first research question entails finding a model whose mean squared error on any feature set, with or without trend, is smaller than the mean squared error of the MOST estimator introduced in section \ref{sec:most_fit}. The second research question is answered by comparing the different evaluation metrics on the ten feature sets (F1 to F5, with and without trend). Note that we cannot use the output of a model to obtain the importance of the features, as this method is not reliable when some of them are correlated \citep{rf_bias,rf_corr_imp}, which is a very relevant issue in our case. Trivially, wind speed and temperature at the different levels are very strongly correlated (Pearson's $r$ is above 0.95), and there are other, more complex, correlations, such as between the net radiation and the soil heat flux, or between the soil temperature and the dew point (Pearson's $r$ is respectively 0.75 and 0.79). In spite of the correlations, all these variables contribute to the flux-profile relationships, often in very nuanced ways.
 
-The differences are quantified using the effect size, as detailed in section \ref{sec:effect_size}; since we are looking for an improvement, we compute right CI for the population effect size, i.e. we only compute a (probabilistic) lower bound.
+The differences are quantified using the effect size, as detailed in section \ref{sec:effect_size}; since we are looking for an improvement, we compute the right 95\% confidence interval for the population effect size. In other words, besides providing a point estimate for the population effect size $\delta_{pop}$, we also provide an interval $[\delta_{lo}, \infty)$.
 
 \chapter{Results}
 \label{ch:results}
 
-This chapter presents the results obtained following the procedures outlined in chapter \ref{ch:method}. Section \ref{sec:eda} describes the dataset and shows some of its peculiarities, then section \ref{sec:res_gradient} identifies the best method to compute the gradient of the profile, while section \ref{sec:res_compute_most} details the computation of the momentum flux-profile relationship, and, finally, section \ref{sec:res_predict_most} presents the results of the estimators and the metrics needed to answer the research questions.
+This chapter presents the results obtained following the procedures outlined in chapter \ref{ch:method}. Section \ref{sec:eda} describes the dataset and shows some of its peculiarities, then section \ref{sec:res_gradient} identifies the best method to compute the gradient of the profile, finally section \ref{sec:most_res} shows the momentum flux-profile relationship obtained on the dataset and its predictions from the estimators we discussed previously.
 
 All the processing was done using the Python programming language\footnote{\url{https://www.python.org/}} and the usual Data Science library stack, in no particular order: Pandas \citep{pandas}, scikit-learn \citep{sklearn}, SymPy \citep{sympy}, Matplotlib \citep{matplotlib}, Seaborn\footnote{\url{https://doi.org/10.5281/zenodo.883859}}, NumPy \citep{numpy}, Jupyter Notebook \citep{jupyter}, IPython \citep{ipython}, Spark \citep{spark}, with the crucial support of Hops\footnote{\url{http://www.hops.io/}}.
 
@@ -1380,7 +1392,7 @@ To conclude, although F.D. (equation \ref{eq:fd_gradient}) is the most accurate 
 
 
 \section{Flux-Profile Relationship}
-\label{sec:res_most}
+\label{sec:most_res}
 Figure \ref{fig:most_scatter} shows the wind shear versus the instability parameter, together with the commonly accepted flux-profile relationship in green and the relationship fitted on our dataset in red. Qualitatively, the scatter plot looks sas expected, going to zero as $\xi$ decreases, linearly increasing in the $0\leq\xi\leq1$ interval, and leveling after that, possibly approaching the $\xi^{1/3}$ form proposed by \cite{sheba_phim}.
 
 negative phim with small |xi|
@@ -1440,18 +1452,16 @@ and \ref{tbl:gbr_results}, while figures \ref{fig:ridge_results_most}, \ref{fig:
 
 
 \begin{table}
-\caption{Effect sizes and their 95\% right CI comparing the MSE scores of all pairs of feature sets, for the GB estimator and for the MOST dataset. The control is on rows and the treatment is on columns, and the effect size is positive when the treatment has a smaller MSE than the control; in bold are the CIs that do not contain 0.}
-\label{tbl:fset_comparison_most}
-\input{include/fset_comparison}
-\end{table}
-
-
-\begin{table}
 \caption{Descriptive statistics of the best MSE achieved by each estimator among all feature sets with and without trend, and effect size comparing it with the MOST baseline; positive effect size denotes improvement, in bold are the CIs that do not contain 0.}
 \label{tbl:baseline_comparison}
 \input{include/baseline_comparison}
 \end{table}
 
+\begin{table}
+\caption{Effect sizes and their 95\% right CI comparing the MSE scores of all pairs of feature sets, for the GB estimator and for the MOST dataset. For each feature set, the best performing between trend and no trend was used. The control is on rows and the treatment is on columns, and the effect size is positive when the treatment has a smaller MSE than the control; in bold are the CIs that do not contain 0.}
+\label{tbl:fset_comparison_most}
+\input{include/fset_comparison}
+\end{table}
 
 \begin{table}
 \caption{Effect sizes and their 95\% right CI comparing the MSE scores of each feature set with and without trend. A positive effect size indicates that the trend reduces the error; in bold are the CIs that do not contain 0.}

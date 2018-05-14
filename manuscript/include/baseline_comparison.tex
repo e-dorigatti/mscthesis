@@ -1,16 +1,16 @@
 \setcellgapes{1ex}\makegapedcells\centering\begin{tabular*}{\textwidth}{cr|@{\extracolsep{\fill}}rrrrrrrr}
 \toprule
-     &      & \textbf{Mean} & \textbf{Std.} & \textbf{Min.} & \textbf{25\%} & \textbf{50\%} & \textbf{75\%} & \textbf{Max.} & \textbf{Effect Size} \\
-\textbf{Dataset} & \textbf{Model} &               &               &               &               &               &               &               &                      \\
+     &      & \textbf{Mean} & \textbf{Std.} & \textbf{Min.} & \textbf{50\%} & \textbf{Max.} & \textbf{Effect Size} \\
+\textbf{Dataset} & \textbf{Model} &               &               &               &               &               &                      \\
 \midrule
-\multirow{4}{*}{\textbf{Full}} & \textbf{MOST} &  0.64 &  0.04 &  0.58 &  0.63 &  0.63 &  0.64 &  0.71 &  - \\
-     & \textbf{GB} &  0.36 &  0.07 &  0.28 &  0.31 &  0.34 &  0.40 &  0.50 &  \textbf{1.97/3.87} \\
-     & \textbf{kNN} &  0.45 &  0.05 &  0.38 &  0.42 &  0.43 &  0.48 &  0.53 &  \textbf{2.29/4.39} \\
-     & \textbf{Ridge} &  0.62 &  0.08 &  0.53 &  0.57 &  0.60 &  0.64 &  0.80 &  -0.17/0.50 \\
-\cline{1-10}
-\multirow{4}{*}{\textbf{MOST}} & \textbf{MOST} &  0.32 &  0.02 &  0.29 &  0.31 &  0.32 &  0.34 &  0.34 &  - \\
-     & \textbf{GB} &  0.18 &  0.01 &  0.15 &  0.17 &  0.18 &  0.19 &  0.19 &  \textbf{6.41/10.27} \\
-     & \textbf{kNN} &  0.22 &  0.01 &  0.21 &  0.22 &  0.22 &  0.23 &  0.25 &  \textbf{4.05/6.99} \\
-     & \textbf{Ridge} &  0.27 &  0.02 &  0.24 &  0.25 &  0.27 &  0.28 &  0.31 &  \textbf{1.32/2.72} \\
+\multirowcell{8}[3ex][c]{\textbf{Full}} & \textbf{MOST} &  0.64 &  0.04 &  0.58 &  0.63 &  0.71 &  - \\
+     & \textbf{GB} &  0.36 &  0.07 &  0.28 &  0.34 &  0.50 &  \textbf{2.26/3.97} \\
+     & \textbf{kNN} &  0.45 &  0.05 &  0.38 &  0.43 &  0.53 &  \textbf{2.40/4.42} \\
+     & \textbf{Ridge} &  0.62 &  0.08 &  0.53 &  0.60 &  0.80 &  -0.20/0.52 \\
+\cline{1-8}
+\multirowcell{8}[3ex][c]{\textbf{MOST}} & \textbf{MOST} &  0.32 &  0.02 &  0.29 &  0.32 &  0.34 &  - \\
+     & \textbf{GB} &  0.18 &  0.01 &  0.15 &  0.18 &  0.19 &  \textbf{6.48/10.15} \\
+     & \textbf{kNN} &  0.22 &  0.01 &  0.21 &  0.22 &  0.25 &  \textbf{4.11/6.96} \\
+     & \textbf{Ridge} &  0.27 &  0.02 &  0.24 &  0.27 &  0.31 &  \textbf{1.29/2.69} \\
 \bottomrule
 \end{tabular*}
