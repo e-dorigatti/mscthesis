@@ -57,7 +57,7 @@ This project marks the end of my years as a student.  During all this time,
 \section*{Summary}
 The study of climate heavily relies on simulations. In order to successfully simulate the evolution of the global climate over long periods of time, the simulations have to use a relatively coarse grid, in which points are horizontally separated by several kilometers. Many important phenomena of the atmosphere, though, happen at much smaller scales, and the only way to incorporate them in the simulation is to rely on parametrizations, i.e. describing their effect based on macro parameters.
 
-The turbulence resulting from the interaction between the atmosphere and the surface is an example of such phenomena that happens at spatial and temporal scales too small to be simulated. One of the quantities of interest arising from turbulence is the momentum flux-profile relationship, which relates the transport of momentum (flux) and the change of wind speed with altitude (profile). This quantity can be computed following the Monin-Obukhov Similarity Theory, according to which it is a function of the altitude divided by a characteristic length scale derived from other turbulence parameters. However, this theory is only applicable in a restricted range of conditions, and produces predictions that are accurate only up to 10-20\%.
+The turbulence resulting from the interaction between the atmosphere and the surface is an example of such phenomena that happens at spatial and temporal scales too small to be simulated. One of the quantities of interest arising from turbulence is the momentum flux-profile relationship, which relates the transport of momentum (flux) and the change of wind speed with altitude (profile). This quantity can be computed following the Monin-Obukhov Similarity Theory, according to which it is a function of the altitude divided by a characteristic length scale derived from other turbulence parameters. However, this theory is only applicable in a restricted range of conditions, and produces predictions that are accurate only up to 20-30\%.
 
 The goal of this thesis is to compute the momentum flux-profile relationship using only macro weather parameters, which are readily available in climate simulations; this is done using Data Mining techniques on 17 years of weather data collected from the Cabauw meteorological tower in the Netherlands. Moreover, we asses the impact of different sets of features on the prediction error.
 
@@ -88,7 +88,7 @@ An even broader field, called \emph{Data Mining}, is concerned with finding inte
 \label{sec:problem}
 One important issues in the study of the atmospheric boundary layer is the derivation of flux-profile relationships for wind and temperature: they essentially relate the transport of momentum and heat by the turbulence (flux) with the change of wind speed/temperature with altitude (profile). The flux of momentum is the rate of change of momentum (mass times velocity) per unit of area. Keeping the area constant, the momentum flux increases if the mass of the air increases (e.g. because of changes in temperature, pressure, or humidity) or if the speed of wind increases.
 
-The state of the art relationships are defined by the Monin-Obukhov Similarity theory in terms of the instability parameter $\xi$, computed as the height above surface scaled by turbulence due to horizontal wind and vertical air movement due to variations in heat. Difficulties in measurements of relevant quantities make this theory accurate only up to 10-20\%, and applicable in a restricted set of conditions.
+The state of the art relationships are defined by the Monin-Obukhov Similarity theory in terms of the instability parameter $\xi$, computed as the height above surface scaled by turbulence due to horizontal wind and vertical air movement due to variations in heat. Difficulties in measurements of relevant quantities make this theory accurate only up to 20-30\% \citep{basicatm}, and applicable in a restricted set of conditions.
 
 \cite{sheba} shows that, at least in difficult conditions, several simulation models produce flux estimates that are highly inaccurate, presenting low correlation (mostly below 0.3) and errors that are as large as the fluxes themselves. Since errors in the simulation accumulate over time, even slight improvements can greatly improve the accuracy of the results after years of simulated time. Improved flux-profile relationship can, therefore, yield more accurate estimates of the fluxes.
 
@@ -107,7 +107,7 @@ Affirmative answers to the research questions would contribute to improve the qu
 
 
 \section{Goals}
-The first research question is answered by proposing one or more data mining methods, i.e. feature selection and extraction, a model and its parameters, that obtain sufficient predictive performance, whereas the second research question is answered by a comparison of the performance of the models when using certain subsets of features.
+The first research question is answered by proposing one or more Data Mining methods, i.e. feature selection and extraction, and a Machine Learning model, that obtain sufficient predictive performance, whereas the second research question is answered by a comparison of the performance of the models when using certain subsets of features.
 
 
 \section{Ethics and Sustainability}
@@ -401,10 +401,6 @@ The solution to this problem is to repeatedly perform this partitioning procedur
 \item In $k$-fold cross validation \citep{kfold}, $D$ is partitioned in $k$ subsets, and each of them is used in turn as validation set, while the others are used for training. This produces $k$ estimates of the true risk, coming from the $k$ subsets.
 \end{itemize}
 
-Regardless of the method used, the final estimate of the performance is the average of the estimates obtained from the individual trials. Every method has different properties regarding both the bias and the variance of the estimates, and there is considerable controversy on which method should be used in which situation. For example, \cite{cv_bootstrap} recommends using 10-fold CV for comparing models, because, although its estimate of the performance is biased, it has lower variance compared to bootstrapping; however, \cite{no_unbiased_cv} show that it is not possible to obtain an universal unbiased estimate of the variance of $k$-fold CV. \cite{cvmyths} further discusses this issue, and debunks some myths and commonly held misconceptions about CV, including the belief, consequent \cite{cv_bootstrap}, that 10-fold cross validation is always the best choice. Generally, there is a tradeoff in choosing the value of $k$, as high values yield estimates with lower bias, but higher variance \citep{cv_survey}, and are more computationally intensive.
-
-Cross validation can be used to perform two distinct tasks: \emph{estimation} and \emph{identification}. The goal of the former is to accurately estimate the best performance attainable on a prediction problem, whereas the goal of the latter is to identify the parameters and hyper-parameters that give rise to the best possible estimators. Consequently, when the goal is estimation we want to eliminate bias, whereas in identification we need low variance. Estimation is best performed with nested CV\citep{nested_cv_stone,nested_cv_varma}, in which there is an inner CV loop done on every training fold of the outer CV loop. This procedure is formalized in algorithm \ref{alg:nested_cv}, where random hyper-parameter search \citep{random_search} is used in the inner CV loop to find good values for the hyper-parameters. \cite{cv_pitfalls} advocates for repeating nested CV, since plain nested CV produces estimates with fairly high variance, but the computational cost of such procedure can be prohibitively high.
-
 
 \begin{algorithm}
 \caption{Nested cross validation with random hyper-parameter search.}
@@ -458,6 +454,10 @@ Cross validation can be used to perform two distinct tasks: \emph{estimation} an
 \end{algorithmic}
 \end{algorithm}
 
+Regardless of the method used, the final estimate of the performance is the average of the estimates obtained from the individual trials. Every method has different properties regarding both the bias and the variance of the estimates, and there is considerable controversy on which method should be used in which situation. For example, \cite{cv_bootstrap} recommends using 10-fold CV for comparing models, because, although its estimate of the performance is biased, it has lower variance compared to bootstrapping; however, \cite{no_unbiased_cv} show that it is not possible to obtain an universal unbiased estimate of the variance of $k$-fold CV. \cite{cvmyths} further discusses this issue, and debunks some myths and commonly held misconceptions about CV, including the belief, consequent \cite{cv_bootstrap}, that 10-fold cross validation is always the best choice. Generally, there is a tradeoff in choosing the value of $k$, as high values yield estimates with lower bias, but higher variance \citep{cv_survey}, and are more computationally intensive.
+
+Cross validation can be used to perform two distinct tasks: \emph{estimation} and \emph{identification}. The goal of the former is to accurately estimate the best performance attainable on a prediction problem, whereas the goal of the latter is to identify the parameters and hyper-parameters that give rise to the best possible estimators. Consequently, when the goal is estimation we want to eliminate bias, whereas in identification we need low variance. Estimation is best performed with nested CV\citep{nested_cv_stone,nested_cv_varma}, in which there is an inner CV loop done on every training fold of the outer CV loop. This procedure is formalized in algorithm \ref{alg:nested_cv}, where random hyper-parameter search \citep{random_search} is used in the inner CV loop to find good values for the hyper-parameters. \cite{cv_pitfalls} advocates for repeating nested CV, since plain nested CV produces estimates with fairly high variance, but the computational cost of such procedure can be prohibitively high.
+
 
 \subsection{Parameter Estimation for Regression}
 \label{sec:regression_fit}
@@ -485,7 +485,7 @@ p(t\vert \bm x, \bm X, \bm t)=\int
 p(t\vert\bm x,\bm\Theta)\cdot p(\bm\Theta\vert \bm t, \bm X)\ \text{d}\bm\Theta 
 \end{equation}
 
-In practice, it is not feasible to compute this integral, and its value is dominated by the values of $\bm\theta$ close to the one that maximizes equation \ref{eq:likelihood} anyways; this is the gist of \emph{maximum likelihood estimation} (MLE). Note that, since the goal is to predict $y_n$, there is a high probability that the "true" parameters would \emph{not} be the ones with maximum likelihood. When a model learns the noise in the training data, it cannot generalize well to new, unseen data, because the noise is random. This situation is known as \emph{overfitting}, and tends to happen when the model is too complex relative to the amount of data available for training, and is related to high estimation error mentioned previously.
+In practice, it is not feasible to compute this integral, and its value is dominated by the values of $\bm\Theta$ close to the one that maximizes equation \ref{eq:likelihood} anyways; this is the gist of \emph{maximum likelihood estimation} (MLE). Note that, since the goal is to predict $y_n$, there is a high probability that the "true" parameters would \emph{not} be the ones with maximum likelihood. When a model learns the noise in the training data, it cannot generalize well to new, unseen data, because the noise is random. This situation is known as \emph{overfitting}, and tends to happen when the model is too complex relative to the amount of data available for training, and is related to high estimation error mentioned previously.
 
 The risk of overfitting can be reduced with a number of \emph{regularization} strategies. A widely used strategy consists in including a prior distribution on the parameters of the model, and maximizing their posterior distribution, computed using Bayes theorem:
 
@@ -500,7 +500,7 @@ p(\bm\Theta\vert\bm t, \bm X)&=\frac{p(\bm X, \bm t\vert\bm\Theta)\cdot p(\bm\Th
 \end{align}
 
 
-where we removed $p(\bm X,\bm t)$ and $p(\bm X\vert\bm\Theta)=p(\bm X)$ because they are constant for a given dataset, and we are not interested in the exact probability, but where it reaches its maximum value. This parameter estimation procedure is called \emph{maximum a posteriori} (MAP). Two commonly used prior distributions are the multivariate Laplace and the multivariate Normal, leading respectively to L1 and L2 regularization, when centered and symmetrical/spherical.
+where we removed $p(\bm X,\bm t)$ and $p(\bm X\vert\bm\Theta)=p(\bm X)$ because they are constant for a given dataset, and we are not interested in the exact probability, but where it reaches its maximum value. This parameter estimation procedure is called \emph{maximum a posteriori} (MAP). Two commonly used prior distributions are the multivariate Laplace and the multivariate Normal, leading respectively to L1 and L2 regularization, when centered and symmetrical/spherical. Note that MAP reduces to MLE when we assume an uniform prior $p(\bm\Theta)$.
 
 The maximization of the posterior can be done conveniently by maximizing its logarithm; this gives expressions that are easier to handle analytically, and give less numerical problems when computed. The MAP problem can be formulated as follows:
 
@@ -563,7 +563,7 @@ A linear regression model has the form $f(\bm x_n;\bm\theta)=\bm\theta^\intercal
 Notice that the term \emph{linear} in linear regression refers to linearity with respect to the parameters, not the features. In fact, new features can be added through the use of a possibly non-linear feature mapping $\phi:\mathbb{R}^D\rightarrow\mathbb{R}^M$, such that $\bm x^\prime_n=\phi(\bm x_n)^\intercal=\left[\phi_1(\bm x_n),\ldots,\phi_M(\bm x_n)\right]^\intercal$. Then, the model parameters can be fitted to the augmented training set $\bm\Phi=\bm X^\prime$, where $\bm\Phi$ is called the \emph{design matrix}. A typical feature added is a bias $\phi_1(\bm x)=1$.
 
 \subsection{k-Nearest Neighbors}
-The k-nearest neighbor model \cite{knn} predicts a value for a sample $\bm x$ by averaging the target values of the $K$ training samples that are closest to $\bm x$, possibly weighted by distance or some other metric. Let $\bm t_{(1)},\ldots,\bm t_{(k)}$ be the target values of the $K$ training samples closest to $\bm x$ according to a distance metric $d:\mathbb{R}^D\rightarrow\mathbb{R}$, then we have
+The k-nearest neighbor model \cite{knn} predicts a value for a sample $\bm x$ by averaging the target values of the $K$ training samples that are closest to $\bm x$, possibly weighted by distance or some other metric. Let $\bm t_{(1)},\ldots,\bm t_{(K)}$ be the target values of the $K$ training samples closest to $\bm x$ according to a distance metric $d:\mathbb{R}^D\rightarrow\mathbb{R}$, then we have
 
 \begin{equation}
 f(\bm x)=\sum_{k=1}^K w_{(k)}\cdot\bm t_{(k)}
@@ -580,7 +580,7 @@ Gradient boosting \citep{gradientboosting} is a general method of combining seve
 f_M(\bm x)=\sum_{m=1}^M \beta_m h(\bm x;\bm\theta_m)
 \end{equation}
 
-Each model $h_m$ and its weight $\beta_m$ are found by improving the predictions of $f_{m-1}$:
+Each model parameters $\bm\theta_m$ and the weight $\beta_m$ are found by improving the predictions of $f_{m-1}$:
 
 \begin{equation}
 \label{eq:gboostjoint}
@@ -589,7 +589,7 @@ t_n, f_{m-1}(\bm x_n)+\beta h(\bm x_n,\bm\theta)
 \right)
 \end{equation}
 
-Where $L$ is the loss function, such as the squared error introduced previously. This optimization problem can be challenging, depending on the specific form of $h_m$ and $L$. Actually, equation \ref{eq:gboostjoint} is equivalent to gradient descent in function space\footnote{meaning that you actually modify the function itself, not its parameters, as we did in section \ref{sec:regression_fit}. This provided that the parametric function $h$ is able to represent the gradient} \citep{boostinggd,greedyboosting}. This gradient can be computed explicitly on the $N$ training points, but we do not know how to compute it on the other points that are not in the training set\footnote{this is the essence of gradient descent in function space, since a function is defined for every point (at least the ones we consider in Machine Learning)}. The fundamental idea is to find a model that can predict this gradient, by training it on the dataset. This model is exactly $h$ with parameters $\bm\theta_m$:
+Where $L$ is the loss function, such as the squared error introduced previously. This optimization problem can be challenging, depending on the specific form of $h$ and $L$. Actually, equation \ref{eq:gboostjoint} is equivalent to gradient descent in function space\footnote{this means that you actually modify the function itself, not its parameters, as we did in section \ref{sec:regression_fit}. This is true provided that the parametric function $h$ is able to represent the gradient} \citep{boostinggd,greedyboosting}. This gradient can be computed explicitly on the $N$ training points, but we do not know how to compute it on the other points that are not in the training set\footnote{this is the essence of gradient descent in function space, since a function is defined for every point (at least the functions we consider in Machine Learning are)}. The fundamental idea is to find a model that can predict this gradient, by training it on the dataset. This model is exactly $h$ with parameters $\bm\theta_m$:
 
 \begin{equation}
 \label{eq:gbtheta}
@@ -624,7 +624,7 @@ L_\delta(t_n,y_n)=\begin{cases}
 \end{cases}
 \end{equation}
 
-Which is robust to outliers as least absolute deviation, but does not penalize small errors too much, like least squares. WIn this case,
+Which is robust to outliers as least absolute deviation, but does not penalize small errors too much, like least squares. In this case,
 
 \begin{equation}
 -g_m(\bm x_n)=\begin{cases}
@@ -637,7 +637,7 @@ In summary, the gradient boosting algorithm starts with a simple prediction $f_0
 
 A popular choice is to use decision trees for $h$. Often, an additional \emph{learning rate} parameter is introduced to shrink the $\beta$ coefficients. Other hyper-parameters for this algorithm are $M$, the the number of boosting steps to perform, the number of examples to use to compute equations \ref{eq:gbtheta} and \ref{eq:gbbeta}, the number of features used to build the trees, their maximum depth, and so on.
 
-A popular extension to vanilla gradient boosting is \emph{extreme gradient boosting} \citep{xgboost}, which essentially adds regularization to the loss function, helping to reduce overfitting, and provides better scalability.
+A popular extension to vanilla gradient boosting is \emph{extreme gradient boosting} \citep{xgboost}, which essentially adds both L1 and L2 regularization to the loss function, helping to reduce overfitting, and provides better scalability.
 
 \subsection{Gaussian Processes}
 A Gaussian Process (GP) is a collection of an infinite number of random variables, such that the joint distribution of any finite subset of them is Gaussian. Intuitively, this allows us to define a distribution over functions, since there is a random variable for every point of the input space. We can sample a function out of a GP by obtaining the random variables at the points of interest; their distribution is a (multivariate) Gaussian, with a certain mean and covariance, and a sample from this distribution contains the values of the sampled function at the points we queried. This process is expressed as follows:
@@ -647,7 +647,7 @@ A Gaussian Process (GP) is a collection of an infinite number of random variable
 p(\bm y\vert\bm X)=\int p(\bm y\vert \bm f)p(\bm f\vert\bm X)\text{d}f
 \end{equation}
 
-Where $\bm X$ are the query points, $\bm f$ a function sampled from the GP, and $\bm y$ the values of the function. By definition of GP, all the distributions in equation \ref{eq:gp_marg} are Gaussian, since the Gaussian distribution is self-conjugate\footnote{referring to equation \ref{eq:map}, the prior is said to be conjugate to the likelihood if the posterior has the same algebraic form of the prior; the Gaussian distribution is self-conjugate, because a Gaussian prior with a Gaussian likelihood results in a Gaussian posterior. Conjugate distributions are mostly used for convenience.}. A GP is just a way of computing the mean and covariance of $\bm f$ given $\bm X$, i.e. $p(\bm f\vert\bm X)$; $\bm f$ is then a multivariate Gaussian, which we can manipulate as usual.
+Where $\bm X$ are the query points, $\bm f$ a function sampled from the GP, and $\bm y$ the value of the function at the query points. By definition of GP, all the distributions in equation \ref{eq:gp_marg} are Gaussian, since the Gaussian distribution is self-conjugate\footnote{referring to equation \ref{eq:map}, the prior is said to be conjugate to the likelihood if the posterior has the same algebraic form of the prior; the Gaussian distribution is self-conjugate, because a Gaussian prior with a Gaussian likelihood results in a Gaussian posterior. Conjugate distributions are mostly used for algebraic convenience.}. Simplistically, a GP is just a way of computing the mean and covariance of $\bm f$ given $\bm X$, i.e. $p(\bm f\vert\bm X)$; $\bm f$ is then a multivariate Gaussian, which we can manipulate as usual.
 
 Consider the setting of ridge regression described in section \ref{sec:ridge}, where $\bm y=f(\bm X;\bm\theta)=\bm\Phi\bm\theta$, with $\bm\Phi$ being the design matrix. Recall that in section \ref{sec:regression_fit} we introduced the Maximum A Posteriori estimation method by using a prior distribution on the model parameters $\bm\theta$; this makes $\bm y$ a random variable itself. If we use an isotropic Gaussian for $\bm\theta$, we have that the distribution of $\bm y$ is again Gaussian with mean
 
@@ -677,7 +677,7 @@ where $\Vert\bm x-\bm x^\prime\Vert^2=\sum_d(\bm x_d-\bm x_d^\prime)^2$ is the s
 k(\bm x, \bm x^\prime)=\sigma^2\bm x^\intercal\bm x^\prime
 \end{equation}
 
-Furthermore, certain operations on a kernel generate another valid kernel, and kernels can be combined in certain ways to produce a new kernel. For example, the product of a kernel with a positive constant is a valid kernel, the sum and product of two kernels are valid kernels, etc. Generally, a kernel can have parameters, which we denote, as usual, as $\bm\theta$.
+Furthermore, certain operations on a kernel generate another valid kernel, and kernels can be combined in certain ways to produce new kernels. For example, the product of a kernel with a positive constant is a valid kernel, the sum and product of two kernels are valid kernels, etc. Generally, a kernel can have parameters, which we denote, as usual, as $\bm\theta$.
 
 In order to use a Gaussian Process for inference (in the regression setting), we need to compute the predictive distribution $p(\bm y\vert\bm X, \bm t, \bm X^*,\bm\theta) $, where $\bm X^*$ is the matrix containing the vectors for which we want to predict the value $\bm y$. We know that the predictive distribution is Gaussian, therefore its mean $\bm\mu_{\bm y}$ and covariance $\bm\Sigma_{\bm y}$ can be obtained relatively easily, resulting in:
 
@@ -692,7 +692,7 @@ In order to use a Gaussian Process for inference (in the regression setting), we
 
 Where $K_{\bm\theta}(\bm A,\bm B)$ is a matrix whose $(i,j)$ cell equals to $k(A_i,B_j;\bm\theta)$. From these formulas, note that in order to use GPs, one needs to remember the kernel matrix, of size $N^2$ and invert it, an operation which has a computational complexity of $O(N^3)$; this makes GPs, and any method based on kernels, hard to scale up.
 
-Up until now, we assumed the kernel was fixed, and treated $\bm\theta$ as hyper-parameters. We could use one of the methods described in section \ref{sec:cv} to find their values, but the Bayesian framework that we used to derive GP allows us to find $\bm\theta$, too, by maximizing $\log p(\bm t\vert\bm X,\bm\theta)$\footnote{obtained as in equation \ref{eq:gp_marg}, usually called log-marginal-likelihood, since we marginalized $\bm f$} with respect to $\bm\theta$. This function often has many local maxima, and is usually optimized by means of gradient descent.
+Up until now, we assumed the kernel was fixed, and treated $\bm\theta$ as hyper-parameters. We could use one of the cross validation methods described in section \ref{sec:cv} to find their values, but the Bayesian framework that we used to derive GP allows us to find $\bm\theta$, too, by maximizing $\log p(\bm t\vert\bm X,\bm\theta)$\footnote{obtained as in equation \ref{eq:gp_marg}, usually called log-marginal-likelihood, since we marginalized $\bm f$} with respect to $\bm\theta$. This function often has many local maxima, and is usually optimized by means of gradient descent.
 
 Finally, the derivative of a GP is itself a GP, whose mean is obtained simply by deriving equation \ref{eq:gp_pred_mean} \citep{gp_diff}:
 
@@ -713,13 +713,13 @@ The effect size is a statistic used to compare the means of two populations, usu
 \delta=\frac{\mu_t-\mu_c}{\sigma}
 \end{equation}
 
-Where $\mu_t$ and $\mu_c$ are the means of the treatment and control groups respectively, and $\sigma$ is a normalizer that can be computed in essentially three ways; when the standard deviations of the control and treatment populations can be assumed to be equal, then $\sigma$ should be the pooled standard deviation\footnote{the average standard deviation of the control and treatment groups, weighted by the degrees of freedom (one less than the number of observations) of each group}, otherwise it should be either the standard deviation of the control or treatment group. Generally, the effect size is computed to be positive when the treatment group represent an improvement over the control group.
+Where $\mu_t$ and $\mu_c$ are the means of the treatment and control groups respectively, and $\sigma$ is a normalizer that can be computed in essentially three ways: when the standard deviations of the control and treatment populations can be assumed to be equal, then $\sigma$ should be the pooled standard deviation\footnote{the average standard deviation of the control and treatment groups, weighted by the degrees of freedom (one less than the number of observations) of each group}, otherwise it should be the standard deviation of either the control or treatment group. Generally, the effect size is computed to be positive when the treatment group represent an improvement over the control group.
 
 Recently, there is a departure from the standard procedure of reporting p-values, test statistics and critical values resulting from hypothesis testing towards reporting effect sizes and their confidence intervals, in addition or in alternative to the usual statistics, see for example \cite{apa} and \cite{aera}.  However, effect sizes can be as misleading as significance testing when the assumptions underlying its expression are violated; commonly used effect size measures, such as Cohen's $d$ [citation], assume both populations are normally distributed and have the same standard deviation\footnote{a property called \emph{homoscedasticity} (contrary: heteroscedasticity)}. Alternatives that do not assume equal standard deviation exist \citep{es1,es2,es3}, but they all require normality, and generally use approximate distributions of the standard error and/or the CI (or both).
 
-In order not to assume normality, we compute the CI for the effect size using the bootstrap percentile method. This method estimates the population value of any statistic $\theta$ and its CI using a single sample of $N$ observations, by extracting $M$ new samples (with replacement) of size $N$ from it and computing $\theta$ on each resample. The population statistic is estimated by the average of the $m$ sample statistics, and the extremes of the (central) $100(1-\alpha)\%$ CI are respectively the $100(\alpha/2)$ and $100(1-\alpha/2)$ percentiles of those values. Usually $M$ is in the order of $10^2$ or $10^3$, enough to guarantee a certain degree of stability in these estimates.
+In order not to assume normality, we compute the CI for the effect size using the bootstrap percentile method. This method estimates the population value of any statistic $\theta$ and its CI using a single sample of $N$ observations, by extracting $M$ new samples (with replacement) of size $N$ from it and computing $\theta$ on each resample. The population statistic is estimated by the average of the $M$ sample statistics, and the extremes of the (central) $100(1-\alpha)\%$ CI are respectively the $100(\alpha/2)$ and $100(1-\alpha/2)$ percentiles of those values. Usually $M$ is in the order of $10^2$ or $10^3$, enough to guarantee a certain degree of stability in these estimates.
 
-The sample effect size of equation \ref{eq:base_es} is not robust to outliers when it is computed with the sample means and standard deviations. Since we do not assume normality outliers are expected, therefore we use measures of location that are not heavily affected by them, namely the sample trimmed mean and the sample Winsorized standard error. The $100\gamma \%$ trimmed mean $\overline{X}_\gamma$ of a sample is simply the mean of that sample after discarding the $100\gamma\%$ largest and the $100\gamma\%$ smallest observations\footnote{this is common practice, for example, when scoring in the modern Olympiads, where the smallest and largest scores are not considered.}; a common value for $\gamma$ is 0.2. The standard error of the sample trimmed mean is obtained from the Winsorized sample standard deviation; let $X_{(\gamma)}$ and $X_{(1-\gamma)}$ be the $100\gamma$ and $100(1-\gamma)$ percentiles, and define the Winsorized observations as follows:
+The sample effect size of equation \ref{eq:base_es} is not robust to outliers when it is computed with the sample means and standard deviations. Since we do not assume normality outliers are expected, therefore we use measures of location that are not heavily affected by them: the sample trimmed mean and the sample Winsorized standard error. The $100\gamma \%$ trimmed mean $\overline{X}_\gamma$ of a sample $X_1,\ldots,X_N$ is simply the mean of that sample after discarding the $100\gamma\%$ largest and the $100\gamma\%$ smallest observations\footnote{this is common practice, for example, when scoring in sports such as the modern Olympiads, where the smallest and largest scores are discarded.}; a common value for $\gamma$ is 0.2. The standard error of the sample trimmed mean is obtained from the Winsorized sample standard deviation; let $X_{(\gamma)}$ and $X_{(1-\gamma)}$ be the $100\gamma$ and $100(1-\gamma)$ percentiles, and define the Winsorized observations as follows:
 
 \begin{equation}
 W_n=\begin{cases}
@@ -752,7 +752,7 @@ The standard error of $\overline{X}_\gamma$ is the usual $(\text{Var}[\overline{
 \begin{equation}
 \label{eq:effect_size}
 \hat{\delta}=(\overline{T}_\gamma-\overline{C}_\gamma)\cdot\sqrt{\frac{N}{\text{Var}[\overline{T}_\gamma]}}
-=(1-2\gamma)\frac{\overline{T}_\gamma-\overline{C}_\gamma}{\hat{\sigma}_W^2}
+=(1-2\gamma)\frac{\overline{T}_\gamma-\overline{C}_\gamma}{\hat{\sigma}_W}
 \end{equation}
 
 where $T_1,\ldots,T_N$ and $C_1,\ldots,C_M$ are the \emph{independent} samples of treatment and control groups respectively. See  \cite{robust_stat} and \cite{modern_stat}for an introduction to robust statistical methods, including the ones just described.
@@ -777,12 +777,7 @@ where $T_1,\ldots,T_N$ and $C_1,\ldots,C_M$ are the \emph{independent} samples o
 \end{figure}
 
 
-Figure \ref{fig:effect_size} shows the effect size computed according to \ref{eq:effect_size}, and tries to provide an intuitive explanation as to why we normalize with the treatment standard deviation. Note that we cannot use an average (weighted or unweighted) as normalizer since it corresponds to assuming homogeneity of \emph{population} variances, an assumption that we wanted to avoid in the first place. Since the goal is to assess the improvement caused by the treatment, it would not make sense to normalize with the standard deviation of the control group, because it would not allow us to discriminate between treatments with the same mean but different standard deviations; given two treatments with the same mean, we prefer the one with the smaller standard deviation. Of course, this reasoning can be applied in the opposite direction: normalizing by the control standard deviation would give a larger effect size when the control group has a smaller standard deviation, which is certainly a desirable property, since a control group with a smaller standard deviation is more clearly separated from the treatment. However, the control group is considered to be fixed, and we will never need to compare two control groups against the same treatment.
-
-
-%https://digitalcommons.wayne.edu/cgi/viewcontent.cgi?article=1256&context=jmasm
-%http://fmipa.umri.ac.id/wp-content/uploads/2016/03/Rand_R._Wilcox_Fundamentals_of_Modern_StatisticaBookZZ.org_.pdf
-%http://psych.colorado.edu/~willcutt/pdfs/Wilcox_2003.pdf
+Figure \ref{fig:effect_size} shows the effect size computed according to \ref{eq:effect_size}, and tries to provide an intuitive explanation as to why we normalize with the treatment standard deviation. Note that we cannot use an average (weighted or unweighted) as normalizer since it corresponds to assuming homogeneity of \emph{population} variances, an assumption that we wanted to avoid in the first place. Since the goal is to assess the improvement caused by the treatment, it would not make sense to normalize with the standard deviation of the control group, because it would not allow us to discriminate between treatments with the same mean but different standard deviations: given two treatments with the same mean, we prefer the one with the smaller standard deviation. Of course, this reasoning can be applied in the opposite direction: normalizing by the control standard deviation would give a larger effect size when the control group has a smaller standard deviation, which is certainly a desirable property, since a control group with a smaller standard deviation is more clearly separated from the treatment. However, we consider the control group to be fixed, and we will never need to compare two control groups against the same treatment.
 
 
 
@@ -796,13 +791,13 @@ The Cabauw Experimental Site for Atmospheric Research\footnote{\url{http://www.c
 
 The observatory is surrounded by fields and no urban agglomerations is present within 15 kilometers; the land is flat with changes of altitude within a few meters over 20 kilometers. The main mast is 213 meters high and offers measurement levels every 20 meters; at each level there are three booms of length 10 meters that allow observations as unobstructed by the main mast as possible, although some disturbance remains. There are three additional smaller masts of height 10 and 20 meters located close to the main mast, in order to obtain undisturbed measurements at the lower levels, and facilities to perform soil and surface observations.
 
-The main focus of this project is on wind and temperature profiles, and the turbulent fluxes of sensible and latent heat. Additional variables, such as temperature and humidity, are needed to compute quantities of interest, most importantly the Obukhov length, and as possible predictors for the universal functions. There is one measurement for each variable every ten minutes, and missing measurements are gap-filled with a number of techniques. The data collected is always visually validated by an operator, which marks suspect or invalid sections of data.
+The main focus of this project is on the wind profile and the turbulent fluxes of sensible and latent heat. Additional variables, such as temperature and humidity, are needed to compute quantities of interest, most importantly the Obukhov length, and as possible predictors for the universal functions. There is one measurement for each variable every ten minutes, and missing measurements are gap-filled with a number of techniques. The data collected is always visually validated by an operator, which marks suspect or invalid sections of data.
 
 Following, we describe the instruments used to collect the measurements (section \ref{sec:measurement}), the techniques used to impute missing or invalid measurements (section \ref{sec:gap_filling}), and the criteria applied to filter low quality data (section \ref{sec:data_filter}).
 
 \subsection{Measurement}
 \label{sec:measurement}
-The Cesar observatory provides full information regarding data collection\footnote{\url{http://projects.knmi.nl/cabauw/insitu/observations/documentation}}, see in particular \cite{cabauwinsitu}, what follows is a brief summary of the most relevant sections.
+The Cesar observatory provides full information regarding data collection\footnote{\url{http://projects.knmi.nl/cabauw/insitu/observations/documentation}}, see in particular \cite{cabauwinsitu}, what follows is a brief summary of the sections in that document that are relevant for this work.
 
 \subsubsection{Wind Speed Measurement}
 Wind speed and direction are measured at heights of 200, 140, 80, 40, 20 and 10 meters, in either two or all three booms available. The wind vane that measures direction has a resolution of $1.5^\circ$, and the cup anemometer that measures wind speed has an accuracy of the largest between 1\% and \SI{0.1}{\meter\per\second}. \cite{windinstr} studied the threshold sensitivity of both instruments, and fount it lower than \SI{0.5}{\meter\per\second}, even though the measurements are inaccurate up to \SI{3}{\meter\per\second}.
@@ -911,19 +906,20 @@ Following other works in this field, such as \cite{boulder} and \cite{hogstrom88
 \item The wind speed $\overline{u}$ is lower than \SI{1}{\meter\per\second}.
 \end{itemize}
 
+The reason for this is that the measures are too inaccurate to be of use.
 
-\section{Flux-Profile Relationships}
+
+\section{Momentum Flux-Profile Relationship}
 \label{sec:profiles}
 
-Since the turbulent fluxes and the friction velocity are measured at the surface level, we can compute the flux-profile relationships only at 10, 20 and 40 meters, because these quantities can be assumed constant only within the surface layer. It is very hard to know the exact height of the surface layer, because it depends on the weather and no exact formulas are known, but it is usually assumed to be 10\% as high as the boundary layer. Based on the typical height of the boundary layer, the surface layer is often higher than 40 meters and lower than 80. \cite{cabauw_z0} indeed reports that a large number of observations from Cabauw at \SI{20}{\meter} are inside the surface layer, the \SI{100}{\meter} level is already outside of the surface layer, and \cite{boulder} used the observations at \SI{50}{\meter} in their analysis, but not those at \SI{100}{\meter}. Moreover, \cite{cabauw60m} reported that the observations at \SI{60}{\meter} are outside of the surface layer only in the early morning; the height of the boundary layer starts growing at around 6 AM, and reaches \SI{600}{\meter} between 9.30 AM and 10.30 AM, and reaches its maximum height, between \SI{1800}{\meter} and \SI{2000}{\meter}, at the end of the day Unfortunately, there is no mention of the \SI{40}{\meter} level in \cite{cabauw60m}. Note that these measures were obtained in May, therefore they are likely to be smaller in Winter, and larger in the Summer.
+Since the turbulent fluxes and the friction velocity are measured at the surface level, we can compute the momentum flux-profile relationships only at 10, 20 and 40 meters, because these quantities can be assumed constant only within the surface layer. It is very hard to know the exact height of the surface layer, because it depends on the weather and no exact formulas are known, but it is usually assumed to be 10\% as high as the boundary layer. Based on the typical height of the boundary layer, the surface layer is often higher than 40 meters and lower than 80. \cite{cabauw_z0} indeed reports that a large number of observations from Cabauw at \SI{20}{\meter} are inside the surface layer, the \SI{100}{\meter} level is already outside of the surface layer, and \cite{boulder} used the observations at \SI{50}{\meter} in their analysis, but not those at \SI{100}{\meter}. Moreover, \cite{cabauw60m} reported that the observations at \SI{60}{\meter} are outside of the surface layer only in the early morning; the height of the boundary layer starts growing at around 6 AM, and reaches \SI{600}{\meter} between 9.30 AM and 10.30 AM, and reaches its maximum height, between \SI{1800}{\meter} and \SI{2000}{\meter}, at the end of the day Unfortunately, there is no mention of the \SI{40}{\meter} level in \cite{cabauw60m}. Note that these measures were obtained in May, therefore they are likely to be smaller in Winter, and larger in the Summer. This evidence seems to support the fact that \SI{40}{\meter} is inside the surface layer most of the time.
 
 \subsection{Obukhov Length}
 
 The Obukhov length is computed as in equation \ref{eq:most_l}, reported here:
 
 $$
-L=-\frac{u_*^3}{\kappa\frac{g}{\theta_v}\frac{Q}{\rho c_\rho}}
-=-\frac{u_*^3 T_v}{\kappa g \overline{w'\theta_v}}
+L=-\frac{u_*^3 T_v}{\kappa g \overline{w'\theta_v}}
 $$
 
 The flux of virtual potential temperature can be computed following the formulas in section \ref{sec:most}, as the data contains all the necessary quantities; $u_*$ is given, as well as the specific humidity and the pressure. The Obukhov length is computed at each height level using the corresponding air temperature measurement, and the fluxes measured at the surface.
@@ -931,17 +927,13 @@ The flux of virtual potential temperature can be computed following the formulas
 
 \subsection{Gradients}
 \label{sec:gradients}
-The flux-profile relationships are listed in equations \ref{eq:phi_m} and \ref{eq:phi_h}, and are reported here for the reader's convenience:
+The momentum flux-profile relationship is in equation \ref{eq:phi_m}, reported here for the reader's convenience:
 
 $$
 \phi_m(\xi)=\frac{\partial\overline{u}}{\partial z}\frac{kz}{u_*}
 $$
 
-$$
-\phi_h(\xi)=\frac{\partial\overline{\theta_v}}{\partial z}\frac{kz}{T_*}
-$$
-
-In order to compute them from the data, we need to compute the derivative of the wind speed, for $\phi_m$, and of the virtual temperature, for $\phi_h$. In general, the derivative can be obtained by fitting a model on the observations, and computing the derivative using the model. The simplest option is to use a piecewise linear function that passes through the measurements; let the observations be sorted by height and $y_i$ the measurement at height $z_i$, then for $z\in[z_i,z_{i+1}]$ we have:
+In order to compute it from the data, we need to compute the derivative of the wind speed with respect to the altitude. In general, the derivative can be obtained by fitting a model on the observations, and computing the derivative using the model. The simplest option is to use a piecewise linear function that passes through the measurements; let the observations be sorted by height and $y_i$ the measurement at height $z_i$, then for $z\in[z_i,z_{i+1}]$ we have:
 
 \begin{equation}
 f(z)=y_i+(z-z_i)\frac{y_{i+1}-y_i}{z_{i+1}-z_i}
@@ -985,10 +977,10 @@ Finally, a third method of computing the gradient is to fit a Gaussian process t
 
 \begin{equation}
 \label{eq:kernel}
-k(z_1,z_2)=k+\exp\left(-\frac{(z_1-z_2)^2}{2\sigma_0^2}\right)+\sqrt{\sigma_1^2+ z_1 z_2}+\sigma_2^2 \mathbbm{1}[z_1=z_2]
+k(z_1,z_2)=\exp\left(-\frac{(z_1-z_2)^2}{2\sigma_0^2}\right)+\sqrt{\sigma_1^2+ z_1 z_2}+\sigma_2^2 \mathbbm{1}[z_1=z_2]+\sigma_3^2
 \end{equation}
 
-Where $\mathbbm{1}[P]$ is an indicator function whose value is 1 iff the predicate $P$ is true, and the parameter $\sigma_2$ controls the noise in the measurement. Unfortunately, this noise is not constant, and does not depend on the altitude level; for example, for wind, the precision of the instrument is $\max(0.1,0.01\cdot u)$. Therefore, all the parameters must be found by optimizing the marginal likelihood. Figure \ref{fig:kernel} shows the prior distribution of a Gaussian process with this kernel, as well as the value of the kernel for some choices of $z_1$ and $z_2$.
+Where $\mathbbm{1}[P]$ is an indicator function whose value is 1 if the predicate $P$ is true, and 0 otherwise, and the parameter $\sigma_2$ controls the noise in the measurement. Unfortunately, this noise is not constant, and does not depend on the altitude level; for example, for the wind speed $u$, the precision of the instrument is $\max(0.1,0.01\cdot u)$. Therefore, all the parameters must be found by optimizing the marginal likelihood. Figure \ref{fig:kernel} shows the prior distribution of a Gaussian process with this kernel, as well as the value of the kernel for some choices of $z_1$ and $z_2$.
 
 \begin{figure}
     \centering
@@ -1013,7 +1005,7 @@ Our final goal is to obtain the derivative of the predictive posterior mean, whi
 
 \begin{equation}
 \label{eq:kernel_derivative}
-\frac{\partial k(z_1,z_2)}{\partial z_1}=\frac{z_2-z_1}{\sigma_0^2}\exp\left(-\frac{(z_1-z_2)^2}{\sigma_0^2}\right)+\frac{z_2}{2\sqrt{\sigma_1^2+z_1z_2}}+\sigma_2^2\mathbbm{1}[z_1=z_2]
+\frac{\partial k(z_1,z_2)}{\partial z_1}=\frac{z_2-z_1}{\sigma_0^2}\exp\left(-\frac{(z_1-z_2)^2}{2\sigma_0^2}\right)+\frac{z_2}{2\sqrt{\sigma_1^2+z_1z_2}}+\sigma_2^2\mathbbm{1}[z_1=z_2]
 \end{equation}
 
 
@@ -1021,7 +1013,7 @@ Our final goal is to obtain the derivative of the predictive posterior mean, whi
 \section{Monin-Obukhov Similarity Theory}
 \label{sec:most_fit}
 
-Even though there is agreement on form of their form, there is still debate on the exact values of the coefficients, with different experiments resulting in different values \citep{hogstrom88}. In order to ensure a fair comparison with the results of this work, we fit the universal functions to the data from the Cesar database. Their general form is:
+Even though there is agreement on form of the momentum flux-profile relationship, there is still debate on the exact values of the coefficients, with different experiments resulting in different values \citep{hogstrom88}. In order to ensure a fair comparison with the results of this work, we fit the universal functions to the data from the Cesar database. Their general form is:
 
 \begin{equation}
 \label{eq:phi_general}
@@ -1057,28 +1049,26 @@ where $\tau=1-c^2\xi$. The Hessian of \ref{eq:phi_general} when $\xi\geq 0$ is s
 \end{bmatrix}
 \end{equation}
 
-Analytical computation of the Hessian allows us to use the Newton conjugate gradient descent algorithm, which provides super-linear convergence rate, unlike other conjugate gradient methods whose rate of convergence is only linear \citep{numopt}.
-
-This model is then fitted to the data using L2 regularization, and evaluated as the other regression models; see section \ref{sec:perf_eval} for details on the procedure.
+Analytical computation of the Hessian allows us to use the Newton conjugate gradient descent algorithm, which provides super-linear convergence rate, unlike other conjugate gradient methods whose rate of convergence is only linear \citep{numopt}. This model is then fitted to the data using L2 regularization, and evaluated as the other regression models.
 
 \section{Model Fitting}
 \label{sec:model_fit}
 In this section, we discuss how we use the data from the Cesar database to predict $\phi_m$.
 
 \subsection{Features}
-All the features come from the Cesar database, refer to section \ref{sec:data_collection} for details on how the data was collected. The predictors are partitioned in five sets:
+All the features come from the Cesar database. The predictors are partitioned in five sets:
 
 \begin{enumerate}
 \item[F1:] altitude $z$, wind at $z$, temperature at $z$, wind at 10 meters, temperature at 10 meters, wind at 20 meters, temperature at 20 meters, wind at 40 meters, temperature at 40 meters, soil temperature;
 \item[F2:] Soil heat flux;
 \item[F3:] Net radiation;
 \item[F4:] Rain amount, dew point;
-\item[F5:] Turbulent kinetic heat flux, turbulent latent heat flux;
+\item[F5:] Turbulent kinetic heat flux $H$, turbulent latent heat flux $\lambda E$;
 \end{enumerate}
 
-These sets are used cumulatively in the order they are listed, meaning that, for example, F3 is used in conjunction with F2 and F1. Derived features that can be computed from others, such as the virtual temperature (equation \ref{eq:vtemp}), are not included. The reason is that the less inputs the models require, the more useful and "agile" they can be when used as a component in a larger system, such as climate simulations.
+These sets are used cumulatively in the order they are listed, meaning that F2 is used in conjunction with F1, F3 with F2 and F1, and so on. Features that can be computed from others, such as the virtual temperature (equation \ref{eq:vtemp}), are not included. The reason is that the less inputs the models require, the more useful and "agile" they can be when used as a component in a larger system, such as climate simulations: reducing the amount of computations makes the simulation faster and reduces numerical errors, since many approximate constants have to be used. Moreover, one of the objectives of this work is to quantify the effect of the feature sets on the prediction accuracy; using derived features would actually make this process difficult, since the point of it is to find the fundamental quantities of importance.
 
-This division was decided based on domain knowledge, so that the level of a feature reflects both its expected impact on the performance and how desirable it is to include it. An example of the former reasoning is with F4, where the effect of moisture is expected to be already captured by the soil heat flux (in F3), and to be generally negligible in all but the most extreme conditions. An example of the latter reasoning is with F5, because turbulent fluxes are hard to measure accurately (see section \ref{sec:eddy_correlation}), and current simulation models are known to be quite inaccurate in their estimation of these fluxes \citep{sheba}. Similarly, the friction velocity was not included, because the point of predicting $\phi_m$ is to use it to estimate $u_*$ from the wind gradient, which is readily measured both in real life and in simulations. \cite{cabauw_z0} has shown that the direction of the wind affects the universal functions at Cabauw, because of the different covers of the surface, changing the roughness length, and disturbances by the main mast, preventing accurate wind speed measurement. Nonetheless, we decided not to include the wind direction in the features, as this is very specific to the Cabauw observatory, and would reduce the generality of our models.
+This division was decided based on the knowledge of a domain expert, so that the level of a feature reflects both its expected impact on the performance and how desirable it is to include it. An example of the former reasoning is with F4, where the effect of moisture is expected to be already captured by the soil heat flux (in F2), and to be generally negligible in all but the most extreme conditions. An example of the latter reasoning is with F5, because turbulent fluxes are hard to measure accurately (see section \ref{sec:eddy_correlation}), and current simulation models are known to be quite inaccurate in their estimation of these fluxes \citep{sheba}. Similarly, the friction velocity was not included, because the point of predicting $\phi_m$ is to use it to estimate $u_*$ from the wind gradient, which is readily measured both in real life and in simulations. \cite{cabauw_z0} has shown that the direction of the wind affects the universal functions at Cabauw, because of the different covers of the surface, changing the roughness length, and disturbances by the main mast, preventing accurate wind speed measurement. Nonetheless, we decided not to include the wind direction in the features, as this is very specific to the Cabauw observatory, and would reduce the generality of our models.
 
 We also create a second version of each feature set, augmented with the hourly trend of each variable, except for the altitude $z$. The reason for including the trend is that it can give an indication of, for example, the time of the day, or other complex phenomena for which there is no measurement. The interval for the trend (one hour) is used because it is enough to capture local variations, but not too large so as to contain irrelevant information. The hourly trend is computed simply as the difference between the current value and the value measured one hour before, divided by one hour. Given the goal of this work, namely to produce a model to be used in climate simulations, it would not make sense to use future values to compute the trend.
 
@@ -1131,12 +1121,18 @@ $\delta$ (for the Huber loss) & Uniform & From 1\% to 99\% \\
 \label{sec:perf_eval}
 The goal of performance evaluation is to obtain a realistic and unbiased estimate of the performance of a model on unseen data. Because the Monin-Obukhov similarity theory is only valid in the $-2\leq\xi\leq1$ range, we will use this data as the primary target for evaluation. We will also evaluate the models on the full dataset, to see what kind of performance can be expected outside of the typical range where the similarity theory is employed.
 
-We are actually not interested in the optimal values of the hyper-parameters; for this reason, we perform nested cross validation, with the inner loop used to optimize the hyper-parameters through random search \citep{random_search}, and the outer loop used to evaluate the model. We use 10 folds in both the inner and outer CV, and test 10 different hyper-parameter combinations for all estimators. Limits in the available computational resources prevent us from testing more combinations; the possibility that this number is too low can manifest itself in the high variance of the nested cross validation results.
+\subsection{Evaluation Procedure}
+The two research questions require different evaluation procedures. The first question essentially entails finding what kind of performance is possible to achieve: this is best done using nested cross-validation, so that this estimate is not biased. The second research question is about comparing alternatives: in this case, we use repeated cross-validation to obtain estimates with lower variance. In both cases we use random search \citep{random_search} to optimize the hyper-parameters of the models.
 
-In practice, we need to run $2\cdot5\cdot2=20$ nested cross validation rounds for each model, meaning that it is fit $20(10\cdot10\cdot10+10)=20200$ times in total. According to the model and its hyper-parameters, fitting can take from a few seconds up to more than 24 hours; in order to make the process feasible, we implemented algorithm \ref{alg:nested_cv} using Apache Spark \citep{spark}. Since the number of stragglers is very low\footnote{for gradient boosted trees, the slowest method, the median fitting time in our experiments is around half a minute, the third quartile is around ten minutes, and the maximum is between 20 and 30 hours}, running multiple nested cross validation jobs at the same time can reduce the duration of the whole process by five to ten times.
+For nested cross-validation, we use 10 outer folds and 10 inner folds, and try 10 random hyper-parameter combinations. Since we have 2 datasets and $5\cdot2$ feature sets, every model is fit a total of $2\cdot5\cdot2\cdot(10\cdot10\cdot10+10)=20200$ times. For repeated cross-validation, we use 10 folds and 25 hyper-parameters combinations, resulting in 250 fittings.
+
+todo how many repeats? better be fixed!
+
+According to the model and its hyper-parameters, fitting can take from a few seconds up to more than 24 hours; in order to make the process feasible, we implemented algorithm \ref{alg:nested_cv} using Apache Spark \citep{spark}. Since the number of stragglers is very low\footnote{for gradient boosted trees, the slowest method, the median fitting time in our experiments is around half a minute, the third quartile is around ten minutes, and the maximum is between 20 and 30 hours}, running multiple nested cross validation jobs at the same time can reduce the duration of the whole process by five to ten times.
 
 A fundamental assumption underlying hold-out evaluation methods is that the samples in the training set are independent and identically distributed, so that the distribution in the two partitions are equal. This is not our case, since there is a inherent time dependency in the data, meaning that samples obtained close in time are very similar. This can be confirmed by training and evaluating a k-nearest neighbors classifier with $k=1$ on random splits: the resulting mean squared error is in the order of $10^{-3}$, which is clearly unrealistic. To circumvent this problem, the CV folds are created on \emph{months}: all the samples in a given month and year are either in the training set or in the validation set. We choose months instead of days because the weather often does not change significantly in the span of 24 hours, whereas in a month there are around three weeks worth of samples that are independent from the conditions at the start and end of the month.
 
+\subsection{Evaluation Metrics}
 The main evaluation metric is the mean squared error, since that is what we are optimizing for, but we compute other metrics in the outer cross validation loop to get a more complete idea of the performance of the estimators:
 
 \begin{itemize}
@@ -1156,9 +1152,11 @@ Where $f_n$ is the predicted value for the test sample $\bm x_n$ with true value
 
 \section{Success Criteria}
 \label{sec:success}
-A successful answer to the first research question entails finding a model whose mean squared error on any feature set, with or without trend, is smaller than the mean squared error of the MOST estimator introduced in section \ref{sec:most_fit}. The second research question is answered by comparing the different evaluation metrics on the ten feature sets (F1 to F5, with and without trend). Note that we cannot use the output of a model to obtain the importance of the features, as this method is not reliable when some of them are correlated \citep{rf_bias,rf_corr_imp}, which is a very relevant issue in our case. Trivially, wind speed and temperature at the different levels are very strongly correlated (Pearson's $r$ is above 0.95), and there are other, more complex, correlations, such as between the net radiation and the soil heat flux, or between the soil temperature and the dew point (Pearson's $r$ is respectively 0.75 and 0.79). In spite of the correlations, all these variables contribute to the flux-profile relationships, often in very nuanced ways.
+A successful answer to the first research question entails finding a model whose mean squared error on any feature set, with or without trend, is smaller than the mean squared error of the MOST estimator introduced in section \ref{sec:most_fit}. The second research question is answered by comparing the mean squared error obtained on the ten feature sets (F1 to F5, with and without trend). This comparison is done using the model that achieved the best performance when answering the first research question.
 
-The differences are quantified using the effect size, as detailed in section \ref{sec:effect_size}; since we are looking for an improvement, we compute the right 95\% confidence interval for the population effect size. In other words, besides providing a point estimate for the population effect size $\delta_{pop}$, we also provide an interval $[\delta_{lo}, \infty)$.
+Note that we cannot use the output of a model to obtain the importance of the features, as this method is not reliable when some of them are correlated \citep{rf_bias,rf_corr_imp}, which is a very relevant issue in our case. Trivially, wind speed and temperature at the different levels are very strongly correlated (Pearson's $r$ is above 0.95), and there are other, more complex, correlations, such as between the net radiation and the soil heat flux, or between the soil temperature and the dew point (Pearson's $r$ is respectively 0.75 and 0.79). In spite of the correlations, all these variables contribute to the flux-profile relationships, often in very nuanced ways.
+
+The differences are quantified using the effect size as described in section \ref{sec:effect_size}; since we are looking for an improvement, we compute the right 95\% confidence interval for the population effect size. In other words, besides providing a point estimate for the population effect size $\delta_{pop}$, we also provide an interval $[\delta_{low}, \infty)$ that contains it 95\% of the times. We say the treatment is better if $\delta_{low}>0$.
 
 \chapter{Results}
 \label{ch:results}
@@ -1190,12 +1188,12 @@ Unfortunately, most of these observations contain unreliable measurements, as de
 \textbf{Dew Point} & 280.3 & 6.1 & 188.0 & 276.6 & 280.6 & 284.7 & 296.7 \\
 \textbf{Spec. Hum.} & 6.6 & 2.5 & -0.9 & 4.8 & 6.4 & 8.3 & 17.8 \\
 \textbf{Rel. Hum.} & 76.5 & 15.2 & 0.0 & 66.9 & 79.2 & 88.3 & 133.7 \\
-\textbf{Air Press.} & 1,009.6 & 69.0 & 0.0 & 1,008.3 & 1,014.8 & 1,020.7 & 1,046.4 \\
+\textbf{Air Press.} & 1,009.6 & 69.0 & 960.9 & 1,008.3 & 1,014.8 & 1,020.7 & 1,046.4 \\
 \textbf{Rain Amount} & 0.0 & 0.1 & 0.0 & 0.0 & 0.0 & 0.0 & 15.1 \\
 \textbf{$CO_2$ Flux} & -0.1 & 0.3 & -7.5 & -0.2 & 0.0 & 0.1 & 6.1 \\
 \textbf{Soil Heat Flux} & 2.9 & 15.6 & -77.8 & -6.5 & -0.7 & 8.9 & 1,139.0 \\
 \textbf{Net Rad.} & 81.8 & 167.2 & -158.5 & -35.4 & -3.0 & 172.5 & 7,775.4 \\
-\textbf{Air Dens.} & 0.3 & 0.1 & 0.0 & 0.2 & 0.3 & 0.3 & 2.8 \\
+\textbf{Air Dens.} & 0.3 & 0.1 & 0.1 & 0.2 & 0.3 & 0.3 & 2.8 \\
 \textbf{Virt. Air Temp.} & 1,443.8 & 454.9 & 124.8 & 1,104.2 & 1,391.0 & 1,753.2 & 3,506.0 \\
 \bottomrule
 \end{tabular*}
@@ -1204,7 +1202,7 @@ Unfortunately, most of these observations contain unreliable measurements, as de
 
 \begin{table}[]
 \centering
-\caption{Number of measurements by gap filling method, for the quantities that have this information. Due to inconsistencies in the Cabauw Documentation \citep{cabauw_gapfilling}, we cannot be sure of the meaning of the columns, but this is our interpretation: 0 - Unknown, 2 - Cabauw In situ (i.e. from the masts, not gapfilled), 3 - Automatic Weather Station in Cabauw (also not gapfilled, but sometimes secondary source), 4 - Computed from profiles, 5- Interpolated, 6- Cabauw-based model, 7 - De Bilt-based model. The net radiation cannot be obtained from the profiles, therefore 4 and 5 should probably be 6 and 7 for that quantity.}
+\caption{Number of measurements by gap filling method, for the quantities that have this information. Due to inconsistencies in the Cabauw Documentation \citep{cabauw_gapfilling}, we cannot be sure of the meaning of the columns, but this is our interpretation: 0 - Unknown, 2 - Cabauw In situ (i.e. from the masts, not gapfilled), 3 - Automatic Weather Station in Cabauw (also not gapfilled, but sometimes secondary source), 4 - Computed from profiles, 5 - Interpolated, 6 - Cabauw-based model, 7 - De Bilt-based model. As the net radiation cannot be obtained from the profiles, we think that sources 4 and 5 for this quantity are mistakes, and should respectively be 6 and 7.}
 \label{tbl:col_gapfilled}
 \begin{tabular*}{\textwidth}{l| @{\extracolsep{\fill}} rrrrrrr}
 \toprule
@@ -1269,9 +1267,9 @@ Figure \ref{fig:le_season} shows the turbulent latent heat flux versus hour of d
 
 
 
-Figure \ref{fig:tsne} shows the result of the t-SNE dimensionality reduction algorithm \citep{tsne} applied to 250,000 samples (19.2\% of the total), using the same features of table \ref{tbl:col_summary}. The 250,000 samples were chosen uniformly at random and standardized with equation \ref{eq:standardization} before fitting, but the colors were computed using the raw features on a perceptually uniform color scale, after excluding the top and bottom 1\% values. Overall, the points cluster in a relatively uniform blob, which is not that surprising once you consider that the measurements were taken continuously, meaning that all physical quantities change smoothly, and all points close in time are also close in feature space.
+Figure \ref{fig:tsne} shows the result of the t-SNE dimensionality reduction algorithm \citep{tsne} applied to 250,000 samples (19.2\% of the total), using the same features of table \ref{tbl:col_summary}, plus $z$, $L$, $\xi$, the wind and virtual temperature gradients, $\phi_m$, the month of the year and hour of day. The 250,000 samples were chosen uniformly at random and standardized with equation \ref{eq:standardization} before fitting, but the colors were computed using the raw features on a perceptually uniform color scale, after excluding the top and bottom 1\% values. Overall, the points cluster in a relatively uniform blob, which is not surprising once you consider that the measurements were taken continuously, meaning that all physical quantities change smoothly, thus all points close in time are also close in feature space.
 
-The colors reveal some structure, though: the left-hand side of the plots contain measurements taken in the Summer, and the right-hand side contains measurement in Winter (see the air temperature in figure \ref{fig:tsne_temp} and month in figure \ref{fig:tsne_month}). Moreover, unstable conditions are clustered in a stripe, centered vertically, that runs from left to right (see the fluxes of figures \cref{fig:tsne_H,fig:tsne_LE,fig:tsne_soilheat}, the radiation in figure \ref{fig:tsne_netrad}, and the hour of day in figure \ref{fig:tsne_hday}). In figure \ref{fig:tsne_z} we also a see cluster on the top with all the observations at 40 meters, whereas the two lower levels are mixed somewhat uniformly in the bottom part of the plot.
+The colors reveal some structure, though: the left-hand side of the blob contain measurements taken in the Summer, and the right-hand side contains measurement in Winter (see the air temperature in figure \ref{fig:tsne_temp} and month in figure \ref{fig:tsne_month}). Moreover, unstable conditions are clustered in a stripe, centered vertically, that runs from left to right (see the fluxes of figures \cref{fig:tsne_H,fig:tsne_LE,fig:tsne_soilheat}, the radiation in figure \ref{fig:tsne_netrad}, and the hour of day in figure \ref{fig:tsne_hday}). In figure \ref{fig:tsne_z} we also a see cluster on the top with all the observations at 40 meters, whereas the two lower levels are mixed somewhat uniformly in the bottom part of the plot.
 
 Finally, figure \ref{fig:tsne_clus} shows the result of k-means clustering in the standardized feature space, using $k=2$ (blue/orange) and $k=4$ (the four shades). This clustering is consistent with the qualitative division above, with the dark orange and blue clusters corresponding to Summer and Winter respectively, light orange corresponding to unstable conditions with considerable vertical movement of air, and light blue corresponding to strong horizontal winds with little movement in the vertical. Stably stratified conditions seem to occur at the boundary of the blob, where $\phi_m$ takes the highest values (see figure \ref{fig:tsne_phi_m}). This is also not surprising, since stable stratification tend to happen at night throughout the year, unlike free convection or z-less scaling, which only happen in specific conditions.
 
@@ -1279,7 +1277,7 @@ Finally, figure \ref{fig:tsne_clus} shows the result of k-means clustering in th
 \subcaptionbox{Air Dens.\label{fig:tsne_air_dens}}{\includegraphics[width=0.25\textwidth]{images/tsne_air_dens}}\hfill
 \subcaptionbox{H\label{fig:tsne_H}}{\includegraphics[width=0.25\textwidth]{images/tsne_H}}\hfill
 \subcaptionbox{LE\label{fig:tsne_LE}}{\includegraphics[width=0.25\textwidth]{images/tsne_LE}}\hfill
-\subcaptionbox{Wind\label{fig:tsne_wind}}{\includegraphics[width=0.25\textwidth]{images/tsne_wind}}\\
+\subcaptionbox{Wind Speed\label{fig:tsne_wind}}{\includegraphics[width=0.25\textwidth]{images/tsne_wind}}\\
 
 \subcaptionbox{Air Temp.\label{fig:tsne_temp}}{\includegraphics[width=0.25\textwidth]{images/tsne_temp}}\hfill
 \subcaptionbox{Virtual Temp.\label{fig:tsne_virtual_temp}}{\includegraphics[width=0.25\textwidth]{images/tsne_virtual_temp}}\hfill
@@ -1306,7 +1304,7 @@ Finally, figure \ref{fig:tsne_clus} shows the result of k-means clustering in th
 \subcaptionbox{$\vert \text{Hr. Day}-12\vert$\label{fig:tsne_hday}}{\includegraphics[width=0.25\textwidth]{images/tsne_hday}}\hfill
 \subcaptionbox{k-Means\label{fig:tsne_clus}}{\includegraphics[width=0.25\textwidth]{images/tsne_clus}}\hfill
 
-    \caption{Results of the t-SNE dimensionality reduction algorithm; every figure uses a different feature to color the points (darker points have smaller values), except figure \ref{fig:tsne_clus}, where the colors represent the result of 2-means clustering (blue/orange) and 4-means clustering (the four shades). The colors are consistent, in the sense that light and dark shades of blue are placed in the same cluster by 2-means clustering, ditto for orange. The points were drawn in random order. (Best viewed in color)}
+    \caption{Results of the t-SNE dimensionality reduction algorithm; every figure uses a different feature to color the points (darker points have smaller values), except figure \ref{fig:tsne_clus}, where the colors represent the result of 2-means clustering (blue/orange) and 4-means clustering (the four shades). The colors are consistent, in the sense that light and dark shades of blue are placed in the same cluster by 2-means clustering, ditto for orange. Figures \ref{fig:tsne_month} and \ref{fig:tsne_hday} use respectively the month and hour of day as feature values, but are colored using the values transformed with the formula in their caption. The points were drawn in random order. (Best viewed in color)}
 	\label{fig:tsne}
 \end{figure}
 
@@ -1316,7 +1314,7 @@ Talking about speed of wind, figure \ref{fig:ustar_wind} shows some measurements
 \begin{figure}
     \centering
 	\includegraphics[width=0.95\textwidth]{images/cyclone_jeanett}
-	\caption{Wind speed measurements during Cyclone Jeanett, which struck north-west Europe in October 2002, causing 33 fatalities. The top of the mast registered winds at \SI{35}{\meter\per\second}; although, in absolute terms, destructive, this cyclone registered winds up to \SI{42.5}{\meter\per\second}!}
+	\caption{Wind speed measurements during Cyclone Jeanett, which struck north-west Europe in October 2002, causing 33 fatalities. The top of the mast registered winds at \SI{35}{\meter\per\second}; although, in absolute terms, destructive, this cyclone registered winds up to \SI{42.5}{\meter\per\second} in other parts of Europe!}
 	\label{fig:cyclone_jeanett}
 \end{figure}
 
@@ -1324,15 +1322,15 @@ Talking about speed of wind, figure \ref{fig:ustar_wind} shows some measurements
 
 \section{Gradient Computation}
 \label{sec:res_gradient}
-Section \ref{sec:gradients} introduced three different ways to compute the gradient, but we need to choose one to compute the universal functions. In this section, we refer to equation \ref{eq:fd_gradient} as \emph{F.D.}, equation \ref{eq:log_gradient} as \emph{Log} and equation \ref{eq:gp_gradient} as \emph{G.P.} Table \ref{tbl:gradients_corr} shows the Pearson correlation coefficient between the three methods, separately for every altitude level. It is clear that the F.D. gradient is inadequate at the lowest level; this can be explained by considering that equation \ref{eq:fd_gradient} with $z=10$ reduces to the wind speed at 20 meters divided by 20. This method appears to be too naive, especially since it does not take the roughness length into consideration, but, as \cite{cabauw_z0} showed, finding a value for $z_0$ is far from trivial. In spite of this, the F.D. and the Log gradients strongly agree on all levels, and are quite different from the gradients by G.P.
+Section \ref{sec:gradients} introduced three different ways to compute the gradient, but we need to choose one to compute the universal functions. In this section, we refer to the finite differences method in equation \ref{eq:fd_gradient} as \emph{FD}, the logarithm-based model of equation \ref{eq:log_gradient} as \emph{LG} and the Gaussian Process-based model of equation \ref{eq:gp_gradient} as \emph{GP}. Table \ref{tbl:gradients_corr} shows the Pearson correlation coefficient between the three methods, separately for every altitude level. It is clear that the FD gradient is inadequate at the lowest level; this can be explained by considering that equation \ref{eq:fd_gradient} with $z=10$ reduces to the wind speed at 20 meters divided by 20. This method appears to be too naive, especially since it does not take the roughness length into consideration, but, as \cite{cabauw_z0} showed, finding a value for $z_0$ is far from trivial. In spite of this, the FD and the Log gradients strongly agree on all levels, and are quite different from the gradients by GP
 
 \begin{table}[]
 \centering
-\caption{Pearson correlation coefficient between the gradients predicted by the different methods, divided by level. The F.D. gradient is poorly correlated with the other two methods at the 10 meters level, but is very well correlated with the Log gradient at the other levels. The Log and G.P. gradients disagree on the lower levels, but it appears their predictions converge as altitude increases.}
+\caption{Pearson correlation coefficient between the gradients predicted by the different methods, divided by level. The FD gradient is poorly correlated with the other two methods at the 10 meters level, but is very well correlated with the LG gradient at the other levels. The LG and GP gradients disagree on the lower levels, but it appears their predictions converge as altitude increases.}
 \label{tbl:gradients_corr}
 \begin{tabular}{c|c|c|c}
 \toprule
-z & F.D. / G.P. & Log / F.D. & Log / G.P. \\ \midrule
+z & FD / GP & LG / FD & LG / GP \\ \midrule
  	10 & 	0.192 & 0.480 &	0.317 \\
  	20 &	0.645 	& 0.991 &	0.640 \\
  	40 &	0.863 & 0.981 &	0.835 \\
@@ -1340,15 +1338,15 @@ z & F.D. / G.P. & Log / F.D. & Log / G.P. \\ \midrule
 \end{tabular}
 \end{table}
 
-Since Log and G.P. predict the wind speed too, we can compare their predictions to the measured wind speed. Notice that these methods are fitted on the wind speed at all levels, from 10 to 200 meters, but we evaluate them only on the three lowest levels, since that is where we compute the universal functions. Table \ref{tbl:model_wind_errors} shows the squared error between the modeled wind and the true wind speed at the three levels for both models. It is interesting to see that both models are quite accurate at all levels; this allows us to conclude that F.D. is not reliable at 10 meters.
+Since LG and GP. predict the wind speed too, we can compare their predictions to the measured wind speed. Notice that these methods are fitted on the wind speed at all levels, from 10 to 200 meters, but we evaluate them only on the three lowest levels, since that is where we compute the universal functions. Table \ref{tbl:model_wind_errors} shows the squared error between the modeled wind and the true wind speed at the three levels for both models. It is interesting to see that both models are quite accurate at all levels; this allows us to conclude that FD is not reliable at 10 meters.
 
 \begin{table}[]
 \centering
-\caption{Absolute percent error of the wind speed modeled by the Log and G.P. methods at each altitude level. The altitude does not affect the error, and the G.P. wind speed is closer to the true wind speed than the Log model in the vast majority of cases, although the difference is negligible, often less than a few percents.}
+\caption{Absolute percent error of the wind speed modeled by the LG and GP methods at each altitude level. The altitude does not affect the error, and the GP wind speed is closer to the true wind speed than the LG model in the vast majority of cases, although the difference is negligible, often less than a few percents.}
 \label{tbl:model_wind_errors}
 \begin{tabular*}{\textwidth}{l @{\extracolsep{\fill}} |ccc|ccc|ccc}
 \toprule
-& z & Log & G.P. & z & Log & G.P. & z & Log & G.P. \\\midrule
+& z & LG & GP & z & LG & GP & z & LG & GP \\\midrule
 Mean & \multirow{7}{*}{ 10 } & 1.2250 & 1.0329 & \multirow{7}{*}{ 20 } & 2.2605 & 1.4217 & \multirow{7}{*}{ 40 } & 1.3878 & 1.0364 \\
 Std. & & 1.4033 & 1.1169 & & 2.3432 & 1.4658 & & 1.4783 & 1.1208 \\
 Min. & & 0.0000 & 0.0000 & & 0.0000 & 0.0000 & & 0.0000 & 0.0000 \\
@@ -1361,25 +1359,25 @@ Max. & & 53.7541 & 212.3985 & & 106.5623 & 192.9434 & & 80.3531 & 43.4657 \\
 \end{table}
 
 
-Figure \ref{fig:gp_log_perc_err_wind_speed} shows the error as a function of the wind speed. It is interesting to see that G.P. becomes more and more reliable as the wind speed increases; not only does its error decrease, so does the variance of the error. It is possible to give an intuitive explanation for the error of Log: the measurement error of the wind speed is the maximum between \SI{0.1}{\meter\per\second} and 1\%, therefore the error of Log can be attributed almost entirely to uncertainty in the data, whereas G.P. is, possibly, overfitting.
+Figure \ref{fig:gp_log_perc_err_wind_speed} shows the error as a function of the wind speed. It is interesting to see that GP becomes more and more reliable as the wind speed increases; not only does its error decrease, so does the variance of the error. It is possible to give an intuitive explanation for the error of LG: the measurement error of the wind speed is the maximum between \SI{0.1}{\meter\per\second} and 1\%, therefore the error of Log can be attributed almost entirely to uncertainty in the data, whereas GP seems to be overfitting.
 
 \begin{figure}
     \centering
 	\includegraphics[width=0.6\textwidth]{images/gp_log_perc_err_wind_speed}
-	\caption{Mean absolute percent error of the wind modeled by the Log and G.P. models as a function of the true wind speed; the lines are the average, and the shaded regions enclose the average plus or minus the standard deviation. Both quantities are computed by binning the wind by its integral part. Notice that slightly less than 5\% are above \SI{11}{\meter\per\second}, and only 656 observations, or 0.04\% of the total, are above \SI{20}{\meter\per\second} (\SI{72}{\kilo\meter\per\hour})}
+	\caption{Mean absolute percent error of the wind modeled by the LG and GP models as a function of the true wind speed; the lines are the average, and the shaded regions enclose the average plus or minus the standard deviation. Both quantities are computed by binning the wind by its integral part. Notice that slightly less than 5\% are above \SI{11}{\meter\per\second}, and only 656 observations, or 0.04\% of the total, are above \SI{20}{\meter\per\second} (\SI{72}{\kilo\meter\per\hour})}
 	\label{fig:gp_log_perc_err_wind_speed}
 \end{figure}
 
 
-Given that the final goal of finding the gradient is to compute the universal functions, for which we already have more or less agreed upon expressions (equation \ref{eq:phi_m_coeff}), it makes sense to compare the error of these expressions when predicting the universal functions (equation \ref{eq:phi_m}) computed with the gradients coming from the three different methods; the best method is, then, the one with the smallest error. Table \ref{tbl:gradient_errors} contains these errors, both with all the data, and by considering only $2\leq\xi\leq 1$. F.D. is slightly better than Log if we do not consider the \SI{10}{\meter} level, but way worse if we include it. G.P. is significantly worse than F.D. in the MOST validity region, but only slightly worse on the whole dataset; this suggests that G.P. is weak when $\vert\xi\vert$ is small. 
+Given that the final goal of finding the gradient is to compute the universal functions, for which we already have more or less agreed upon expressions (equation \ref{eq:phi_m_coeff}), it makes sense to compare the error of these expressions when predicting the universal functions (equation \ref{eq:phi_m}) computed with the gradients coming from the three different methods; the best method is, then, the one with the smallest error. Table \ref{tbl:gradient_errors} contains these errors, both with all the data, and by considering only $2\leq\xi\leq 1$. FD is slightly better than LG if we do not consider the \SI{10}{\meter} level, but way worse if we include it. GP is significantly worse than FD in the MOST validity region, but only slightly worse on the whole dataset; this suggests that GP is weak when $\vert\xi\vert$ is small. 
 
 \begin{table}[]
 \centering
-\caption{Mean squared error of $\phi_m$ (coefficients according to equation \ref{eq:phi_m_coeff}) when predicting the empirical flux-profile relationship (equation \ref{eq:phi_m}), computed with the three methods of calculating the gradient. The errors in second line (F.D. w/o z=10) were computed after discarding the data at the 10 meters level, because we argued the F.D. method is not reliable at that level. We show the error both in the range where the Monin-Obukhov similarity theory is known to be valid (84\% of the total), and the error using all data.}
+\caption{Mean squared error of $\phi_m$ (coefficients according to equation \ref{eq:phi_m_coeff}) when predicting the empirical flux-profile relationship (equation \ref{eq:phi_m}), computed with the three methods of calculating the gradient. The errors in second line (F.D. w/o z=10) were computed after discarding the data at the 10 meters level, because we argued the F.D. method is not reliable at that level. We show the error both in the range where the Monin-Obukhov similarity theory is known to be valid (84\% of the samples), and the error using all data.}
 \label{tbl:gradient_errors}
 \begin{tabular}{l|r|r}
 \toprule
-Method & MSE ($-2\leq\xi\leq1$) & MSE \\ \midrule
+Method & MSE ($-2\leq\xi\leq1$) & MSE (full dataset) \\ \midrule
 F.D. & 1.994 & 9.322 \\
 F.D. (w/o z=10) & 0.627  & 11.832 \\
 Log & 0.660 & 8.498 \\
@@ -1388,15 +1386,12 @@ G.P. & 1.213 & 8.899 \\
 \end{tabular}
 \end{table}
 
-To conclude, although F.D. (equation \ref{eq:fd_gradient}) is the most accurate way of computing the profile gradient, it does not allow us to use data at the 10 meters level. Considering that Log (equation \ref{eq:log_gradient}) is just slightly worse, but allows us to include that level (increasing the data available by 50\%!), all the results presented from now on make use of it.
+To conclude, although FD (equation \ref{eq:fd_gradient}) is the most accurate way of computing the profile gradient, it does not allow us to use data at the \SI{10}{\meter} level. Considering that LG (equation \ref{eq:log_gradient}) is just slightly worse, but allows us to include that level (increasing the data available by 50\%!), all the results presented from now on make use of it.
 
 
 \section{Flux-Profile Relationship}
 \label{sec:most_res}
 Figure \ref{fig:most_scatter} shows the wind shear versus the instability parameter, together with the commonly accepted flux-profile relationship in green and the relationship fitted on our dataset in red. Qualitatively, the scatter plot looks sas expected, going to zero as $\xi$ decreases, linearly increasing in the $0\leq\xi\leq1$ interval, and leveling after that, possibly approaching the $\xi^{1/3}$ form proposed by \cite{sheba_phim}.
-
-negative phim with small |xi|
-
 
 \begin{figure}
     \centering
@@ -1417,16 +1412,13 @@ negative phim with small |xi|
 	\label{fig:most_scatter}
 \end{figure}
 
-
-In this section, we present and compare the evaluation metrics obtained by the estimators on the different configurations of features and data. We will refer to the interval $-2\leq\xi\leq1$ as the \emph{MOST validity range}, abbreviated as \textbf{MOST} in the tables; the proportion of data falling in this interval is 83.6\%. Unless specified otherwise, the metrics are presented as the mean over the ten outer validation folds followed by the standard deviation, in parenthesis, whereas the effect sizes are presented followed by the 95\% CI in parenthesis.
-
-The performance of the MOST estimator is shown in table \ref{tbl:most_results}; we see a considerable increase in the MSE when the full dataset is used; this is not surprising, considering that, with $\xi>1$, $\phi_m$ tends to level off, and there are a considerable number of outliers in the range $-20\leq\xi\leq-2$ (see figure \ref{fig:most_full}) that cannot be fitted by the MOST estimator. Figure \ref{fig:most_scatter} shows $\phi_m$ as a function of $\xi$ as computed in our dataset, as well as the predictions of equation \ref{eq:phi_m_coeff} and the fitted MOST estimator.
+We refer to the interval $-2\leq\xi\leq1$ as the \emph{MOST validity range}, or \emph{MOST dataset} in the tables; it contains 1,297,841 samples, 83.6\% of the total. The performance of the MOST estimator is shown in table \ref{tbl:most_results}; we see a considerable increase in the MSE when the full dataset is used; this is not surprising, considering that, with $\xi>1$, $\phi_m$ tends to level off, and there are a considerable number of outliers in the range $-20\leq\xi\leq-2$ (see figure \ref{fig:most_full}) that cannot be fitted by the MOST estimator. Figure \ref{fig:most_scatter} shows $\phi_m$ as a function of $\xi$ as computed in our dataset, as well as the predictions of equation \ref{eq:phi_m_coeff} and the fitted MOST estimator.
 
 Table \ref{tbl:most_results} shows the values of the coefficients in equation \ref{eq:phi_general}, when fitted to the region of data where the Monin-Obukhov similarity theory is valid. We note a big difference with the values recommended in \cite{hogstrom88}, as well as most studies on the topic. However, \cite{cabauw_night_most} studied the stable, nocturnal boundary layer at Cabauw, and reported values varying between 0.81 and 0.95 for $a$ and between 2.7 and 3.2 for $b$, depending on the direction of the wind; there is no known explanation for this discrepancy. Although \cite{cabauw_night_most} used the same method that we applied to find the coefficients, no goodness of fit statistics, such as MSE or $R^2$, were reported.
 
 \begin{table}[]
 \centering
-\caption{Evaluation metrics for the MOST estimator on both datasets.}
+\caption{Evaluation metrics for the MOST estimator on both datasets obtained with nested cross-validation. The first number is the average over the 10 outer folds, followed by the standard deviation in parentheses.}
 \label{tbl:most_results}
 \input{include/most_est_results}
 \end{table}
@@ -1445,6 +1437,10 @@ $d$ & -0.30 & 0.11 & -0.60 & -0.26 & -0.26 & -0.26 & -0.25 \\
 \bottomrule
 \end{tabular}
 \end{table}
+
+Table \ref{tbl:baseline_comparison} shows descriptive statistics of the best MSE obtained by each estimator for each datasets, among all the feature sets with and without trend, as well as the effect size comparing it with the MOST baseline. 
+
+todo procedure for choosing best MSE
 
 
 The averaged evaluation metrics for the Ridge, kNN and GB estimators are presented in tables \ref{tbl:ridge_results}, \ref{tbl:knn_results}
