@@ -44,7 +44,12 @@
 
 
 \section*{Acknowledgments}
-todo
+The work of a lot of people, most of whom I do not know, was needed to enable me to this research project: the hundreds, perhaps thousands, of Open Source maintainers who created and take care of the Data Science libraries for the Python programming language, 
+Python itself, operating systems, distributed computing platforms, and so on. Among them, I am extremely grateful to team behind the Hops platform\footnote{\url{http://www.hops.io/}}, for giving me access to an astonishing amount of computational resources and their support in using them.
+
+I cannot thank my family enough for supporting me in everything I did and moving mountains [??] so that I could focus on my studies free of worries [??].
+
+This project marks the end of my years as a student.  During all this time,
 
 \newpage
 
@@ -71,11 +76,14 @@ Climatology, or climate science, studies the long-term average weather condition
 
 Climate science is an extremely difficult field, for a number of reasons. First, climate is evident, by definition, only over long periods of time and large distances, making the usual scientific approach of testing hypotheses by conducting experiments inapplicable; instead, climate scientists have to rely on historical data. Second, the atmosphere is a complex and chaotic system, which must be described through systems of nonlinear differential equation. They can be used to create numerical simulations, and the resulting predictions compared to historical data to assess the accuracy of the theory. Furthermore, the chaotic character of the atmosphere makes it impossible to study parts of it in isolation from others, as small scale phenomena affect large scale ones, and vice versa. In spite of this, it is useful to split the atmosphere in vertical layers and horizontal zones, in order to differentiate among conditions and phenomena typically occurring in one area or the other.
 
-The troposphere contains most of the air mass in the atmosphere, and occupies the lowest 10 to 12 kilometers of the atmosphere. This is where weather happens, and it can be divided in a number of sub-layers, the lowest of which is the \emph{atmospheric boundary layer}: it is the region of the atmosphere that is affected by the conditions of the surface. Most human activities happen in this layer, and it is responsible for a large part of the diffusion and transport of aerosol such as, among others, pollutants. Yet, the physics governing the atmospheric boundary layer is not fully understood, and the theory is lacking. One important issues in the study of the atmospheric boundary layer is the derivation of flux-profile relationships for wind and temperature: they essentially relate the transport of momentum and heat by the turbulence (flux)\footnote{the flux of momentum is the rate of change of momentum (mass times velocity) per unit of area. Keeping the area constant, the momentum flux increases if the mass increases (e.g. because of changes in temperature, pressure, or humidity) or if the speed of wind increases.} with the change of wind speed/temperature with altitude (profile). The state of the art relationships are defined by the Monin-Obukhov Similarity theory in terms of the instability parameter $\xi$, computed as the height above surface scaled by turbulence due to horizontal wind and vertical air movement due to variations in heat. Difficulties in measurements of relevant quantities make this theory accurate only up to 10-20\%, and applicable in a restricted set of conditions.
+The troposphere contains most of the air mass in the atmosphere, and occupies the lowest 10 to 12 kilometers of the atmosphere. This is where weather happens, and it can be divided in a number of sub-layers, the lowest of which is the \emph{atmospheric boundary layer}: it is the region of the atmosphere that is affected by the conditions of the surface. Most human activities happen in this layer, and it is responsible for a large part of the diffusion and transport of aerosol such as, among others, pollutants. Yet, the physics governing the atmospheric boundary layer is not fully understood, and the theory is lacking. One important issues in the study of the atmospheric boundary layer is the derivation of flux-profile relationships for wind and temperature: they essentially relate the transport of momentum and heat by the turbulence (flux)\footnote{the flux of momentum is the rate of change of momentum (mass times velocity) per unit of area. Keeping the area constant, the momentum flux increases if the mass of the air increases (e.g. because of changes in temperature, pressure, or humidity) or if the speed of wind increases.} with the change of wind speed/temperature with altitude (profile). The state of the art relationships are defined by the Monin-Obukhov Similarity theory in terms of the instability parameter $\xi$, computed as the height above surface scaled by turbulence due to horizontal wind and vertical air movement due to variations in heat. Difficulties in measurements of relevant quantities make this theory accurate only up to 10-20\%, and applicable in a restricted set of conditions.
 
 In stark contrast to the traditional, top-down approach of science, recent developments in information technology made bottom-up approaches possible. In this new way of thinking, existing data is used to automatically infer the "best" explanation for the measurements at hand, the underlying laws that originated that data. The field that makes this possible is called \emph{Machine Learning}: it takes advantage of several methods coming from statistics, information theory, optimization theory, etc., to make computers learn from examples. Together with Natural Language Processing and Automated Planning, it is one of the three main branches of Artificial Intelligence, the sub-field of Computer Science that studies ways of making machines behave intelligently.
 
 An even broader field, called \emph{Data Mining}, is concerned with finding interesting patterns, structures, and regularities in large datasets, where the definition of interesting depends on the specific goals. Data Mining makes use of techniques from Machine Learning, as well as other statistical models, such as ANOVA, and visualization techniques.
+
+\section{Purpose}
+todo
 
 \section{Research Question}
 \label{sec:research_question}
@@ -95,7 +103,7 @@ The two most widely used research methodologies in data mining are CRISP-DM, the
 \item \emph{Business Understanding:} Get familiar with the application domain, obtaining necessary background knowledge, then identify the goals of the process from the customer's perspective and translate them to data mining tasks;
 \label{ol:dm_biz_understanding}
 
-\item \emph{Data Understanding:} Obtain and clean the data that is necessary to conduct the data mining tasks, appropriately dealing with empty, missing and outlier values, then conduct simple analysis and visualizations to inspect the overall quality and gain further understanding of the data itself;
+\item \emph{Data Understanding:} Obtain and clean the data that is necessary to conduct the data mining tasks, appropriately dealing with empty, missing and outlier values, and conducting simple analyses and visualizations to inspect the overall quality and gain further understanding of the data itself;
 \label{ol:dm_data_understanding}
 
 \item \emph{Data Preparation:} Transform the data in the format needed to conduct the data mining tasks, e.g. by performing feature selection and/or extraction, such as joins, aggregates, etc.
@@ -114,9 +122,13 @@ The two most widely used research methodologies in data mining are CRISP-DM, the
 It is important to mention that these steps are not strictly sequential, but heavily interact with one another: insights gained from the data can give rise to new questions, the evaluation of the results can highlight flaws in earlier steps, etc.
 
 \section{Ethics and Sustainability}
-todo
-reproducibility: using open data, following standards of reproducible research (open source and jupyter notebooks)
-lots of stuff about climate change etc.
+The author strongly aligns with the Open Science movement, according to which scientific research should be made as open and accessible as possible, so that it can be examined, extended and improved by as many people as possible. This is what allowed mankind to become what it is today, and it should not change. For this reason, this work was performed entirely with Free and Open Source tools, providing a low barrier to entry, and focusing on reproducibility of the results. The entirety of the analysis, from the very data to the generation of plots and tables, is openly accessible\footnote{\url{https://github.com/e-dorigatti/mscthesis}} and can be performed by anyone with enough computational resources.
+
+[todo is this paragraph necessary?] As noted in the introduction, climate scientists have found evidence of a recent change in our planet's climate, which is predicted to considerably impact life on Earth in the coming centuries [check and cite]: understanding climate is very important, for it could suggest ways of preserving our only home.
+
+Some of the analysis performed in this work required a considerable amount of computational resources, in the order of hundreds of cores and terabytes of memory. Such resources are power hungry and require electricity to run and to be kept at an appropriate temperature [todo some stats about internet power usage etc], as well as proper support infrastructure, e.g. for networking. In an effort to reduce the energy requirements, only the necessary experiments were performed, and care was taken not to do unnecessary work, for example by reusing results of previous experiments where possible.
+
+ethics: fair share of cluster resources? XD
 
 
 \section{Outline}
@@ -1428,29 +1440,23 @@ and \ref{tbl:gbr_results}, while figures \ref{fig:ridge_results_most}, \ref{fig:
 
 
 \begin{table}
-\caption{Descriptive statistics of the best MSE achieved by each estimator among all feature sets with and without trend, and effect size comparing it with the MOST baseline. A positive effect size denotes improvement, and its 95\% right CI is in parenthesis. Note that we selected the best feature set comparing only the mean MSE, it is possible that another feature set with a slightly higher average but lower variance would generate a larger effect size.}
+\caption{Effect sizes and their 95\% right CI comparing the MSE scores of all pairs of feature sets, for the GB estimator and for the MOST dataset. The control is on rows and the treatment is on columns, and the effect size is positive when the treatment has a smaller MSE than the control; in bold are the CIs that do not contain 0.}
+\label{tbl:fset_comparison_most}
+\input{include/fset_comparison}
+\end{table}
+
+
+\begin{table}
+\caption{Descriptive statistics of the best MSE achieved by each estimator among all feature sets with and without trend, and effect size comparing it with the MOST baseline; positive effect size denotes improvement, in bold are the CIs that do not contain 0.}
 \label{tbl:baseline_comparison}
 \input{include/baseline_comparison}
 \end{table}
 
 
 \begin{table}
-\caption{Effect sizes and their 95\% right CI comparing the MSE scores of each feature set with and without trend. A positive effect size indicates that the trend reduces the error; in bold are the combinations whose CI does not contain 0.}
+\caption{Effect sizes and their 95\% right CI comparing the MSE scores of each feature set with and without trend. A positive effect size indicates that the trend reduces the error; in bold are the CIs that do not contain 0.}
 \label{tbl:trend_comparison}
 \input{include/trend_comparison}
-\end{table}
-
-
-\begin{table}
-\caption{Effect sizes and their 95\% right CI comparing the MSE scores of all pairs of feature sets, for each estimator and for the MOST dataset. The control is on rows and the treatment is on columns, and the effect size is positive when the treatment has a smaller MSE than the control; in bold are the combinations whose CI  does not contain 0.}
-\label{tbl:fset_comparison_most}
-\input{include/fset_comparison_most}
-\end{table}
-
-\begin{table}
-\caption{Effect sizes and their 95\% right CI comparing the MSE scores of all pairs of feature sets, for each estimator and for the full dataset. The control is on rows and the treatment is on columns, and the effect size is positive when the treatment has a smaller MSE than the control; in bold are the combinations whose CI does not contain 0.}
-\label{tbl:fset_comparison_nomost}
-\input{include/fset_comparison_nomost}
 \end{table}
 
 

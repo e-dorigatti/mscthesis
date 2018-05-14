@@ -1,16 +1,16 @@
-\setcellgapes{1ex}\makegapedcells\centering\begin{tabular*}{\textwidth}{c @{\extracolsep{\fill}} r|rrrrrrrr}
+\setcellgapes{1ex}\makegapedcells\centering\begin{tabular*}{\textwidth}{cr|@{\extracolsep{\fill}}rrrrrrrr}
 \toprule
-    &      & \textbf{Mean} & \textbf{Std.} & \textbf{Min.} & \textbf{25\%} & \textbf{50\%} & \textbf{75\%} & \textbf{Max.} &             \textbf{Effect Size} \\
-\textbf{Dataset} & \textbf{Model} &               &               &               &               &               &               &               &                                  \\
+     &      & \textbf{Mean} & \textbf{Std.} & \textbf{Min.} & \textbf{25\%} & \textbf{50\%} & \textbf{75\%} & \textbf{Max.} & \textbf{Effect Size} \\
+\textbf{Dataset} & \textbf{Model} &               &               &               &               &               &               &               &                      \\
 \midrule
-\multirowcell{8}[3ex][c]{\textbf{All}} & \textbf{MOST} &  0.64 &  0.04 &  0.58 &  0.63 &  0.63 &  0.64 &  0.71 &  - \\
-    & \textbf{GB} &  0.36 &  0.07 &  0.28 &  0.31 &  0.34 &  0.40 &  0.50 &  \makecell[c]{4.04 (2.38; inf)} \\
-    & \textbf{kNN} &  0.45 &  0.05 &  0.38 &  0.42 &  0.43 &  0.48 &  0.53 &  \makecell[c]{4.51 (2.72; inf)} \\
-    & \textbf{Ridge} &  0.62 &  0.08 &  0.53 &  0.57 &  0.60 &  0.64 &  0.80 &  \makecell[c]{0.55 (-0.19; inf)} \\
+\multirow{4}{*}{\textbf{Full}} & \textbf{MOST} &  0.64 &  0.04 &  0.58 &  0.63 &  0.63 &  0.64 &  0.71 &  - \\
+     & \textbf{GB} &  0.36 &  0.07 &  0.28 &  0.31 &  0.34 &  0.40 &  0.50 &  \textbf{1.97/3.87} \\
+     & \textbf{kNN} &  0.45 &  0.05 &  0.38 &  0.42 &  0.43 &  0.48 &  0.53 &  \textbf{2.29/4.39} \\
+     & \textbf{Ridge} &  0.62 &  0.08 &  0.53 &  0.57 &  0.60 &  0.64 &  0.80 &  -0.17/0.50 \\
 \cline{1-10}
-\multirowcell{8}[3ex][c]{\textbf{MOST}} & \textbf{MOST} &  0.32 &  0.02 &  0.29 &  0.31 &  0.32 &  0.34 &  0.34 &  - \\
-    & \textbf{GB} &  0.18 &  0.01 &  0.15 &  0.17 &  0.18 &  0.19 &  0.19 &  \makecell[c]{10.94 (6.81; inf)} \\
-    & \textbf{kNN} &  0.22 &  0.01 &  0.21 &  0.22 &  0.22 &  0.23 &  0.25 &  \makecell[c]{7.33 (4.80; inf)} \\
-    & \textbf{Ridge} &  0.27 &  0.02 &  0.24 &  0.25 &  0.27 &  0.28 &  0.31 &  \makecell[c]{2.69 (1.50; inf)} \\
+\multirow{4}{*}{\textbf{MOST}} & \textbf{MOST} &  0.32 &  0.02 &  0.29 &  0.31 &  0.32 &  0.34 &  0.34 &  - \\
+     & \textbf{GB} &  0.18 &  0.01 &  0.15 &  0.17 &  0.18 &  0.19 &  0.19 &  \textbf{6.41/10.27} \\
+     & \textbf{kNN} &  0.22 &  0.01 &  0.21 &  0.22 &  0.22 &  0.23 &  0.25 &  \textbf{4.05/6.99} \\
+     & \textbf{Ridge} &  0.27 &  0.02 &  0.24 &  0.25 &  0.27 &  0.28 &  0.31 &  \textbf{1.32/2.72} \\
 \bottomrule
 \end{tabular*}
