@@ -3,6 +3,7 @@
 \usepackage[a4paper,inner=36mm,outer=18mm,top=30mm,]{geometry}
 \usepackage[a4paper]{geometry}
 \usepackage{bm}
+\usepackage{enumitem}
 \usepackage{siunitx}
 \usepackage{tcolorbox}
 \usepackage{afterpage}
@@ -31,6 +32,9 @@
 
 \DeclareMathOperator*{\argmin}{argmin}
 \DeclareMathOperator*{\argmax}{argmax}
+
+% https://tex.stackexchange.com/a/207023/161471
+\SetLabelAlign{LeftAlignWithIndent}{\hspace*{1.5em}\makebox[1.5em][l]{#1}}
 
 \setcitestyle{authoryear, open={(},close={)}}
 
@@ -370,7 +374,7 @@ We can now use the empirical risk as a surrogate for the true risk, selecting th
 \hat{f}=\argmin_{f\in\mathcal{F}}\hat{R}(f)
 \end{equation}
 
-as our best guess. This procedure is called \emph{empirical risk minimization}. Note that $\hat{f}$ is a random function, because it depends on $D$, which is a random variable. An interesting question to ask is how good $\hat{f}$ actually is, or, in other words, what is its expected true risk $\mathbb{E}[R(\hat{f})]$ and how it compares to the lowest attainable risk $R(f^*)$. This latter quantity can be decomposed as
+\noindent as our best guess. This procedure is called \emph{empirical risk minimization}. Note that $\hat{f}$ is a random function, because it depends on $D$, which is a random variable. An interesting question to ask is how good $\hat{f}$ actually is, or, in other words, what is its expected true risk $\mathbb{E}[R(\hat{f})]$ and how it compares to the lowest attainable risk $R(f^*)$. This latter quantity can be decomposed as
 
 \begin{equation}
 \mathbb{E}[R(\hat{f})]-R(f^*)=
@@ -501,7 +505,7 @@ p(\bm\Theta\vert\bm t, \bm X)&=\frac{p(\bm X, \bm t\vert\bm\Theta)\cdot p(\bm\Th
 \end{align}
 
 
-where we removed $p(\bm X,\bm t)$ and $p(\bm X\vert\bm\Theta)=p(\bm X)$ because they are constant for a given dataset, and we are not interested in the exact probability, but where it reaches its maximum value. This parameter estimation procedure is called \emph{maximum a posteriori} (MAP). Two commonly used prior distributions are the multivariate Laplace and the multivariate Normal, leading respectively to L1 and L2 regularization, when centered and symmetrical/spherical. Note that MAP reduces to MLE when we assume an uniform prior $p(\bm\Theta)$.
+\noindent where we removed $p(\bm X,\bm t)$ and $p(\bm X\vert\bm\Theta)=p(\bm X)$ because they are constant for a given dataset, and we are not interested in the exact probability, but where it reaches its maximum value. This parameter estimation procedure is called \emph{maximum a posteriori} (MAP). Two commonly used prior distributions are the multivariate Laplace and the multivariate Normal, leading respectively to L1 and L2 regularization, when centered and symmetrical/spherical. Note that MAP reduces to MLE when we assume an uniform prior $p(\bm\Theta)$.
 
 The maximization of the posterior can be done conveniently by maximizing its logarithm; this gives expressions that are easier to handle analytically, and give less numerical problems when computed. The MAP problem can be formulated as follows:
 
@@ -517,7 +521,7 @@ If we assume a Gaussian likelihood like the one in equation \ref{eq:likelihood},
 \bm\theta^*=\argmin_{\bm\theta}\ L(\bm\theta)=\argmin_{\bm\theta}\sum_{n=1}^N\left( f(\bm x_n,\theta)-t_n\right)^2+\lambda\bm\theta^\intercal\bm\theta
 \end{equation}
 
-Where $L$ is the \emph{loss function}, in this case the sum-of-squares error. It is customary to use the mean squared error instead of the sum of squares because it results in smaller numbers and is readily interpreted; being only a constant factor away from \ref{eq:least_squares}, it does not transcend the essence of MAP estimation. The parameter $\beta$ can be estimated as well in a similar way, if necessary, and a fully Bayesian treatment allows to estimate $\lambda$, too. Depending on the model $f(\bm x_n,\bm\theta)$, \ref{eq:least_squares} can be solved analytically to yield a closed-form solution for $\bm\theta$.
+\noindent where $L$ is the \emph{loss function}, in this case the sum-of-squares error. It is customary to use the mean squared error instead of the sum of squares because it results in smaller numbers and is readily interpreted; being only a constant factor away from \ref{eq:least_squares}, it does not transcend the essence of MAP estimation. The parameter $\beta$ can be estimated as well in a similar way, if necessary, and a fully Bayesian treatment allows to estimate $\lambda$, too. Depending on the model $f(\bm x_n,\bm\theta)$, \ref{eq:least_squares} can be solved analytically to yield a closed-form solution for $\bm\theta$.
  
 When this is not possible, iterative optimization methods are employed. A widely used approach is called \emph{gradient descent}: the gradient of a function computed at a given location "points" to the steepest direction where the function's value increases. By repeatedly following the gradient, it is possible to reach a local maximum, and, in the opposite direction, a local minimum:
 
@@ -525,7 +529,7 @@ When this is not possible, iterative optimization methods are employed. A widely
 \bm\theta_{n+1}:=\bm\theta_n-\eta\cdot\nabla f(\bm x_n)
 \end{equation}
 
-the series $\bm\theta_1,\ldots,\bm\theta_n$ is guaranteed to converge to the local optimum at a rate of $O(n^{-1})$ if certain conditions are met \citep{gd_convergence}. \cite{numopt} describes more advanced optimization techniques that use the gradient and, possibly, the Hessian, such as Newton's. The gradient of $L(\bm\theta)$ is
+The series $\bm\theta_1,\ldots,\bm\theta_n$ is guaranteed to converge to the local optimum at a rate of $O(n^{-1})$ if certain conditions are met \citep{gd_convergence}. \cite{numopt} describes more advanced optimization techniques that use the gradient and, possibly, the Hessian, such as Newton's. The gradient of $L(\bm\theta)$ is
 
 \begin{equation}
 \label{eq:least_squares_gradient}
@@ -533,7 +537,7 @@ the series $\bm\theta_1,\ldots,\bm\theta_n$ is guaranteed to converge to the loc
 =2\sum_{n=1}^N \big(f(\bm x_n;\theta)-\bm t_n\big)\cdot\nabla_{\bm\theta}f(\bm x_n;\theta) + 2\lambda\bm\theta
 \end{equation}
 
-And its Hessian is
+\noindent and its Hessian is
 
 \begin{equation}
 \label{eq:least_squares_hessian}
@@ -590,7 +594,7 @@ t_n, f_{m-1}(\bm x_n)+\beta h(\bm x_n,\bm\theta)
 \right)
 \end{equation}
 
-Where $L$ is the loss function, such as the squared error introduced previously. This optimization problem can be challenging, depending on the specific form of $h$ and $L$. Actually, equation \ref{eq:gboostjoint} is equivalent to gradient descent in function space\footnote{this means that you actually modify the function itself, not its parameters, as we did in section \ref{sec:regression_fit}. This is true provided that the parametric function $h$ is able to represent the gradient} \citep{boostinggd,greedyboosting}. This gradient can be computed explicitly on the $N$ training points, but we do not know how to compute it on the other points that are not in the training set\footnote{this is the essence of gradient descent in function space, since a function is defined for every point (at least the functions we consider in Machine Learning are)}. The fundamental idea is to find a model that can predict this gradient, by training it on the dataset. This model is exactly $h$ with parameters $\bm\theta_m$:
+\noindent where $L$ is the loss function, such as the squared error introduced previously. This optimization problem can be challenging, depending on the specific form of $h$ and $L$. Actually, equation \ref{eq:gboostjoint} is equivalent to gradient descent in function space\footnote{this means that you actually modify the function itself, not its parameters, as we did in section \ref{sec:regression_fit}. This is true provided that the parametric function $h$ is able to represent the gradient} \citep{boostinggd,greedyboosting}. This gradient can be computed explicitly on the $N$ training points, but we do not know how to compute it on the other points that are not in the training set\footnote{this is the essence of gradient descent in function space, since a function is defined for every point (at least the functions we consider in Machine Learning are)}. The fundamental idea is to find a model that can predict this gradient, by training it on the dataset. This model is exactly $h$ with parameters $\bm\theta_m$:
 
 \begin{equation}
 \label{eq:gbtheta}
@@ -599,7 +603,7 @@ Where $L$ is the loss function, such as the squared error introduced previously.
 \right]^2
 \end{equation}
 
-With $g_m$ being the gradient of $L$ with respect to $f_{m-1}$:
+\noindent with $g_m$ being the gradient of $L$ with respect to $f_{m-1}$:
 
 \begin{equation}
 \label{eq:gbgrad}
@@ -625,7 +629,7 @@ L_\delta(t_n,y_n)=\begin{cases}
 \end{cases}
 \end{equation}
 
-Which is robust to outliers as least absolute deviation, but does not penalize small errors too much, like least squares. In this case,
+\noindent which is robust to outliers as least absolute deviation, but does not penalize small errors too much, like least squares. In this case,
 
 \begin{equation}
 -g_m(\bm x_n)=\begin{cases}
@@ -656,7 +660,7 @@ Consider the setting of ridge regression described in section \ref{sec:ridge}, w
 \mathbb{E}[\bm y]=\mathbb{E}[\bm\Phi\bm\theta]=\bm\Phi\mathbb{E}[\bm\theta]=\bm 0
 \end{equation}
 
-and covariance
+\noindent and covariance
 
 \begin{equation}
 \text{cov}[\bm y]=\mathbb{E}[\bm y\bm y^\intercal]
@@ -672,7 +676,7 @@ In general, we can use any function $k$ to compute the covariance between two in
 k(\bm x, \bm x^\prime)=\exp\left(-\frac{\Vert\bm x-\bm x^\prime\Vert^2}{2\sigma^2}\right)
 \end{equation}
 
-where $\Vert\bm x-\bm x^\prime\Vert^2=\sum_d(\bm x_d-\bm x_d^\prime)^2$ is the squared Euclidean distance, and which incidentally corresponds to an infinite dimentional basis function, and the linear kernel:
+\noindent where $\Vert\bm x-\bm x^\prime\Vert^2=\sum_d(\bm x_d-\bm x_d^\prime)^2$ is the squared Euclidean distance, and which incidentally corresponds to an infinite dimentional basis function, and the linear kernel:
 
 \begin{equation}
 k(\bm x, \bm x^\prime)=\sigma^2\bm x^\intercal\bm x^\prime
@@ -691,7 +695,7 @@ In order to use a Gaussian Process for inference (in the regression setting), we
 \bm\Sigma_{\bm y}=K_{\bm\theta}(\bm X^*,\bm X^*)-K_{\bm\theta}(\bm X^*,\bm X)^\intercal K_{\bm\theta}(\bm X, \bm X)^{-1}K_{\bm\theta}(\bm X,\bm X^*)
 \end{equation}
 
-Where $K_{\bm\theta}(\bm A,\bm B)$ is a matrix whose $(i,j)$ cell equals to $k(A_i,B_j;\bm\theta)$. From these formulas, note that in order to use GPs, one needs to remember the kernel matrix, of size $N^2$ and invert it, an operation which has a computational complexity of $O(N^3)$; this makes GPs, and any method based on kernels, hard to scale up.
+\noindent where $K_{\bm\theta}(\bm A,\bm B)$ is a matrix whose $(i,j)$ cell equals to $k(A_i,B_j;\bm\theta)$. From these formulas, note that in order to use GPs, one needs to remember the kernel matrix, of size $N^2$ and invert it, an operation which has a computational complexity of $O(N^3)$; this makes GPs, and any method based on kernels, hard to scale up.
 
 Up until now, we assumed the kernel was fixed, and treated $\bm\theta$ as hyper-parameters. We could use one of the cross validation methods described in section \ref{sec:cv} to find their values, but the Bayesian framework that we used to derive GP allows us to find $\bm\theta$, too, by maximizing $\log p(\bm t\vert\bm X,\bm\theta)$\footnote{obtained as in equation \ref{eq:gp_marg}, usually called log-marginal-likelihood, since we marginalized $\bm f$} with respect to $\bm\theta$. This function often has many local maxima, and is usually optimized by means of gradient descent.
 
@@ -714,7 +718,7 @@ The effect size is a statistic used to compare the means of two populations, usu
 \delta=\frac{\mu_t-\mu_c}{\sigma}
 \end{equation}
 
-Where $\mu_t$ and $\mu_c$ are the means of the treatment and control groups respectively, and $\sigma$ is a normalizer that can be computed in essentially three ways: when the standard deviations of the control and treatment populations can be assumed to be equal, then $\sigma$ should be the pooled standard deviation\footnote{the average standard deviation of the control and treatment groups, weighted by the degrees of freedom (one less than the number of observations) of each group}, otherwise it should be the standard deviation of either the control or treatment group. Generally, the effect size is computed to be positive when the treatment group represent an improvement over the control group.
+\noindent where $\mu_t$ and $\mu_c$ are the means of the treatment and control groups respectively, and $\sigma$ is a normalizer that can be computed in essentially three ways: when the standard deviations of the control and treatment populations can be assumed to be equal, then $\sigma$ should be the pooled standard deviation\footnote{the average standard deviation of the control and treatment groups, weighted by the degrees of freedom (one less than the number of observations) of each group}, otherwise it should be the standard deviation of either the control or treatment group. Generally, the effect size is computed to be positive when the treatment group represent an improvement over the control group.
 
 Recently, there is a departure from the standard procedure of reporting p-values, test statistics and critical values resulting from hypothesis testing towards reporting effect sizes and their confidence intervals, in addition or in alternative to the usual statistics, see for example \cite{apa} and \cite{aera}.  However, effect sizes can be as misleading as significance testing when the assumptions underlying its expression are violated; commonly used effect size measures, such as Cohen's $d$ [citation], assume both populations are normally distributed and have the same standard deviation\footnote{a property called \emph{homoscedasticity} (contrary: heteroscedasticity)}. Alternatives that do not assume equal standard deviation exist \citep{es1,es2,es3}, but they all require normality, and generally use approximate distributions of the standard error and/or the CI (or both).
 
@@ -730,19 +734,19 @@ X_n &\text{otherwise}
 \end{cases}
 \end{equation}
 
-then we have the Winsorized sample mean
+\noindent then we have the Winsorized sample mean
 
 \begin{equation}
 \overline{X}_W=\frac{1}{N}\sum_{n=1}^N W_n
 \end{equation}
 
-the Winsorized sample variance
+\noindent the Winsorized sample variance
 
 \begin{equation}
 \hat{\sigma}_W=\frac{1}{N-1}\sum_{n=1}^N (W_n-\overline{X}_W)^2
 \end{equation}
 
-and the estimated variance of the trimmed mean
+\noindent and the estimated variance of the trimmed mean
 
 \begin{equation}
 \text{Var}[\overline{X}_\gamma]=\frac{\hat{\sigma}^2_W}{N(1-2\gamma)^2}
@@ -756,7 +760,7 @@ The standard error of $\overline{X}_\gamma$ is the usual $(\text{Var}[\overline{
 =(1-2\gamma)\frac{\overline{T}_\gamma-\overline{C}_\gamma}{\hat{\sigma}_W}
 \end{equation}
 
-where $T_1,\ldots,T_N$ and $C_1,\ldots,C_M$ are the \emph{independent} samples of treatment and control groups respectively. See  \cite{robust_stat} and \cite{modern_stat}for an introduction to robust statistical methods, including the ones just described.
+\noindent where $T_1,\ldots,T_N$ and $C_1,\ldots,C_M$ are the \emph{independent} samples of treatment and control groups respectively. See  \cite{robust_stat} and \cite{modern_stat}for an introduction to robust statistical methods, including the ones just described.
 
 \begin{figure}
     \centering
@@ -817,7 +821,7 @@ $$
 F_a=\frac{1}{T_2-T_1}\sum_{t=T_1}^{T_2}(w_t-\overline{w})(a_t-\overline{a})
 $$
 
-Where $\overline{w}$ and $\overline{a}$ are the averages of $w_t$ and $a_t$ for $T_1\leq t\leq T_2$. The fluxes in the Cesar database are computed every ten minutes, with 10 measurements per second.
+\noindent where $\overline{w}$ and $\overline{a}$ are the averages of $w_t$ and $a_t$ for $T_1\leq t\leq T_2$. The fluxes in the Cesar database are computed every ten minutes, with 10 measurements per second.
 
 The eddy correlation technique is far from perfect, see e.g. \citep{microhandbook, ed_co2}. Other methods can be used to compute $H$ and $u_*$; for example, \cite{cabauw_abl} uses an iterative method to estimate these quantities from $L$, starting from an initial guess and refining the result, alternating improvements of $u_*$ and $H$ with improvements of $L$.
 
@@ -981,7 +985,7 @@ Finally, a third method of computing the gradient is to fit a Gaussian process t
 k(z_1,z_2)=\exp\left(-\frac{(z_1-z_2)^2}{2\sigma_0^2}\right)+\sqrt{\sigma_1^2+ z_1 z_2}+\sigma_2^2 \mathbbm{1}[z_1=z_2]+\sigma_3^2
 \end{equation}
 
-Where $\mathbbm{1}[P]$ is an indicator function whose value is 1 if the predicate $P$ is true, and 0 otherwise, and the parameter $\sigma_2$ controls the noise in the measurement. Unfortunately, this noise is not constant, and does not depend on the altitude level; for example, for the wind speed $u$, the precision of the instrument is $\max(0.1,0.01\cdot u)$. Therefore, all the parameters must be found by optimizing the marginal likelihood. Figure \ref{fig:kernel} shows the prior distribution of a Gaussian process with this kernel, as well as the value of the kernel for some choices of $z_1$ and $z_2$.
+\noindent where $\mathbbm{1}[P]$ is an indicator function whose value is 1 if the predicate $P$ is true, and 0 otherwise, and the parameter $\sigma_2$ controls the noise in the measurement. Unfortunately, this noise is not constant, and does not depend on the altitude level; for example, for the wind speed $u$, the precision of the instrument is $\max(0.1,0.01\cdot u)$. Therefore, all the parameters must be found by optimizing the marginal likelihood. Figure \ref{fig:kernel} shows the prior distribution of a Gaussian process with this kernel, as well as the value of the kernel for some choices of $z_1$ and $z_2$.
 
 \begin{figure}
     \centering
@@ -1036,7 +1040,7 @@ Where $a$ is close to 1, $b$ is positive, and $d$ is negative. Since $d$ is nega
 \end{bmatrix}
 \end{align}
 
-where $\tau=1-c^2\xi$. The Hessian of \ref{eq:phi_general} when $\xi\geq 0$ is simply 0, because it is a linear function in all parameters, while, in the negative case, we have:
+\noindent where $\tau=1-c^2\xi$. The Hessian of \ref{eq:phi_general} when $\xi\geq 0$ is simply 0, because it is a linear function in all parameters, while, in the negative case, we have:
 
 \begin{equation}
 \nabla^2_\theta\phi(\xi)\vert_{\xi<0} = \begin{bmatrix}
@@ -1450,13 +1454,13 @@ Table \ref{tbl:baseline_comparison} shows descriptive statistics of the MSE obta
 \end{table}
 
 \begin{table}[p]
-\caption{Effect sizes comparing the MSE scores of each feature set with and without trend; a positive effect size indicates that the trend (treatment) reduces the error compared to not using the trend (control). The first number is the lower bound for the right 95\% CI interval, and the second number is the estimated population effect size; in bold are the CIs that do not contain 0. Using the trend does not improve the performance.}
+\caption{Effect sizes comparing the MSE scores of each feature set with and without trend; the upper effect size uses the trend as treatment, whereas the lower effect size uses the trend as control. The first number is the lower bound for the right 95\% CI interval, and the second number is the estimated population effect size; positive effect size denotes improvement over the control group, in bold are the CIs that do not contain 0. Using the trend does not improve the performance.}
 \label{tbl:trend_comparison}
 \input{include/trend_comparison}
 \end{table}
 
 \begin{table}[p]
-\caption{Effect sizes comparing the MSE scores of all pairs of feature sets; in light of table \ref{tbl:trend_comparison}, the trend is not included in the features. The first number is the lower bound for the right 95\% CI interval, and the second number is the estimated population effect size; positive effect size denotes improvement, in bold are the CIs that do not contain 0. The only feature sets that do not bring an improvement are F2 over F1 and F4 over F3.}
+\caption{Effect sizes comparing the MSE scores of all pairs of feature sets; in light of table \ref{tbl:trend_comparison}, the trend is not included in the features. The control is on rows, and the treatment is on columns. The first number is the lower bound for the right 95\% CI interval, and the second number is the estimated population effect size; positive effect size denotes improvement over the control group, in bold are the CIs that do not contain 0. The only feature sets that do not bring an improvement are F2 over F1 and F4 over F3.}
 \label{tbl:fset_comparison}
 \input{include/fset_comparison}
 \end{table}
@@ -1467,13 +1471,40 @@ Table \ref{tbl:trend_comparison} compares each feature set with and without tren
 
 Table \ref{tbl:fset_comparison} compares every pair of feature set, again restricted to the MOST dataset and the GBT estimator. Given that the trend does not provide additional benefits, we compare the feature sets without the trend. The only feature sets that do not improve over the previous sets are F2 (soil heat flux) over F1 and F4 (rain amount and dew point) over F3; in all other cases, adding features gives a significant improvement.
 
-Refer to appendix \ref{apx:all_results} for detailed results, including all metrics for all combinations of estimator, dataset, trend and features.
 
 \begin{table}
 \caption{Number of times the cross validation procedure was performed to obtain the scores summarized in tables \ref{tbl:trend_comparison} and \ref{tbl:fset_comparison}.}
 \label{tbl:repeated_cv_count}
 \input{include/repeated_cv_count.tex}
 \end{table}
+
+
+As argued in section \ref{sec:effect_size}, we normalize the effect size with the standard deviation of the treatment. In table \ref{tbl:baseline_comparison}, it is clear that the MOST estimator is the control group, and the other estimators are different treatments, however this distinction is not so clear-cut in tables \ref{tbl:trend_comparison} and \ref{tbl:fset_comparison}, therefore these tables report both effect sizes.  The goal of the tables is to answer one-sided questions of the form\\
+
+\emph{Q: How much better is the treatment compared to the control?} \\
+
+\noindent with an answer like: \\
+ 
+\emph{The treatment is $\delta$ better than the control, and with high probability better than $\delta_{low}$}. \\
+
+\noindent This answer can be transformed into the answer to: \\
+
+\emph{$Q^\prime$: How much better is the control compared to the treatment?} \\
+
+\noindent as follows: \\
+ 
+\emph{The control is $-\delta$ better than the treatment, but with high probability no better than $-\delta_{low}$}.\\
+ 
+\noindent Comparing two samples $A$ and $B$ using each of them both as control and treatment allows us to answer the following four questions:
+
+\begin{enumerate}[leftmargin=*,align=LeftAlignWithIndent]
+\item[$Q1$.] How much better is $A$ compared to $B$, when $A$ is the treatment?
+\item[$Q1^\prime$.] How much better is $B$ compared to $A$, when $A$ is the treatment?
+\item[$Q2$.] How much better is $B$ compared to $A$, when $B$ is the treatment?
+\item[$Q2^\prime$.] How much better is $A$ compared to $B$, when $B$ is the treatment?
+\end{enumerate}
+
+Note that it is wrong to combine the answers to $Q$ and $Q^\prime$ to obtain a two-sided CI, for the simple reason that these answers use two different treatments. In other words, one should refrain from combining CIs, but choose the appropriate one \emph{after} determining which question is of interest \emph{and} which interpretation is appropriate.
 
 \chapter{Discussion}
 \label{ch:discussion}
@@ -1493,10 +1524,13 @@ can generate new training samples at more altitude levels, since we have a model
 
 our models can only be used in conditions that are similar to cabauw. most importantly, they are not valid in the oceanic surface layer, because it is very different [citation]
 
+incorporate uncertainty in the model (e.g. quantile regression), then use this in the simulations to get climate uncertainty (monte carlo by sampling from prediction would be a quick and dirty way of implementing this, although it would make the simulation quite slow)
+
+trend would be better included using some sort of time series prediction together with the features we considered in this work
+
+
 \section{Limitations and Future Work}
 todo
-
-
 
 \appendix
 \chapter{Detailed Results}
