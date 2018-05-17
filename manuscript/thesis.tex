@@ -1479,33 +1479,6 @@ Table \ref{tbl:fset_comparison} compares every pair of feature set, again restri
 \end{table}
 
 
-As argued in section \ref{sec:effect_size}, we normalize the effect size with the standard deviation of the treatment. In table \ref{tbl:baseline_comparison}, it is clear that the MOST estimator is the control group, and the other estimators are different treatments, however this distinction is not so clear-cut in tables \ref{tbl:trend_comparison} and \ref{tbl:fset_comparison}, therefore these tables report both effect sizes.  The goal of the tables is to answer one-sided questions of the form\\
-
-\emph{Q: How much better is the treatment compared to the control?} \\
-
-\noindent with an answer like: \\
- 
-\emph{The treatment is $\delta$ better than the control, and with high probability better than $\delta_{low}$}. \\
-
-\noindent This answer can be transformed into the answer to: \\
-
-\emph{$Q^\prime$: How much better is the control compared to the treatment?} \\
-
-\noindent as follows: \\
- 
-\emph{The control is $-\delta$ better than the treatment, but with high probability no better than $-\delta_{low}$}.\\
- 
-\noindent Comparing two samples $A$ and $B$ using each of them both as control and treatment allows us to answer the following four questions:
-
-\begin{enumerate}[leftmargin=*,align=LeftAlignWithIndent]
-\item[$Q1$.] How much better is $A$ compared to $B$, when $A$ is the treatment?
-\item[$Q1^\prime$.] How much better is $B$ compared to $A$, when $A$ is the treatment?
-\item[$Q2$.] How much better is $B$ compared to $A$, when $B$ is the treatment?
-\item[$Q2^\prime$.] How much better is $A$ compared to $B$, when $B$ is the treatment?
-\end{enumerate}
-
-Note that it is wrong to combine the answers to $Q$ and $Q^\prime$ to obtain a two-sided CI, for the simple reason that these answers use two different treatments. In other words, one should refrain from combining CIs, but choose the appropriate one \emph{after} determining which question is of interest \emph{and} which interpretation is appropriate.
-
 \chapter{Discussion}
 \label{ch:discussion}
 even though we predicted phim, the actual interest is in u*. we predict phim to have a direct means of comparing with state of the art (?), \cite{weber1999} computes u* from the standard deviations obtaining rmse between 0.05 and 0.1
@@ -1526,7 +1499,19 @@ our models can only be used in conditions that are similar to cabauw. most impor
 
 incorporate uncertainty in the model (e.g. quantile regression), then use this in the simulations to get climate uncertainty (monte carlo by sampling from prediction would be a quick and dirty way of implementing this, although it would make the simulation quite slow)
 
-trend would be better included using some sort of time series prediction together with the features we considered in this work
+trend could be better included using some sort of time series prediction together with the features we considered in this work, but preliminary experiments (3 layers gru + 4 layers fully connected) do not seem to work well)
+
+richardson number instead of obukhov length
+
+generalization problem: surface roughness? simulations already use some parameters for this
+
+defense thu 14 at 11 in kista room grottan
+
+ask ying to review my thesis
+
+seems like it's fairly new, no ML attempts
+
+boundary layer journal
 
 
 \section{Limitations and Future Work}
@@ -1658,6 +1643,42 @@ and \ref{tbl:gbr_results}, while figures \ref{fig:ridge_results_most}, \ref{fig:
 
 % ---------------------------------------------------------------
 
+
+\chapter{Prediction with Deep Neural Networks}
+The reason why this is not included in the main report is that time and resources constraint prevented a formal and thorough evaluation of these results. That said, this approach is definitely promising and worth pursuing in the future.
+\paragraph{Methods:}
+The features were obtained in the same way as for the other estimators discussed in the main report. The validation set used all the samples belonging to 12 months, and a new random validation set was created for every experiment performed. The configuration of the networks was obtained manually:
+
+\begin{itemize}
+\item \textbf{Architecture:} Fully connected layers only, number of neurons halved at every layer. The first layer with 1 neuron was the output layer, and the first hidden layer had either 128, 256 or 512 neurons, resulting in 7 to 9 hidden layers;
+\item \textbf{Activation Function:} linear for the output layer, PReLU [cite] for the hidden layers;
+\item \textbf{Regularization:} Dropout ($p=0.5$, only when the first layer had 256 neurons);
+\item \textbf{Optimizer:} Adam [cite] with inital learning rate $10^{-3}$ (check this);
+\item \textbf{Batch Size:} 1024
+\item \textbf{Learning Rate Schedule:} Divide by 10 if the validation loss had not decreased by at least $10^{-4}$ in the last 10 epochs;
+\item \textbf{Early Stopping:} if the validation error did not improve in the last 25 epochs, or if the learning rate was reduced below $10^{-6}$.
+\end{itemize}
+
+\paragraph{Results:}
+Table \ref{tbl:nnets} shows the results obtained on the full dataset; for comparison, the best result presented in the main text for this dataset is 0.36 with a standard deviation of 0.03. An informal evaluation suggests that neural networks have roughly the same standard deviation, possibly a bit 
+
+\begin{table}
+\caption{MSE obtained by neural networks on the full dataset and using the trend}
+\label{tbl:nnets}
+\centering
+\begin{tabular}{c|ccccc}
+\toprule
+\textbf{MOST} & \textbf{F1} & \textbf{F2} & \textbf{F3} & \textbf{F4} & \textbf{F5} \\
+\midrule
+0.67 & 0.31 & 0.29 & 0.26 & 0.24 & 0.21 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Other experiments were performed using all the observations in the hour preceding the sample to predict, and using up to three GRU layers, followed by up to four fully connected layers, with the other parameters as detailed above. The performances were discouraging, with the network struggling to go below 0.15/0.20 training MSE and 0.7/0.8 validation MSE on F4 and full dataset.
+
+
+\chapter{Bayesian Hyper-parameter Optimization}
 
 %\bibliographystyle{unsrt}
 %\bibliographystyle{plainnat}
