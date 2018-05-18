@@ -60,13 +60,11 @@ This project marks the end of my years as a student.  During all this time,
 \newpage
 
 \section*{Summary}
-The study of climate heavily relies on simulations. In order to successfully simulate the evolution of the global climate over long periods of time, the simulations have to use a relatively coarse grid, in which points are horizontally separated by several kilometers. Many important phenomena of the atmosphere, though, happen at much smaller scales, and the only way to incorporate them in the simulation is to rely on parametrizations, i.e. describing their effect based on macro parameters.
-
-The turbulence resulting from the interaction between the atmosphere and the surface is an example of such phenomena that happens at spatial and temporal scales too small to be simulated. One of the quantities of interest arising from turbulence is the momentum flux-profile relationship, which relates the transport of momentum (flux) and the change of wind speed with altitude (profile). This quantity can be computed following the Monin-Obukhov Similarity Theory, according to which it is a function of the altitude divided by a characteristic length scale derived from other turbulence parameters. However, this theory is only applicable in a restricted range of conditions, and produces predictions that are accurate only up to 20-30\%.
+The study of climate heavily relies on simulations. For efficiency reasons, many important phenomena cannot be simulated, and have to be parametrized, i.e. describing their effect based on macro parameters. The turbulence resulting from the interaction between the atmosphere and the surface is an example of such phenomena One of the quantities of interest arising from turbulence is the momentum flux-profile relationship, which relates the transport of momentum (flux) and the change of wind speed with altitude (profile). This quantity can be computed following the Monin-Obukhov Similarity Theory \citep{mostayyyy}. However, this theory requires parameters that are hard to measure, both in real life and in the simulations, is only applicable in a restricted range of conditions, and produces predictions that are accurate only up to 20-30\% \citep{50years}.
 
 The goal of this thesis is to compute the momentum flux-profile relationship using only macro weather parameters, which are readily available in climate simulations; this is done using Data Mining techniques on 17 years of weather data collected from the Cabauw meteorological tower in the Netherlands. Moreover, we asses the impact of different sets of features on the prediction error.
 
-Results show that ...
+Results show that even the simplest linear models are able to compete with the similarity theory, and complex methods such as gradient boosted trees can reduce the mean squared error by almost 50\%. Furthermore, these methods are applicable to a much wider range of conditions compared to the similarity theory, while providing roughly the same predictive performance achieved by this theory \emph{in its validity range}. These results are obtained using wind speed and air temperature at different levels, the soil temperature, and the net radiation at the surface; the improvement offered by the heat fluxes is significant, but of low magnitude. The soil heat flux, the dew point, and the hourly trend of the features do not have a tangible impact on the performance.
 
 \tableofcontents
 
@@ -95,7 +93,7 @@ One important issues in the study of the atmospheric boundary layer is the deriv
 
 The state of the art relationships are defined by the Monin-Obukhov Similarity theory in terms of the instability parameter $\xi$, computed as the height above surface scaled by turbulence due to horizontal wind and vertical air movement due to variations in heat. Difficulties in measurements of relevant quantities make this theory accurate only up to 20-30\% \citep{basicatm}, and applicable in a restricted set of conditions.
 
-\cite{sheba} shows that, at least in difficult conditions, several simulation models produce flux estimates that are highly inaccurate, presenting low correlation (mostly below 0.3) and errors that are as large as the fluxes themselves. Since errors in the simulation accumulate over time, even slight improvements can greatly improve the accuracy of the results after years of simulated time. Improved flux-profile relationship can, therefore, yield more accurate estimates of the fluxes.
+\cite{sheba} shows that, at least in difficult conditions, several simulation models produce flux estimates that are highly inaccurate, presenting low correlation (mostly below 0.3) and errors that are as large as the fluxes themselves. \cite{most_les} raises awareness on the fact that the lowest grid level used in many simulations recent simulations is too low, outside of the validity region of the Monin-Obukhov similarity theory, although no quantitative measure of the issues caused is presented. Intuitively, since errors in the simulation accumulate over time, even slight improvements can greatly improve the accuracy of the results after years of simulated time. Improved flux-profile relationship can, therefore, yield more accurate estimates of the fluxes.
 
 Currently, limitations of the validity of the Monin-Obukhov similarity theory are not believed to be a likely explanation for the high scatter that is found in experimental studies, unless in highly stable conditions, where measurement challenges arise \citep{basicatm}. With the availability of macro- and micro-meteorological data from specialized observation sites such as Cabauw, in the Netherlands, and the recent developments in Machine Learning, this conjecture can be finally put to the test. More specifically, we pose the following \\
 
@@ -108,7 +106,7 @@ Currently, limitations of the validity of the Monin-Obukhov similarity theory ar
 
 \section{Purpose}
 \label{sec:purpose}
-Affirmative answers to the research questions would contribute to improve the quality of current global circulation models (large scale climate simulations), allowing them to obtain more accurate predictions of the momentum flux-profile relationship, leading to more precise long term climate forecasts.
+Affirmative answers to the research questions would contribute to improve the quality of current global circulation models and large scale eddy simulations, allowing them to obtain more accurate predictions of the momentum flux-profile relationship, leading to more precise long term climate forecasts.
 
 
 \section{Goals}
@@ -117,10 +115,11 @@ The first research question is answered by proposing one or more Data Mining met
 
 \section{Ethics and Sustainability}
 \label{sec:ethics}
-The author strongly aligns with the Open Science movement, according to which scientific research should be made as open and accessible as possible, so that it can be examined, extended and improved by as many people as possible. This is what allowed mankind to become what it is today, and it should not change. For this reason, this work was performed entirely with Free and Open Source tools, providing a low barrier to entry, and focusing on reproducibility of the results. The entirety of the analysis, from the very data to the generation of plots and tables, is openly accessible\footnote{\url{https://github.com/e-dorigatti/mscthesis}} and can be performed by anyone with enough computational resources.
+This work posed no ethical issues: data collection was mostly automated and performed by a third party, which provides free and open access to it, and privacy and confidentiality are not relevant issues since no test subjects were needed to perform the research.
+
+The author strongly aligns with the Open Science movement, according to which scientific research should be made as open and accessible as possible, so that it can be examined, extended and improved by as many people as possible. This is what allowed mankind to become what it is today, and it should not change. For this reason, this work was performed entirely with Free and Open Source tools, providing a low barrier to entry, and focusing on reproducibility of the results. The entirety of the analysis and its historical record, from the very data to the generation of plots and tables, is openly accessible\footnote{\url{https://github.com/e-dorigatti/mscthesis}} and can be performed by anyone with enough computational resources.
 
 Some of the analysis performed in this work required a considerable amount of computational resources, in the order of hundreds of cores and terabytes of memory. Such resources are power hungry and require electricity to run and to be kept at an appropriate temperature [todo some stats about internet power usage etc], as well as proper support infrastructure, e.g. for networking. In an effort to reduce the energy requirements, only the necessary experiments were performed, and care was taken not to do unnecessary work, for example by reusing results of previous experiments where possible.
-
 
 \section{Research Methodology}
 \label{sec:research_methodology}
@@ -155,7 +154,9 @@ The thesis is organized as follows: in chapter \ref{ch:background}, we introduce
 
 \chapter{Background}
 \label{ch:background}
-This chapter introduces the basic concepts the reader should be qualitatively familiar with, in order to understand the content of this thesis. It is assumed readers are already knowledgeable of simple mathematical concepts, such as calculus, linear algebra, statistics, and probability theory. We first describe fluid dynamics, with a focus on the boundary layer (section \ref{sec:fluids}), then use that knowledge to describe the atmospheric boundary layer and the Monin-Obukhov similarity theory (section \ref{sec:abl}), and finally describe the Machine Learning algorithms that will be used to answer the research questions (section \ref{sec:ml}). Readers should feel free to skip the sections they are already familiar with.
+This chapter introduces the basic concepts the reader should be qualitatively familiar with, in order to understand the content of this thesis. It is assumed readers are already knowledgeable of simple mathematical concepts, such as calculus, linear algebra, statistics, and probability theory. We first describe fluid dynamics, with a focus on the boundary layer (section \ref{sec:fluids}), then use that knowledge to describe the atmospheric boundary layer and the Monin-Obukhov similarity theory (section \ref{sec:abl}), and finally describe the Machine Learning algorithms that will be used to answer the research questions (section \ref{sec:ml}). 
+
+The most important section is \ref{sec:most}, since it introduces the state of the art which this work tries to improve upon, but readers should feel free to skip the sections they are already familiar with.
 
 \section{Fluid Dynamics}
 \label{sec:fluids}
@@ -198,7 +199,12 @@ In the context of fluid dynamics, the boundary layer is the region where a fluid
 
 The variation of velocity with distance from the surface, $\partial\overline{u}/\partial z$, is called \emph{shear}, and, together with viscosity, determines the materialization of turbulence in the flow. Every layer of fluid is squeezed between a faster moving layer above and a slower moving below; in high shear conditions, this causes high stress on the particles, and prevents them from moving orderly, thus leading to turbulent motion. Figure \ref{fig:bl} shows turbulence forming close to the wall in a canal, where the water flows from right to left. Viscosity and the no-slip condition prevent this phenomenon to arise in a region very close to the solid surface, called the \emph{laminar (or viscuous) sub-layer}, where we still find laminar motion.
 
-The strength of the turbulence is proportional to $u_{rms}=(\overline{u'^2})^{1/2}$, which is, in turn, proportional to the shear. Again, because of the no-slip condition, $u_{rms}$ is zero at $z=0$, increases in the laminar sub-layer, and decreases to 0 at the end of the boundary layer, assuming laminar flow outside of it. Higher free-stream velocity generates higher shear, more turbulence, and a thinner laminar sub-layer. The strength of turbulence can be written in units of velocity, resulting in the \emph{friction velocity}, computed as $u_*=(\tau/\rho)^{1/2}=(\nu\cdot\partial\overline{u}/\partial z)^{1/2}$, where $\tau$ is the shear stress, $\rho$ is the density of the fluid, $\nu=\mu/\rho$ is the kinematic viscosity, and $\mu$ the dynamic viscosity. Therefore, the friction velocity increases with shear and viscosity, and decreases with density; it is proportional to the free-stream velocity and the turbulence strength, and inversely proportional to the height of the laminar sub-layer.
+The strength of the turbulence is proportional to $u_{rms}=(\overline{u'^2})^{1/2}$, which is, in turn, proportional to the shear. Again, because of the no-slip condition, $u_{rms}$ is zero at $z=0$, increases in the laminar sub-layer, and decreases to 0 at the end of the boundary layer, assuming laminar flow outside of it. Higher free-stream velocity generates higher shear, more turbulence, and a thinner laminar sub-layer. The strength of turbulence can be written in units of velocity, resulting in the \emph{friction velocity}, computed as $u_*=(\tau/\rho)^{1/2}=(\nu\cdot\partial\overline{u}/\partial z)^{1/2}$, where $\tau$ is the shear stress, $\rho$ is the density of the fluid, $\nu=\mu/\rho$ is the kinematic viscosity, and $\mu$ the dynamic viscosity. Therefore, the friction velocity increases with shear and viscosity, and decreases with density; it is proportional to the free-stream velocity and the turbulence strength, and inversely proportional to the height of the laminar sub-layer. Expressing the shear $\tau$ in terms of the horizontal kinematic momentum fluxes $\overline{u'w'}$ and $\overline{v'w'}$, we obtain an equivalent formulation of $u_*$:
+
+\begin{equation}
+\label{eq:ustar_momentum}
+u_*=\left(\overline{u'w'}^2+\overline{v'w'}^2\right)^{1/4}
+\end{equation}
 
 The mean velocity $\overline{u}$ increases linearly within the laminar sub-layer, then logarithmically until the end of the boundary layer, thus the shear decreases further away from the surface. In the logarithmic sub-layer, the velocity is computed as $\overline{u}(z)=u_*(\log z - \log z_0)/\kappa$, where $z_0$ is the characteristic roughness of the surface, and $\kappa$ is the von Karman's constant, whose value is around 0.4 [citation needed]. The characteristic roughness depends on the texture of the surface, and its relationship with the height $\delta_s$ of the laminar sub-layer; if the roughness scale is smaller than $\delta_s$, the logarithmic velocity profile is not affected by the texture, because the laminar sub-layer completely covers the variations on the surface, and we have the so-called smooth turbulent flow. If, on the contrary, the bumps in the surface are larger than $\delta_s$, the laminar sub-layer follow the profile of the surface, and the logarithmic velocity profile is altered depending on the texture, a regime called rough turbulent flow.
 
@@ -272,7 +278,16 @@ The $P$ term is always positive, as energy is taken from the mean flow to the tu
 
 \subsection{Monin-Obukhov Similarity Theory}
 \label{sec:most}
-One of the factors to distinguish laminar from turbulent flow is the length scale $L$ of the system. This length scale for the ABL was derived by A. M. Obukhov in 1946, and forms the basis of the similarity theory. According to this theory, the normalized wind and temperature profiles can be expressed as an unique function of $\xi=z/L$:
+One of the quantities of interest is the momentum flux-profile relationship, computed as follows:
+
+\begin{equation}
+\label{eq:phi_m}
+\frac{\partial\overline{u}}{\partial z}\frac{\kappa z}{u_*}
+\end{equation}
+
+where $\kappa$ is the von Karman constant, which roughly equals 0.4. The profile is expressed by the $\partial\overline{u}/\partial z$ term, and the momentum flux is contained in the friction velocity $u_*$ according its interpretation in equation \ref{eq:ustar_momentum}.
+
+One of the factors to distinguish laminar from turbulent flow is the length scale $L$ of the system. This length scale for the ABL was derived by \cite{mostayyyy}, and forms the basis of the similarity theory. According to this theory, the normalized wind profile of equation \ref{eq:phi_m} can be expressed as an unique \emph{universal} function of $\xi=z/L$, with
 
 \begin{equation}
 \label{eq:most_l}
@@ -280,21 +295,10 @@ L=-\frac{u_*^3}{\kappa\frac{g}{\theta_v}\frac{Q}{\rho c_\rho}}
 =-\frac{u_*^3 T_v}{\kappa g \overline{w'\theta_v}}
 \end{equation}
 
-\begin{equation}
-\label{eq:phi_m}
-\frac{\partial\overline{u}}{\partial z}\frac{kz}{u_*}=\phi_m(\xi)
-\end{equation}
-
-\begin{equation}
-\label{eq:phi_h}
-\frac{\partial\overline{\theta_v}}{\partial z}\frac{kz}{T_*}=\phi_h(\xi)
-\end{equation}
-
-With
+\noindent where
 
 \begin{itemize}
 \item $g=\SI{9.81}{\meter\per\square\second}$ the acceleration due to Earth's gravity
-\item $\kappa=0.4$ the von Karman constant
 
 \item $\theta_v$ virtual temperature\footnote{potential temperature of dry air if it had the same density as moist air. It allows to use formulas for dry air when the air is not dry.}, obtained as
 
@@ -320,22 +324,18 @@ $$
 
 The stability parameter $\xi$ is positive for stable conditions, where wind shear dominates the production of TKE, and negative for unstable conditions, where buoyancy is the main contributor to turbulence. It approaches 0 in the limit of neutral stratification (i.e. $\partial\overline{\theta}/\partial z=0$), because the temperature flux goes to 0 causing $L$ go to infinity.
 
-The universal functions $\phi_m$ and $\phi_h$ must be determined experimentally. This is no easy task, and considerable effort has been devoted to it; one of the greatest difficulties lies in obtaining accurate and unbiased measurements, especially the fluxes. \cite{hogstrom88} is a meta-study that aggregates and improves many previous results, and suggests the following expressions:
+The universal function must be determined experimentally. This is no easy task, and considerable effort has been devoted to it; one of the greatest difficulties lies in obtaining accurate and unbiased measurements, especially the fluxes. \cite{hogstrom88} is a meta-study that aggregates and improves many previous results, and suggests the following expressions:
 
 \begin{align}
 \phi_m(\xi)&=\begin{cases}
 \label{eq:phi_m_coeff}
 \mathrlap{(1-19.3\xi)^{-1/4}} \hphantom{0.95(1-11.6\xi)^{-1/2}} & -2<\xi<0 \\
 1+6\xi & 0<\xi<1\\
-\end{cases} \\
-\phi_h(\xi)&=\begin{cases}
-0.95(1-11.6\xi)^{-1/2} & -2<\xi<0 \\
-0.95+8\xi & 0<\xi<1
 \end{cases}
 \end{align}
 
 
-The Monin-Obukhov similarity theory is only applicable in the surface layer, at heights much larger than the aerodynamic roughness length, and with $\vert\xi\vert<2$; even under ideal conditions, the predictions of this theory are accurate up to 10-20\% \citep{50years}. Iintuitively, when $\vert\xi\vert$ is too large, the eddies do not feel the effect of the surface anymore, and, under very stable stratification ($\xi>>1$), vertical motion is hampered, so the height $z$ does not play a role. Recent attempts \citep{sheba_phim,most_teal,Wilson2008} try to extend, or altogether replace, this similarity theory.
+The Monin-Obukhov similarity theory (MOST) is only applicable in the surface layer, at heights much larger than the aerodynamic roughness length, and with $\vert\xi\vert<2$; even under ideal conditions, the predictions of this theory are accurate up to 10-20\% \citep{50years}. Intuitively, when $\vert\xi\vert$ is too large, the eddies do not feel the effect of the surface anymore, and, under very stable stratification ($\xi>>1$), vertical motion is hampered, so the height $z$ does not play a role. Recent attempts \citep{sheba_phim,most_teal,Wilson2008} try to extend, or altogether replace, this similarity theory.
 
 \section{Statistics and Machine Learning}
 \label{sec:ml}
@@ -1064,7 +1064,7 @@ In this section, we discuss how we use the data from the Cesar database to predi
 All the features come from the Cesar database. The predictors are partitioned in five sets:
 
 \begin{enumerate}
-\item[F1:] altitude $z$, wind at $z$, temperature at $z$, wind at 10 meters, temperature at 10 meters, wind at 20 meters, temperature at 20 meters, wind at 40 meters, temperature at 40 meters, soil temperature;
+\item[F1:] soil temperature, altitude $z$, wind at $z$, temperature at $z$, wind at 10 meters, temperature at 10 meters, wind at 20 meters, temperature at 20 meters, wind at 40 meters, temperature at 40 meters;
 \item[F2:] Soil heat flux;
 \item[F3:] Net radiation;
 \item[F4:] Rain amount, dew point;
