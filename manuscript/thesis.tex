@@ -1647,30 +1647,31 @@ and \ref{tbl:gbr_results}, while figures \ref{fig:ridge_results_most}, \ref{fig:
 \chapter{Prediction with Deep Neural Networks}
 The reason why this is not included in the main report is that time and resources constraint prevented a formal and thorough evaluation of these results. That said, this approach is definitely promising and worth pursuing in the future.
 \paragraph{Methods:}
-The features were obtained in the same way as for the other estimators discussed in the main report. The validation set used all the samples belonging to 12 months, and a new random validation set was created for every experiment performed. The configuration of the networks was obtained manually:
+The features were obtained in the same way as for the other estimators discussed in the main report. The validation set used all the samples belonging to 18 months, and a new random validation set was created for every experiment performed. The configuration of the networks was obtained manually:
 
 \begin{itemize}
 \item \textbf{Architecture:} Fully connected layers only, number of neurons halved at every layer. The first layer with 1 neuron was the output layer, and the first hidden layer had either 128, 256 or 512 neurons, resulting in 7 to 9 hidden layers;
-\item \textbf{Activation Function:} linear for the output layer, PReLU [cite] for the hidden layers;
+\item \textbf{Activation Function:} linear for the output layer, PReLU \citep{prelu} for the hidden layers;
 \item \textbf{Regularization:} Dropout ($p=0.5$, only when the first layer had 256 neurons);
-\item \textbf{Optimizer:} Adam [cite] with inital learning rate $10^{-3}$ (check this);
-\item \textbf{Batch Size:} 1024
+\item \textbf{Optimizer:} Adam \citep{adam} with inital learning rate $10^{-3}$;
+\item \textbf{Batch Size:} 1024 (1165 batches per epoch);
 \item \textbf{Learning Rate Schedule:} Divide by 10 if the validation loss had not decreased by at least $10^{-4}$ in the last 10 epochs;
 \item \textbf{Early Stopping:} if the validation error did not improve in the last 25 epochs, or if the learning rate was reduced below $10^{-6}$.
 \end{itemize}
 
 \paragraph{Results:}
-Table \ref{tbl:nnets} shows the results obtained on the full dataset; for comparison, the best result presented in the main text for this dataset is 0.36 with a standard deviation of 0.03. An informal evaluation suggests that neural networks have roughly the same standard deviation, possibly a bit 
+The results are shown in table \ref{tbl:nnets}. Neural networks show promising results, but one needs to keep in mind the anecdotal nature of these results, since they are a point estimate, and not an average of different validation scores.
 
 \begin{table}
-\caption{MSE obtained by neural networks on the full dataset and using the trend}
+\caption{MSE obtained by neural networks compared to the MOST estimator and gradient boosted trees. The features included the trend.}
 \label{tbl:nnets}
 \centering
-\begin{tabular}{c|ccccc}
+\begin{tabular}{ccc|cccccc}
 \toprule
-\textbf{MOST} & \textbf{F1} & \textbf{F2} & \textbf{F3} & \textbf{F4} & \textbf{F5} \\
+\textbf{Dataset} & \textbf{MOST} & \textbf{GBT} & \textbf{F1} & \textbf{F2} & \textbf{F3} & \textbf{F4} & \textbf{F5} \\
 \midrule
-0.67 & 0.31 & 0.29 & 0.26 & 0.24 & 0.21 \\
+Full & 0.64 & 0.36 & 0.31 & 0.29 & 0.26 & 0.24 & 0.21 \\
+MOST & 0.32 & 0.18 & - & - & - & - & 0.13 \\
 \bottomrule
 \end{tabular}
 \end{table}
