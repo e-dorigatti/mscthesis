@@ -11,6 +11,7 @@
 \usepackage{booktabs}
 \usepackage{tabularx}
 \usepackage{makecell}
+\usepackage{rotating}
 \usepackage{hyphenat}
 \usepackage{amsmath,amsfonts,amssymb,amsthm,mathtools}
 \usepackage{rotating}
@@ -1465,45 +1466,57 @@ Table \ref{tbl:baseline_comparison} shows descriptive statistics of the MSE obta
 \input{include/fset_comparison}
 \end{table}
 
-The scores used to perform the comparisons in tables \ref{tbl:trend_comparison} and \ref{tbl:fset_comparison} were obtained with the repeated cross validation procedure; table \ref{tbl:repeated_cv_count} shows how many repeats were performed for each feature set.
+The scores used to perform the comparisons in tables \ref{tbl:trend_comparison} and \ref{tbl:fset_comparison} were obtained by repeating the cross validation procedure 5 times.
 
 Table \ref{tbl:trend_comparison} compares each feature set with and without trend, for the MOST dataset and the GBT estimator. Essentially, the table shows that the features augmented with trend do not provide a significant improvement over those without trend; it is interesting to relate this result with table \ref{tbl:baseline_comparison}, where the largest effect size when comparing GBT with MOST is actually obtained with the trend. This is another example of differing standard deviations counteracting the difference in means.
 
 Table \ref{tbl:fset_comparison} compares every pair of feature set, again restricted to the MOST dataset and the GBT estimator. Given that the trend does not provide additional benefits, we compare the feature sets without the trend. The only feature sets that do not improve over the previous sets are F2 (soil heat flux) over F1 and F4 (rain amount and dew point) over F3; in all other cases, adding features gives a significant improvement.
 
-
-\begin{table}
-\caption{Number of times the cross validation procedure was performed to obtain the scores summarized in tables \ref{tbl:trend_comparison} and \ref{tbl:fset_comparison}.}
-\label{tbl:repeated_cv_count}
-\input{include/repeated_cv_count.tex}
-\end{table}
-
-
 \chapter{Discussion}
 \label{ch:discussion}
-even though we predicted phim, the actual interest is in u*. we predict phim to have a direct means of comparing with state of the art (?), \cite{weber1999} computes u* from the standard deviations obtaining rmse between 0.05 and 0.1
+As shown in table \ref{tbl:baseline_comparison}, we could improve the predictions of the similarity theory even with a simple regularized linear model. Furthermore, \ref{tbl:trend_comparison} shows that no useful information can be obtained from knowing the value of a feature one hour earlier than the prediction. Finally, table \ref{tbl:fset_comparison} shows that, besides the heat fluxes, the net radiation is an important predictor, whereas the dew point and the soil heat flux do not contribute significantly to the predictive performance.
 
-actual constants and coefficients (e.g. von karmans constant) dont really matter, because they are constant and do not affect the ml model 
+
+
+\subsection{Features}
+ Of course, we cannot rule out the possibility that the model was able to figure out the information contained in these features, thus making them redundant, or needed other features to make sense of them.
+ 
+ 
+actual constants and coefficients (e.g. von karmans constant) dont really matter, because they are constant and do not affect the ml model (can be figured out)
 
 estimating parameters (von karman, roughness length etc) is very difficult, by using ml we can circumvent the problem (they need a supporting infrastructure even if they want to compute those constants, so not huge downside)
 
-outliers with xi between -20 and -2 mostly belong to z=40 in the morning (between 6 and 12); given what was said in [paper], there is the possibility that they are not in the surface layer, explaining why the c coefficient is higher than expected
+
 
 one of the reasons why MOST is unreliable in stable conditions is because of the difficulty of measuring fluxes. there are other methods to compute the turbulent fluxes (http://bibliotheek.knmi.nl/knmipubWR/WR87-02.pdf, ), we used eddy corr because that's what in the cesar database
 
 wind direction is very important since different characteristics of the surface affect the measurements, see https://journals.ametsoc.org/doi/full/10.1175/2006JAMC1298.1 and somebody else on cabauw
 
-can generate new training samples at more altitude levels, since we have a model for wind and temp (need to interpolate spec. humidity too), according to the simulation that uses this model
-
 our models can only be used in conditions that are similar to cabauw. most importantly, they are not valid in the oceanic surface layer, because it is very different [citation]
-
-incorporate uncertainty in the model (e.g. quantile regression), then use this in the simulations to get climate uncertainty (monte carlo by sampling from prediction would be a quick and dirty way of implementing this, although it would make the simulation quite slow)
-
-trend could be better included using some sort of time series prediction together with the features we considered in this work, but preliminary experiments (3 layers gru + 4 layers fully connected) do not seem to work well)
 
 richardson number instead of obukhov length
 
+
+trend could be better included using some sort of time series prediction together with the features we considered in this work, but preliminary experiments (3 layers gru + 4 layers fully connected) do not seem to work well)
+
+
 generalization problem: surface roughness? simulations already use some parameters for this
+
+\paragraph{Samples}
+outliers with xi between -20 and -2 mostly belong to z=40 in the morning (between 6 and 12); given what was said in [paper], there is the possibility that they are not in the surface layer, explaining why the c coefficient is higher than expected
+
+
+can generate new training samples at more altitude levels, since we have a model for wind and temp (need to interpolate spec. humidity too), according to the simulation that uses this model
+
+
+\paragraph{Performance}
+This is a notable achievement, since the chosen model will be just one of the many components of climate simulations, which are notoriously very slow and computationally intensive. A linear model has the potential to compete with the efficiency of MOST, depending on the number of features, since it is fundamentally a dot product
+
+even though we predicted phim, the actual interest is in u*. we predict phim to have a direct means of comparing with state of the art (?), \cite{weber1999} computes u* from the standard deviations obtaining rmse between 0.05 and 0.1
+
+
+
+incorporate uncertainty in the model (e.g. quantile regression), then use this in the simulations to get climate uncertainty (monte carlo by sampling from prediction would be a quick and dirty way of implementing this, although it would make the simulation quite slow)
 
 defense thu 14 at 11 in kista room grottan
 
@@ -1522,8 +1535,6 @@ todo
 \label{apx:all_results}
 The averaged evaluation metrics for the Ridge, kNN and GBT estimators are presented in tables \ref{tbl:ridge_results}, \ref{tbl:knn_results}
 and \ref{tbl:gbr_results}, while figures \ref{fig:ridge_results_most}, \ref{fig:knn_results_most} and \ref{fig:gbr_results_most} show boxplots of these metrics for the MOST validity range, and figures \ref{fig:ridge_results_all}, \ref{fig:knn_results_all} and \ref{fig:gbr_results_all} do so for the whole dataset.
-
-
 
 \begin{figure}[h]
 \subcaptionbox{Mean Squared Error\label{fig:result_Ridge_most_mean_squared_error}}{\includegraphics[width=0.5\textwidth]{images/result_Ridge_most_mean_squared_error}}\hfill
@@ -1562,6 +1573,14 @@ and \ref{tbl:gbr_results}, while figures \ref{fig:ridge_results_most}, \ref{fig:
 \end{table}
 
 
+\begin{sidewaystable}
+\caption{Hyper-parameters and MSE for each outer fold obtained by the best combination of trend and features in each dataset by the Ridge estimator.}
+\label{tbl:params_ridge}
+\input{include/params_ridge}
+\end{sidewaystable}
+
+
+
 % ---------------------------------------------------------------
 
 \begin{figure}[h]
@@ -1595,11 +1614,17 @@ and \ref{tbl:gbr_results}, while figures \ref{fig:ridge_results_most}, \ref{fig:
 
 
 \begin{table}[h]
-\caption{Evaluation metrics for the k-Nearest Neighbors Regressor estimator.}
+\caption{Evaluation metrics for the k-Nearest Neighbors estimator.}
 \label{tbl:knn_results}
 \input{include/results_kNN}
 \end{table}
 
+
+\begin{sidewaystable}
+\caption{Hyper-parameters and MSE for each outer fold obtained by the best combination of trend and features in each dataset by the k-Nearest Neighbors estimator.}
+\label{tbl:params_knn}
+\input{include/params_knn}
+\end{sidewaystable}
 
 % ---------------------------------------------------------------
 
@@ -1641,6 +1666,12 @@ and \ref{tbl:gbr_results}, while figures \ref{fig:ridge_results_most}, \ref{fig:
 \end{table}
 
 
+\begin{sidewaystable}
+\caption{Hyper-parameters and MSE for each outer fold obtained by the best combination of trend and features in each dataset by the Gradient Boosted Trees estimator.}
+\label{tbl:params_gbt}
+\input{include/params_gbt}
+\end{sidewaystable}
+
 % ---------------------------------------------------------------
 
 
@@ -1677,6 +1708,34 @@ MOST & 0.32 & 0.18 & - & - & - & - & 0.13 \\
 \end{table}
 
 Other experiments were performed using all the observations in the hour preceding the sample to predict, and using up to three GRU layers, followed by up to four fully connected layers, with the other parameters as detailed above. The performances were discouraging, with the network struggling to go below 0.15/0.20 training MSE and 0.7/0.8 validation MSE on F4 and full dataset.
+
+\chapter{Prediction with an Ensemble of Regularized Linear Models}
+We can relax the constraints needed to answer the research questions, in particular the second one, and perform additional feature engineering. In order to minimize the computational resources needed, we apply Ridge linear regression to the MOST dataset.
+
+\paragraph{Method}
+Instead of restricting ourselves to the five feature sets, we use all the quantities shown in table \ref{tbl:col_summary}, and, in light of the results shown in the main report, we do not use the trend. We add polynomial features, then standardize the dataset, apply PCA, and fit the Ridge estimator. This whole procedure, including feature engineering, is performed separately for a number of random subsets of samples (with replacement) and features, and the final prediction is the average of the predictions obtained by the different models. We then optimize the parameters of every steps with random search and cross validation. This means that, although all the steps share the same hyper-parameters, they are fit on different subsets of the full dataset, and thus have different parameters. This improves generalization, since the best performing hyper-parameters were able to extract good features and use them to obtain good predictions on different independent subsets.
+
+Table \ref{tbl:linear_bag_hyp} shows the distribution of the hyper-parameters, which were optimized with 10-fold cross validation by sampling 24 values.
+
+\begin{table}
+\caption{Distribution of the hyper-parameters used in the random search and optimal value found.}
+\label{tbl:linear_bag_hyp}
+\setcellgapes{0.5ex}\makegapedcells\centering
+\begin{tabular*}{\textwidth}{l|@{\extracolsep{\fill}}c|c|l|l}
+
+\toprule
+& \textbf{Hyper-Parameter} & \textbf{Distribution }& \textbf{Values} & \textbf{Optimal }\\
+\midrule
+\multirowcell{4}[2ex][c]{ \makecell[c]{\textbf{Base}\\\textbf{Estimator}} } & Polynomial Degree & Uniform & 1 or 2 & ?? \\
+& Polynomial Interactions & Uniform & Yes or No & ??\\
+& PCA Target Dimension & Uniform & From 10\% to 90\% & ?? \\
+& Ridge Regularization & Log$_{10}$-uniform & From $10^{-7}$ to $10^1$ & ?? \\ \hline \
+\multirowcell{3}[1ex][c]{ \makecell[c]{\textbf{Bagging}\\\textbf{Estimator}} } & Number of Base Estimators & Uniform & From 5 to 25 & ?? \\
+& Samples per Base Estimator & Uniform & From 5\% to 25\% & ?? \\
+& Features per Base Estimator & Uniform & From 25\% to 100\% & ?? \\
+\bottomrule
+\end{tabular*} 
+\end{table}
 
 
 \chapter{Bayesian Hyper-parameter Optimization}
