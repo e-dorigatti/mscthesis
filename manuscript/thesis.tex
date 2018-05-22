@@ -1110,8 +1110,8 @@ We use log-uniform distributions for parameters with a high range of possible va
 \begin{tabularx}{\textwidth}{r|l|X}
 \toprule
 \textbf{Hyper-parameter} & \textbf{Distribution} & \textbf{Values} \\ \midrule
-Number of estimators & log$_{10}$-uniform & From $10^1$ to $10^4$ \\
-Learning rate & log$_{10}$-uniform & From $10^{-3}$ to $10^0$ \\
+Number of estimators & Log$_{10}$-uniform & From $10^1$ to $10^4$ \\
+Learning rate & Log$_{10}$-uniform & From $10^{-3}$ to $10^0$ \\
 Number of features & Uniform & All possible values \\
 Maximum depth & Uniform & From 4 to 12 \\
 Sub-sampling factor & Uniform & From 25\% to 100\% \\
@@ -1534,7 +1534,7 @@ todo
 \chapter{Detailed Results}
 \label{apx:all_results}
 The averaged evaluation metrics for the Ridge, kNN and GBT estimators are presented in tables \ref{tbl:ridge_results}, \ref{tbl:knn_results}
-and \ref{tbl:gbr_results}, while figures \ref{fig:ridge_results_most}, \ref{fig:knn_results_most} and \ref{fig:gbr_results_most} show boxplots of these metrics for the MOST validity range, and figures \ref{fig:ridge_results_all}, \ref{fig:knn_results_all} and \ref{fig:gbr_results_all} do so for the whole dataset.
+and \ref{tbl:gbr_results}, while figures \ref{fig:ridge_results_most}, \ref{fig:knn_results_most} and \ref{fig:gbr_results_most} show boxplots of these metrics for the MOST validity range, and figures \ref{fig:ridge_results_all}, \ref{fig:knn_results_all} and \ref{fig:gbr_results_all} do so for the whole dataset. Finally, tables \ref{tbl:params_ridge}, \ref{tbl:params_knn} and \ref{tbl:params_gbt} list the hyper-parameters obtained in each outer fold that generated the best results shown in table \ref{tbl:baseline_comparison}.
 
 \begin{figure}[h]
 \subcaptionbox{Mean Squared Error\label{fig:result_Ridge_most_mean_squared_error}}{\includegraphics[width=0.5\textwidth]{images/result_Ridge_most_mean_squared_error}}\hfill
@@ -1677,13 +1677,14 @@ and \ref{tbl:gbr_results}, while figures \ref{fig:ridge_results_most}, \ref{fig:
 
 \chapter{Prediction with Deep Neural Networks}
 The reason why this is not included in the main report is that time and resources constraint prevented a formal and thorough evaluation of these results. That said, this approach is definitely promising and worth pursuing in the future.
+
 \paragraph{Methods:}
 The features were obtained in the same way as for the other estimators discussed in the main report. The validation set used all the samples belonging to 18 months, and a new random validation set was created for every experiment performed. The configuration of the networks was obtained manually:
 
 \begin{itemize}
 \item \textbf{Architecture:} Fully connected layers only, number of neurons halved at every layer. The first layer with 1 neuron was the output layer, and the first hidden layer had either 128, 256 or 512 neurons, resulting in 7 to 9 hidden layers;
 \item \textbf{Activation Function:} linear for the output layer, PReLU \citep{prelu} for the hidden layers;
-\item \textbf{Regularization:} Dropout ($p=0.5$, only when the first layer had 256 neurons);
+\item \textbf{Regularization:} Dropout ($p=0.5$, only when the first layer had 256 neurons or more);
 \item \textbf{Optimizer:} Adam \citep{adam} with inital learning rate $10^{-3}$;
 \item \textbf{Batch Size:} 1024 (1165 batches per epoch);
 \item \textbf{Learning Rate Schedule:} Divide by 10 if the validation loss had not decreased by at least $10^{-4}$ in the last 10 epochs;
@@ -1712,16 +1713,16 @@ Other experiments were performed using all the observations in the hour precedin
 \chapter{Prediction with an Ensemble of Regularized Linear Models}
 We can relax the constraints needed to answer the research questions, in particular the second one, and perform additional feature engineering. In order to minimize the computational resources needed, we apply Ridge linear regression to the MOST dataset.
 
-\paragraph{Method}
-Instead of restricting ourselves to the five feature sets, we use all the quantities shown in table \ref{tbl:col_summary}, and, in light of the results shown in the main report, we do not use the trend. We add polynomial features, then standardize the dataset, apply PCA, and fit the Ridge estimator. This whole procedure, including feature engineering, is performed separately for a number of random subsets of samples (with replacement) and features, and the final prediction is the average of the predictions obtained by the different models. We then optimize the parameters of every steps with random search and cross validation. This means that, although all the steps share the same hyper-parameters, they are fit on different subsets of the full dataset, and thus have different parameters. This improves generalization, since the best performing hyper-parameters were able to extract good features and use them to obtain good predictions on different independent subsets.
+\paragraph{Methods:}
+Instead of restricting ourselves to the five feature sets, we use all the quantities shown in table \ref{tbl:col_summary}, except for the turbulent heat fluxes, and, in light of the results shown in the main report, we do not use the trend. We add polynomial features, then standardize the dataset, apply PCA, and fit the Ridge estimator. This whole procedure, including feature engineering, is performed separately for a number of random subsets of samples (with replacement) and features, and the final prediction is the average of the predictions obtained by the different models. We then optimize the parameters of every steps with random search and cross validation. This means that, although all the steps share the same hyper-parameters, they are fit on different subsets of the full dataset, and thus have different parameters. This improves generalization, since the best performing hyper-parameters were able to extract good features and use them to obtain good predictions on different independent subsets.
 
-Table \ref{tbl:linear_bag_hyp} shows the distribution of the hyper-parameters, which were optimized with 10-fold cross validation by sampling 24 values.
+Table \ref{tbl:linear_bag_hyp} shows the distribution of the hyper-parameters, which were optimized with 10-fold cross validation by sampling 24 values, as well as the optimal values found in the procedure.
 
 \begin{table}
 \caption{Distribution of the hyper-parameters used in the random search and optimal value found.}
 \label{tbl:linear_bag_hyp}
 \setcellgapes{0.5ex}\makegapedcells\centering
-\begin{tabular*}{\textwidth}{l|@{\extracolsep{\fill}}c|c|l|l}
+\begin{tabular*}{\textwidth}{l|@{\extracolsep{\fill}}r|c|c|c}
 
 \toprule
 & \textbf{Hyper-Parameter} & \textbf{Distribution }& \textbf{Values} & \textbf{Optimal }\\
@@ -1738,7 +1739,37 @@ Table \ref{tbl:linear_bag_hyp} shows the distribution of the hyper-parameters, w
 \end{table}
 
 
-\chapter{Bayesian Hyper-parameter Optimization}
+\chapter{More Hyper-parameter Optimization}
+By foregoing nested cross-validation and focusing on a particular dataset (MOST) and set of features (F4 without trend), we can reduce the computational resources needed for more involved hyper-parameter tuning procedures.
+
+\paragraph{Methods:} We optimized the hyper-parameters of extreme gradient boosted trees \citep{xgboost} using both HyperBand \citep{hyperband} and the Python library GPyOpt\footnote{\url{http://github.com/SheffieldML/GPyOpt}}. For Hyperband, we use the default parameters suggested in the paper, i.e. $\eta=3$ and $R=81$, with each unit of budget corresponding to 10 trees. The Bayesian optimization procedure is based on Gaussian Processes with the RBF kernel, using the integrated expected improvement as acquisition function. Integration is performed over the posterior of the hyper-parameters, approximated with MCMC sampling \citep{practical_gphypopt}, in order to improve the accuracy of the proposed hyper-parameters. Both methods were evaluated on the same subset of 20 months, and trained on the remaining data, without cross-validation. Table \ref{tbl:hypopt_distr} shows the distribution of the hyper-parameters used in the search, and the optimal values found by the two methods.
+
+\paragraph{Results:} The best configuration found by Hyperband, after 170 steps, had a MSE of 0.1744 on the validation set, whereas the solution found by GPyOpt, after 42 trials, had a MSE of 0.1729. These results are very similar to what was obtained with random search and nested cross validation.
+
+
+\begin{table}
+\caption{Distribution of the hyper-parameters used.}
+\label{tbl:hypopt_distr}
+\centering
+\begin{tabular*}{\textwidth}{r|@{\extracolsep{\fill}}c|c|c|c}
+\toprule
+\textbf{Hyper-parameter} & \textbf{Distribution} & \textbf{Values} & \makecell[c]{\textbf{Best}\\\textbf{(Hyperband)}} &
+\makecell[c]{\textbf{Best}\\\textbf{(GPyOpt)}} \\
+\midrule
+Number of Trees & Log$_{10}$-Uniform & From $10^{1}$ to $10^3$ & 810 & 1000 \\
+Learning Rate & Log$_{10}$-Uniform & From $10^{-4}$ to $10^0$ & 0.079 & 0.1 \\
+Max. Depth & Uniform & From 2 to 12 & 7 & 12 \\
+Min. Child Weight & Uniform & From 1 to 100 & 9 & 100 \\
+Subsample & Uniform & From 20\% to 100\% & 86.3\% & 20\% \\
+$\gamma$ (Min. loss decrease) & Uniform & From 0 to 1 & 0.455 & 0 \\
+$\alpha$ (L1 regularization) & Log$_{10}$-Uniform & From $10^{-10}$ to $10^0$  &  \num{3.16e-6} & \num{1e-10} \\
+$\lambda$ (L2 regularization) & Log$_{10}$-Uniform & From $10^{-10}$ to $10^0$ & \num{2.32e-6} & \num{1e-10} \\
+Number of features & Uniform & From 20\% to 100\% & 57.7\% & 20\% \\
+Loss & Uniform & MSE or MAE & MAE & MAE \\
+\bottomrule
+\end{tabular*} 
+\end{table}
+
 
 %\bibliographystyle{unsrt}
 %\bibliographystyle{plainnat}
