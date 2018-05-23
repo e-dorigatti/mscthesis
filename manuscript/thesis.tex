@@ -207,7 +207,7 @@ The strength of the turbulence is proportional to $u_{rms}=(\overline{u'^2})^{1/
 u_*=\left(\overline{u'w'}^2+\overline{v'w'}^2\right)^{1/4}
 \end{equation}
 
-The mean velocity $\overline{u}$ increases linearly within the laminar sub-layer, then logarithmically until the end of the boundary layer, thus the shear decreases further away from the surface. In the logarithmic sub-layer, the velocity is computed as $\overline{u}(z)=u_*(\log z - \log z_0)/\kappa$, where $z_0$ is the characteristic roughness of the surface, and $\kappa$ is the von Karman's constant, whose value is around 0.4 [citation needed]. The characteristic roughness depends on the texture of the surface, and its relationship with the height $\delta_s$ of the laminar sub-layer; if the roughness scale is smaller than $\delta_s$, the logarithmic velocity profile is not affected by the texture, because the laminar sub-layer completely covers the variations on the surface, and we have the so-called smooth turbulent flow. If, on the contrary, the bumps in the surface are larger than $\delta_s$, the laminar sub-layer follow the profile of the surface, and the logarithmic velocity profile is altered depending on the texture, a regime called rough turbulent flow.
+The mean velocity $\overline{u}$ increases linearly within the laminar sub-layer, then logarithmically until the end of the boundary layer, thus the shear decreases further away from the surface. In the logarithmic sub-layer, the velocity is computed as $\overline{u}(z)=u_*(\log z - \log z_0)/\kappa$, where $z_0$ is the characteristic roughness of the surface, and $\kappa$ is the von Karman's constant, whose value is around 0.4 \cite{basicatm}. The characteristic roughness depends on the texture of the surface, and its relationship with the height $\delta_s$ of the laminar sub-layer; if the roughness scale is smaller than $\delta_s$, the logarithmic velocity profile is not affected by the texture, because the laminar sub-layer completely covers the variations on the surface, and we have the so-called smooth turbulent flow. If, on the contrary, the bumps in the surface are larger than $\delta_s$, the laminar sub-layer follow the profile of the surface, and the logarithmic velocity profile is altered depending on the texture, a regime called rough turbulent flow.
 
 \begin{figure}
 \caption{Turbulent boundary layer at the edge of a canal; water flows from right to left.}
@@ -218,9 +218,9 @@ The mean velocity $\overline{u}$ increases linearly within the laminar sub-layer
 
 \section{The Atmospheric Boundary Layer}
 \label{sec:abl}
-The atmosphere is composed by air, which is behaves like fluid. Therefore, close to the Earth's surface, in the region called \emph{atmospheric boundary layer}, we find the same effects described in the previous section. Additionally, there are other phenomena that complicate things further, such as the temperature of the surface, which changes widely from day to night and from Summer to Winter, the rotation of the Earth, the varying roughness of the surface, due to cities and vegetation, etc. The effect of the surface on the first few hundred meters of the atmosphere is the main focus of \emph{boundary layer meteorology}. 
+The atmosphere is composed by air, which is behaves like a fluid. Therefore, close to the Earth's surface, in the region called \emph{atmospheric boundary layer} (ABL), we find the same effects described in the previous section. Additionally, there are other phenomena that complicate things further, such as the temperature of the surface, which changes widely from day to night and from Summer to Winter, the rotation of the Earth, the varying roughness of the surface, due to cities and vegetation, etc. The effect of the surface on the first few hundred meters of the atmosphere is the main focus of \emph{boundary layer meteorology}. 
 
-The height of the atmospheric boundary layer (hereafter abbreviated as ABL) typically varies between 100 and 1000 meters, highly depending on the conditions, and it is always turbulent. There are two main instabilities driving turbulence in the ABL:
+The height of the ABL typically varies between 100 and 1000 meters, highly depending on the conditions, and it is always turbulent. There are two main instabilities driving turbulence in the ABL:
 
 \begin{itemize}
 \item Shear instability: caused by shear, the mechanism described in the previous section. This happens at high Reynolds number, and, by using typical values for the ABL, we find $Re$ well above $10^6$.
@@ -258,9 +258,9 @@ Kinetic energy is energy stored in form of movement: faster or heavier objects h
 \includegraphics[width=0.5\textwidth]{images/kinetic_energy_spectrum}
 \end{figure}
 
-From now on, we will use a coordinate system with the $x$ axis aligned to the average horizontal wind direction, the $y$ axis perpendicular to it, and the $z$ axis pointing away from the surface. Then, we will use the letters $u$, $v$ and $w$ to denote the components of the wind along the axes $x$, $y$ and $z$ respectively; clearly, $\overline{v}=0$. Eddy fluxes can then be described in terms of covariances: let $\theta$ denote the potential temperature\footnote{the potential temperature is final temperature after bringing a parcel of air to a standard pressure adiabatically, i.e. not allowing exchange of temperature with the surroundings. It is a useful mean to compare temperatures irrespectively of pressure, i.e. altitude}, then $\overline{w'\theta'}$ is the turbulent heat flux, i.e. the sensible heat flux in the vertical due to turbulence. Usually the ABL  studied assuming homogeneous horizontal conditions, because they vary on a length scale larger than the height of the ABL. Because of this, the horizontal eddy correlations $\partial\overline{u'a'}/\partial x$ and $\partial\overline{v'a'}/\partial y$ are usually of negligible intensity, and are thus ignored. Note that this is not necessarily true when clouds are involved.
+From now on, we will use a coordinate system with the $x$ axis aligned to the average horizontal wind direction, the $y$ axis perpendicular to it, and the $z$ axis pointing away from the surface. Then, we will use the letters $u$, $v$ and $w$ to denote the components of the wind along the axes $x$, $y$ and $z$ respectively; clearly, $\overline{v}=0$. Eddy fluxes can then be described in terms of covariances: let $\theta$ denote the potential temperature\footnote{the potential temperature is final temperature after bringing a parcel of air to a standard pressure adiabatically, i.e. not allowing exchange of temperature with the surroundings. It is a useful mean to compare temperatures irrespectively of pressure, i.e. altitude}, then $\overline{w'\theta'}$ is the turbulent heat flux, i.e. the sensible heat flux in the vertical due to turbulence. Usually the ABL is studied assuming homogeneous horizontal conditions, because they vary on a length scale larger than the height of the ABL. Because of this, the horizontal eddy correlations $\partial\overline{u'a'}/\partial x$ and $\partial\overline{v'a'}/\partial y$ are usually of negligible intensity, and are thus ignored; this is to say that the vertical fluxes are assumed to be horizontally constant. Note that this is not necessarily true when clouds are involved.
 
-It is important to notice that turbulence is dissipative in nature. Consider a hot Summer day, where air is warmer close to the surface, and a circular eddy moving some air up and some down, so that the average motion is zero. The parcel of air moving up ($w'>0$) ends up being warmer than its surroundings ($\theta'>0$), while the one moving down ($w'<0$) will be colder ($\theta'<0$); the result is a net transport of heat through the eddy: $\overline{w'\theta'}>0$. On the contrary, imagine a cold night, where the air close to the surface is colder; the same eddy would transport a colder parcel of air upwards, and a warmer one downwards. In both cases, the end result would be a net transport of heat without transport of mass. Because of the ??? law, the eddy must lose energy, and thus dissipate over time.
+It is important to notice that turbulence is dissipative in nature. Consider a hot Summer day, where air is warmer close to the surface, and a circular eddy moving some air up and some down, so that the average motion is zero. The parcel of air moving up ($w'>0$) ends up being warmer than its surroundings ($\theta'>0$), while the one moving down ($w'<0$) will be colder ($\theta'<0$); the result is a net transport of heat through the eddy: $\overline{w'\theta'}>0$. On the contrary, imagine a cold night, where the air close to the surface is colder; the same eddy would transport a colder parcel of air upwards, and a warmer one downwards. In both cases, the end result would be a net transport of heat without transport of mass; the eddy must lose energy, and thus dissipate over time.
 
 Since turbulence changes over time, we are more interested in the change of kinetic energy, the \emph{turbulent kinetic energy budget}. A full derivation is out of the scope of this work, but its final form \citep{basicatm} can be derived from prime physical principles, resulting in
 
@@ -275,7 +275,7 @@ Since turbulence changes over time, we are more interested in the change of kine
 
 Where ${e'}^2={u'}^2+{v'}^2+{w'}^2$. The $P$ term is the production due to shear, $B$ is the production due to buoyancy, $T_t$ is the turbulent transport of TKE by large-scale eddies, $T_p$ is the transport due to pressure, and $\epsilon$ is molecular dissipation due to viscosity. $P$ and $B$ are the most prominent terms, and the transport terms are close to zero in neutral conditions \citep{basicatm}.
 
-The $P$ term is always positive, as energy is taken from the mean flow to the turbulent one. On the other hand, the contribution from buoyancy can be either positive or negative, depending on the difference of temperature between a parcel of air moved by the turbulence and the surrounding air. When $\overline{w^\prime\theta^\prime}$ is negative, the turbulence is moving cold air upwards and warm air downwards; these parcels of air will try to undo the effect of turbulence, thereby increasing the overall kinetic energy. A similar reasoning goes for when the heat flux is positive.
+The $P$ term is always positive, as energy is taken from the mean flow to the turbulent one (in other words, turbulence can only generate kinetic energy). On the other hand, the contribution from buoyancy can be either positive or negative, depending on the difference of temperature between a parcel of air moved by the turbulence and the surrounding air. When $\overline{w^\prime\theta^\prime}$ is negative, the turbulence is moving cold air upwards and warm air downwards; these parcels of air will try to undo the effect of turbulence, thereby increasing the overall kinetic energy. A similar reasoning goes for when the heat flux is positive.
 
 \subsection{Monin-Obukhov Similarity Theory}
 \label{sec:most}
@@ -371,6 +371,7 @@ The ideal situation is to find the estimator $f^*$ that has the lowest risk; unf
 We can now use the empirical risk as a surrogate for the true risk, selecting the estimator
 
 \begin{equation}
+\label{eq:emp_risk_min}
 \hat{f}=\argmin_{f\in\mathcal{F}}\hat{R}(f)
 \end{equation}
 
@@ -382,7 +383,7 @@ We can now use the empirical risk as a surrogate for the true risk, selecting th
 +\left(\inf_{f\in\mathcal{F}} R(f)-R(f^*)\right)
 \end{equation}
 
-Where the first term is the \emph{estimation} error incurred by not selecting the best possible estimator in $\mathcal{F}$, and the second term is the \emph{approximation} error caused by searching a good estimator in $\mathcal{F}$. They usually have opposite behavior:
+\noindent where the first term is the \emph{estimation} error incurred by not selecting the best possible estimator in $\mathcal{F}$, and the second term is the \emph{approximation} error caused by searching a good estimator in $\mathcal{F}$ and not somewhere else. They usually have opposite behavior:
 
 \begin{itemize}
 \item the estimation error is high when $\mathcal{F}$ is too complex for the data at hand, where complexity refers to the range of phenomena that can be accurately modeled by these functions. In other words, $\mathcal{F}$ contains many valid explanations that are equally good on the training set (they have low empirical risk $\hat{R}$), but are not accurate models of the underlying phenomenon $p_{XT}$, i.e. they do not generalize well (they have high risk $R$);
@@ -391,7 +392,7 @@ Where the first term is the \emph{estimation} error incurred by not selecting th
 
 This decomposition is often referred to as the \emph{bias-variance decomposition}, where bias and variance refer to, respectively, approximation and estimation error.
 
-The fundamental problem is to find a class of functions that is powerful enough to model $p_{XT}$, but not too powerful so as to contain too many good explanations, because we would not be able to choose. Equivalently, we want to find a good model, one that can explain the data we have, and generalize to new examples. This problem is known as \emph{model selection}, and is important to distinguish between model selection for \emph{identification}, and model selection for \emph{estimation}. In the former case, the goal is to obtain a model and its parameters, to be used on new prediction problems, whereas the goal of the latter is to obtain a realistic estimate of the performance that can be obtained on new data. This problem can be approached in two ways: by directly estimating approximation and estimation errors using hold-out sets, or by penalizing complex models in order to favor simpler explanations, even though they might have slightly higher empirical risk. The next sections describe these two approaches.
+A common way of building $\mathcal{F}$ is to fix the form of the models it contains, and allow their behavior to be controlled through a series of \emph{parameters}. Then, equation \ref{eq:emp_risk_min} reduces to finding a good set of parameters; this process can also be governed by other parameters, called \emph{hyper-parameters}. The fundamental problem is to find a class of functions that is powerful enough to model $p_{XT}$, but not too powerful so as to contain too many good explanations, because we would not be able to choose. Equivalently, we want to find a good model, one that can explain the data we have, and generalize to new examples. This problem is known as \emph{model selection}, and is important to distinguish between model selection for \emph{identification}, and model selection for \emph{estimation}. In the former case, the goal is to obtain a model and its parameters, to be used on new prediction problems, whereas the goal of the latter is to obtain a realistic estimate of the performance that can be obtained on new data. This problem can be approached in two ways: by directly estimating approximation and estimation errors using hold-out sets, or by penalizing complex models in order to favor simpler explanations, even though they might have slightly higher empirical risk. The next sections describe these two approaches.
 
 
 \subsection{Cross Validation}
@@ -476,14 +477,14 @@ A common assumption in the regression setting is that the observations are corru
 p(t_n\vert \bm{x_n},\bm\Theta)=\mathcal{N}(t_n\vert f(\bm{x_n};\bm\theta),\beta^{-1})
 \end{equation}
 
-This probability is called \emph{likelihood} of the observation $t_n$, under the model $f(\cdot;\cdot)$ with parameters $\bm{\theta}$. Since the training data is assumed to be independent and identically distributed, the likelihood of the whole training set is
+This probability is called \emph{likelihood} of the observation $t_n$, under the model $f(\cdot;\cdot)$ with parameters $\bm{\theta}$ and hyper-parameters $\bm\Theta$ (only $\beta$ in this specific example). Since the training data is assumed to be independent and identically distributed, the likelihood of the whole training set is
 
 \begin{equation}
 \label{eq:likelihood}
 p(\bm{t}\vert\bm{X}, \bm\Theta)=\prod_{n=1}^N  \mathcal{N}(t_n\vert f(\bm{x_n};\bm\theta),\beta^{-1})
 \end{equation}
 
-And the predicted value $t$ for a new sample $\bm x$ is distributed as
+\noindent and the predicted value $t$ for a new sample $\bm x$ is distributed as
 
 \begin{equation}
 p(t\vert \bm x, \bm X, \bm t)=\int
@@ -550,7 +551,7 @@ The series $\bm\theta_1,\ldots,\bm\theta_n$ is guaranteed to converge to the loc
 In some cases, the gradient and the Hessian can be approximated using a random subset of the training set, and, in extreme cases, a single sample. These variants are called \emph{minibatch} gradient descent and \emph{stochastic} gradient descent respectively. They both compute a noisy approximation to the true gradient, which can actually improve convergence and generalization of high-dimensional, non-convex loss functions such as those found in deep learning \citep{sgd_noise, bayesian_sgd}. Vanilla gradient descent can be greatly improved with a number of techniques, such as momentum \citep{gd_momentum}, adaptive learning rate \citep{adagrad, adadelta, adam}, and so on, see \cite{gd_overview} for an overview. 
 
 \subsection{Hyper-parameter Optimization}
-The previous section discussed some methods to find the best parameters for a model. In practice, though, finding good values for the hyper-parameters is often as important as fitting the model, since these hyper-parameters control the learning process itself.
+The previous section discussed some methods to find the best parameters for a model. The behavior of most model, though, is governed by other \emph{hyper-parameters}, such as $\beta$ in equation \ref{eq:model_pred_distrib}. In practice, finding good values for the hyper-parameters is often as important as fitting the model, since these hyper-parameters control the learning process itself.
 
 A simple way to approach this problem is to choose some possible values for each hyper-parameter, try all the possible combinations, and pick the one that works best. Alternatively, one can sample each hyper-parameter from a probability distribution, and try many random combinations of values; \cite{random_search} showed that this latter method is surprisingly effective at this task, and scales much better than the former. Unfortunately, this procedure can overfit, too, so it has to be paired with some resampling technique such as cross validation. The procedure is simply to test every hyper-parameter combination on every fold, so that 50 combinations tested with 10-fold cross validation require to fit the model 500 times.
 
