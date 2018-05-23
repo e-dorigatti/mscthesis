@@ -41,7 +41,7 @@
 
 \begin{document}
 
-\title{Predicting the momentum flux-profile relationship from  macro weather parameters}
+\title{Predicting the Momentum Flux-Profile Relationship from  Macro Weather Parameters}
 \author{Emilio Dorigatti}
 
 
@@ -61,7 +61,7 @@ This project marks the end of my years as a student.  During all this time,
 \newpage
 
 \section*{Summary}
-The study of climate heavily relies on simulations. For efficiency reasons, many important phenomena cannot be simulated, and have to be parametrized, i.e. describing their effect based on macro parameters. The turbulence resulting from the interaction between the atmosphere and the surface is an example of such phenomena One of the quantities of interest arising from turbulence is the momentum flux-profile relationship, which relates the transport of momentum (flux) and the change of wind speed with altitude (profile). This quantity can be computed following the Monin-Obukhov Similarity Theory \citep{mostayyyy}. However, this theory requires parameters that are hard to measure, both in real life and in the simulations, is only applicable in a restricted range of conditions, and produces predictions that are accurate only up to 20-30\% \citep{50years}.
+The study of climate heavily relies on simulations. For efficiency reasons, many important phenomena cannot be simulated, and have to be parametrized, i.e. their effect must be described based on macro parameters. The turbulence resulting from the interaction between the atmosphere and the surface is an example of such phenomena. One of the quantities of interest arising from turbulence is the momentum flux-profile relationship, which relates the transport of momentum (flux) and the change of wind speed with altitude (profile). This quantity can be computed following the Monin-Obukhov Similarity Theory \citep{mostayyyy}. However, this theory requires parameters that are hard to measure, both in real life and in the simulations, is only applicable in a restricted range of conditions, and produces predictions that are accurate only up to 20-30\% \citep{50years}.
 
 The goal of this thesis is to compute the momentum flux-profile relationship using only macro weather parameters, which are readily available in climate simulations; this is done using Data Mining techniques on 17 years of weather data collected from the Cabauw meteorological tower in the Netherlands. Moreover, we asses the impact of different sets of features on the prediction error.
 
@@ -94,7 +94,7 @@ One important issues in the study of the atmospheric boundary layer is the deriv
 
 The state of the art relationships are defined by the Monin-Obukhov Similarity theory in terms of the instability parameter $\xi$, computed as the height above surface scaled by turbulence due to horizontal wind and vertical air movement due to variations in heat. Difficulties in measurements of relevant quantities make this theory accurate only up to 20-30\% \citep{basicatm}, and applicable in a restricted set of conditions.
 
-\cite{sheba} shows that, at least in difficult conditions, several simulation models produce flux estimates that are highly inaccurate, presenting low correlation (mostly below 0.3) and errors that are as large as the fluxes themselves. \cite{most_les} raises awareness on the fact that the lowest grid level used in many simulations recent simulations is too low, outside of the validity region of the Monin-Obukhov similarity theory, although no quantitative measure of the issues caused is presented. Intuitively, since errors in the simulation accumulate over time, even slight improvements can greatly improve the accuracy of the results after years of simulated time. Improved flux-profile relationship can, therefore, yield more accurate estimates of the fluxes.
+\cite{sheba} shows that, at least in difficult conditions, several simulation models produce flux estimates that are highly inaccurate, presenting low correlation (mostly below 0.3) and errors that are as large as the fluxes themselves. On the contrary, \citep{boundary_layer_impact_in_sim} and \citep{most_sim} show that other simulation models are able to provide accurate estimates of the fluxes at the price of biased surface temperature estimates. Intuitively, this trade-off arises because of the deep relationship between the net radiation, the surface fluxes and the surface temperature: one can choose which two quantities to estimate accurately, and sacrifice accuracy on the remaining one. \cite{most_les} raises awareness on the fact that the lowest grid level used in many simulations recent simulations is too low, outside of the validity region of the Monin-Obukhov similarity theory, although no quantitative measure of the issues caused is presented. Since errors in the simulation accumulate over time, even slight improvements can greatly improve the accuracy of the results after years of simulated time.
 
 Currently, limitations of the validity of the Monin-Obukhov similarity theory are not believed to be a likely explanation for the high scatter that is found in experimental studies, unless in highly stable conditions, where measurement challenges arise \citep{basicatm}. With the availability of macro- and micro-meteorological data from specialized observation sites such as Cabauw, in the Netherlands, and the recent developments in Machine Learning, this conjecture can be finally put to the test. More specifically, we pose the following \\
 
@@ -151,7 +151,7 @@ It is important to mention that these steps are not strictly sequential, but hea
 
 \section{Outline}
 \label{sec:outline}
-The thesis is organized as follows: in chapter \ref{ch:background}, we introduce the relevant background in climate science and machine learning, then, in chapter \ref{ch:method}, we describe how the data is collected and used to answer the research question, chapter \ref{ch:results} contains the results of such investigation, and, finally, chapter \ref{ch:discussion} discusses the results, pointing out limitations and possible future directions.
+The thesis is organized as follows: in chapter \ref{ch:background}, we introduce the relevant background in climate science and machine learning, then, in chapter \ref{ch:method}, we describe how the data is collected and used to answer the research question, chapter \ref{ch:results} contains the results of such investigation, and, finally, chapter \ref{ch:conclusion} discusses the results, pointing out limitations and possible directions for expanding this work.
 
 \chapter{Background}
 \label{ch:background}
@@ -335,8 +335,7 @@ The universal function must be determined experimentally. This is no easy task, 
 \end{cases}
 \end{align}
 
-
-The Monin-Obukhov similarity theory (MOST) is only applicable in the surface layer, at heights much larger than the aerodynamic roughness length, and with $\vert\xi\vert<2$; even under ideal conditions, the predictions of this theory are accurate up to 10-20\% \citep{50years}. Intuitively, when $\vert\xi\vert$ is too large, the eddies do not feel the effect of the surface anymore, and, under very stable stratification ($\xi>>1$), vertical motion is hampered, so the height $z$ does not play a role. Recent attempts \citep{sheba_phim,most_teal,Wilson2008} try to extend, or altogether replace, this similarity theory.
+The Monin-Obukhov similarity theory (MOST) is only applicable in the surface layer, at heights much larger than the aerodynamic roughness length, and with $\vert\xi\vert<2$; intuitively, when $\vert\xi\vert$ is too large, the eddies do not feel the effect of the surface anymore, and, under very stable stratification ($\xi>>1$), vertical motion is hampered, so the height $z$ does not play a role. Even under ideal conditions, the predictions of this theory are accurate up to 10-20\% \citep{50years}. Some works, such as \cite{flux_prof_measure_issues}, argue that the poor agreement between data and experiments, and even among experiments themselves, can be largely attributed to difficulties in measuring the necessary quantities. Recent attempts \citep{sheba_phim,most_teal,Wilson2008,aerodynamic_fluxes} try to extend, improve, or altogether replace, this similarity theory or pars thereof.
 
 \section{Statistics and Machine Learning}
 \label{sec:ml}
@@ -977,7 +976,7 @@ The model is linear in its parameters, therefore equation \ref{eq:ridge_solution
 f^\prime(z)=b+2cz^2+d\frac{1}{z}
 \end{equation}
 
-After removing the observations for which this model has a $R^2<0.9$, \cite{windlogprofile} estimates the uncertainty of this gradient to be around 30\%. Note that some works, such as \cite{windprof_nosqr}, do not use the squared term.
+After removing the observations for which this model has a $R^2<0.9$, \cite{windlogprofile} estimates the uncertainty of this gradient to be around 30\%. Note that some works, such as \cite{windprof_nosqr}, do not use the squared term, and others, such as \cite{flux_vs_gradient_abl_depth} add squared and even cubic logarithmic terms $\ln^2z$ and $\ln^3z$.
 
 Finally, a third method of computing the gradient is to fit a Gaussian process to the profile using the following kernel:
 
@@ -1094,7 +1093,7 @@ The models that we use are ridge regression, k-nearest neighbors, gradient boost
 All models but neural networks are fitted using nested cross validation with random hyper-parameter search. This procedure detailed in section \ref{sec:perf_eval}, but we list here the distributions of the hyper-parameters that we use in the random search:
 
 \begin{itemize}
-\item Ridge regression and Monin-Obukhov estimator: the only hyper-parameter to tune is the regularization coefficient, for which we use a log$_{10}$-uniform distribution\footnote{a random variable $X$ has a log$_\beta$-uniform distribution from $a$ to $b$ if $\log_\beta X$ is uniformly distributed between $a$ and $b$. Equivalently, if $Y$ is uniform between $a$ and $b$, then $\beta^Y$ is log$_\beta$-uniform.} from $10^{-6}$ to $10^{1}$.
+\item Ridge regression and Monin-Obukhov estimator: the only hyper-parameter to tune is the regularization coefficient, for which we use a log$_{10}$-uniform distribution\footnote{a random variable $X$ has a log$_\beta$-uniform distribution from $\beta^a$ to $\beta^b$ if $\log_\beta X$ is uniformly distributed between $a$ and $b$. Equivalently, if $Y$ is uniform between $a$ and $b$, then $\beta^Y$ is log$_\beta$-uniform.} from $10^{-6}$ to $10^{1}$.
 
 \item k-nearest neighbors: the hyper-parameters to tune are the number of neighbors, chosen uniformly from $1$ to $15$, the distance function, either L1 or L2 norm, and the weights of the neighbors, either uniform or directly proportional to the distance to the query point.
 
@@ -1472,21 +1471,27 @@ Table \ref{tbl:trend_comparison} compares each feature set with and without tren
 
 Table \ref{tbl:fset_comparison} compares every pair of feature set, again restricted to the MOST dataset and the GBT estimator. Given that the trend does not provide additional benefits, we compare the feature sets without the trend. The only feature sets that do not improve over the previous sets are F2 (soil heat flux) over F1 and F4 (rain amount and dew point) over F3; in all other cases, adding features gives a significant improvement.
 
-\chapter{Discussion}
-\label{ch:discussion}
-As shown in table \ref{tbl:baseline_comparison}, we could improve the predictions of the similarity theory even with a simple regularized linear model. Furthermore, \ref{tbl:trend_comparison} shows that no useful information can be obtained from knowing the value of a feature one hour earlier than the prediction. Finally, table \ref{tbl:fset_comparison} shows that, besides the heat fluxes, the net radiation is an important predictor, whereas the dew point and the soil heat flux do not contribute significantly to the predictive performance.
+\chapter{Conclusion}
+\label{ch:conclusion}
+The Monin-Obukhov similarity theory is an important component in many climate simulation models. In this work we investigated whether it is possible to improve the predictions of this theory by using macro weather parameters instead of parameters describing turbulence, and we tried to identify the importance of the features.
 
+As shown in table \ref{tbl:baseline_comparison}, we could improve the predictions of the similarity theory even with a simple regularized linear model, and more complex methods can reduce the MSE by almost 50\%. Table \ref{tbl:fset_comparison} shows that, besides the heat fluxes, the net radiation is an important predictor, whereas the dew point and the soil heat flux do not contribute significantly to the predictive performance. Furthermore, \ref{tbl:trend_comparison} shows that no useful information can be obtained from knowing the value of a feature one hour earlier than the prediction.
 
+\section{Discussion}
+We can comment on several aspects of this work, highlighting limitations and potential alternative approaches. An obvious, but perhaps easy to ignore, fact is that the models presented are black boxes that cannot be easily interpreted. This approach is very different from the traditional methodology in Physics and related fields, in which theories offer predictions by \emph{explaining} the phenomena at hand. 
 
 \subsection{Features}
- Of course, we cannot rule out the possibility that the model was able to figure out the information contained in these features, thus making them redundant, or needed other features to make sense of them.
- 
- 
+The features used for prediction play a very important role, since they affect the ability to generalize to different conditions, and the ease with which the model can be applied to new situations. This is especially noteworthy since no feature engineering was performed, except for standardization. This means, for example, that the model could have incorporated biases coming from the instruments used at Cabauw, thereby hurting performance when using samples coming from different instruments (newer version, different maker, different measuring principle, etc.).
+
+\paragraph{Feature importance:} Even though we showed that the dew point and the soil heat flux are not important predictors, we cannot rule out the possibility that the model was able to figure out the information contained in these features using features from earlier sets, or, on the contrary, needed features from later sets make sense of them. For example, the soil heat flux could have had an impact only when the model could relate it to the turbulent fluxes in F5. Similarly, perhaps the model was able to figure out the dew point by relating the the air temperature and the net radiation with the soil heat flux (to estimate humidity). The opposite is also possible, namely these measures could have been not informative enough, and the model needed more features, such as the virtual temperature, to make sense of them.
+
+\paragraph{Micro parameters:} One of the biggest obstacles in applying the similarity theory lies in accurately measuring the quantities it relies on. Examples are the von Karman's constant $\kappa$, the roughness length $z_0$, the turbulent fluxes $H$ and $\lambda E$, the friction velocity $u_*$, and so on. The advantage of using only macro parameters to predict $\phi_m$ is that accurately measuring these quantities becomes less important, in the sense that we can force models to find explanations that do not rely on them. Of course, such models would likely have inferior performances, depending on the influence of these parameters on $\phi_m$.
+
+Another downside of not using micro parameters is that the resulting models do not generalize well in conditions that are different to those presented in the training set, especially if it contains measures coming from a single location, such as in our case. Training with data coming from different locations certainly produces more general models, as long as the data contains features that are informative and general enough to allow the model to differentiate between the different conditions. For example, the properties of the surface, such as its roughness, have a large impact on turbulence; what our model thinks is the normal behavior of turbulence might in fact be largely determined by the surface around the measurement site. But our model is completely unaware of the effect of the surface, so it might not be able to give accurate predictions at sites with different surface characteristics. See \cite{cabauw_surface} for a discussion on how the obstacles around the Cabauw tower affect the flux-profile relationships measured there. A training set with relevant features and diverse samples can alleviate this problem. For example, features could be extracted from satellite images of the surroundings; a very crude approach is to classify the surface into one of several categories, and use a lookup table with pre-computed roughness lengths.
+
 actual constants and coefficients (e.g. von karmans constant) dont really matter, because they are constant and do not affect the ml model (can be figured out)
 
 estimating parameters (von karman, roughness length etc) is very difficult, by using ml we can circumvent the problem (they need a supporting infrastructure even if they want to compute those constants, so not huge downside)
-
-
 
 one of the reasons why MOST is unreliable in stable conditions is because of the difficulty of measuring fluxes. there are other methods to compute the turbulent fluxes (http://bibliotheek.knmi.nl/knmipubWR/WR87-02.pdf, ), we used eddy corr because that's what in the cesar database
 
@@ -1502,14 +1507,15 @@ trend could be better included using some sort of time series prediction togethe
 
 generalization problem: surface roughness? simulations already use some parameters for this
 
-\paragraph{Samples}
+\subsection{Training Samples}
 outliers with xi between -20 and -2 mostly belong to z=40 in the morning (between 6 and 12); given what was said in [paper], there is the possibility that they are not in the surface layer, explaining why the c coefficient is higher than expected
 
+hurricane
 
 can generate new training samples at more altitude levels, since we have a model for wind and temp (need to interpolate spec. humidity too), according to the simulation that uses this model
 
 
-\paragraph{Performance}
+\subsection{Performance}
 This is a notable achievement, since the chosen model will be just one of the many components of climate simulations, which are notoriously very slow and computationally intensive. A linear model has the potential to compete with the efficiency of MOST, depending on the number of features, since it is fundamentally a dot product
 
 even though we predicted phim, the actual interest is in u*. we predict phim to have a direct means of comparing with state of the art (?), \cite{weber1999} computes u* from the standard deviations obtaining rmse between 0.05 and 0.1
@@ -1518,17 +1524,23 @@ even though we predicted phim, the actual interest is in u*. we predict phim to 
 
 incorporate uncertainty in the model (e.g. quantile regression), then use this in the simulations to get climate uncertainty (monte carlo by sampling from prediction would be a quick and dirty way of implementing this, although it would make the simulation quite slow)
 
-defense thu 14 at 11 in kista room grottan
+\subsection{Deployment}
+todo
 
-ask ying to review my thesis
+\section{Related Work}
+todo
+\citep{cabauw_preds} predicts ustar, fluxes, wind speed etc., would be interesting to compute phim with their predictions and compare
 
-seems like it's fairly new, no ML attempts
+\citep{predict_micro_from_macro_sim} predicts abl parameters (ustar, fluxes etc) from macro parameters obtained from simulations. quite cool we should also try to predict using only inputs from simulations
 
-boundary layer journal
+\citep{ustar_from_profile} predicts ustar from profiles (choose ustar that minimizes difference between measured and predicted profile), give only r=0.84, r=0.9 and r=0.89 for different wind directions, very similar to our sqrt(r), but they needed to use z0. they also give a method to compute confidence intervals (we can do that too!!!)
 
+
+\citep{flux_prof_measure_issues} argues that 
 
 \section{Limitations and Future Work}
 todo
+future work: see appendix, also test on other dataset, try inside simulations similarly to \citep{predict_micro_from_macro_sim}
 
 \appendix
 \chapter{Detailed Results}
@@ -1714,9 +1726,8 @@ Other experiments were performed using all the observations in the hour precedin
 We can relax the constraints needed to answer the research questions, in particular the second one, and perform additional feature engineering. In order to minimize the computational resources needed, we apply Ridge linear regression to the MOST dataset.
 
 \paragraph{Methods:}
-Instead of restricting ourselves to the five feature sets, we use all the quantities shown in table \ref{tbl:col_summary}, except for the turbulent heat fluxes, and, in light of the results shown in the main report, we do not use the trend. We add polynomial features, then standardize the dataset, apply PCA, and fit the Ridge estimator. This whole procedure, including feature engineering, is performed separately for a number of random subsets of samples (with replacement) and features, and the final prediction is the average of the predictions obtained by the different models. We then optimize the parameters of every steps with random search and cross validation. This means that, although all the steps share the same hyper-parameters, they are fit on different subsets of the full dataset, and thus have different parameters. This improves generalization, since the best performing hyper-parameters were able to extract good features and use them to obtain good predictions on different independent subsets.
+Instead of restricting ourselves to the five feature sets, we use all the quantities shown in table \ref{tbl:col_summary}, except for the turbulent heat fluxes, and, in light of the results shown in the main report, we do not use the trend. We add polynomial features, then standardize the dataset, apply PCA, and fit the Ridge estimator. This whole procedure, including feature engineering, is performed separately for a number of random subsets of samples (with replacement) and features, and the final prediction is the average of the predictions obtained by the different models. We then optimize the parameters of every steps with random search and cross validation. This means that, although all the steps share the same hyper-parameters, they are fit on different subsets of the full dataset, and thus have different parameters. This improves generalization, since the best performing hyper-parameters were able to extract good features and use them to obtain good predictions on different independent subsets. Table \ref{tbl:linear_bag_hyp} shows the distribution of the hyper-parameters, which were optimized with 10-fold cross validation by sampling 250 values, as well as the optimal values found in the procedure.
 
-Table \ref{tbl:linear_bag_hyp} shows the distribution of the hyper-parameters, which were optimized with 10-fold cross validation by sampling 24 values, as well as the optimal values found in the procedure.
 
 \begin{table}
 \caption{Distribution of the hyper-parameters used in the random search and optimal value found.}
@@ -1727,22 +1738,27 @@ Table \ref{tbl:linear_bag_hyp} shows the distribution of the hyper-parameters, w
 \toprule
 & \textbf{Hyper-Parameter} & \textbf{Distribution }& \textbf{Values} & \textbf{Optimal }\\
 \midrule
-\multirowcell{4}[2ex][c]{ \makecell[c]{\textbf{Base}\\\textbf{Estimator}} } & Polynomial Degree & Uniform & 1 or 2 & ?? \\
-& Polynomial Interactions & Uniform & Yes or No & ??\\
-& PCA Target Dimension & Uniform & From 10\% to 90\% & ?? \\
-& Ridge Regularization & Log$_{10}$-uniform & From $10^{-7}$ to $10^1$ & ?? \\ \hline \
-\multirowcell{3}[1ex][c]{ \makecell[c]{\textbf{Bagging}\\\textbf{Estimator}} } & Number of Base Estimators & Uniform & From 5 to 25 & ?? \\
-& Samples per Base Estimator & Uniform & From 5\% to 25\% & ?? \\
-& Features per Base Estimator & Uniform & From 25\% to 100\% & ?? \\
+\multirowcell{4}[2ex][c]{ \makecell[c]{\textbf{Base}\\\textbf{Estimator}} } & Polynomial Degree & Uniform & 1 or 2 & 2 \\
+& Polynomial Interactions & Uniform & Yes or No & Yes \\
+& PCA Target Dimension & Uniform & From 2 to 19 & 19 \\
+& Ridge Regularization & Log$_{10}$-uniform & From $10^{-7}$ to $10^1$ & \num{2e-5} \\ \hline \
+\multirowcell{3}[1ex][c]{ \makecell[c]{\textbf{Bagging}\\\textbf{Estimator}} } & Number of Base Estimators & Uniform & From 5 to 100 & 13 \\
+& Samples per Base Estimator & Uniform & From 5\% to 25\% & 11\% \\
+& Features per Base Estimator & Uniform & From 4 to 20 & 20 \\
 \bottomrule
 \end{tabular*} 
 \end{table}
 
+\paragraph{Results:} The average MSE obtained on the 10 validation folds is 0.187 with a standard deviation of 0.022, which is just slightly worse than the best results obtained by the gradient boosted trees on F3. All the other metrics are within one standard deviation, too.
+
+\paragraph{Discussion:} The linear models use all the available features, and the effect of PCA is only to decorrelate the features. However, they use few samples and weak regularization; in spite of this, the MSE on the training folds is almost identical to the MSE on the validation folds, indicating that the linear models do not overfit and suggesting that the ensemble is not needed to reduce variance.
+
+
 
 \chapter{More Hyper-parameter Optimization}
-By foregoing nested cross-validation and focusing on a particular dataset (MOST) and set of features (F4 without trend), we can reduce the computational resources needed for more involved hyper-parameter tuning procedures.
+By foregoing nested cross-validation and focusing on a particular dataset (MOST) and set of features (table \ref{tbl:col_summary} without $H$ and $\lambda E$), we can reduce the computational resources needed for more involved hyper-parameter tuning procedures.
 
-\paragraph{Methods:} We optimized the hyper-parameters of extreme gradient boosted trees \citep{xgboost} using both HyperBand \citep{hyperband} and the Python library GPyOpt\footnote{\url{http://github.com/SheffieldML/GPyOpt}}. For Hyperband, we use the default parameters suggested in the paper, i.e. $\eta=3$ and $R=81$, with each unit of budget corresponding to 10 trees. The Bayesian optimization procedure is based on Gaussian Processes with the RBF kernel, using the integrated expected improvement as acquisition function. Integration is performed over the posterior of the hyper-parameters, approximated with MCMC sampling \citep{practical_gphypopt}, in order to improve the accuracy of the proposed hyper-parameters. Both methods were evaluated on the same subset of 20 months, and trained on the remaining data, without cross-validation. Table \ref{tbl:hypopt_distr} shows the distribution of the hyper-parameters used in the search, and the optimal values found by the two methods.
+\paragraph{Methods:} We optimized the hyper-parameters of extreme gradient boosted trees \citep{xgboost} using both HyperBand \citep{hyperband} and the Python library GPyOpt\footnote{\url{http://github.com/SheffieldML/GPyOpt}}. For Hyperband, we use the default parameters suggested in the paper, i.e. $\eta=3$ and $R=81$, with each unit of budget corresponding to 15 trees. The Bayesian optimization procedure is based on Gaussian Processes with the RBF kernel, using the integrated expected improvement as acquisition function. Integration is performed over the posterior of the hyper-parameters, approximated with MCMC sampling \citep{practical_gphypopt}, in order to improve the accuracy of the proposed hyper-parameters. Both methods were evaluated on the same subset of 20 months, and trained on the remaining data, without cross-validation. Table \ref{tbl:hypopt_distr} shows the distribution of the hyper-parameters used in the search, and the optimal values found by the two methods.
 
 \paragraph{Results:} The best configuration found by Hyperband, after 170 steps, had a MSE of 0.1744 on the validation set, whereas the solution found by GPyOpt, after 42 trials, had a MSE of 0.1729. These results are very similar to what was obtained with random search and nested cross validation.
 
