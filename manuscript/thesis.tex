@@ -116,9 +116,11 @@ The first research question is answered by proposing one or more Data Mining met
 
 \section{Ethics and Sustainability}
 \label{sec:ethics}
-This work posed no ethical issues: data collection was mostly automated and performed by a third party, which provides free and open access to it, and privacy and confidentiality are not relevant issues since no test subjects were needed to perform the research.
+Carrying out this project posed no ethical issues: data collection was mostly automated and performed by a third party, which provides free and open access to it, and privacy and confidentiality are not relevant issues since no test subjects were needed to perform the research.
 
 The author strongly aligns with the Open Science movement, according to which scientific research should be made as open and accessible as possible, so that it can be examined, extended and improved by as many people as possible. This is what allowed mankind to become what it is today, and it should not change. For this reason, this work was performed entirely with Free and Open Source tools, providing a low barrier to entry, and focusing on reproducibility of the results. The entirety of the analysis and its historical record, from the very data to the generation of plots and tables, is openly accessible\footnote{\url{https://github.com/e-dorigatti/mscthesis}} and can be performed by anyone with enough computational resources.
+
+http://www.un.org/sustainabledevelopment/health/
 
 Some of the analysis performed in this work required a considerable amount of computational resources, in the order of hundreds of cores and terabytes of memory. Such resources are power hungry and require electricity to run and to be kept at an appropriate temperature [todo some stats about internet power usage etc], as well as proper support infrastructure, e.g. for networking. In an effort to reduce the energy requirements, only the necessary experiments were performed, and care was taken not to do unnecessary work, for example by reusing results of previous experiments where possible.
 
@@ -273,7 +275,7 @@ Since turbulence changes over time, we are more interested in the change of kine
 +\epsilon
 \end{equation}
 
-Where ${e'}^2={u'}^2+{v'}^2+{w'}^2$. The $P$ term is the production due to shear, $B$ is the production due to buoyancy, $T_t$ is the turbulent transport of TKE by large-scale eddies, $T_p$ is the transport due to pressure, and $\epsilon$ is molecular dissipation due to viscosity. $P$ and $B$ are the most prominent terms, and the transport terms are close to zero in neutral conditions \citep{basicatm}.
+\noindent where ${e'}^2={u'}^2+{v'}^2+{w'}^2$. The $P$ term is the production due to shear, $B$ is the production due to buoyancy, $T_t$ is the turbulent transport of TKE by large-scale eddies, $T_p$ is the transport due to pressure, and $\epsilon$ is molecular dissipation due to viscosity. $P$ and $B$ are the most prominent terms, and the transport terms are close to zero in neutral conditions \citep{basicatm}.
 
 The $P$ term is always positive, as energy is taken from the mean flow to the turbulent one (in other words, turbulence can only generate kinetic energy). On the other hand, the contribution from buoyancy can be either positive or negative, depending on the difference of temperature between a parcel of air moved by the turbulence and the surrounding air. When $\overline{w^\prime\theta^\prime}$ is negative, the turbulence is moving cold air upwards and warm air downwards; these parcels of air will try to undo the effect of turbulence, thereby increasing the overall kinetic energy. A similar reasoning goes for when the heat flux is positive.
 
@@ -308,7 +310,9 @@ L=-\frac{u_*^3}{\kappa\frac{g}{\theta_v}\frac{Q}{\rho c_\rho}}
 \theta_v=\theta\frac{1+r_v/\epsilon}{1+r_v}=\theta(1+0.61\cdot q)
 \end{equation}
 
-Where $\theta$ is the air temperature, $r_v$ is the mixing ratio, $q=r_v/(1+r_v)$ the specific humidity, and $\epsilon$ is the ratio of the gas constants of dry air and water vapor, roughly 0.622.
+\noindent where $\theta$ is the air temperature, $r_v$ is the mixing ratio, $q=r_v/(1+r_v)$ the specific humidity, and $\epsilon$ is the ratio of the gas constants of dry air and water vapor, roughly 0.622.
+
+\item $T_v=\theta_v/g$ is the buoyancy parameter;
 
 \item $\rho$ the air density, computed from the pressure $P$ and the specific gas constant for dry air $R=\SI{287.058}{\joule\per\kilo\gram\kelvin}$ as
 
@@ -727,6 +731,24 @@ In order not to assume normality, we compute the CI for the effect size using th
 
 The sample effect size of equation \ref{eq:base_es} is not robust to outliers when it is computed with the sample means and standard deviations. Since we do not assume normality outliers are expected, therefore we use measures of location that are not heavily affected by them: the sample trimmed mean and the sample Winsorized standard error. The $100\gamma \%$ trimmed mean $\overline{X}_\gamma$ of a sample $X_1,\ldots,X_N$ is simply the mean of that sample after discarding the $100\gamma\%$ largest and the $100\gamma\%$ smallest observations\footnote{this is common practice, for example, when scoring in sports such as the modern Olympiads, where the smallest and largest scores are discarded.}; a common value for $\gamma$ is 0.2. The standard error of the sample trimmed mean is obtained from the Winsorized sample standard deviation; let $X_{(\gamma)}$ and $X_{(1-\gamma)}$ be the $100\gamma$ and $100(1-\gamma)$ percentiles, and define the Winsorized observations as follows:
 
+
+\begin{figure}
+    \centering
+    \begin{subfigure}[t]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/small_es}
+        \label{fig:small_es}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/large_es}
+		\label{fig:large_es}
+    \end{subfigure}
+    \caption{Graphical explanation of why the effect size is normalized with the standard deviation of the treatment, when the control has a mean of 0 and standard deviation of 1 and the treatment has a mean of 2; inarguably, the treatment in the right figure the best of the two. Of course, one could perform the same experiment but keeping the treatment fixed and varying the standard deviation of the control: in that case, the effect size would not change. Refer to the main text for a discussion.}
+	\label{fig:effect_size}
+\end{figure}
+
 \begin{equation}
 W_n=\begin{cases}
 X_{(\gamma)} & \text{if }X_n\leq X_{(\gamma)} \\
@@ -744,7 +766,7 @@ X_n &\text{otherwise}
 \noindent the Winsorized sample variance
 
 \begin{equation}
-\hat{\sigma}_W=\frac{1}{N-1}\sum_{n=1}^N (W_n-\overline{X}_W)^2
+\hat{\sigma}^2_W=\frac{1}{N-1}\sum_{n=1}^N (W_n-\overline{X}_W)^2
 \end{equation}
 
 \noindent and the estimated variance of the trimmed mean
@@ -762,25 +784,6 @@ The standard error of $\overline{X}_\gamma$ is the usual $(\text{Var}[\overline{
 \end{equation}
 
 \noindent where $T_1,\ldots,T_N$ and $C_1,\ldots,C_M$ are the \emph{independent} samples of treatment and control groups respectively. See  \cite{robust_stat} and \cite{modern_stat}for an introduction to robust statistical methods, including the ones just described.
-
-\begin{figure}
-    \centering
-    \begin{subfigure}[t]{0.49\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{images/small_es}
-%        \caption{The treatment has standard deviation of 0.5, and the effect size is 3.93}
-        \label{fig:small_es}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[t]{0.49\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{images/large_es}
-%        \caption{The treatment has standard deviation of 0255, and the effect size is 7.77}
-		\label{fig:large_es}
-    \end{subfigure}
-    \caption{Graphical explanation of why the effect size is normalized with the standard deviation of the treatment, when the control has a mean of 0 and standard deviation of 1 and the treatment has a mean of 2; inarguably, the treatment in the right figure the best of the two. Of course, one could perform the same experiment but keeping the treatment fixed and varying the standard deviation of the control: in that case, the effect size would not change. Refer to the main text for a discussion.}
-	\label{fig:effect_size}
-\end{figure}
 
 
 Figure \ref{fig:effect_size} shows the effect size computed according to \ref{eq:effect_size}, and tries to provide an intuitive explanation as to why we normalize with the treatment standard deviation. Note that we cannot use an average (weighted or unweighted) as normalizer since it corresponds to assuming homogeneity of \emph{population} variances, an assumption that we wanted to avoid in the first place. Since the goal is to assess the improvement caused by the treatment, it would not make sense to normalize with the standard deviation of the control group, because it would not allow us to discriminate between treatments with the same mean but different standard deviations: given two treatments with the same mean, we prefer the one with the smaller standard deviation. Of course, this reasoning can be applied in the opposite direction: normalizing by the control standard deviation would give a larger effect size when the control group has a smaller standard deviation, which is certainly a desirable property, since a control group with a smaller standard deviation is more clearly separated from the treatment. However, we consider the control group to be fixed, and we will never need to compare two control groups against the same treatment.
@@ -1162,7 +1165,7 @@ A successful answer to the first research question entails finding a model whose
 
 Note that we cannot use the output of a model to obtain the importance of the features, as this method is not reliable when some of them are correlated \citep{rf_bias,rf_corr_imp}, which is a very relevant issue in our case. Trivially, wind speed and temperature at the different levels are very strongly correlated (Pearson's $r$ is above 0.95), and there are other, more complex, correlations, such as between the net radiation and the soil heat flux, or between the soil temperature and the dew point (Pearson's $r$ is respectively 0.75 and 0.79). In spite of the correlations, all these variables contribute to the flux-profile relationships, often in very nuanced ways.
 
-The differences are quantified using the effect size as described in section \ref{sec:effect_size}. We prefer the effect size over the mean MSE because the effect size allows us to consider the standard deviation of the MSE, as well as its mean; this could lead us to prefer models with slightly worse average MSE, but more consistent and reliable performances (i.e. smaller standard deviation). Since we are looking for an improvement, we compute the right 95\% confidence interval for the population effect size. In other words, besides providing a point estimate for the population effect size $\delta_{pop}$, we also provide an interval $[\delta_{low}, \infty)$ that contains it 95\% of the times. We say the treatment is better if $\delta_{low}>0$.
+The differences needed to answer the second research question are quantified using the effect size as described in section \ref{sec:effect_size}. We prefer the effect size over the mean MSE because the effect size allows us to consider the standard deviation of the MSE, as well as its mean; this could lead us to prefer models with slightly worse average MSE, but more consistent and reliable performances (i.e. smaller standard deviation). Since we are looking for an improvement, we compute the right 95\% confidence interval for the population effect size. In other words, besides providing a point estimate for the population effect size $\delta_{pop}$, we also provide an interval $[\delta_{low}, \infty)$ that contains it 95\% of the times. We say the treatment is better if $\delta_{low}>0$. In order to increase the reliability of our estimates, we repeat the cross validation procedure 5 times for each combination of features and trend.
 
 \chapter{Results}
 \label{ch:results}
@@ -1446,7 +1449,13 @@ $d$ & -0.30 & 0.11 & -0.60 & -0.26 & -0.26 & -0.26 & -0.25 \\
 \end{table}
 
 \subsection{Other Estimators}
-Table \ref{tbl:baseline_comparison} shows descriptive statistics of the MSE obtained by the best combination of features and trend, for each estimator and for each datasets, as well as the effect size comparing it with the MOST baseline. The scores were obtained with the nested cross validation procedure. The best combination of features and trend is the one with the largest lower bound of the 95\% CI; although in this case it equals the combination with the largest point estimate of the effect size, we feel that a definition in terms of the CI is more robust and reliable. It is very interesting to compare the kNN and GBT estimators: kNN manages to get a larger effect size when compared to MOST, despite the fact that its best performance corresponds to GBT's worst. This can be explained by the different scatter of the data points: kNN is more consistent, with only a couple of outliers driving up the standard deviation, while GBT's performances are more evenly scattered (and the rounding to two decimal digits in the table is deceiving). Consider the samples with the full dataset: the interquartile range for kNN is 0.025, whereas for GBT it is 0.055, and the Winsorized standard deviation over $10^4$ bootstraps is respectively 0.017 and 0.027. This difference is large enough to counteract the difference in means, and produce a larger effect size.
+Table \ref{tbl:baseline_comparison} shows descriptive statistics of the MSE obtained by the best combination of features and trend, for each estimator and for each datasets, as well as the effect size comparing it with the MOST baseline. The scores were obtained with the nested cross validation procedure, and are also shown in figure \ref{fig:baseline_comparison}. The best combination of features and trend is the one with the largest lower bound of the 95\% CI; although in this case it equals the combination with the largest point estimate of the effect size, we feel that a definition in terms of the CI is more robust and reliable. In many cases there was a combination with a MSE that was lower by a few percents, but with higher standard deviation, producing a smaller effect size. It is very interesting to compare the kNN and GBT estimators: kNN manages to get a larger effect size when compared to MOST, despite the fact that its best performance corresponds to GBT's worst. This can be explained by the different scatter of the data points: kNN is more consistent, with only a couple of outliers driving up the standard deviation, while GBT's performances are more evenly scattered (and the rounding to two decimal digits in the table is deceiving). Consider the samples with the full dataset: the interquartile range for kNN is 0.025, whereas for GBT it is 0.055, and the Winsorized standard deviation over $10^4$ bootstraps is respectively 0.017 and 0.027. This difference is large enough to counteract the difference in means, and produce a larger effect size.
+
+Table \ref{tbl:trend_comparison} compares each feature set with and without trend, for the MOST dataset and the GBT estimator. Essentially, the table shows that the features augmented with trend do not provide a significant improvement over those without trend; it is interesting to relate this result with table \ref{tbl:baseline_comparison}, where the largest effect size when comparing GBT with MOST is actually obtained with the trend. This is another example of differing standard deviations counteracting the difference in means.
+
+Figure \ref{fig:fset_comparison} shows the MSE obtained by the GBT estimator on the MOST dataset for each feature set; given that the trend does not provide additional benefits, we compare the feature sets without the trend. This data is used to compute the effect sizes shown in talbe \ref{tbl:fset_comparison}. The only feature sets that do not improve over the previous sets are F2 (soil heat flux) over F1 and F4 (rain amount and dew point) over F3; in all other cases, adding features gives a significant improvement.
+
+Finally, figure \ref{fig:residuals} shows the predictions obtained with the GBT estimator on one of the outer validation folds, and a probability plot of the residuals. It is clear that the error is largely determined by outliers: the mean squared error of these predictions is 0.155, but only 17\% of the squared errors is larger than that, and the median is 0.028. Moreover, in figure \ref{fig:residuals_scatter} we see a tendency to overestimate small values of $\phi_m$ and underestimate large ones.
 
 \begin{table}[p]
 \caption{Descriptive statistics of the best MSE achieved by each estimator, and effect size comparing it (treatment) with the MOST baseline (control); the effect size is positive when the treatment has a lower MSE. The first number is the lower bound for the right 95\% CI interval, and the second number is the estimated population effect size; in bold are the CIs that do not contain 0. The only model which is not significantly better than the MOST baseline is Ridge on the MOST dataset.}
@@ -1466,11 +1475,44 @@ Table \ref{tbl:baseline_comparison} shows descriptive statistics of the MSE obta
 \input{include/fset_comparison}
 \end{table}
 
-The scores used to perform the comparisons in tables \ref{tbl:trend_comparison} and \ref{tbl:fset_comparison} were obtained by repeating the cross validation procedure 5 times.
+\begin{figure}[p]
+    \centering
+    \begin{subfigure}[t]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/residuals_scatter}
+        \caption{Scatterplot showing predicted value versus true value. MSE=0.155}
+        \label{fig:residuals_scatter}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/residuals_probplot}
+        \caption{Probability plot of the residuals, $R^2=0.85$}
+        \label{fig:residuals_probplot}
+    \end{subfigure}
+    \caption{Illustration of the predictions and their residuals obtained by the gradient boosted trees on one of the outer validation folds (107,932 samples). The residuals are fairly symmetric with very heavy tails, and the model seems to underestimate extremely high $\phi_m$, and overestimate extremely low $\phi_m$.}
+	\label{fig:residuals}
+\end{figure}
 
-Table \ref{tbl:trend_comparison} compares each feature set with and without trend, for the MOST dataset and the GBT estimator. Essentially, the table shows that the features augmented with trend do not provide a significant improvement over those without trend; it is interesting to relate this result with table \ref{tbl:baseline_comparison}, where the largest effect size when comparing GBT with MOST is actually obtained with the trend. This is another example of differing standard deviations counteracting the difference in means.
 
-Table \ref{tbl:fset_comparison} compares every pair of feature set, again restricted to the MOST dataset and the GBT estimator. Given that the trend does not provide additional benefits, we compare the feature sets without the trend. The only feature sets that do not improve over the previous sets are F2 (soil heat flux) over F1 and F4 (rain amount and dew point) over F3; in all other cases, adding features gives a significant improvement.
+\begin{figure}[p]
+    \centering
+    \begin{minipage}[t]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/fset_comparison}
+        \caption{MSE obtained by the five feature sets without trend.}
+        \label{fig:fset_comparison}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[t]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/baseline_comparison}
+        \caption{MSE obtained by the best models, for the MOST dataset (left) and the full dataset (right).}
+        \label{fig:baseline_comparison}
+    \end{minipage}
+\end{figure}
+
+
 
 \chapter{Conclusion}
 \label{ch:conclusion}
@@ -1482,31 +1524,27 @@ As shown in table \ref{tbl:baseline_comparison}, we could improve the prediction
 We can comment on several aspects of this work, highlighting limitations and potential alternative approaches. An obvious, but perhaps easy to ignore, fact is that the models presented are black boxes that cannot be easily interpreted. This approach is very different from the traditional methodology in Physics and related fields, in which theories offer predictions by \emph{explaining} the phenomena at hand. 
 
 \subsection{Features}
-The features used for prediction play a very important role, since they affect the ability to generalize to different conditions, and the ease with which the model can be applied to new situations. This is especially noteworthy since no feature engineering was performed, except for standardization. This means, for example, that the model could have incorporated biases coming from the instruments used at Cabauw, thereby hurting performance when using samples coming from different instruments (newer version, different maker, different measuring principle, etc.).
+The features used for prediction play a very important role, since they affect the ability to generalize to different conditions, and the ease with which the model can be applied to new situations. This is especially noteworthy since no feature engineering was performed, except for standardization. This means, for example, that the model could have incorporated biases coming from the instruments used at Cabauw, thereby hurting performance when using samples coming from different instruments (newer version, different maker, different measuring principle, etc.). The features that are computed with the eddy correlation method are particularly susceptible to this issue: since the shortcomings of such procedure are well known, it is likely that better methods will be developed in the future.
+
+Another thing to keep in mind is that the models were trained using only a subset of the features available in the dataset; undoubtedly, using all of them would reduce the error attained by the models. The reason for this is that we hoped to reduce the amount of computation needed for the project by answering both research questions with the results of the nested cross validation procedure. However, the variance of these results proved to be too high to produce significant confidence intervals, so we performed the repeated cross validation procedure to obtain results with smaller variance, leading to narrowed confidence interval\footnote{this is not cheating}. Ideally, the first research question should have been answered with all the features.
+
+Although our experiments showed that measurements in the past do not improve the performance, the method we used was quite crude. Advanced methods explicitly based on time series analysis, such as ARIMA, could be tried. We performed some informal experiments with recurrent neural networks, but the results are discouraging, since they had difficulties even in properly fitting the dataset (see appendix \ref{apx:deep_learning})
+
+trend could be better included using some sort of time series prediction together with the features we considered in this work, but preliminary experiments (3 layers gru + 4 layers fully connected) do not seem to work well)
+
+
+richardson number instead of obukhov length
+
+
 
 \paragraph{Feature importance:} Even though we showed that the dew point and the soil heat flux are not important predictors, we cannot rule out the possibility that the model was able to figure out the information contained in these features using features from earlier sets, or, on the contrary, needed features from later sets make sense of them. For example, the soil heat flux could have had an impact only when the model could relate it to the turbulent fluxes in F5. Similarly, perhaps the model was able to figure out the dew point by relating the the air temperature and the net radiation with the soil heat flux (to estimate humidity). The opposite is also possible, namely these measures could have been not informative enough, and the model needed more features, such as the virtual temperature, to make sense of them.
 
 \paragraph{Micro parameters:} One of the biggest obstacles in applying the similarity theory lies in accurately measuring the quantities it relies on. Examples are the von Karman's constant $\kappa$, the roughness length $z_0$, the turbulent fluxes $H$ and $\lambda E$, the friction velocity $u_*$, and so on. The advantage of using only macro parameters to predict $\phi_m$ is that accurately measuring these quantities becomes less important, in the sense that we can force models to find explanations that do not rely on them. Of course, such models would likely have inferior performances, depending on the influence of these parameters on $\phi_m$.
 
-Another downside of not using micro parameters is that the resulting models do not generalize well in conditions that are different to those presented in the training set, especially if it contains measures coming from a single location, such as in our case. Training with data coming from different locations certainly produces more general models, as long as the data contains features that are informative and general enough to allow the model to differentiate between the different conditions. For example, the properties of the surface, such as its roughness, have a large impact on turbulence; what our model thinks is the normal behavior of turbulence might in fact be largely determined by the surface around the measurement site. But our model is completely unaware of the effect of the surface, so it might not be able to give accurate predictions at sites with different surface characteristics. See \cite{cabauw_surface} for a discussion on how the obstacles around the Cabauw tower affect the flux-profile relationships measured there. A training set with relevant features and diverse samples can alleviate this problem. For example, features could be extracted from satellite images of the surroundings; a very crude approach is to classify the surface into one of several categories, and use a lookup table with pre-computed roughness lengths.
-
-actual constants and coefficients (e.g. von karmans constant) dont really matter, because they are constant and do not affect the ml model (can be figured out)
-
-estimating parameters (von karman, roughness length etc) is very difficult, by using ml we can circumvent the problem (they need a supporting infrastructure even if they want to compute those constants, so not huge downside)
-
-one of the reasons why MOST is unreliable in stable conditions is because of the difficulty of measuring fluxes. there are other methods to compute the turbulent fluxes (http://bibliotheek.knmi.nl/knmipubWR/WR87-02.pdf, ), we used eddy corr because that's what in the cesar database
-
-wind direction is very important since different characteristics of the surface affect the measurements, see https://journals.ametsoc.org/doi/full/10.1175/2006JAMC1298.1 and somebody else on cabauw
-
-our models can only be used in conditions that are similar to cabauw. most importantly, they are not valid in the oceanic surface layer, because it is very different [citation]
-
-richardson number instead of obukhov length
+Another downside of not using micro parameters is that the resulting models do not generalize well in conditions that are different to those presented in the training set, especially if it contains measures coming from a single location, such as in our case. Training with data coming from different locations certainly produces more general models, as long as the data contains features that are informative and general enough to allow the model to differentiate between the different conditions. For example, the properties of the surface, such as its roughness, have a large impact on turbulence; what our model thinks is the normal behavior of turbulence might in fact be largely determined by the surface around the measurement site. But our model is completely unaware of the effect of the surface, so it might not be able to give accurate predictions at sites with different surface characteristics. See \cite{cabauw_surface} for a discussion on how the obstacles around the Cabauw tower affect the flux-profile relationships measured there; in particular, the turbulence behaves differently depending on the wind direction. A training set with relevant features and diverse samples can alleviate this problem. For example, features could be extracted from satellite images of the surroundings; a very crude approach is to classify the surface into one of several categories, and use a lookup table with pre-computed roughness lengths.
 
 
-trend could be better included using some sort of time series prediction together with the features we considered in this work, but preliminary experiments (3 layers gru + 4 layers fully connected) do not seem to work well)
 
-
-generalization problem: surface roughness? simulations already use some parameters for this
 
 \subsection{Training Samples}
 outliers with xi between -20 and -2 mostly belong to z=40 in the morning (between 6 and 12); given what was said in [paper], there is the possibility that they are not in the surface layer, explaining why the c coefficient is higher than expected
@@ -1689,6 +1727,7 @@ and \ref{tbl:gbr_results}, while figures \ref{fig:ridge_results_most}, \ref{fig:
 
 
 \chapter{Prediction with Deep Neural Networks}
+\label{apx:deep_learning}
 The reason why this is not included in the main report is that time and resources constraint prevented a formal and thorough evaluation of these results. That said, this approach is definitely promising and worth pursuing in the future.
 
 \paragraph{Methods:}
