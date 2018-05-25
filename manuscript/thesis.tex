@@ -1798,13 +1798,10 @@ Instead of restricting ourselves to the five feature sets, we use all the quanti
 \chapter{More Hyper-parameter Optimization}
 By foregoing nested cross-validation and focusing on a particular dataset (MOST) and set of features (table \ref{tbl:col_summary} without $H$ and $\lambda E$), we can reduce the computational resources needed for more involved hyper-parameter tuning procedures.
 
-\paragraph{Methods:} We optimized the hyper-parameters of extreme gradient boosted trees \citep{xgboost} using both HyperBand \citep{hyperband} and the Python library GPyOpt\footnote{\url{http://github.com/SheffieldML/GPyOpt}}. For Hyperband, we use the default parameters suggested in the paper, i.e. $\eta=3$ and $R=81$, with each unit of budget corresponding to 15 trees. The Bayesian optimization procedure is based on Gaussian Processes with the RBF kernel, using the integrated expected improvement as acquisition function. Integration is performed over the posterior of the hyper-parameters, approximated with MCMC sampling \citep{practical_gphypopt}, in order to improve the accuracy of the proposed hyper-parameters. Both methods were evaluated on the same subset of 20 months, and trained on the remaining data, without cross-validation. Table \ref{tbl:hypopt_distr} shows the distribution of the hyper-parameters used in the search, and the optimal values found by the two methods.
-
-\paragraph{Results:} The best configuration found by Hyperband, after 170 steps, had a MSE of 0.1744 on the validation set, whereas the solution found by GPyOpt, after 42 trials, had a MSE of 0.1729. These results are very similar to what was obtained with random search and nested cross validation.
-
+\paragraph{Methods:} We optimized the hyper-parameters of extreme gradient boosted trees \citep{xgboost} using both HyperBand \citep{hyperband} and the Python library GPyOpt\footnote{\url{http://github.com/SheffieldML/GPyOpt}}. For Hyperband, we use the default parameters suggested in the paper, i.e. $\eta=3$ and $R=81$, with each unit of budget corresponding to 15 trees. The Bayesian optimization procedure is based on Gaussian Processes with the RBF kernel, using the integrated expected improvement as acquisition function. Integration is performed over the posterior of the hyper-parameters, approximated with MCMC sampling \citep{practical_gphypopt}, in order to improve the accuracy of the proposed hyper-parameters. The dataset was randomly split in three smaller sets: a training set of 162 months, a validation set of 20 months, and a test set of 20 months. The training set was used to train the models, and the hyper-parameter optimization procedure optimized the scores on the validation set; the test set is used at the end to evaluate the optimal configuration. Table \ref{tbl:hypopt_distr} shows the distribution of the hyper-parameters used in the search, and the optimal values found by the two methods.
 
 \begin{table}
-\caption{Distribution of the hyper-parameters used.}
+\caption{Distribution of the hyper-parameters used and best values found by the two optimization procedures.}
 \label{tbl:hypopt_distr}
 \centering
 \begin{tabular*}{\textwidth}{r|@{\extracolsep{\fill}}c|c|c|c}
@@ -1812,19 +1809,23 @@ By foregoing nested cross-validation and focusing on a particular dataset (MOST)
 \textbf{Hyper-parameter} & \textbf{Distribution} & \textbf{Values} & \makecell[c]{\textbf{Best}\\\textbf{(Hyperband)}} &
 \makecell[c]{\textbf{Best}\\\textbf{(GPyOpt)}} \\
 \midrule
-Number of Trees & Log$_{10}$-Uniform & From $10^{1}$ to $10^3$ & 810 & 1000 \\
-Learning Rate & Log$_{10}$-Uniform & From $10^{-4}$ to $10^0$ & 0.079 & 0.1 \\
-Max. Depth & Uniform & From 2 to 12 & 7 & 12 \\
-Min. Child Weight & Uniform & From 1 to 100 & 9 & 100 \\
-Subsample & Uniform & From 20\% to 100\% & 86.3\% & 20\% \\
-$\gamma$ (Min. loss decrease) & Uniform & From 0 to 1 & 0.455 & 0 \\
-$\alpha$ (L1 regularization) & Log$_{10}$-Uniform & From $10^{-10}$ to $10^0$  &  \num{3.16e-6} & \num{1e-10} \\
-$\lambda$ (L2 regularization) & Log$_{10}$-Uniform & From $10^{-10}$ to $10^0$ & \num{2.32e-6} & \num{1e-10} \\
-Number of features & Uniform & From 20\% to 100\% & 57.7\% & 20\% \\
+Number of Trees & Log$_{10}$-Uniform & From $10^{1}$ to $10^3$ & 1000 & 1000 \\
+Learning Rate & Log$_{10}$-Uniform & From $10^{-4}$ to $10^0$ & \num{8.86e-3} & \num{4.34e-2} \\
+Max. Depth & Uniform & From 2 to 12 & 12 & 12 \\
+Min. Child Weight & Uniform & From 1 to 10 & 9 & 10 \\
+Subsample & Uniform & From 10\% to 100\% & 64.6\% & 49.3\% \\
+$\gamma$ (Min. loss decrease) & Uniform & From 0 to 1 & 0.194 & 0 \\
+$\alpha$ (L1 regularization) & Log$_{10}$-Uniform & From $10^{-20}$ to $10^0$  &  \num{1.87e-11} & \num{1.70e-07} \\
+$\lambda$ (L2 regularization) & Log$_{10}$-Uniform & From $10^{-20}$ to $10^0$ & \num{2.46e-10} & \num{5.96e-05} \\
+Number of features & Uniform & From 10\% to 100\% & 22.7\% & 12.5\% \\
 Loss & Uniform & MSE or MAE & MAE & MAE \\
 \bottomrule
 \end{tabular*} 
 \end{table}
+
+
+
+\paragraph{Results:} The MSEs of the best configuration found by Hyperband, after 200 steps, were 0.08250, 0.1613, and 0.1676 on the training set, validation set, and test set respectively. The scores of best configuration found by GPyOpt, after 18 steps, were 0.04756, 0.1606, and 0.1670. These results are very similar to what was obtained with random search and nested cross validation.
 
 
 %\bibliographystyle{unsrt}
