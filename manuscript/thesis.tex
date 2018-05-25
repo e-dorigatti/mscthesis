@@ -1449,53 +1449,11 @@ $d$ & -0.30 & 0.11 & -0.60 & -0.26 & -0.26 & -0.26 & -0.25 \\
 \end{table}
 
 \subsection{Other Estimators}
+In the following, all the effect sizes are reported as a right 95\% confidence interval "$[\hat{\delta}_{low}, \hat{\delta}$", in bold when it does not contain 0.
 Table \ref{tbl:baseline_comparison} shows descriptive statistics of the MSE obtained by the best combination of features and trend, for each estimator and for each datasets, as well as the effect size comparing it with the MOST baseline. The scores were obtained with the nested cross validation procedure, and are also shown in figure \ref{fig:baseline_comparison}. The best combination of features and trend is the one with the largest lower bound of the 95\% CI; although in this case it equals the combination with the largest point estimate of the effect size, we feel that a definition in terms of the CI is more robust and reliable. In many cases there was a combination with a MSE that was lower by a few percents, but with higher standard deviation, producing a smaller effect size. It is very interesting to compare the kNN and GBT estimators: kNN manages to get a larger effect size when compared to MOST, despite the fact that its best performance corresponds to GBT's worst. This can be explained by the different scatter of the data points: kNN is more consistent, with only a couple of outliers driving up the standard deviation, while GBT's performances are more evenly scattered (and the rounding to two decimal digits in the table is deceiving). Consider the samples with the full dataset: the interquartile range for kNN is 0.025, whereas for GBT it is 0.055, and the Winsorized standard deviation over $10^4$ bootstraps is respectively 0.017 and 0.027. This difference is large enough to counteract the difference in means, and produce a larger effect size.
 
-Table \ref{tbl:trend_comparison} compares each feature set with and without trend, for the MOST dataset and the GBT estimator. Essentially, the table shows that the features augmented with trend do not provide a significant improvement over those without trend; it is interesting to relate this result with table \ref{tbl:baseline_comparison}, where the largest effect size when comparing GBT with MOST is actually obtained with the trend. This is another example of differing standard deviations counteracting the difference in means.
 
-Figure \ref{fig:fset_comparison} shows the MSE obtained by the GBT estimator on the MOST dataset for each feature set; given that the trend does not provide additional benefits, we compare the feature sets without the trend. This data is used to compute the effect sizes shown in talbe \ref{tbl:fset_comparison}. The only feature sets that do not improve over the previous sets are F2 (soil heat flux) over F1 and F4 (rain amount and dew point) over F3; in all other cases, adding features gives a significant improvement.
-
-Finally, figure \ref{fig:residuals} shows the predictions obtained with the GBT estimator on one of the outer validation folds, and a probability plot of the residuals. It is clear that the error is largely determined by outliers: the mean squared error of these predictions is 0.155, but only 17\% of the squared errors is larger than that, and the median is 0.028. Moreover, in figure \ref{fig:residuals_scatter} we see a tendency to overestimate small values of $\phi_m$ and underestimate large ones.
-
-\begin{table}[p]
-\caption{Descriptive statistics of the best MSE achieved by each estimator, and effect size comparing it (treatment) with the MOST baseline (control); the effect size is positive when the treatment has a lower MSE. The first number is the lower bound for the right 95\% CI interval, and the second number is the estimated population effect size; in bold are the CIs that do not contain 0. The only model which is not significantly better than the MOST baseline is Ridge on the MOST dataset.}
-\label{tbl:baseline_comparison}
-\input{include/baseline_comparison}
-\end{table}
-
-\begin{table}[p]
-\caption{Effect sizes comparing the MSE scores of each feature set with and without trend; the upper effect size uses the trend as treatment, whereas the lower effect size uses the trend as control. The first number is the lower bound for the right 95\% CI interval, and the second number is the estimated population effect size; positive effect size denotes improvement over the control group, in bold are the CIs that do not contain 0. Using the trend does not improve the performance.}
-\label{tbl:trend_comparison}
-\input{include/trend_comparison}
-\end{table}
-
-\begin{table}[p]
-\caption{Effect sizes comparing the MSE scores of all pairs of feature sets; in light of table \ref{tbl:trend_comparison}, the trend is not included in the features. The control is on rows, and the treatment is on columns. The first number is the lower bound for the right 95\% CI interval, and the second number is the estimated population effect size; positive effect size denotes improvement over the control group, in bold are the CIs that do not contain 0. The only feature sets that do not bring an improvement are F2 over F1 and F4 over F3.}
-\label{tbl:fset_comparison}
-\input{include/fset_comparison}
-\end{table}
-
-\begin{figure}[p]
-    \centering
-    \begin{subfigure}[t]{0.49\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{images/residuals_scatter}
-        \caption{Scatterplot showing predicted value versus true value. MSE=0.155}
-        \label{fig:residuals_scatter}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[t]{0.49\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{images/residuals_probplot}
-        \caption{Probability plot of the residuals, $R^2=0.85$}
-        \label{fig:residuals_probplot}
-    \end{subfigure}
-    \caption{Illustration of the predictions and their residuals obtained by the gradient boosted trees on one of the outer validation folds (107,932 samples). The residuals are fairly symmetric with very heavy tails, and the model seems to underestimate extremely high $\phi_m$, and overestimate extremely low $\phi_m$.}
-	\label{fig:residuals}
-\end{figure}
-
-
-\begin{figure}[p]
+\begin{figure}
     \centering
     \begin{minipage}[t]{0.49\textwidth}
         \centering
@@ -1511,6 +1469,54 @@ Finally, figure \ref{fig:residuals} shows the predictions obtained with the GBT 
         \label{fig:baseline_comparison}
     \end{minipage}
 \end{figure}
+
+\begin{table}
+\caption{Descriptive statistics of the best MSE achieved by each estimator, and effect size comparing it (treatment) with the MOST baseline (control); the only model which is not significantly better than the MOST baseline is Ridge on the MOST dataset.}
+\label{tbl:baseline_comparison}
+\input{include/baseline_comparison}
+\end{table}
+
+
+\begin{table}
+\caption{Effect sizes comparing the MSE scores of all pairs of feature sets; in light of table \ref{tbl:trend_comparison}, the trend is not included in the features. The control is on rows, and the treatment is on columns. The only feature sets that do not bring an improvement are F2 over F1 and F4 over F3.}
+\label{tbl:fset_comparison}
+\input{include/fset_comparison}
+\end{table}
+
+
+
+\begin{figure}
+    \centering
+    \begin{subfigure}[t]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/residuals_scatter}
+        \caption{Scatterplot showing predicted value versus true value, MSE=0.155 and $R^2=0.803$}
+        \label{fig:residuals_scatter}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/residuals_probplot}
+        \caption{Probability plot of the residuals and normal fit, $R^2=0.850$ and Shapiro-Wilk's $W=0.850$}
+        \label{fig:residuals_probplot}
+    \end{subfigure}
+    \caption{Illustration of the predictions and their residuals obtained by the gradient boosted trees on one of the outer validation folds (107,932 samples). The residuals are fairly symmetric with very heavy tails, and the model seems to underestimate extremely high $\phi_m$, and overestimate extremely low $\phi_m$.}
+	\label{fig:residuals}
+\end{figure}
+
+
+Table \ref{tbl:trend_comparison} compares each feature set with and without trend, for the MOST dataset and the GBT estimator. Essentially, the table shows that the features augmented with trend do not provide a significant improvement over those without trend; it is interesting to relate this result with table \ref{tbl:baseline_comparison}, where the largest effect size when comparing GBT with MOST is actually obtained with the trend. This is another example of differing standard deviations counteracting the difference in means.
+
+Figure \ref{fig:fset_comparison} shows the MSE obtained by the GBT estimator on the MOST dataset for each feature set; given that the trend does not provide additional benefits, we compare the feature sets without the trend. This data is used to compute the effect sizes shown in table \ref{tbl:fset_comparison}. The only feature sets that do not improve over the previous sets are F2 (soil heat flux) over F1 and F4 (rain amount and dew point) over F3; in all other cases, adding features gives a significant improvement. Figure \ref{fig:fset_comparison} might give the impression that the samples are normally distributed, but a Shapiro-Wilk normality test on F1 gives a p-value of 0.0519 ($W=0.954$), and a p-value of 0.140 ($W=0.965$) on F3; we feel there is not enough evidence to deem \emph{all} five groups normally distributed, hence our use of the non-parametric bootstrap CI method to compare them.
+
+Finally, figure \ref{fig:residuals} shows the predictions obtained with the GBT estimator on one of the outer validation folds, and a probability plot of the residuals. It is clear that the error is largely determined by outliers: the mean squared error of these predictions is 0.155, but only 17\% of the squared errors is larger than that, and the median is 0.028. Moreover, in figure \ref{fig:residuals_scatter} we see a tendency to overestimate small values of $\phi_m$ and underestimate large ones.
+
+
+\begin{table}
+\caption{Effect sizes comparing the MSE scores of each feature set with and without trend; the upper effect size uses the trend as treatment, whereas the lower effect size uses the trend as control. Using the trend does not improve the performance.}
+\label{tbl:trend_comparison}
+\input{include/trend_comparison}
+\end{table}
 
 
 
