@@ -1161,11 +1161,11 @@ Where $f_n$ is the predicted value for the test sample $\bm x_n$ with true value
 
 \section{Success Criteria}
 \label{sec:success}
-A successful answer to the first research question entails finding a model whose mean squared error on any feature set, with or without trend, is smaller than the mean squared error of the MOST estimator introduced in section \ref{sec:most_fit}. The second research question is answered by comparing the mean squared error obtained on the ten feature sets (F1 to F5, with and without trend). This comparison is done using the model that achieved the best performance when answering the first research question.
+The differences needed to answer the research questions are quantified using the effect size as described in section \ref{sec:effect_size}. We prefer the effect size over the mean MSE because the effect size allows us to consider the standard deviation of the MSE, as well as its mean; this could lead us to prefer models with slightly worse average MSE, but more consistent and reliable performances (i.e. smaller standard deviation). Since we are looking for an improvement, we compute the right 95\% confidence interval for the population effect size. In other words, besides providing a point estimate for the population effect size $\delta_{pop}$, we also provide an interval $[\delta_{low}, \infty)$ that contains it 95\% of the times. We say the treatment is better if $\delta_{low}>0$.
+
+A successful answer to the first research question entails finding a model whose mean squared error on any feature set, with or without trend, is smaller than the mean squared error of the MOST estimator introduced in section \ref{sec:most_fit}. The second research question is answered by comparing the mean squared error obtained on the ten feature sets (F1 to F5, with and without trend). This comparison is done using the model that achieved the best performance when answering the first research question, and, in order to increase the reliability of our estimates, we repeat the cross validation procedure 5 times for each combination of features and trend.
 
 Note that we cannot use the output of a model to obtain the importance of the features, as this method is not reliable when some of them are correlated \citep{rf_bias,rf_corr_imp}, which is a very relevant issue in our case. Trivially, wind speed and temperature at the different levels are very strongly correlated (Pearson's $r$ is above 0.95), and there are other, more complex, correlations, such as between the net radiation and the soil heat flux, or between the soil temperature and the dew point (Pearson's $r$ is respectively 0.75 and 0.79). In spite of the correlations, all these variables contribute to the flux-profile relationships, often in very nuanced ways.
-
-The differences needed to answer the second research question are quantified using the effect size as described in section \ref{sec:effect_size}. We prefer the effect size over the mean MSE because the effect size allows us to consider the standard deviation of the MSE, as well as its mean; this could lead us to prefer models with slightly worse average MSE, but more consistent and reliable performances (i.e. smaller standard deviation). Since we are looking for an improvement, we compute the right 95\% confidence interval for the population effect size. In other words, besides providing a point estimate for the population effect size $\delta_{pop}$, we also provide an interval $[\delta_{low}, \infty)$ that contains it 95\% of the times. We say the treatment is better if $\delta_{low}>0$. In order to increase the reliability of our estimates, we repeat the cross validation procedure 5 times for each combination of features and trend.
 
 \chapter{Results}
 \label{ch:results}
@@ -1421,7 +1421,6 @@ Figure \ref{fig:most_scatter} shows the wind shear versus the instability parame
 	\label{fig:most_scatter}
 \end{figure}
 
-\subsection{MOST Estimator}
 The performance of the MOST estimator is shown in table \ref{tbl:most_results}; we see a considerable increase in the MSE when the full dataset is used; this is not surprising, considering that, with $\xi>1$, $\phi_m$ tends to level off, and there are a considerable number of outliers in the range $-20\leq\xi\leq-2$ (see figure \ref{fig:most_full}) that cannot be fitted by the MOST estimator. Figure \ref{fig:most_scatter} shows $\phi_m$ as a function of $\xi$ as computed in our dataset, as well as the predictions of equation \ref{eq:phi_m_coeff} and the fitted MOST estimator.
  
 Table \ref{tbl:most_results} shows the values of the coefficients in equation \ref{eq:phi_general}, when fitted to the region of data where the Monin-Obukhov similarity theory is valid. We note a big difference with the values recommended in \cite{hogstrom88}, as well as most studies on the topic. However, \cite{cabauw_night_most} studied the stable, nocturnal boundary layer at Cabauw, and reported values varying between 0.81 and 0.95 for $a$ and between 2.7 and 3.2 for $b$, depending on the direction of the wind; there is no known explanation for this discrepancy. Although \cite{cabauw_night_most} used the same method that we applied to find the coefficients, no goodness of fit statistics, such as MSE or $R^2$, were reported.
@@ -1448,9 +1447,32 @@ $d$ & -0.30 & 0.11 & -0.60 & -0.26 & -0.26 & -0.26 & -0.25 \\
 \end{tabular}
 \end{table}
 
-\subsection{Other Estimators}
-In the following, all the effect sizes are reported as a right 95\% confidence interval "$[\hat{\delta}_{low}, \hat{\delta}$", in bold when it does not contain 0.
-Table \ref{tbl:baseline_comparison} shows descriptive statistics of the MSE obtained by the best combination of features and trend, for each estimator and for each datasets, as well as the effect size comparing it with the MOST baseline. The scores were obtained with the nested cross validation procedure, and are also shown in figure \ref{fig:baseline_comparison}. The best combination of features and trend is the one with the largest lower bound of the 95\% CI; although in this case it equals the combination with the largest point estimate of the effect size, we feel that a definition in terms of the CI is more robust and reliable. In many cases there was a combination with a MSE that was lower by a few percents, but with higher standard deviation, producing a smaller effect size. It is very interesting to compare the kNN and GBT estimators: kNN manages to get a larger effect size when compared to MOST, despite the fact that its best performance corresponds to GBT's worst. This can be explained by the different scatter of the data points: kNN is more consistent, with only a couple of outliers driving up the standard deviation, while GBT's performances are more evenly scattered (and the rounding to two decimal digits in the table is deceiving). Consider the samples with the full dataset: the interquartile range for kNN is 0.025, whereas for GBT it is 0.055, and the Winsorized standard deviation over $10^4$ bootstraps is respectively 0.017 and 0.027. This difference is large enough to counteract the difference in means, and produce a larger effect size.
+\section{First Research Question}
+The first research question asked \emph{how can the from the Cesar database be used to predicthe momentum flux-profile relationship more accurately than the Monin-Obukhov similarity theory, by using only macro weather parameters?}
+
+Table \ref{tbl:baseline_comparison} shows descriptive statistics of the MSE obtained by the best combination of features and trend, for each estimator and for each datasets, as well as the effect size comparing it with the MOST baseline. The scores were obtained with the nested cross validation procedure, and are also shown in figure \ref{fig:baseline_comparison}. It is very interesting to compare the kNN and GBT estimators: kNN manages to get a larger effect size when compared to MOST, despite the fact that its best performance corresponds to GBT's worst. This can be explained by the different scatter of the data points: kNN is more consistent, with only a couple of outliers driving up the standard deviation, while GBT's performances are more evenly scattered (and the rounding to two decimal digits in the table is deceiving). Consider the samples with the full dataset: the interquartile range for kNN is 0.025, whereas for GBT it is 0.055, and the Winsorized standard deviation over $10^4$ bootstraps is respectively 0.017 and 0.027. This difference is large enough to counteract the difference in means, and produce a larger effect size.
+
+Figure \ref{fig:residuals} shows the predictions obtained with the GBT estimator on one of the outer validation folds, and a probability plot of the residuals. It is clear that the error is largely determined by outliers: the mean squared error of these predictions is 0.155, but only 17\% of the squared errors is larger than that, and the median is 0.028. Moreover, in figure \ref{fig:residuals_scatter} we see a tendency to overestimate small values of $\phi_m$ and underestimate large ones.
+
+
+\begin{figure}
+    \centering
+    \begin{subfigure}[t]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/residuals_scatter}
+        \caption{Predicted value ($y$-axis) versus true value ($x$-axis), MSE=0.155 and $R^2=0.803$}
+        \label{fig:residuals_scatter}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/residuals_probplot}
+        \caption{Residuals and normal fit, $R^2=0.850$ and Shapiro-Wilk's $W=0.850$}
+        \label{fig:residuals_probplot}
+    \end{subfigure}
+    \caption{Illustration of the predictions and their residuals obtained by the gradient boosted trees on one of the outer validation folds (107,932 samples).}
+	\label{fig:residuals}
+\end{figure}
 
 
 \begin{figure}
@@ -1458,7 +1480,7 @@ Table \ref{tbl:baseline_comparison} shows descriptive statistics of the MSE obta
     \begin{minipage}[t]{0.49\textwidth}
         \centering
         \includegraphics[width=\textwidth]{images/fset_comparison}
-        \caption{MSE obtained by the five feature sets without trend.}
+        \caption{MSE obtained by the five feature sets without trend on the MOST dataset.}
         \label{fig:fset_comparison}
     \end{minipage}
     \hfill
@@ -1470,6 +1492,9 @@ Table \ref{tbl:baseline_comparison} shows descriptive statistics of the MSE obta
     \end{minipage}
 \end{figure}
 
+
+
+
 \begin{table}
 \caption{Descriptive statistics of the best MSE achieved by each estimator, and effect size comparing it (treatment) with the MOST baseline (control); the only model which is not significantly better than the MOST baseline is Ridge on the MOST dataset.}
 \label{tbl:baseline_comparison}
@@ -1477,39 +1502,15 @@ Table \ref{tbl:baseline_comparison} shows descriptive statistics of the MSE obta
 \end{table}
 
 
-\begin{table}
-\caption{Effect sizes comparing the MSE scores of all pairs of feature sets; in light of table \ref{tbl:trend_comparison}, the trend is not included in the features. The control is on rows, and the treatment is on columns. The only feature sets that do not bring an improvement are F2 over F1 and F4 over F3.}
-\label{tbl:fset_comparison}
-\input{include/fset_comparison}
-\end{table}
-
-
-
-\begin{figure}
-    \centering
-    \begin{subfigure}[t]{0.49\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{images/residuals_scatter}
-        \caption{Scatterplot showing predicted value versus true value, MSE=0.155 and $R^2=0.803$}
-        \label{fig:residuals_scatter}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[t]{0.49\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{images/residuals_probplot}
-        \caption{Probability plot of the residuals and normal fit, $R^2=0.850$ and Shapiro-Wilk's $W=0.850$}
-        \label{fig:residuals_probplot}
-    \end{subfigure}
-    \caption{Illustration of the predictions and their residuals obtained by the gradient boosted trees on one of the outer validation folds (107,932 samples). The residuals are fairly symmetric with very heavy tails, and the model seems to underestimate extremely high $\phi_m$, and overestimate extremely low $\phi_m$.}
-	\label{fig:residuals}
-\end{figure}
-
+\section{Second Research Question}
+The second research question asked \emph{What impact do different macro-weather parameters have on the
+quality of the predictions obtained?}
 
 Table \ref{tbl:trend_comparison} compares each feature set with and without trend, for the MOST dataset and the GBT estimator. Essentially, the table shows that the features augmented with trend do not provide a significant improvement over those without trend; it is interesting to relate this result with table \ref{tbl:baseline_comparison}, where the largest effect size when comparing GBT with MOST is actually obtained with the trend. This is another example of differing standard deviations counteracting the difference in means.
 
-Figure \ref{fig:fset_comparison} shows the MSE obtained by the GBT estimator on the MOST dataset for each feature set; given that the trend does not provide additional benefits, we compare the feature sets without the trend. This data is used to compute the effect sizes shown in table \ref{tbl:fset_comparison}. The only feature sets that do not improve over the previous sets are F2 (soil heat flux) over F1 and F4 (rain amount and dew point) over F3; in all other cases, adding features gives a significant improvement. Figure \ref{fig:fset_comparison} might give the impression that the samples are normally distributed, but a Shapiro-Wilk normality test on F1 gives a p-value of 0.0519 ($W=0.954$), and a p-value of 0.140 ($W=0.965$) on F3; we feel there is not enough evidence to deem \emph{all} five groups normally distributed, hence our use of the non-parametric bootstrap CI method to compare them.
+Figure \ref{fig:fset_comparison} shows the MSE obtained by the GBT estimator on the MOST dataset for each feature set; given that the trend does not provide additional benefits, we compare the feature sets without the trend. This data is used to compute the effect sizes shown in table \ref{tbl:fset_comparison}. The only feature sets that do not improve over the previous sets are F2 (soil heat flux) over F1, and F4 (rain amount and dew point) over F3; in all other cases, adding features gives a significant improvement. Figure \ref{fig:fset_comparison} might give the impression that the samples are normally distributed, but a Shapiro-Wilk normality test on F1 gives a p-value of 0.0519 ($W=0.954$), and a p-value of 0.140 ($W=0.965$) on F3; we feel there is not enough evidence to deem \emph{all} five groups normally distributed, hence our use of the non-parametric bootstrap CI method to compare them.
 
-Finally, figure \ref{fig:residuals} shows the predictions obtained with the GBT estimator on one of the outer validation folds, and a probability plot of the residuals. It is clear that the error is largely determined by outliers: the mean squared error of these predictions is 0.155, but only 17\% of the squared errors is larger than that, and the median is 0.028. Moreover, in figure \ref{fig:residuals_scatter} we see a tendency to overestimate small values of $\phi_m$ and underestimate large ones.
+
 
 
 \begin{table}
@@ -1517,6 +1518,13 @@ Finally, figure \ref{fig:residuals} shows the predictions obtained with the GBT 
 \label{tbl:trend_comparison}
 \input{include/trend_comparison}
 \end{table}
+
+\begin{table}
+\caption{Effect sizes comparing the MSE scores of all pairs of feature sets; in light of table \ref{tbl:trend_comparison}, the trend is not included in the features. The control is on rows, and the treatment is on columns. The only feature sets that do not bring an improvement are F2 over F1 and F4 over F3.}
+\label{tbl:fset_comparison}
+\input{include/fset_comparison}
+\end{table}
+
 
 
 
@@ -1550,14 +1558,14 @@ richardson number instead of obukhov length
 Another downside of not using micro parameters is that the resulting models do not generalize well in conditions that are different to those presented in the training set, especially if it contains measures coming from a single location, such as in our case. Training with data coming from different locations certainly produces more general models, as long as the data contains features that are informative and general enough to allow the model to differentiate between the different conditions. For example, the properties of the surface, such as its roughness, have a large impact on turbulence; what our model thinks is the normal behavior of turbulence might in fact be largely determined by the surface around the measurement site. But our model is completely unaware of the effect of the surface, so it might not be able to give accurate predictions at sites with different surface characteristics. See \cite{cabauw_surface} for a discussion on how the obstacles around the Cabauw tower affect the flux-profile relationships measured there; in particular, the turbulence behaves differently depending on the wind direction. A training set with relevant features and diverse samples can alleviate this problem. For example, features could be extracted from satellite images of the surroundings; a very crude approach is to classify the surface into one of several categories, and use a lookup table with pre-computed roughness lengths.
 
 
-
-
 \subsection{Training Samples}
-outliers with xi between -20 and -2 mostly belong to z=40 in the morning (between 6 and 12); given what was said in [paper], there is the possibility that they are not in the surface layer, explaining why the c coefficient is higher than expected
 
+\paragraph{Surface layer:} Although the Cabauw tower takes measurements until \SI{200}{\meter}, one of the issues we had to deal with is that the height of the surface layer is difficult to determine. We chose to use the measures at 10, 20 and 40 meters only, which comprise only half of the available data. There is evidence that some of the samples at 40 meters are anomalous: in figure \ref{fig:tsne_z}, the samples at 40 meters are clearly separated from the other two levels, which are well mixed, and in figure \ref{fig:most_full} there are some outliers in the range $-20<\xi<0$ that deviate significantly from the assumed relationship. These outliers mostly belong to the \SI{40}{\meter} level. On the other hand, it is very likely that in some situations the samples at \SI{80}{\meter}, and perhaps even \SI{100}{\meter}, are in the surface layer.
+
+\paragraph{Extreme weather events:} Another interesting 
 hurricane
 
-can generate new training samples at more altitude levels, since we have a model for wind and temp (need to interpolate spec. humidity too), according to the simulation that uses this model
+\paragraph{Altitude levels:} can generate new training samples at more altitude levels, since we have a model for wind and temp (need to interpolate spec. humidity too), according to the simulation that uses this model
 
 
 \subsection{Performance}
