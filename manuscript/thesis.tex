@@ -212,7 +212,7 @@ u_*=\left(\overline{u'w'}^2+\overline{v'w'}^2\right)^{1/4}
 The mean velocity $\overline{u}$ increases linearly within the laminar sub-layer, then logarithmically until the end of the boundary layer, thus the shear decreases further away from the surface. In the logarithmic sub-layer, the velocity is computed as $\overline{u}(z)=u_*(\log z - \log z_0)/\kappa$, where $z_0$ is the characteristic roughness of the surface, and $\kappa$ is the von Karman's constant, whose value is around 0.4 \cite{basicatm}. The characteristic roughness depends on the texture of the surface, and its relationship with the height $\delta_s$ of the laminar sub-layer; if the roughness scale is smaller than $\delta_s$, the logarithmic velocity profile is not affected by the texture, because the laminar sub-layer completely covers the variations on the surface, and we have the so-called smooth turbulent flow. If, on the contrary, the bumps in the surface are larger than $\delta_s$, the laminar sub-layer follow the profile of the surface, and the logarithmic velocity profile is altered depending on the texture, a regime called rough turbulent flow.
 
 \begin{figure}
-\caption{Turbulent boundary layer at the edge of a canal; water flows from right to left.}
+\caption{Turbulent boundary layer at the edge of a canal; water flows from right to left. Colors are inverted to make the patterns more visible.}
 \label{fig:bl}
 \centering
 \includegraphics[width=\textwidth]{images/bl}
@@ -804,14 +804,44 @@ The main focus of this project is on the wind profile and the turbulent fluxes o
 
 Following, we describe the instruments used to collect the measurements (section \ref{sec:measurement}), the techniques used to impute missing or invalid measurements (section \ref{sec:gap_filling}), and the criteria applied to filter low quality data (section \ref{sec:data_filter}).
 
+
+\begin{figure}
+    \centering
+        \begin{subfigure}[c]{0.48\textwidth}
+        \centering
+		\includegraphics[width=\textwidth]{images/cabauw_tower}
+		\caption{The main mast}
+		\label{fig:cabauw_main_mast}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[c]{0.48\textwidth}
+        \centering
+		\includegraphics[width=\textwidth]{images/cabauw_turbulence_instruments}
+		\caption{Sonic anemometer and optical open-path sensor at the \SI{180}{\meter} level}
+		\label{fig:cabauw_180m}
+    \end{subfigure}
+    
+% https://tex.stackexchange.com/a/67030
+% essentially, cannot have a footnote in a caption or you screw up the list of figures at the beginning
+% this is latex's simple and intuitive way of saying not to bother about the footnote in the list of figures
+\caption[The Cabauw main mast (\ref{fig:cabauw_main_mast}, from the Cesar Observatory website) and some measurement instruments it supports (\ref{fig:cabauw_180m}, from the KNMI website)]{The Cabauw main mast (\ref{fig:cabauw_main_mast}, from the Cesar Observatory website\protect\footnotemark) and some measurement instruments it supports (\ref{fig:cabauw_180m}, from the KNMI website\protect\footnotemark)}.
+\label{fig:cabauw_tower}
+\end{figure}
+
+
 \subsection{Measurement}
 \label{sec:measurement}
 The Cesar observatory provides full information regarding data collection\footnote{\url{http://projects.knmi.nl/cabauw/insitu/observations/documentation}}, see in particular \cite{cabauwinsitu}, what follows is a brief summary of the sections in that document that are relevant for this work.
+
 
 \subsubsection{Wind Speed Measurement}
 Wind speed and direction are measured at heights of 200, 140, 80, 40, 20 and 10 meters, in either two or all three booms available. The wind vane that measures direction has a resolution of $1.5^\circ$, and the cup anemometer that measures wind speed has an accuracy of the largest between 1\% and \SI{0.1}{\meter\per\second}. \cite{windinstr} studied the threshold sensitivity of both instruments, and fount it lower than \SI{0.5}{\meter\per\second}, even though the measurements are inaccurate up to \SI{3}{\meter\per\second}.
 
 For every ten minutes interval, the measurement comes from the instrument that is best exposed to the wind, and less affected by the obstruction caused by the mast. Corrections are then applied to the raw measurements to further attenuate the disturbance by the tower, following \cite{winddistortion}.
+
+% obviously, if you put the footnotes close to the image, they will be placed in the previous page!
+\footnotetext{\url{http://www.cesar-observatory.nl/}}
+\footnotetext{\url{https://www.knmi.nl/research}}
 
 \subsubsection{Eddy Correlation}
 \label{sec:eddy_correlation}
@@ -832,23 +862,6 @@ The eddy correlation technique is far from perfect, see e.g. \citep{microhandboo
 \subsubsection{Air Temperature and Dew Point Measurement}
 Both air temperature and dew point\footnote{the temperature the air needs to be to reach a relative humidity of 100\%} are measured at heights of 200, 140, 80, 40, 20, 10 and 1.5 meters, and the dew point is computed from the air temperature and the humidity obtained with the open-path sensor described previously. The instruments at the highest four levels are located on the main tower, whereas 20 and 10 meters are measured in the smaller mast, and 1.5 meters is measured by the weather station. The resolution of the instruments is of \SI{0.1}{\celsius}, whereas the accuracy is \SI{0.1}{\celsius} for temperature and 3.5\% of relative humidity for the dew point (1.5\% after 2014). Low wind speed and high irradiation can result result in a few \SI{0.1}{\celsius} overestimate of the temperature \citep{tempoverestimate}, whereas the humidity can be over estimated when drying after dew, fog, or rain \citep{cabauwinsitu}.
 
-
-\begin{figure}
-    \centering
-    \begin{subfigure}[t]{0.48\textwidth}
-        \centering
-		\includegraphics[width=\textwidth]{images/cabauw_turbulence_instruments}
-		% https://www.knmi.nl/research/observations-data-technology/projects/cabauw-in-situ-measurements
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[t]{0.48\textwidth}
-        \centering
-		\includegraphics[width=\textwidth]{images/cabauw_turbulence_instruments_2}
-		% http://www.knmi.nl/kennis-en-datacentrum/project/cesar-cabauw-and-wind
-    \end{subfigure}
-\caption{Two of the three sonic anemometers, that measure turbulence, and optical open-path sensor, that measure humidity and $CO_2$, at the 180m level of the Cabauw mast.}
-\label{fig:cabauw_180m_instruments}
-\end{figure}
 
 
 \subsubsection{Net Radiation Measurement}
@@ -887,9 +900,6 @@ This instrument is positioned at \SI{1.5}{\meter} height, and is ventilated and 
 	\label{fig:cabauw_instruments}
 \end{figure}
 
-% https://tex.stackexchange.com/a/67030
-% essentially, cannot have a footnote in a caption or you screw up the lisf of figures at the beginning
-% this is latex's simple and intuitive way of saying not to bother about the footnote in the list of figures
 \footnotetext{\url{https://en.wikipedia.org/wiki/File:Hukseflux_netto_radiometer_nr01_photo.jpg}}
 
 \subsubsection{Surface Soil Heat Flux}
@@ -1161,7 +1171,7 @@ Where $f_n$ is the predicted value for the test sample $\bm x_n$ with true value
 
 \section{Success Criteria}
 \label{sec:success}
-The differences needed to answer the research questions are quantified using the effect size as described in section \ref{sec:effect_size}. We prefer the effect size over the mean MSE because the effect size allows us to consider the standard deviation of the MSE, as well as its mean; this could lead us to prefer models with slightly worse average MSE, but more consistent and reliable performances (i.e. smaller standard deviation). Since we are looking for an improvement, we compute the right 95\% confidence interval for the population effect size. In other words, besides providing a point estimate for the population effect size $\delta_{pop}$, we also provide an interval $[\delta_{low}, \infty)$ that contains it 95\% of the times. We say the treatment is better if $\delta_{low}>0$.
+The differences needed to answer the research questions are quantified using the effect size as described in section \ref{sec:effect_size}. We prefer the effect size over the mean MSE because the effect size allows us to consider the standard deviation of the MSE, as well as its mean; this could lead us to prefer models with slightly worse average MSE, but more consistent and reliable performances (i.e. smaller standard deviation). Since we are looking for an improvement, we compute the right 95\% confidence interval for the population effect size. In other words, besides providing a point estimate for the population effect size $\delta_{pop}$, we also provide an interval $[\delta_{low}, \infty)$ that contains it 95\% of the times. We say the treatment is better if $\delta_{low}>0$, and the best treatment is the one with the largest $\delta_{low}$.
 
 A successful answer to the first research question entails finding a model whose mean squared error on any feature set, with or without trend, is smaller than the mean squared error of the MOST estimator introduced in section \ref{sec:most_fit}. The second research question is answered by comparing the mean squared error obtained on the ten feature sets (F1 to F5, with and without trend). This comparison is done using the model that achieved the best performance when answering the first research question, and, in order to increase the reliability of our estimates, we repeat the cross validation procedure 5 times for each combination of features and trend.
 
@@ -1506,7 +1516,7 @@ Figure \ref{fig:residuals} shows the predictions obtained with the GBT estimator
 The second research question asked \emph{What impact do different macro-weather parameters have on the
 quality of the predictions obtained?}
 
-Table \ref{tbl:trend_comparison} compares each feature set with and without trend, for the MOST dataset and the GBT estimator. Essentially, the table shows that the features augmented with trend do not provide a significant improvement over those without trend; it is interesting to relate this result with table \ref{tbl:baseline_comparison}, where the largest effect size when comparing GBT with MOST is actually obtained with the trend. This is another example of differing standard deviations counteracting the difference in means.
+Table \ref{tbl:trend_comparison} compares each feature set with and without trend, for the MOST dataset and the GBT estimator. Essentially, the table shows that the features augmented with trend do not provide a significant improvement over those without trend; it is interesting to relate this result with table \ref{tbl:baseline_comparison}, where the largest effect size when comparing GBT with MOST is actually obtained with the trend: this is another example of differing standard deviations counteracting the difference in means.
 
 Figure \ref{fig:fset_comparison} shows the MSE obtained by the GBT estimator on the MOST dataset for each feature set; given that the trend does not provide additional benefits, we compare the feature sets without the trend. This data is used to compute the effect sizes shown in table \ref{tbl:fset_comparison}. The only feature sets that do not improve over the previous sets are F2 (soil heat flux) over F1, and F4 (rain amount and dew point) over F3; in all other cases, adding features gives a significant improvement. Figure \ref{fig:fset_comparison} might give the impression that the samples are normally distributed, but a Shapiro-Wilk normality test on F1 gives a p-value of 0.0519 ($W=0.954$), and a p-value of 0.140 ($W=0.965$) on F3; we feel there is not enough evidence to deem \emph{all} five groups normally distributed, hence our use of the non-parametric bootstrap CI method to compare them.
 
