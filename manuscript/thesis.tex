@@ -80,13 +80,13 @@ This chapter briefly introduces the area for this project, and formally defines 
 \label{sec:intro_bg}
 Climatology, or climate science, studies the long-term average weather conditions. In the last few decades, climate scientists found evidence of ongoing changes in Earth's climate, most notably, a general increase in average temperature; in the long run, this and other changes can potentially have a devastating impact on life on our planet. Regardless of the causal effect of human activities on it, having a solid understanding of the climate allows us to find the best way to mitigate its change, and to preserve our planet.
 
-Climate science is an extremely difficult field, for a number of reasons. First, climate is evident, by definition, only over long periods of time and large distances, making the usual scientific approach of testing hypotheses by conducting experiments inapplicable; instead, climate scientists have to rely on historical data. Second, the atmosphere is a complex and chaotic system, which must be described through systems of nonlinear differential equation. They can be used to create numerical simulations, and the resulting predictions compared to historical data to assess the accuracy of the theory. Furthermore, the chaotic character of the atmosphere makes it impossible to study parts of it in isolation from others, as small scale phenomena affect large scale ones, and vice versa. In spite of this, it is useful to split the atmosphere in vertical layers and horizontal zones, in order to differentiate among conditions and phenomena typically occurring in one area or the other. 
+Climate science is an extremely difficult field, for a number of reasons. First, climate is evident, by definition, only over long periods of time and large distances, making the usual scientific approach of testing hypotheses by conducting experiments inapplicable; instead, climate scientists have to rely on historical data. Second, the atmosphere is a complex and chaotic system, which must be described through systems of nonlinear differential equation. They can be used to create numerical simulations, such as CM3 \citep{gfdl_cm3} and SURFEX \citep{surfex}, and the resulting predictions compared to historical data to assess the accuracy of the theory. Furthermore, the chaotic character of the atmosphere makes it impossible to study parts of it in isolation from others, as small scale phenomena affect large scale ones, and vice versa. These simulations, called General Circulation Models (GCMs), use equations describing fluid dynamics to simulate the behavior of the atmosphere. These equations are discretized by using a grid whose horizontal resolution varies between 10 and 100 kilometers; the smaller the grid, the higher computational resources needed to perform the simulation. Grids of this size are too large to simulate some phenomena, such as clouds and turbulence, which have to be "summarized" with simpler theories (a process called \emph{parametrization}).
 
-The troposphere contains most of the air mass in the atmosphere, and occupies the lowest 10 to 12 kilometers of the atmosphere. This is where weather happens, and it can be divided in a number of sub-layers, the lowest of which is the \emph{atmospheric boundary layer}: it is the region of the atmosphere that is affected by the conditions of the surface. Most human activities happen in this layer, and it is responsible for a large part of the diffusion and transport of aerosol such as, among others, pollutants. Yet, the physics governing the atmospheric boundary layer is not fully understood, and the theory is lacking.
+The atmosphere ca be vertically divided in several regions with different characteristics. The lowest such region, the troposphere, contains most of the air mass in the atmosphere, and occupies the lowest 10 to 12 kilometers of the atmosphere. This is where weather happens, and it can be further divided in a number of sub-layers, the lowest of which is the \emph{atmospheric boundary layer}: it is the region of the atmosphere that is affected by the conditions of the surface. Most human activities happen in this layer, and it is responsible for a large part of the diffusion and transport of aerosol such as, among others, pollutants. Yet, the physics governing the atmospheric boundary layer is not fully understood, and the theory is lacking. This means that its parametrization in GCMs is inaccurate.
 
 In stark contrast to the traditional, top-down approach of science, recent developments in information technology made bottom-up approaches possible. In this new way of thinking, existing data is used to automatically infer the "best" explanation for the measurements at hand, the underlying laws that originated that data. The field that makes this possible is called \emph{Machine Learning}: it takes advantage of several methods coming from statistics, information theory, optimization theory, etc., to make computers learn from examples. Together with Natural Language Processing and Automated Planning, it is one of the three main branches of Artificial Intelligence, the sub-field of Computer Science that studies ways of making machines behave intelligently.
 
-An even broader field, called \emph{Data Mining}, is concerned with finding interesting patterns, structures, and regularities in large datasets, where the definition of interesting depends on the specific goals. Data Mining makes use of techniques from Machine Learning, as well as other statistical models, such as ANOVA, and visualization techniques.
+An even broader field, called \emph{Data Mining}, is concerned with finding interesting patterns, structures, and regularities in large datasets, where the definition of interesting depends on the specific goals. Data Mining makes use of techniques from Machine Learning, as well as other statistical models such as ANOVA, and visualization techniques.
 
 \section{Problem}
 \label{sec:problem}
@@ -105,13 +105,13 @@ Currently, limitations of the validity of the Monin-Obukhov similarity theory ar
 \end{tcolorbox}
 
 
+\section{Goals}
+\label{sec:goals}
+The first research question is answered by proposing one or more Data Mining methods, i.e. feature selection and extraction, and a Machine Learning model, that obtain sufficient predictive performance, whereas the second research question is answered by a comparison of the performance of the models when using certain subsets of features.
+
 \section{Purpose}
 \label{sec:purpose}
-Affirmative answers to the research questions would contribute to improve the quality of current global circulation models and large scale eddy simulations, allowing them to obtain more accurate predictions of the momentum flux-profile relationship, leading to more precise long term climate forecasts.
-
-
-\section{Goals}
-The first research question is answered by proposing one or more Data Mining methods, i.e. feature selection and extraction, and a Machine Learning model, that obtain sufficient predictive performance, whereas the second research question is answered by a comparison of the performance of the models when using certain subsets of features.
+Successfully achieving the goals explained in section \ref{sec:goals} would produce one or more predictors that can be incorporated in general circulation models in order to provide more accurate predictions of the momentum flux-profile relationship. This, in turn, would lead to more precise long term climate forecasts.
 
 
 \section{Ethics and Sustainability}
@@ -120,7 +120,7 @@ Carrying out this project posed no ethical issues: data collection was mostly au
 
 The author strongly aligns with the Open Science movement, according to which scientific research should be made as open and accessible as possible, so that it can be examined, extended and improved by as many people as possible. This is what allowed mankind to become what it is today, and it should not change. For this reason, this work was performed entirely with Free and Open Source tools, providing a low barrier to entry, and focusing on reproducibility of the results. The entirety of the analysis and its historical record, from the very data to the generation of plots and tables, is openly accessible\footnote{\url{https://github.com/e-dorigatti/mscthesis}} and can be performed by anyone with enough computational resources.
 
-http://www.un.org/sustainabledevelopment/health/
+todo http://www.un.org/sustainabledevelopment/health/
 
 Some of the analysis performed in this work required a considerable amount of computational resources, in the order of hundreds of cores and terabytes of memory. Such resources are power hungry and require electricity to run and to be kept at an appropriate temperature [todo some stats about internet power usage etc], as well as proper support infrastructure, e.g. for networking. In an effort to reduce the energy requirements, only the necessary experiments were performed, and care was taken not to do unnecessary work, for example by reusing results of previous experiments where possible.
 
@@ -339,7 +339,7 @@ The universal function must be determined experimentally. This is no easy task, 
 \end{cases}
 \end{align}
 
-The Monin-Obukhov similarity theory (MOST) is only applicable in the surface layer, at heights much larger than the aerodynamic roughness length, and with $\vert\xi\vert<2$; intuitively, when $\vert\xi\vert$ is too large, the eddies do not feel the effect of the surface anymore, and, under very stable stratification ($\xi>>1$), vertical motion is hampered, so the height $z$ does not play a role. Even under ideal conditions, the predictions of this theory are accurate up to 10-20\% \citep{50years}. Some works, such as \cite{flux_prof_measure_issues}, argue that the poor agreement between data and experiments, and even among experiments themselves, can be largely attributed to difficulties in measuring the necessary quantities. Recent attempts \citep{sheba_phim,most_teal,Wilson2008,aerodynamic_fluxes} try to extend, improve, or altogether replace, this similarity theory or pars thereof.
+The Monin-Obukhov similarity theory (MOST) is only applicable in the surface layer, at heights much larger than the aerodynamic roughness length, and with $\vert\xi\vert<2$; intuitively, when $\vert\xi\vert$ is too large, the eddies do not feel the effect of the surface anymore, and, under very stable stratification ($\xi>>1$), vertical motion is hampered, so the height $z$ does not play a role. Even under ideal conditions, the predictions of this theory are accurate up to 10-20\% \citep{50years}. Some works, such as \cite{flux_prof_measure_issues}, argue that the poor agreement between data and experiments, and even among experiments themselves, can be largely attributed to difficulties in measuring the necessary quantities. Recent attempts, such as \citep{sheba_phim,most_teal,Wilson2008,aerodynamic_fluxes}, try to extend, improve, or altogether replace, this similarity theory or pars thereof.
 
 \section{Statistics and Machine Learning}
 \label{sec:ml}
@@ -1545,7 +1545,8 @@ The Monin-Obukhov similarity theory is an important component in many climate si
 As shown in table \ref{tbl:baseline_comparison}, we could improve the predictions of the similarity theory even with a simple regularized linear model, and more complex methods can reduce the MSE by almost 50\%. Table \ref{tbl:fset_comparison} shows that, besides the heat fluxes, the net radiation is an important predictor, whereas the dew point and the soil heat flux do not contribute significantly to the predictive performance. Furthermore, \ref{tbl:trend_comparison} shows that no useful information can be obtained from knowing the value of a feature one hour earlier than the prediction.
 
 \section{Discussion}
-We can comment on several aspects of this work, highlighting limitations and potential alternative approaches. An obvious, but perhaps easy to ignore, fact is that the models presented are black boxes that cannot be easily interpreted. This approach is very different from the traditional methodology in Physics and related fields, in which theories offer predictions by \emph{explaining} the phenomena at hand. 
+\label{sec:discussion}
+An obvious, but perhaps easy to ignore, fact is that the models presented are black boxes that cannot be easily interpreted. This approach is very different from the traditional methodology in Physics and related fields, in which theories offer predictions by \emph{explaining} the phenomena at hand. 
 
 \subsection{Features}
 The features used for prediction play a very important role, since they affect the ability to generalize to different conditions, and the ease with which the model can be applied to new situations. This is especially noteworthy since no feature engineering was performed, except for standardization. This means, for example, that the model could have incorporated biases coming from the instruments used at Cabauw, thereby hurting performance when using samples coming from different instruments (newer version, different maker, different measuring principle, etc.). The features that are computed with the eddy correlation method are particularly susceptible to this issue: since the shortcomings of such procedure are well known, it is likely that better methods will be developed in the future.
@@ -1554,41 +1555,41 @@ Another thing to keep in mind is that the models were trained using only a subse
 
 Although our experiments showed that measurements in the past do not improve the performance, the method we used was quite crude. Advanced methods explicitly based on time series analysis, such as ARIMA, could be tried. We performed some informal experiments with recurrent neural networks, but the results are discouraging, since they had difficulties even in properly fitting the dataset (see appendix \ref{apx:deep_learning})
 
-trend could be better included using some sort of time series prediction together with the features we considered in this work, but preliminary experiments (3 layers gru + 4 layers fully connected) do not seem to work well)
+In this project, we focused on the Monin-Obukhov similarity theory, which defines the flux-profile relationships in term of the Obukhov length $L$; the instability parameter $\xi=z/L$ can then be used to distinguish between stable ($\xi>>0$), unstable ($\xi<<0$) and neutral ($\xi\approx0$) conditions. An alternative approach is to use the Richardson number, defined as\footnote{\url{http://glossary.ametsoc.org/wiki/Richardson_number}}:
 
+\begin{equation}
+Ri=\frac{g}{T}\frac{\partial\theta/\partial z}{(\partial\overline{u}/\partial z)^2}
+\end{equation}
 
-richardson number instead of obukhov length
-
-
+\noindent which is, essentially, the ratio between production of turbulence due to buoyancy and to wind shear, and qualitatively behaves as $\xi$. In fact, there are deep connections between the Obukhov length and the Richardson number \citep{mostayyyy}, so much so that some GCMs, such as CM3 \citep{gfdl_cm3}, use $Ri$ instead of $L$ to parametrize the atmospheric boundary layer. It would then be interesting to apply the methodology used in this project to this different parametrization of turbulence, in hope of achieving better performance.
 
 \paragraph{Feature importance:} Even though we showed that the dew point and the soil heat flux are not important predictors, we cannot rule out the possibility that the model was able to figure out the information contained in these features using features from earlier sets, or, on the contrary, needed features from later sets make sense of them. For example, the soil heat flux could have had an impact only when the model could relate it to the turbulent fluxes in F5. Similarly, perhaps the model was able to figure out the dew point by relating the the air temperature and the net radiation with the soil heat flux (to estimate humidity). The opposite is also possible, namely these measures could have been not informative enough, and the model needed more features, such as the virtual temperature, to make sense of them.
 
-\paragraph{Micro parameters:} One of the biggest obstacles in applying the similarity theory lies in accurately measuring the quantities it relies on. Examples are the von Karman's constant $\kappa$, the roughness length $z_0$, the turbulent fluxes $H$ and $\lambda E$, the friction velocity $u_*$, and so on. The advantage of using only macro parameters to predict $\phi_m$ is that accurately measuring these quantities becomes less important, in the sense that we can force models to find explanations that do not rely on them. Of course, such models would likely have inferior performances, depending on the influence of these parameters on $\phi_m$.
+\paragraph{Micro parameters:} One of the biggest obstacles in applying the similarity theory lies in accurately measuring the quantities it relies on. Examples are the von Karman's constant $\kappa$, the roughness length $z_0$, the turbulent fluxes $H$ and $\lambda E$, the friction velocity $u_*$, and so on. The advantage of using only macro parameters to predict $\phi_m$ is that accurately measuring these quantities becomes less important, in the sense that we can force models to find explanations that do not rely on them.
 
-Another downside of not using micro parameters is that the resulting models do not generalize well in conditions that are different to those presented in the training set, especially if it contains measures coming from a single location, such as in our case. Training with data coming from different locations certainly produces more general models, as long as the data contains features that are informative and general enough to allow the model to differentiate between the different conditions. For example, the properties of the surface, such as its roughness, have a large impact on turbulence; what our model thinks is the normal behavior of turbulence might in fact be largely determined by the surface around the measurement site. But our model is completely unaware of the effect of the surface, so it might not be able to give accurate predictions at sites with different surface characteristics. See \cite{cabauw_surface} for a discussion on how the obstacles around the Cabauw tower affect the flux-profile relationships measured there; in particular, the turbulence behaves differently depending on the wind direction. A training set with relevant features and diverse samples can alleviate this problem. For example, features could be extracted from satellite images of the surroundings; a very crude approach is to classify the surface into one of several categories, and use a lookup table with pre-computed roughness lengths.
+A downside of not using micro parameters is that the resulting models do not generalize well in conditions that are different to those presented in the training set, especially if it contains measures coming from a single location, such as in our case. Training with data coming from different locations would certainly produce more general models, as long as the data contains features that are informative and general enough to allow the model to differentiate between the different conditions. For example, the properties of the surface, such as its roughness, have a large impact on turbulence: what our model thinks is the normal behavior of turbulence might in fact be largely determined by the surface around the measurement site. But our model is completely unaware of the effect of the surface, so it might not be able to give accurate predictions at sites with different surface characteristics. See \cite{cabauw_surface} for a discussion on how the obstacles around the Cabauw tower affect the flux-profile relationships measured there; in particular, the turbulence behaves differently depending on the wind direction. A training set with relevant features and diverse samples can alleviate this problem. For example, features could be extracted from satellite images of the surroundings; a very crude approach would be to classify the surface into one of several categories, and use a lookup table with pre-computed roughness lengths.
 
 
 \subsection{Training Samples}
+As mentioned earlier, having training samples from multiple sites would certainly increase the generality of the models, but there are other sources of samples that can be used. too.
 
 \paragraph{Surface layer:} Although the Cabauw tower takes measurements until \SI{200}{\meter}, one of the issues we had to deal with is that the height of the surface layer is difficult to determine. We chose to use the measures at 10, 20 and 40 meters only, which comprise only half of the available data. There is evidence that some of the samples at 40 meters are anomalous: in figure \ref{fig:tsne_z}, the samples at 40 meters are clearly separated from the other two levels, which are well mixed, and in figure \ref{fig:most_full} there are some outliers in the range $-20<\xi<0$ that deviate significantly from the assumed relationship. These outliers mostly belong to the \SI{40}{\meter} level. On the other hand, it is very likely that in some situations the samples at \SI{80}{\meter}, and perhaps even \SI{100}{\meter}, are in the surface layer.
 
-\paragraph{Extreme weather events:} Another interesting 
-hurricane
+\paragraph{Extreme weather events:} Figure \ref{fig:cyclone_jeanett} shows the wind speed measured during cyclone Jeanett. These measurements are unique, since such extreme events are very rare in Europe todo!!
 
-\paragraph{Altitude levels:} can generate new training samples at more altitude levels, since we have a model for wind and temp (need to interpolate spec. humidity too), according to the simulation that uses this model
+\paragraph{Altitude levels:} In this project we used the same altitude levels at which measurements are taken at the Cabauw site. It is possible to generate synthetic samples at different altitude levels by interpolating the measures that change with height (i.e. wind speed, temperature, and humidity). This is not too hard, since we are already fitting a curve to the profiles of wind and temperature (see section \ref{sec:gradients}), and becomes essential when building a training set with samples coming from different sources, since it is unlikely that they all use the same altitude levels. One has to keep in mind, of course, that samples generated in such a way increase uncertainty in the resulting models, since the modeled profile might be different from the actual profile.
 
-
-\subsection{Performance}
-This is a notable achievement, since the chosen model will be just one of the many components of climate simulations, which are notoriously very slow and computationally intensive. A linear model has the potential to compete with the efficiency of MOST, depending on the number of features, since it is fundamentally a dot product
-
-even though we predicted phim, the actual interest is in u*. we predict phim to have a direct means of comparing with state of the art (?), \cite{weber1999} computes u* from the standard deviations obtaining rmse between 0.05 and 0.1
-
-
-
-incorporate uncertainty in the model (e.g. quantile regression), then use this in the simulations to get climate uncertainty (monte carlo by sampling from prediction would be a quick and dirty way of implementing this, although it would make the simulation quite slow)
 
 \subsection{Deployment}
-todo
+As mentioned in section \ref{sec:purpose}, the estimators produced in this project will form the basis of a new component in GCMs that predicts the momentum flux-profile relationship more accurately than the current state of the art.
+
+\paragraph{Technology:} The technologies (programming language, libraries and frameworks) used in this project are not necessarily the same that are used to develop in GCMs. Additional development effort is therefore needed to embed the predictors shown in this project in the simulators. To verify that this re-implementation is correct, the developers can run the same analyses that were performed in this project, and ensure they get the same results.
+
+\paragraph{Performance:} Current GCMs are computationally very demanding, and a single simulation requires weeks on specialized high performance clusters. Therefore, one of the requirements that were not considered in this project, but are of high practical relevance, is the performance of the estimator. Table \ref{tbl:baseline_comparison} shows that a simple linear model is already more accurate than the similarity theory, and in appendix \ref{apx:linear_ensemble} we further explore this aspect by presenting an ensemble of linear models whose performance rivals that of gradient boosted trees. This is a notable achievement since the predictions from a linear model is obtained with a scalar product, therefore they have the potential to compete with the similarity theory in terms of computational complexity,
+
+\paragraph{•}
+incorporate uncertainty in the model (e.g. quantile regression), then use this in the simulations to get climate uncertainty (monte carlo by sampling from prediction would be a quick and dirty way of implementing this, although it would make the simulation quite slow)
+
 
 \section{Related Work}
 todo
@@ -1599,9 +1600,12 @@ todo
 \citep{ustar_from_profile} predicts ustar from profiles (choose ustar that minimizes difference between measured and predicted profile), give only r=0.84, r=0.9 and r=0.89 for different wind directions, very similar to our sqrt(r), but they needed to use z0. they also give a method to compute confidence intervals (we can do that too!!!)
 
 
+even though we predicted phim, the actual interest is in u*. we predict phim to have a direct means of comparing with state of the art (?), \cite{weber1999} computes u* from the standard deviations obtaining rmse between 0.05 and 0.1
+
+
 \citep{flux_prof_measure_issues} argues that 
 
-\section{Limitations and Future Work}
+\section{Future Work}
 todo
 future work: see appendix, also test on other dataset, try inside simulations similarly to \citep{predict_micro_from_macro_sim}
 
@@ -1786,7 +1790,8 @@ MOST & 0.32 & 0.18 & - & - & - & - & 0.13 \\
 
 Other experiments were performed using all the observations in the hour preceding the sample to predict, and using up to three GRU layers, followed by up to four fully connected layers, with the other parameters as detailed above. The performances were discouraging, with the network struggling to go below 0.15/0.20 training MSE and 0.7/0.8 validation MSE on F4 and full dataset.
 
-\chapter{Prediction with an Ensemble of Regularized Linear Models}
+\chapter{Prediction with an Ensemble of Linear Models}
+\label{apx:linear_ensemble}
 We can relax the constraints needed to answer the research questions, in particular the second one, and perform additional feature engineering. In order to minimize the computational resources needed, we apply Ridge linear regression to the MOST dataset.
 
 \paragraph{Methods:}
