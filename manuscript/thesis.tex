@@ -6,6 +6,7 @@
 \usepackage{enumitem}
 \usepackage{siunitx}
 \usepackage{tcolorbox}
+\usepackage{changepage}
 \usepackage{afterpage}
 \usepackage{titling}
 \usepackage{booktabs}
@@ -44,28 +45,39 @@
 \title{Predicting the Momentum Flux-Profile Relationship from  Macro Weather Parameters}
 \author{Emilio Dorigatti}
 
+\postdate{\par\end{center}
+
+\subsection*{\centering Summary}
+\indent The study of climate heavily relies on simulations. For efficiency reasons, many important phenomena cannot be simulated, and have to be parametrized, i.e. their effect must be described based on macro parameters. The turbulence resulting from the interaction between the atmosphere and the surface is an example of such phenomena. One of the quantities of interest arising from turbulence is the momentum flux-profile relationship, which relates the transport of momentum (flux) and the change of wind speed with altitude (profile). This quantity can be computed following the Monin-Obukhov Similarity Theory \citep{mostayyyy}. However, this theory requires parameters that are hard to measure, both in real life and in the simulations, is only applicable in a restricted range of conditions, and produces predictions that are accurate only up to 20-30\% \citep{50years}.
+
+The goal of this thesis is to compute the momentum flux-profile relationship using only macro weather parameters, which are readily available in climate simulations; this is done using Data Mining techniques on 17 years of weather data collected from the Cabauw meteorological tower in the Netherlands. Moreover, we asses the impact of different sets of features on the prediction error.
+
+Results show that even the simplest linear models are able to compete with the similarity theory, and complex methods such as gradient boosted trees can reduce the mean squared error by almost 50\%. Furthermore, these methods are applicable to a much wider range of conditions compared to the similarity theory, while providing roughly the same predictive performance achieved by this theory \emph{in its validity range}. These results are obtained using wind speed and air temperature at different levels, the soil temperature, and the net radiation at the surface; the improvement offered by the heat fluxes is significant, but of low magnitude. The soil heat flux, the dew point, and the hourly trend of the features do not have a tangible impact on the performance.
+
+	\vfill
+	\noindent\textsc{Supervisor:} Gunilla Svennson \\
+	\noindent\textsc{Examiner:} Jim Dowling
+}
+
+% \includepdf{kth_front_page.pdf}
+
 
 \newgeometry{hmarginratio=1:1} %centered title page
 \maketitle
 \restoregeometry
 
 
+
 \section*{Acknowledgments}
 The work of a lot of people, most of whom I do not know, was needed to enable me to this research project: the hundreds, perhaps thousands, of Open Source maintainers who created and take care of the Data Science libraries for the Python programming language, 
 Python itself, operating systems, distributed computing platforms, and so on. Among them, I am extremely grateful to team behind the Hopsworks platform \citep{hops}, for giving me access to an astonishing amount of computational resources and their support in using them.
 
-I cannot thank my family enough for supporting me in everything I did and moving mountains [??] so that I could focus on my studies free of worries [??].
+I am also grateful to Gunilla for setting the course of this research, leading me through (the relevant parts of) Climate Science, explaining difficult concepts, giving spot on feedback on my report, and being supportive and encouraging throughout the project.
 
-This project marks the end of my years as a student.  During all this time,
+Finally, I cannot thank my family enough for supporting me in everything I did, and moving mountains to allow me to focus on my studies free of worries.
 
 \newpage
 
-\section*{Summary}
-The study of climate heavily relies on simulations. For efficiency reasons, many important phenomena cannot be simulated, and have to be parametrized, i.e. their effect must be described based on macro parameters. The turbulence resulting from the interaction between the atmosphere and the surface is an example of such phenomena. One of the quantities of interest arising from turbulence is the momentum flux-profile relationship, which relates the transport of momentum (flux) and the change of wind speed with altitude (profile). This quantity can be computed following the Monin-Obukhov Similarity Theory \citep{mostayyyy}. However, this theory requires parameters that are hard to measure, both in real life and in the simulations, is only applicable in a restricted range of conditions, and produces predictions that are accurate only up to 20-30\% \citep{50years}.
-
-The goal of this thesis is to compute the momentum flux-profile relationship using only macro weather parameters, which are readily available in climate simulations; this is done using Data Mining techniques on 17 years of weather data collected from the Cabauw meteorological tower in the Netherlands. Moreover, we asses the impact of different sets of features on the prediction error.
-
-Results show that even the simplest linear models are able to compete with the similarity theory, and complex methods such as gradient boosted trees can reduce the mean squared error by almost 50\%. Furthermore, these methods are applicable to a much wider range of conditions compared to the similarity theory, while providing roughly the same predictive performance achieved by this theory \emph{in its validity range}. These results are obtained using wind speed and air temperature at different levels, the soil temperature, and the net radiation at the surface; the improvement offered by the heat fluxes is significant, but of low magnitude. The soil heat flux, the dew point, and the hourly trend of the features do not have a tangible impact on the performance.
 
 \tableofcontents
 
@@ -80,9 +92,9 @@ This chapter briefly introduces the area for this project, and formally defines 
 \label{sec:intro_bg}
 Climatology, or climate science, studies the long-term average weather conditions. In the last few decades, climate scientists found evidence of ongoing changes in Earth's climate, most notably, a general increase in average temperature; in the long run, this and other changes can potentially have a devastating impact on life on our planet. Regardless of the causal effect of human activities on it, having a solid understanding of the climate allows us to find the best way to mitigate its change, and to preserve our planet.
 
-Climate science is an extremely difficult field, for a number of reasons. First, climate is evident, by definition, only over long periods of time and large distances, making the usual scientific approach of testing hypotheses by conducting experiments inapplicable; instead, climate scientists have to rely on historical data. Second, the atmosphere is a complex and chaotic system, which must be described through systems of nonlinear differential equation. They can be used to create numerical simulations, such as CM3 \citep{gfdl_cm3} and SURFEX \citep{surfex}, and the resulting predictions compared to historical data to assess the accuracy of the theory. Furthermore, the chaotic character of the atmosphere makes it impossible to study parts of it in isolation from others, as small scale phenomena affect large scale ones, and vice versa. These simulations, called General Circulation Models (GCMs), use equations describing fluid dynamics to simulate the behavior of the atmosphere. These equations are discretized by using a grid whose horizontal resolution varies between 10 and 100 kilometers; the smaller the grid, the higher computational resources needed to perform the simulation. Grids of this size are too large to simulate some phenomena, such as clouds and turbulence, which have to be "summarized" with simpler theories (a process called \emph{parametrization}).
+Climate science is an extremely difficult field, for a number of reasons. First, climate is evident, by definition, only over long periods of time and large distances, making the usual scientific approach of testing hypotheses by conducting experiments inapplicable; instead, climate scientists have to rely on historical data. Second, the atmosphere is a complex and chaotic system, which must be described through systems of nonlinear differential equation. They can be used to create numerical simulations, such as the atmospheric model of GFDL-CM3 \citep{gfdl_am3}, HadCM3 \citep{hadcm3} and others, and the resulting predictions compared to historical data to assess the accuracy of the theory. Furthermore, the chaotic character of the atmosphere makes it impossible to study parts of it in isolation from others, as small scale phenomena affect large scale ones, and vice versa. These simulations, called General Circulation Models (GCMs), use equations describing fluid dynamics to simulate the behavior of the atmosphere. These equations are discretized by using a grid whose horizontal resolution varies between tens and hundreds of kilometers; the smaller the grid, the more precise the simulation is, but the higher computational resources are needed. Grids of this size are too large to simulate some phenomena, such as clouds and turbulence, which have to be "summarized" with simpler theories (a process called \emph{parametrization}).
 
-The atmosphere ca be vertically divided in several regions with different characteristics. The lowest such region, the troposphere, contains most of the air mass in the atmosphere, and occupies the lowest 10 to 12 kilometers of the atmosphere. This is where weather happens, and it can be further divided in a number of sub-layers, the lowest of which is the \emph{atmospheric boundary layer}: it is the region of the atmosphere that is affected by the conditions of the surface. Most human activities happen in this layer, and it is responsible for a large part of the diffusion and transport of aerosol such as, among others, pollutants. Yet, the physics governing the atmospheric boundary layer is not fully understood, and the theory is lacking. This means that its parametrization in GCMs is inaccurate.
+The atmosphere can be vertically divided in several regions with different characteristics. The lowest such region, the troposphere, contains most of the air mass in the atmosphere, and occupies the lowest 10 to 12 kilometers of the atmosphere. This is where weather happens, and it can be further divided in a number of sub-layers, the lowest of which is the \emph{atmospheric boundary layer}: it is the region of the atmosphere that is affected by the conditions of the surface. Most human activities happen in this layer, and it is responsible for a large part of the diffusion and transport of aerosol such as, among others, pollutants. Yet, the physics governing the atmospheric boundary layer is not fully understood, and the theory is lacking. This means that its parametrization in GCMs is inaccurate.
 
 In stark contrast to the traditional, top-down approach of science, recent developments in information technology made bottom-up approaches possible. In this new way of thinking, existing data is used to automatically infer the "best" explanation for the measurements at hand, the underlying laws that originated that data. The field that makes this possible is called \emph{Machine Learning}: it takes advantage of several methods coming from statistics, information theory, optimization theory, etc., to make computers learn from examples. Together with Natural Language Processing and Automated Planning, it is one of the three main branches of Artificial Intelligence, the sub-field of Computer Science that studies ways of making machines behave intelligently.
 
@@ -94,39 +106,38 @@ One important issues in the study of the atmospheric boundary layer is the deriv
 
 The state of the art relationships are defined by the Monin-Obukhov Similarity theory in terms of the instability parameter $\xi$, computed as the height above surface scaled by turbulence due to horizontal wind and vertical air movement due to variations in heat. Difficulties in measurements of relevant quantities make this theory accurate only up to 20-30\% \citep{basicatm}, and applicable in a restricted set of conditions.
 
-\cite{sheba} shows that, at least in difficult conditions, several simulation models produce flux estimates that are highly inaccurate, presenting low correlation (mostly below 0.3) and errors that are as large as the fluxes themselves. On the contrary, \citep{boundary_layer_impact_in_sim} and \citep{most_sim} show that other simulation models are able to provide accurate estimates of the fluxes at the price of biased surface temperature estimates. Intuitively, this trade-off arises because of the deep relationship between the net radiation, the surface fluxes and the surface temperature: one can choose which two quantities to estimate accurately, and sacrifice accuracy on the remaining one. \cite{most_les} raises awareness on the fact that the lowest grid level used in many simulations recent simulations is too low, outside of the validity region of the Monin-Obukhov similarity theory, although no quantitative measure of the issues caused is presented. Since errors in the simulation accumulate over time, even slight improvements can greatly improve the accuracy of the results after years of simulated time.
+\cite{sheba} shows that, at least in difficult conditions, several simulation models produce flux estimates that are highly inaccurate, presenting low correlation (mostly below 0.3) and errors that are as large as the fluxes themselves. On the contrary, \cite{boundary_layer_impact_in_sim} and \citep{most_sim} show that other simulation models are able to provide accurate estimates of the fluxes at the price of biased surface temperature estimates. Intuitively, this trade-off arises because of the deep relationship between the net radiation, the surface fluxes and the surface temperature: one can choose which two quantities to estimate accurately, and sacrifice accuracy on the remaining one. \cite{most_les} raise awareness on the fact that the lowest grid level used in many simulations recent simulations is too low, outside of the validity region of the Monin-Obukhov similarity theory, although no quantitative measure of the issues caused is presented. In the atmospheric model of the GFDL-CM2 and CM3 models, the wind speed used to calculate the fluxes is artificially adjusted to correctly include the contribution from turbulence, and the predictions from the similarity theory are adjusted to prevent excessive surface cooling of the land surface during winter \citep{gfdl_am2}. Since errors in the simulation accumulate over time, even slight improvements can greatly improve the accuracy of the results after years of simulated time.
 
 Currently, limitations of the validity of the Monin-Obukhov similarity theory are not believed to be a likely explanation for the high scatter that is found in experimental studies, unless in highly stable conditions, where measurement challenges arise \citep{basicatm}. With the availability of macro- and micro-meteorological data from specialized observation sites such as Cabauw, in the Netherlands, and the recent developments in Machine Learning, this conjecture can be finally put to the test. More specifically, we pose the following \\
 
-\begin{tcolorbox}
+\begin{adjustwidth}{1cm}{1cm}
 \textbf{Research Question 1:} How can the data from the Cesar database be used to predict the momentum flux-profile relationship more accurately than the Monin-Obukhov similarity theory, by using only macro weather parameters? \\
 
-\textbf{Research Question 2:} What impact do different macro-weather parameters have on the quality of the predictions obtained?
-\end{tcolorbox}
-
+\noindent\textbf{Research Question 2:} What impact do different macro-weather parameters have on the quality of the predictions obtained?
+\end{adjustwidth}
 
 \section{Goals}
 \label{sec:goals}
-The first research question is answered by proposing one or more Data Mining methods, i.e. feature selection and extraction, and a Machine Learning model, that obtain sufficient predictive performance, whereas the second research question is answered by a comparison of the performance of the models when using certain subsets of features.
+The first research question is answered by proposing one or more Data Mining methods, i.e. feature selection and extraction, and a Machine Learning model, that obtain sufficient predictive performance, whereas the second research question is answered by a qualitative comparison of the performance of the models when using certain subsets of features.
 
 \section{Purpose}
 \label{sec:purpose}
-Successfully achieving the goals explained in section \ref{sec:goals} would produce one or more predictors that can be incorporated in general circulation models in order to provide more accurate predictions of the momentum flux-profile relationship. This, in turn, would lead to more precise long term climate forecasts.
+Successfully achieving the goals explained in section \ref{sec:goals} would produce one or more predictors that can be incorporated in general circulation models in order to provide more accurate predictions of the momentum flux-profile relationship. This, in turn, would lead to more precise long term climate forecasts, ultimately advancing our understanding of the impact of our activities on the planet.
 
 
 \section{Ethics and Sustainability}
 \label{sec:ethics}
-Carrying out this project posed no ethical issues: data collection was mostly automated and performed by a third party, which provides free and open access to it, and privacy and confidentiality are not relevant issues since no test subjects were needed to perform the research.
+Carrying out this project posed no ethical issues: data collection was mostly automated and performed by a third party, and there is no evidence that such activities were performed in unethical and/or unlawful manner. Privacy and confidentiality are not relevant issues either, since no test subjects were needed to perform the research, and the data is free and open to everybody.
 
-The author strongly aligns with the Open Science movement, according to which scientific research should be made as open and accessible as possible, so that it can be examined, extended and improved by as many people as possible. This is what allowed mankind to become what it is today, and it should not change. For this reason, this work was performed entirely with Free and Open Source tools, providing a low barrier to entry, and focusing on reproducibility of the results. The entirety of the analysis and its historical record, from the very data to the generation of plots and tables, is openly accessible\footnote{\url{https://github.com/e-dorigatti/mscthesis}} and can be performed by anyone with enough computational resources.
+The author strongly aligns with the Open Science movement, according to which scientific research should be made as open and accessible as possible, so that it can be examined, extended and improved by as many people as possible \citep{fiveopenscience}. This is what allowed mankind to become what it is today, and it should not change. For this reason, this work was performed entirely with Free and Open Source tools, providing a low barrier to entry, and focusing on reproducibility of the results. The entirety of the analysis and its historical record, from the very data to the generation of plots and tables, is openly accessible\footnote{\url{https://github.com/e-dorigatti/mscthesis}} and can be performed by anyone with enough computational resources.
 
-todo http://www.un.org/sustainabledevelopment/health/
-
-Some of the analysis performed in this work required a considerable amount of computational resources, in the order of hundreds of cores and terabytes of memory. Such resources are power hungry and require electricity to run and to be kept at an appropriate temperature [todo some stats about internet power usage etc], as well as proper support infrastructure, e.g. for networking. In an effort to reduce the energy requirements, only the necessary experiments were performed, and care was taken not to do unnecessary work, for example by reusing results of previous experiments where possible.
+Some of the analysis performed in this work required a considerable amount of computational resources, in the order of hundreds of cores and terabytes of memory. Such resources are power hungry and require electricity to run and to be kept at an appropriate temperature, as well as proper support infrastructure, e.g. for networking. In an effort to reduce the energy requirements, only the necessary experiments were performed, and care was taken not to do unnecessary work, for example by reusing results of previous experiments where possible. Moreover, this project strongly aligns with the thirteenth goal, \emph{take urgent action to combat climate change and its impacts}, of the Sustainable Development Goals set by the United Nations\footnote{\url{https://www.un.org/sustainabledevelopment/}}. The Paris agreement\footnote{\url{https://unfccc.int/process-and-meetings/the-paris-agreement/the-paris-agreement}} is a formal document where adhering nations set goals to limit the global rise of temperature well below \SI{2}{\celsius}. The main contribution of this project is to aid the development of accurate climate simulations, thanks to which nations can set realistic targets, monitor their progress towards the goals, etc.
 
 \section{Research Methodology}
 \label{sec:research_methodology}
-The two most widely used research methodologies in data mining are CRISP-DM, the cross-industry standard process for data mining, by \cite{crispdm}, and KDD, knowledge discovery in databases, by \cite{kdd}. Despite the difference in terminology, they essentially describe the same process for extracting useful information, or \emph{patterns}, from one or more raw data sources. This process is composed by the following steps (we use the nomenclature of CRISP-DM):
+Following the taxonomy of \cite{research_bs}, this project aligns with the positivist school of thought, and follows the quantitative research methodology by applying a deductive approach in order to answer the research questions. The data is collected through field measurements, and processed and analyzed with mathematical and statistical tools, that provide strong reliability and replicability guarantees.
+
+The two most widely used research methodologies in Data Mining are CRISP-DM, the cross-industry standard process for data mining, by \cite{crispdm}, and KDD, knowledge discovery in databases, by \cite{kdd}. Despite the difference in terminology, they essentially describe the same process for extracting useful information, or \emph{patterns}, from one or more raw data sources. This process is composed by the following steps (we use the nomenclature of CRISP-DM):
 
 \begin{enumerate}
 \item \emph{Business Understanding:} Get familiar with the application domain, obtaining necessary background knowledge, then identify the goals of the process from the customer's perspective and translate them to data mining tasks;
@@ -180,7 +191,7 @@ $$
 \overline{a}(s)=\frac{1}{T}\int_{T_0}^{T_0+T}a(s,t)dt
 $$
 
-and the deviation from the average
+\noindent and the deviation from the average
 
 $$
 a'(s,t)=a(s,t)-\overline{a}(s)
@@ -212,7 +223,7 @@ u_*=\left(\overline{u'w'}^2+\overline{v'w'}^2\right)^{1/4}
 The mean velocity $\overline{u}$ increases linearly within the laminar sub-layer, then logarithmically until the end of the boundary layer, thus the shear decreases further away from the surface. In the logarithmic sub-layer, the velocity is computed as $\overline{u}(z)=u_*(\log z - \log z_0)/\kappa$, where $z_0$ is the characteristic roughness of the surface, and $\kappa$ is the von Karman's constant, whose value is around 0.4 \cite{basicatm}. The characteristic roughness depends on the texture of the surface, and its relationship with the height $\delta_s$ of the laminar sub-layer; if the roughness scale is smaller than $\delta_s$, the logarithmic velocity profile is not affected by the texture, because the laminar sub-layer completely covers the variations on the surface, and we have the so-called smooth turbulent flow. If, on the contrary, the bumps in the surface are larger than $\delta_s$, the laminar sub-layer follow the profile of the surface, and the logarithmic velocity profile is altered depending on the texture, a regime called rough turbulent flow.
 
 \begin{figure}
-\caption{Turbulent boundary layer at the edge of a canal; water flows from right to left. Colors are inverted to make the patterns more visible.}
+\caption{Turbulent boundary layer at the edge of a canal; water flows from right to left. Colors are inverted to make the patterns more visible. Picture taken by the author.}
 \label{fig:bl}
 \centering
 \includegraphics[width=\textwidth]{images/bl}
@@ -246,7 +257,7 @@ $$
 R=H+\lambda E+G
 $$
 
-which states that the total incoming energy $R$ must be equal to the energy given back to the atmosphere $H+\lambda E$ (not counting long-wave radiation, which is accounted to in $R$) plus the energy absorbed by the surface $G$, assuming the temperature is constant. When the temperature is not constant, one can write a budget equation relating the changes in these quantities.
+\noindent which states that the total incoming energy $R$ must be equal to the energy given back to the atmosphere $H+\lambda E$ (not counting long-wave radiation, which is accounted to in $R$) plus the energy absorbed by the surface $G$, assuming the temperature is constant. When the temperature is not constant, one can write a budget equation relating the changes in these quantities.
 
 The turbulent fluxes $H$ and $\lambda E$ are constant in the surface layer. Experimentally, the energy balance is not always achieved \citep{cabauwinsitu} because of the difficulty in measuring fluxes due to eddy correlation being inaccurate.
 
@@ -288,14 +299,14 @@ One of the quantities of interest is the momentum flux-profile relationship, com
 \frac{\partial\overline{u}}{\partial z}\frac{\kappa z}{u_*}
 \end{equation}
 
-where $\kappa$ is the von Karman constant, which roughly equals 0.4. The profile is expressed by the $\partial\overline{u}/\partial z$ term, and the momentum flux is contained in the friction velocity $u_*$ according its interpretation in equation \ref{eq:ustar_momentum}.
+\noindent where $\kappa$ is the von Karman constant, which roughly equals 0.4. The profile is expressed by the $\partial\overline{u}/\partial z$ term, and the momentum flux is contained in the friction velocity $u_*$ according its interpretation in equation \ref{eq:ustar_momentum}.
 
 One of the factors to distinguish laminar from turbulent flow is the length scale $L$ of the system. This length scale for the ABL was derived by \cite{mostayyyy}, and forms the basis of the similarity theory. According to this theory, the normalized wind profile of equation \ref{eq:phi_m} can be expressed as an unique \emph{universal} function of $\xi=z/L$, with
 
 \begin{equation}
 \label{eq:most_l}
 L=-\frac{u_*^3}{\kappa\frac{g}{\theta_v}\frac{Q}{\rho c_\rho}}
-=-\frac{u_*^3 T_v}{\kappa g \overline{w'\theta_v}}
+=-\frac{u_*^3 T_v}{\kappa g \overline{w'\theta^\prime_v}}
 \end{equation}
 
 \noindent where
@@ -323,8 +334,7 @@ $$
 
 \item $c_\rho$ specific heat of dry air, \SI{1005}{\joule\per\kilo\gram\per\kelvin} at \SI{300}{\kelvin}
 \item $Q$ the buoyancy flux, approximated by $H+0.07\lambda E$ and measured in \si{\watt\per\square\meter}
-\item $\overline{w'\theta_v}=Q/\rho c_\rho$ the flux of virtual potential temperature, measured in \si{\kelvin\meter\per\second}
-\item $T_*=-\overline{w'\theta}/u_*$
+\item $\overline{w'\theta^\prime_v}=Q/\rho c_\rho$ the flux of virtual potential temperature, measured in \si{\kelvin\meter\per\second}
 \end{itemize}
 
 The stability parameter $\xi$ is positive for stable conditions, where wind shear dominates the production of TKE, and negative for unstable conditions, where buoyancy is the main contributor to turbulence. It approaches 0 in the limit of neutral stratification (i.e. $\partial\overline{\theta}/\partial z=0$), because the temperature flux goes to 0 causing $L$ go to infinity.
@@ -657,7 +667,7 @@ A Gaussian Process (GP) is a collection of an infinite number of random variable
 p(\bm y\vert\bm X)=\int p(\bm y\vert \bm f)p(\bm f\vert\bm X)\text{d}f
 \end{equation}
 
-Where $\bm X$ are the query points, $\bm f$ a function sampled from the GP, and $\bm y$ the value of the function at the query points. By definition of GP, all the distributions in equation \ref{eq:gp_marg} are Gaussian, since the Gaussian distribution is self-conjugate\footnote{referring to equation \ref{eq:map}, the prior is said to be conjugate to the likelihood if the posterior has the same algebraic form of the prior; the Gaussian distribution is self-conjugate, because a Gaussian prior with a Gaussian likelihood results in a Gaussian posterior. Conjugate distributions are mostly used for algebraic convenience.}. Simplistically, a GP is just a way of computing the mean and covariance of $\bm f$ given $\bm X$, i.e. $p(\bm f\vert\bm X)$; $\bm f$ is then a multivariate Gaussian, which we can manipulate as usual.
+\noindent where $\bm X$ are the query points, $\bm f$ a function sampled from the GP, and $\bm y$ the value of the function at the query points. By definition of GP, all the distributions in equation \ref{eq:gp_marg} are Gaussian, since the Gaussian distribution is self-conjugate\footnote{referring to equation \ref{eq:map}, the prior is said to be conjugate to the likelihood if the posterior has the same algebraic form of the prior; the Gaussian distribution is self-conjugate, because a Gaussian prior with a Gaussian likelihood results in a Gaussian posterior. Conjugate distributions are mostly used for algebraic convenience.}. Simplistically, a GP is just a way of computing the mean and covariance of $\bm f$ given $\bm X$, i.e. $p(\bm f\vert\bm X)$; $\bm f$ is then a multivariate Gaussian, which we can manipulate as usual.
 
 Consider the setting of ridge regression described in section \ref{sec:ridge}, where $\bm y=f(\bm X;\bm\theta)=\bm\Phi\bm\theta$, with $\bm\Phi$ being the design matrix. Recall that in section \ref{sec:regression_fit} we introduced the Maximum A Posteriori estimation method by using a prior distribution on the model parameters $\bm\theta$; this makes $\bm y$ a random variable itself. If we use an isotropic Gaussian for $\bm\theta$, we have that the distribution of $\bm y$ is again Gaussian with mean
 
@@ -673,7 +683,7 @@ Consider the setting of ridge regression described in section \ref{sec:ridge}, w
 =\alpha^{-1}\bm\Phi^\intercal\bm\Phi=\bm K
 \end{equation}
 
-Where $\alpha$ is the precision of the prior on $\bm\theta$. This is a simple GP with zero mean, and whose covariance between any two points can be computed as the dot product of their features.
+\noindent where $\alpha$ is the precision of the prior on $\bm\theta$. This is a simple GP with zero mean, and whose covariance between any two points can be computed as the dot product of their features.
 
 In general, we can use any function $k$ to compute the covariance between two input points, as long as the resulting matrix $\bm K$, with $K_{ij}=k(\bm x_i,\bm x_j)$ is symmetric and positive semi-definite\footnote{this means that $\bm K^\intercal=\bm K$ and $\bm v^\intercal\bm K\bm v\geq 0$ for any $\bm X$ (used to compute $\bm K$) and $\bm v$. This condition is necessary for $\bm K$ to be a valid covariance matrix}. We call any such function  \emph{kernel}, a function $k:\mathbb{R}^d\times\mathbb{R}^d\rightarrow\mathbb{R}$ that, intuitively, expresses the similarity of any two input vectors. Mercer's theorem guarantees that for every symmetric positive-definite kernel there exists a basis function $\phi$, such that the kernel corresponds to the dot product in the space generated by $\phi$. In practice, this means that we do not have to explicitly define $\phi$, and that we can even use basis functions that create an infinite dimensional space. Commonly used kernels are the radial basis function kernel:
 
@@ -810,7 +820,7 @@ Following, we describe the instruments used to collect the measurements (section
         \begin{subfigure}[c]{0.48\textwidth}
         \centering
 		\includegraphics[width=\textwidth]{images/cabauw_tower}
-		\caption{The main mast}
+		\caption{The main mast rising from the morning fog}
 		\label{fig:cabauw_main_mast}
     \end{subfigure}
     \hfill
@@ -938,7 +948,7 @@ Since the turbulent fluxes and the friction velocity are measured at the surface
 The Obukhov length is computed as in equation \ref{eq:most_l}, reported here:
 
 $$
-L=-\frac{u_*^3 T_v}{\kappa g \overline{w'\theta_v}}
+L=-\frac{u_*^3 T_v}{\kappa g \overline{w'\theta^\prime_v}}
 $$
 
 The flux of virtual potential temperature can be computed following the formulas in section \ref{sec:most}, as the data contains all the necessary quantities; $u_*$ is given, as well as the specific humidity and the pressure. The Obukhov length is computed at each height level using the corresponding air temperature measurement, and the fluxes measured at the surface.
@@ -1042,7 +1052,7 @@ a(1-c^2\xi)^d & \xi<0 \\
 \end{cases}
 \end{equation}
 
-Where $a$ is close to 1, $b$ is positive, and $d$ is negative. Since $d$ is negative, the base of the power must be positive, hence the squared $c$. Following the approach outlined in section \ref{sec:regression_fit}, the coefficients $a$, $b$, $c$ and $d$ can be found by minimizing the L2-regularized mean squared error using equations \ref{eq:least_squares_gradient} and \ref{eq:least_squares_hessian}; in this case, the parameter vector is $\bm\theta=\left[a,b,c,d\right]^\intercal$. The gradient of \ref{eq:phi_general} is:
+\noindent where $a$ is close to 1, $b$ is positive, and $d$ is negative. Since $d$ is negative, the base of the power must be positive, hence the squared $c$. Following the approach outlined in section \ref{sec:regression_fit}, the coefficients $a$, $b$, $c$ and $d$ can be found by minimizing the L2-regularized mean squared error using equations \ref{eq:least_squares_gradient} and \ref{eq:least_squares_hessian}; in this case, the parameter vector is $\bm\theta=\left[a,b,c,d\right]^\intercal$. The gradient of \ref{eq:phi_general} is:
 
 
 \begin{align}
@@ -1068,7 +1078,7 @@ Where $a$ is close to 1, $b$ is positive, and $d$ is negative. Since $d$ is nega
 \end{bmatrix}
 \end{equation}
 
-Analytical computation of the Hessian allows us to use the Newton conjugate gradient descent algorithm, which provides super-linear convergence rate, unlike other conjugate gradient methods whose rate of convergence is only linear \citep{numopt}. This model is then fitted to the data using L2 regularization, and evaluated as the other regression models.
+Analytical computation of the Hessian allows us to use the Newton conjugate gradient descent algorithm, which provides super-linear convergence rate, unlike other conjugate gradient methods whose rate of convergence is only linear \citep{numopt}. This model is then fitted to the data using L2 regularization, and evaluated as the other regression models. In the remainder of the report, we will refer to this model as the \emph{MOST Estimator}.
 
 \section{Model Fitting}
 \label{sec:model_fit}
@@ -1104,7 +1114,7 @@ This method is not robust to outliers, since they heavily affect mean and standa
 
 The models that we use are ridge regression, k-nearest neighbors, gradient boosted trees, and neural networks. Due to the size of the dataset, we cannot use kernel-based algorithms such as SVM and Gaussian Processes, as they require $\Theta(N^2)$ memory to store the kernel matrix, and $O(N^3)$ time to invert it.
 
-All models but neural networks are fitted using nested cross validation with random hyper-parameter search. This procedure detailed in section \ref{sec:perf_eval}, but we list here the distributions of the hyper-parameters that we use in the random search:
+All models are fitted using nested cross validation with random hyper-parameter search. This procedure detailed in section \ref{sec:perf_eval}, but we list here the distributions of the hyper-parameters that we use in the random search:
 
 \begin{itemize}
 \item Ridge regression and Monin-Obukhov estimator: the only hyper-parameter to tune is the regularization coefficient, for which we use a log$_{10}$-uniform distribution\footnote{a random variable $X$ has a log$_\beta$-uniform distribution from $\beta^a$ to $\beta^b$ if $\log_\beta X$ is uniformly distributed between $a$ and $b$. Equivalently, if $Y$ is uniform between $a$ and $b$, then $\beta^Y$ is log$_\beta$-uniform.} from $10^{-6}$ to $10^{1}$.
@@ -1123,7 +1133,7 @@ We use log-uniform distributions for parameters with a high range of possible va
 \begin{tabularx}{\textwidth}{r|l|X}
 \toprule
 \textbf{Hyper-parameter} & \textbf{Distribution} & \textbf{Values} \\ \midrule
-Number of estimators & Log$_{10}$-uniform & From $10^1$ to $10^4$ \\
+Number of estimators & Log$_{10}$-uniform & From $10^1$ to $10^3$ \\
 Learning rate & Log$_{10}$-uniform & From $10^{-3}$ to $10^0$ \\
 Number of features & Uniform & All possible values \\
 Maximum depth & Uniform & From 4 to 12 \\
@@ -1138,18 +1148,16 @@ $\delta$ (for the Huber loss) & Uniform & From 1\% to 99\% \\
 
 \section{Performance Evaluation}
 \label{sec:perf_eval}
-The goal of performance evaluation is to obtain a realistic and unbiased estimate of the performance of a model on unseen data. Because the Monin-Obukhov similarity theory is only valid in the $-2\leq\xi\leq1$ range, we will use this data as the primary target for evaluation. We will also evaluate the models on the full dataset, to see what kind of performance can be expected outside of the typical range where the similarity theory is employed.
+The goal of performance evaluation is to obtain a realistic estimate of the performance of a model on unseen data. Because the similarity theory is only valid in the $-2\leq\xi\leq1$ range, we will use this data as the primary target for evaluation. We will also evaluate the models on the full dataset, to see what kind of performance can be expected outside of the typical range where the similarity theory is employed.
 
 \subsection{Evaluation Procedure}
-The two research questions require different evaluation procedures. The first question essentially entails finding what kind of performance is possible to achieve: this is best done using nested cross-validation, so that this estimate is not biased. The second research question is about comparing alternatives: in this case, we use repeated cross-validation to obtain estimates with lower variance. In both cases we use random search \citep{random_search} to optimize the hyper-parameters of the models.
+The two research questions require different evaluation procedures. The first question essentially entails finding what kind of performance is possible to achieve: this is best done using nested cross-validation, so that the estimate is not biased. The second research question is about comparing alternatives: in this case, we use repeated cross-validation to obtain estimates with lower variance. In both cases we use random search \citep{random_search} to optimize the hyper-parameters of the models.
 
-For nested cross-validation, we use 10 outer folds and 10 inner folds, and try 10 random hyper-parameter combinations. Since we have 2 datasets and $5\cdot2$ feature sets, every model is fit a total of $2\cdot5\cdot2\cdot(10\cdot10\cdot10+10)=20200$ times. For repeated cross-validation, we use 10 folds and 25 hyper-parameters combinations, resulting in 250 fittings.
+For nested cross-validation, we use 10 outer folds and 10 inner folds, and try 10 random hyper-parameter combinations. Since we have 2 datasets and $5\cdot2$ feature sets, every model is fit a total of $2\cdot5\cdot2\cdot(10\cdot10\cdot10+10)=20200$ times. For repeated cross-validation, we use 10 folds and 25 hyper-parameters combinations, and repeat the procedure 5 times, resulting in 1250 fittings.
 
-todo how many repeats? better be fixed!
+According to the model and its hyper-parameters, fitting can take from a few seconds up to 8 hours or more; in order to reduce the total time needed, we implemented both plain and nested cross validation using Apache Spark \citep{spark}. Since the number of stragglers is very low\footnote{for gradient boosted trees, the slowest method, the median fitting time in our experiments is around a minute, the third quartile is around ten minutes, and the maximum is between 8 and 12 hours}, running multiple cross validation jobs at the same time can reduce the duration of the whole process by five to ten times.
 
-According to the model and its hyper-parameters, fitting can take from a few seconds up to more than 24 hours; in order to make the process feasible, we implemented algorithm \ref{alg:nested_cv} using Apache Spark \citep{spark}. Since the number of stragglers is very low\footnote{for gradient boosted trees, the slowest method, the median fitting time in our experiments is around half a minute, the third quartile is around ten minutes, and the maximum is between 20 and 30 hours}, running multiple nested cross validation jobs at the same time can reduce the duration of the whole process by five to ten times.
-
-A fundamental assumption underlying hold-out evaluation methods is that the samples in the training set are independent and identically distributed, so that the distribution in the two partitions are equal. This is not our case, since there is a inherent time dependency in the data, meaning that samples obtained close in time are very similar. This can be confirmed by training and evaluating a k-nearest neighbors classifier with $k=1$ on random splits: the resulting mean squared error is in the order of $10^{-3}$, which is clearly unrealistic. To circumvent this problem, the CV folds are created on \emph{months}: all the samples in a given month and year are either in the training set or in the validation set. We choose months instead of days because the weather often does not change significantly in the span of 24 hours, whereas in a month there are around three weeks worth of samples that are independent from the conditions at the start and end of the month.
+A fundamental assumption underlying hold-out evaluation methods is that the samples in the training set are independent and identically distributed, so that the distribution in the two partitions are equal. This is not our case, since there is a inherent time dependency in the data, meaning that samples obtained close in time are very similar. This can be confirmed by training and evaluating a k-nearest neighbors classifier with $k=1$ on random splits: the resulting mean squared error is in the order of $10^{-3}$, which is clearly unrealistic. To circumvent this problem, the CV folds are created on \emph{months}: all the samples in a given month/year combination are either in the training set or in the validation set. We choose months instead of days because the weather often does not change significantly in the span of 24 hours, whereas in a month there are around three weeks worth of samples that are independent from the conditions at the start and end of the month.
 
 \subsection{Evaluation Metrics}
 The main evaluation metric is the mean squared error, since that is what we are optimizing for, but we compute other metrics in the outer cross validation loop to get a more complete idea of the performance of the estimators:
@@ -1166,60 +1174,60 @@ $$
 $$
 \end{itemize}
 
-Where $f_n$ is the predicted value for the test sample $\bm x_n$ with true value $t_n$, the squared error is $(f_n-t_n)^2$, the absolute error is $\vert f_n-t_n\vert$, the absolute percent error is $100\vert 1-f_n/t_n\vert$. We present both mean and median scores because the former are heavily skewed by outliers. We also present both absolute and percent errors because the latter are easier to interpret, but tend to explode when the true value is very small,\footnote{predicting 1 for a true value of 100 gives a percent error of 99\%, but predicting 100 for a true value of 1 gives, somewhat unfairly, a percent error of 9900\%, whereas their absolute error is identical.} a condition that frequently happens in our dataset.
+\noindent where $f_n$ is the predicted value for the test sample $\bm x_n$ with true value $t_n$, the squared error is $(f_n-t_n)^2$, the absolute error is $\vert f_n-t_n\vert$, and the absolute percent error is $100\vert 1-f_n/t_n\vert$. We present both mean and median scores because the former are heavily skewed by outliers. We also present both absolute and percent errors because the latter are easier to interpret, but tend to explode when the true value is very small,\footnote{predicting 1 for a true value of 100 gives a percent error of 99\%, but predicting 100 for a true value of 1 gives, somewhat unfairly, a percent error of 9900\%, whereas their absolute error is identical.} a condition that happens frequently in our dataset.
 
 
 \section{Success Criteria}
 \label{sec:success}
 The differences needed to answer the research questions are quantified using the effect size as described in section \ref{sec:effect_size}. We prefer the effect size over the mean MSE because the effect size allows us to consider the standard deviation of the MSE, as well as its mean; this could lead us to prefer models with slightly worse average MSE, but more consistent and reliable performances (i.e. smaller standard deviation). Since we are looking for an improvement, we compute the right 95\% confidence interval for the population effect size. In other words, besides providing a point estimate for the population effect size $\delta_{pop}$, we also provide an interval $[\delta_{low}, \infty)$ that contains it 95\% of the times. We say the treatment is better if $\delta_{low}>0$, and the best treatment is the one with the largest $\delta_{low}$.
 
-A successful answer to the first research question entails finding a model whose mean squared error on any feature set, with or without trend, is smaller than the mean squared error of the MOST estimator introduced in section \ref{sec:most_fit}. The second research question is answered by comparing the mean squared error obtained on the ten feature sets (F1 to F5, with and without trend). This comparison is done using the model that achieved the best performance when answering the first research question, and, in order to increase the reliability of our estimates, we repeat the cross validation procedure 5 times for each combination of features and trend.
+A successful answer to the first research question entails finding a model whose mean squared error on any feature set, with or without trend, is smaller than the mean squared error of the MOST estimator introduced in section \ref{sec:most_fit}. The second research question is answered by comparing the mean squared error obtained on the ten feature sets (F1 to F5, with and without trend). This comparison is done using the model that achieved the best performance when answering the first research question.
 
-Note that we cannot use the output of a model to obtain the importance of the features, as this method is not reliable when some of them are correlated \citep{rf_bias,rf_corr_imp}, which is a very relevant issue in our case. Trivially, wind speed and temperature at the different levels are very strongly correlated (Pearson's $r$ is above 0.95), and there are other, more complex, correlations, such as between the net radiation and the soil heat flux, or between the soil temperature and the dew point (Pearson's $r$ is respectively 0.75 and 0.79). In spite of the correlations, all these variables contribute to the flux-profile relationships, often in very nuanced ways.
+Note that we cannot use the output of a model to obtain the importance of the features, as this method is not reliable when some of them are correlated \citep{rf_bias,rf_corr_imp}, which is a very relevant issue in our case. Trivially, the wind speeds at different levels are very strongly correlated (Pearson's $r$ is above 0.95), and there are other, more complex, correlations, such as between the net radiation and the soil heat flux, or between the soil temperature and the dew point (Pearson's $r$ is respectively 0.75 and 0.79).
 
 \chapter{Results}
 \label{ch:results}
 
 This chapter presents the results obtained following the procedures outlined in chapter \ref{ch:method}. Section \ref{sec:eda} describes the dataset and shows some of its peculiarities, then section \ref{sec:res_gradient} identifies the best method to compute the gradient of the profile, finally section \ref{sec:most_res} shows the momentum flux-profile relationship obtained on the dataset and its predictions from the estimators we discussed previously.
 
-All the processing was done using the Python programming language\footnote{\url{https://www.python.org/}} and the usual Data Science library stack, in no particular order: Pandas \citep{pandas}, scikit-learn \citep{sklearn}, SymPy \citep{sympy}, Matplotlib \citep{matplotlib}, Seaborn\footnote{\url{https://doi.org/10.5281/zenodo.883859}}, NumPy \citep{numpy}, Jupyter Notebook \citep{jupyter}, IPython \citep{ipython}, Spark \citep{spark}, with the crucial support of Hopsworks \citep{hops}
+All the processing was done using the Python programming language\footnote{\url{https://www.python.org/}} version 3.6.5, and the usual Data Science stack, in no particular order: Pandas 0.23.0 \citep{pandas}, scikit-learn 0.19.1 \citep{sklearn}, SymPy 1.1.1 \citep{sympy}, Matplotlib 2.2.2 \citep{matplotlib}, Seaborn 0.8.1 \footnote{\url{https://doi.org/10.5281/zenodo.883859}}, NumPy 1.14.2 \citep{numpy}, Jupyter Notebook 5.5.0 \citep{jupyter}, IPython 6.4.0 \citep{ipython}, Spark 2.2.0 \citep{spark}, with the crucial support of Hopsworks \citep{hops}
 
 
 \section{Exploratory Data Analysis}
 \label{sec:eda}
 The dataset consists of 17 years of measurements, from January 2001 to December 2017, for a total of 3,436,416 observations. The Cesar database contains one tar-gzipped archive for every month, whose content is a single data file in the netCDF format \citep{netcdf}. The archives contain a subset of related variables, and we used the datasets containing surface fluxes, tower meteorological profiles, meteorological surface  data, and soil heat, for a total of 816 datasets covering 204 months.
 
-Unfortunately, most of these observations contain unreliable measurements, as detailed in section \ref{sec:data_filter}, leaving only  1,561,973 usable records. Additionally, the turbulent fluxes measured in March 2016 exhibit a much wider range than the March measurements of other years. Roughly 15 to 20\% of the measurements in that month are suspicious; since the Cesar database contains a separate dataset every month, we decided to completely exclude the dataset of March 2016, fearing for a systematic error somewhere in the process. Moreover, 6 measurements of the turbulent latent heat are way above the acceptable range, 4,538 do not have a dew point, and 247,656 do not have a soil temperature; this leaves 1,308,362 usable records. Table \ref{tbl:col_summary} summarizes the weather parameters that were used to compute the similarity functions and/or as features for the models, and table \ref{tbl:col_gapfilled} presents the number of observations that were gap-filled with each method, for the measurements for which this information was provided.
+Unfortunately, most of these observations contain unreliable measurements, as per section \ref{sec:data_filter}, leaving only  1,561,973 usable records. Additionally, the turbulent fluxes measured in March 2016 exhibit a much wider range than the March measurements of other years. Roughly 15 to 20\% of the measurements in that month are suspicious; since the Cesar database contains a separate dataset every month that is manually reviewed, we decided to completely exclude the dataset of March 2016, fearing for a systematic error somewhere in the process. Moreover, 6 measurements of the turbulent latent heat are way above the acceptable range, 4,538 do not have a dew point, and 247,656 do not have a soil temperature; this leaves 1,308,362 usable records. Table \ref{tbl:col_summary} summarizes the weather parameters that were used to compute the similarity functions and/or as features for the models, and table \ref{tbl:col_gapfilled} presents the number of observations that were gap-filled with each method, for the measurements for which this information was provided.
 
-\begin{table}[]
+\begin{table}[p]
 \centering
 \caption{Basic descriptive statistics of the features in the Cesar database, except for the air density and virtual air temperature, which were computed by us.  Note that the relative humidity was computed by the Cesar consortium using values from other measurements, and 16,833 records  (1.3\%) have a relative humidity above 100\%.}
 \label{tbl:col_summary}
-\begin{tabular*}{\textwidth}{l| @{\extracolsep{\fill}} rrrrrrr}
+\begin{tabular*}{\textwidth}{l| @{\extracolsep{\fill}} rrrrrrrr}
 \toprule
-& \textbf{Mean} & \textbf{Std.} & \textbf{Min.} & \textbf{25\%} & \textbf{50\%} & \textbf{75\%} & \textbf{Max.} \\ \midrule
-\textbf{$H$} & 3.7 & 47.3 & -460.0 & -25.8 & -14.7 & 28.2 & 479.6 \\
-\textbf{$\lambda E$} & 74.7 & 114.9 & -534.8 & -4.9 & 23.8 & 132.9 & 6,940.8 \\
-\textbf{$u_*$} & 0.3 & 0.1 & 0.1 & 0.2 & 0.3 & 0.4 & 1.8 \\
-\textbf{Wind Speed} & 5.9 & 2.6 & 1.0 & 4.0 & 5.4 & 7.2 & 29.4 \\
-\textbf{Air Temp.} & 284.7 & 6.4 & 259.6 & 280.1 & 284.8 & 289.4 & 306.9 \\
-\textbf{Soil Temp.} & 284.4 & 5.7 & 271.9 & 279.6 & 284.3 & 289.1 & 302.6 \\
-\textbf{Dew Point} & 280.3 & 6.1 & 188.0 & 276.6 & 280.6 & 284.7 & 296.7 \\
-\textbf{Spec. Hum.} & 6.6 & 2.5 & -0.9 & 4.8 & 6.4 & 8.3 & 17.8 \\
-\textbf{Rel. Hum.} & 76.5 & 15.2 & 0.0 & 66.9 & 79.2 & 88.3 & 133.7 \\
-\textbf{Air Press.} & 1,009.6 & 69.0 & 960.9 & 1,008.3 & 1,014.8 & 1,020.7 & 1,046.4 \\
-\textbf{Rain Amount} & 0.0 & 0.1 & 0.0 & 0.0 & 0.0 & 0.0 & 15.1 \\
-\textbf{$CO_2$ Flux} & -0.1 & 0.3 & -7.5 & -0.2 & 0.0 & 0.1 & 6.1 \\
-\textbf{Soil Heat Flux} & 2.9 & 15.6 & -77.8 & -6.5 & -0.7 & 8.9 & 1,139.0 \\
-\textbf{Net Rad.} & 81.8 & 167.2 & -158.5 & -35.4 & -3.0 & 172.5 & 7,775.4 \\
-\textbf{Air Dens.} & 0.3 & 0.1 & 0.1 & 0.2 & 0.3 & 0.3 & 2.8 \\
-\textbf{Virt. Air Temp.} & 1,443.8 & 454.9 & 124.8 & 1,104.2 & 1,391.0 & 1,753.2 & 3,506.0 \\
+& \textbf{Mean} & \textbf{Std.} & \textbf{Min.} & \textbf{25\%} & \textbf{50\%} & \textbf{75\%} & \textbf{Max.} & \textbf{UoM} \\ \midrule
+\textbf{$H$} & 3.7 & 47.3 & -460.0 & -25.8 & -14.7 & 28.2 & 479.6 & \si{\watt\per\square\meter} \\
+\textbf{$\lambda E$} & 74.7 & 114.9 & -534.8 & -4.9 & 23.8 & 132.9 & 6,940.8 & \si{\watt\per\square\meter} \\
+\textbf{$u_*$} & 0.3 & 0.1 & 0.1 & 0.2 & 0.3 & 0.4 & 1.8 & \si{\meter\per\second} \\
+\textbf{Wind Speed} & 5.9 & 2.6 & 1.0 & 4.0 & 5.4 & 7.2 & 29.4 & \si{\meter\per\second} \\
+\textbf{Air Temp.} & 284.7 & 6.4 & 259.6 & 280.1 & 284.8 & 289.4 & 306.9 & \si{\kelvin} \\
+\textbf{Soil Temp.} & 284.4 & 5.7 & 271.9 & 279.6 & 284.3 & 289.1 & 302.6 & \si{\kelvin} \\
+\textbf{Dew Point} & 280.3 & 6.1 & 188.0 & 276.6 & 280.6 & 284.7 & 296.7 & \si{\kelvin} \\
+\textbf{Spec. Hum.} & 6.6 & 2.5 & -0.9 & 4.8 & 6.4 & 8.3 & 17.8 & \num{1e-3} \\
+\textbf{Rel. Hum.} & 76.5 & 15.2 & 0.0 & 66.9 & 79.2 & 88.3 & 133.7 & \si{\percent} \\
+\textbf{Air Press.} & 1,009.6 & 69.0 & 960.9 & 1,008.3 & 1,014.8 & 1,020.7 &  1,046.4 & \si{\hecto\pascal}\\
+\textbf{Rain Amount} & 0.0 & 0.1 & 0.0 & 0.0 & 0.0 & 0.0 & 15.1 & \SI{6}{\milli\meter\per\hour} \\
+\textbf{$CO_2$ Flux} & -0.1 & 0.3 & -7.5 & -0.2 & 0.0 & 0.1 & 6.1 & \si{\milli\gram\per\square\meter\per\second} \\
+\textbf{Soil Heat Flux} & 2.9 & 15.6 & -77.8 & -6.5 & -0.7 & 8.9 & 1,139.0 & \si{\watt\per\square\meter}\\
+\textbf{Net Rad.} & 81.8 & 167.2 & -158.5 & -35.4 & -3.0 & 172.5 & 7,775.4 & \si{\watt\per\square\meter}\\
+\textbf{Air Dens.} & 0.3 & 0.1 & 0.1 & 0.2 & 0.3 & 0.3 & 2.8 & \si{\kilo\gram\per\cubic\meter} \\
+\textbf{Virt. Air T.} & 1,443.8 & 454.9 & 124.8 & 1,104.2 & 1,391.0 & 1,753.2 & 3,506.0 & \si{\kelvin} \\
 \bottomrule
 \end{tabular*}
 \end{table}
 
 
-\begin{table}[]
+\begin{table}[p]
 \centering
 \caption{Number of measurements by gap filling method, for the quantities that have this information. Due to inconsistencies in the Cabauw Documentation \citep{cabauw_gapfilling}, we cannot be sure of the meaning of the columns, but this is our interpretation: 0 - Unknown, 2 - Cabauw In situ (i.e. from the masts, not gapfilled), 3 - Automatic Weather Station in Cabauw (also not gapfilled, but sometimes secondary source), 4 - Computed from profiles, 5 - Interpolated, 6 - Cabauw-based model, 7 - De Bilt-based model. As the net radiation cannot be obtained from the profiles, we think that sources 4 and 5 for this quantity are mistakes, and should respectively be 6 and 7.}
 \label{tbl:col_gapfilled}
@@ -1242,10 +1250,7 @@ Unfortunately, most of these observations contain unreliable measurements, as de
 \end{table}
 
 
-
-Figure \ref{fig:le_season} shows the turbulent latent heat flux versus hour of day both in Winter and Summer, whereas figure \ref{fig:ustar_wind_temp} shows the friction velocity as a function of air temperature and wind speed. The dependency of $u_*$ with the wind speed of figure \ref{fig:ustar_wind} is quite complicated: there are three clear regions with different constant of proportionality and correlation coefficient. The group where the two quantities are almost perfectly correlated corresponds to imputed values for the friction velocity, derived from the wind speed. The three other groups differ widely in the values of the fluxes and radiation; for example, fitting an ordinary least squares model to 1000 bootstraps of the observations with negative net radiation yields an average proportionality coefficient of \num{0.051} with standard deviation \num{1.52e-05}, whereas the same procedure on the complementary set yields an average of \num{0.046} with standard deviation \num{1.40e-05}. Note that this dependency might be related to the observed imbalance in the surface energy budged, usually around 15\% during day time and 100\% during night time at the Cabauw observatory; \cite{cabauwinsitu} notes that the imbalance seems to depend on the speed of wind.
-
-\begin{figure}
+\begin{figure}[p]
     \centering
     \begin{subfigure}[t]{0.48\textwidth}
         \centering
@@ -1265,32 +1270,33 @@ Figure \ref{fig:le_season} shows the turbulent latent heat flux versus hour of d
 \end{figure}
 
 
-\begin{figure}
+\begin{figure}[p]
     \centering
     \begin{subfigure}[t]{0.48\textwidth}
         \centering
         \includegraphics[width=\textwidth]{images/ustar_temp}
-        \caption{Temperature}
+        \caption{Air temperature. }
         \label{fig:ustar_temp}
     \end{subfigure}
     \hfill
     \begin{subfigure}[t]{0.48\textwidth}
         \centering
         \includegraphics[width=\textwidth]{images/ustar_wind}
-        \caption{Wind}
+        \caption{Wind, and eyeballed line fits for different groups of data. The legend shows the equation of the lines from highest to lowest.}
         \label{fig:ustar_wind}
     \end{subfigure}
-    \caption{Friction velocity versus temperature (left) and wind speed (right). There is a clear subgroup where the wind and $u^*$ are almost perfectly correlated; this is because of the gap-filling technique discussed in section \ref{sec:gap_filling}. Additionally, there are three subgroups with different regression line fit; they differ widely in fluxes, radiation, and altitude (since $u_*$ is computed at the surface, the intercept is different, because wind speed tends to be positively correlated with altitude).}
+    \caption{Friction velocity versus air temperature (left) and wind speed (right). Figure \ref{fig:ustar_wind} shows four distinct groups of data with different proportionality between $\overline{u}$ and $u_*$. The solid line shows almost perfect correlation: this is because of the gap-filling technique discussed in section \ref{sec:gap_filling}. The samples in the three other groups differ widely in fluxes, radiation, and altitude.}
 	\label{fig:ustar_wind_temp}
 \end{figure}
 
 
+\begin{figure}[p]
+    \centering
+	\includegraphics[width=\textwidth]{images/cyclone_jeanett}
+	\caption{Wind speed measurements during Cyclone Jeanett, which struck north-west Europe in October 2002, causing 33 fatalities. Every line corresponds to a different altitude, with brighter colors for higher altitudes. The top speed registered at Cabauw is \SI{35.2}{\meter\per\second}, but the cyclone registered winds up to \SI{42.5}{\meter\per\second} in other parts of Europe!}
+	\label{fig:cyclone_jeanett}
+\end{figure}
 
-Figure \ref{fig:tsne} shows the result of the t-SNE dimensionality reduction algorithm \citep{tsne} applied to 250,000 samples (19.2\% of the total), using the same features of table \ref{tbl:col_summary}, plus $z$, $L$, $\xi$, the wind and virtual temperature gradients, $\phi_m$, the month of the year and hour of day. The 250,000 samples were chosen uniformly at random and standardized with equation \ref{eq:standardization} before fitting, but the colors were computed using the raw features on a perceptually uniform color scale, after excluding the top and bottom 1\% values. Overall, the points cluster in a relatively uniform blob, which is not surprising once you consider that the measurements were taken continuously, meaning that all physical quantities change smoothly, thus all points close in time are also close in feature space.
-
-The colors reveal some structure, though: the left-hand side of the blob contain measurements taken in the Summer, and the right-hand side contains measurement in Winter (see the air temperature in figure \ref{fig:tsne_temp} and month in figure \ref{fig:tsne_month}). Moreover, unstable conditions are clustered in a stripe, centered vertically, that runs from left to right (see the fluxes of figures \cref{fig:tsne_H,fig:tsne_LE,fig:tsne_soilheat}, the radiation in figure \ref{fig:tsne_netrad}, and the hour of day in figure \ref{fig:tsne_hday}). In figure \ref{fig:tsne_z} we also a see cluster on the top with all the observations at 40 meters, whereas the two lower levels are mixed somewhat uniformly in the bottom part of the plot.
-
-Finally, figure \ref{fig:tsne_clus} shows the result of k-means clustering in the standardized feature space, using $k=2$ (blue/orange) and $k=4$ (the four shades). This clustering is consistent with the qualitative division above, with the dark orange and blue clusters corresponding to Summer and Winter respectively, light orange corresponding to unstable conditions with considerable vertical movement of air, and light blue corresponding to strong horizontal winds with little movement in the vertical. Stably stratified conditions seem to occur at the boundary of the blob, where $\phi_m$ takes the highest values (see figure \ref{fig:tsne_phi_m}). This is also not surprising, since stable stratification tend to happen at night throughout the year, unlike free convection or z-less scaling, which only happen in specific conditions.
 
 \begin{figure}
 \subcaptionbox{Air Dens.\label{fig:tsne_air_dens}}{\includegraphics[width=0.25\textwidth]{images/tsne_air_dens}}\hfill
@@ -1328,15 +1334,14 @@ Finally, figure \ref{fig:tsne_clus} shows the result of k-means clustering in th
 \end{figure}
 
 
+
+Figure \ref{fig:le_season} shows the turbulent latent heat flux versus hour of day both in Winter and Summer, whereas figure \ref{fig:ustar_wind_temp} shows the friction velocity as a function of air temperature and wind speed. The dependency of $u_*$ with the wind speed of figure \ref{fig:ustar_wind} is quite complicated: there are three clear regions with different constant of proportionality and correlation coefficient. The group where the two quantities are almost perfectly correlated corresponds to imputed values for the friction velocity, derived from the wind speed. The three other groups differ widely in the values of the fluxes and radiation; for example, fitting an ordinary least squares model to 1000 bootstraps of the observations with negative net radiation yields an average proportionality coefficient of \num{0.051} with standard deviation \num{1.52e-05}, whereas the same procedure on the complementary set yields an average of \num{0.046} with standard deviation \num{1.40e-05}. Note that this dependency might be related to the observed imbalance in the surface energy budged, usually around 15\% during day time and 100\% during night time at the Cabauw observatory; \cite{cabauwinsitu} notes that the imbalance seems to depend on the speed of wind.
+
+
 Talking about speed of wind, figure \ref{fig:ustar_wind} shows some measurements exceeding \SI{25}{\meter\per\second}; according to the Beaufort scale, holding umbrellas and walking become hard at \SI{15}{\meter\per\second}. Those measurements are not issues with the data: figure \ref{fig:cyclone_jeanett} shows the highest wind speed present in the Cesar database to date, corresponding to cyclone Jeanett.
 
-\begin{figure}
-    \centering
-	\includegraphics[width=0.95\textwidth]{images/cyclone_jeanett}
-	\caption{Wind speed measurements during Cyclone Jeanett, which struck north-west Europe in October 2002, causing 33 fatalities. The top of the mast registered winds at \SI{35}{\meter\per\second}; although, in absolute terms, destructive, this cyclone registered winds up to \SI{42.5}{\meter\per\second} in other parts of Europe!}
-	\label{fig:cyclone_jeanett}
-\end{figure}
 
+Figure \ref{fig:tsne} shows the result of the t-SNE dimensionality reduction algorithm \citep{tsne} applied to 250,000 samples (19.2\% of the total), using the same features of table \ref{tbl:col_summary}, plus $z$, $L$, $\xi$, the wind and virtual temperature gradients, $\phi_m$, the month of the year and hour of day. The 250,000 samples were chosen uniformly at random and standardized with equation \ref{eq:standardization} before fitting, but the colors were computed using the raw features on a perceptually uniform color scale, after excluding the top and bottom 1\% values. Overall, the points cluster in a relatively uniform blob, which is not surprising once you consider that the measurements were taken continuously, meaning that all physical quantities change smoothly, thus all points close in time are also close in feature space. The colors reveal some structure, though: the left-hand side of the blob contain measurements taken in the Summer, and the right-hand side contains measurement in Winter (see the air temperature in figure \ref{fig:tsne_temp} and month in figure \ref{fig:tsne_month}). Moreover, unstable conditions are clustered in a stripe, centered vertically, that runs from left to right (see the fluxes of figures \cref{fig:tsne_H,fig:tsne_LE,fig:tsne_soilheat}, the radiation in figure \ref{fig:tsne_netrad}, and the hour of day in figure \ref{fig:tsne_hday}). In figure \ref{fig:tsne_z} we also a see cluster on the top with all the observations at 40 meters, whereas the two lower levels are mixed somewhat uniformly in the bottom part of the plot. Finally, figure \ref{fig:tsne_clus} shows the result of k-means clustering in the standardized feature space, using $k=2$ (blue/orange) and $k=4$ (the four shades). This clustering is consistent with the qualitative division above, with the dark orange and blue clusters corresponding to Summer and Winter respectively, light orange corresponding to unstable conditions with considerable vertical movement of air, and light blue corresponding to strong horizontal winds with little movement in the vertical. Stably stratified conditions seem to occur at the boundary of the blob, where $\phi_m$ takes the highest values (see figure \ref{fig:tsne_phi_m}). This is also not surprising, since stable stratification tend to happen at night throughout the year, unlike free convection or z-less scaling, which only happen in specific conditions.
 
 
 \section{Gradient Computation}
@@ -1503,8 +1508,6 @@ Figure \ref{fig:residuals} shows the predictions obtained with the GBT estimator
 \end{figure}
 
 
-
-
 \begin{table}
 \caption{Descriptive statistics of the best MSE achieved by each estimator, and effect size comparing it (treatment) with the MOST baseline (control); the only model which is not significantly better than the MOST baseline is Ridge on the MOST dataset.}
 \label{tbl:baseline_comparison}
@@ -1571,31 +1574,37 @@ A downside of not using micro parameters is that the resulting models do not gen
 
 
 \subsection{Training Samples}
-As mentioned earlier, having training samples from multiple sites would certainly increase the generality of the models, but there are other sources of samples that can be used. too.
+As mentioned earlier, having training samples from multiple sites would certainly increase the generality of the models, but there are other sources of samples that can be used, too.
 
 \paragraph{Surface layer:} Although the Cabauw tower takes measurements until \SI{200}{\meter}, one of the issues we had to deal with is that the height of the surface layer is difficult to determine. We chose to use the measures at 10, 20 and 40 meters only, which comprise only half of the available data. There is evidence that some of the samples at 40 meters are anomalous: in figure \ref{fig:tsne_z}, the samples at 40 meters are clearly separated from the other two levels, which are well mixed, and in figure \ref{fig:most_full} there are some outliers in the range $-20<\xi<0$ that deviate significantly from the assumed relationship. These outliers mostly belong to the \SI{40}{\meter} level. On the other hand, it is very likely that in some situations the samples at \SI{80}{\meter}, and perhaps even \SI{100}{\meter}, are in the surface layer.
 
-\paragraph{Extreme weather events:} Figure \ref{fig:cyclone_jeanett} shows the wind speed measured during cyclone Jeanett. These measurements are unique, since such extreme events are very rare in Europe todo!!
+\paragraph{Altitude levels:} In this project we used the same altitude levels at which measurements are taken at the Cabauw site. It is possible to generate synthetic samples at different altitude levels by interpolating the measures that change with height (i.e. wind speed, temperature, and humidity). This is not too hard, since we are already fitting a curve to the profiles of wind and temperature (see section \ref{sec:gradients}), and becomes essential when building a training set with samples coming from different sources, and when training a model to be included in a simulation. For example, the atmospheric model of the GFDL-CM2 and CM3 only use wind and temperature at \SI{30}{\meter} and at the surface to compute the turbulent fluxes \citep{gfdl_am2}. One has to keep in mind, of course, that samples generated in such a way increase uncertainty in the resulting models, since the modeled profile might be different from the actual profile.
 
-\paragraph{Altitude levels:} In this project we used the same altitude levels at which measurements are taken at the Cabauw site. It is possible to generate synthetic samples at different altitude levels by interpolating the measures that change with height (i.e. wind speed, temperature, and humidity). This is not too hard, since we are already fitting a curve to the profiles of wind and temperature (see section \ref{sec:gradients}), and becomes essential when building a training set with samples coming from different sources, since it is unlikely that they all use the same altitude levels. One has to keep in mind, of course, that samples generated in such a way increase uncertainty in the resulting models, since the modeled profile might be different from the actual profile.
+\paragraph{Surface type:} Most GCMs use different parametrizations for land, ocean and sea-ice \citep{gfdl_am2,gfdl_am3,hadcm3}, since they behave very differently. This project was focused on land, but the same methodology can be used to develop models that work for the other surface types, too.
+
+\paragraph{Extreme weather events:} Figure \ref{fig:cyclone_jeanett} shows the wind speed measured during cyclone Jeanett; these measurements are unique, since such extreme events are very rare in Europe. Figure \ref{fig:jeanett_error} shows the prediction error during this event. Although the error increases during the storm, it is still at acceptable levels. This is pleasantly surprising, but it is impossible to guarantee that the models will be this well behaved in all circumstances.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.75\textwidth]{images/jeanett_error}
+    \caption{Wind speed and squared error during cyclone Jeanett (light green is the average of the three altitude levels, solid green is a smoothed time average of that). Throughout the storm, the error is larger than the median, and many peaks are larger than the mean.}
+    \label{fig:jeanett_error}
+\end{figure}
 
 
 \subsection{Deployment}
-As mentioned in section \ref{sec:purpose}, the estimators produced in this project will form the basis of a new component in GCMs that predicts the momentum flux-profile relationship more accurately than the current state of the art.
+As mentioned in section \ref{sec:purpose}, the estimators produced in this project will form the basis of a new component in GCMs that predicts the momentum flux-profile relationship more accurately than the current state of the art. It is therefore very important to develop models that can be easily integrated with simulations.
 
 \paragraph{Technology:} The technologies (programming language, libraries and frameworks) used in this project are not necessarily the same that are used to develop in GCMs. Additional development effort is therefore needed to embed the predictors shown in this project in the simulators. To verify that this re-implementation is correct, the developers can run the same analyses that were performed in this project, and ensure they get the same results.
 
 \paragraph{Performance:} Current GCMs are computationally very demanding, and a single simulation requires weeks on specialized high performance clusters. Therefore, one of the requirements that were not considered in this project, but are of high practical relevance, is the performance of the estimator. Table \ref{tbl:baseline_comparison} shows that a simple linear model is already more accurate than the similarity theory, and in appendix \ref{apx:linear_ensemble} we further explore this aspect by presenting an ensemble of linear models whose performance rivals that of gradient boosted trees. This is a notable achievement since the predictions from a linear model is obtained with a scalar product, therefore they have the potential to compete with the similarity theory in terms of computational complexity,
-
-\paragraph{•}
-incorporate uncertainty in the model (e.g. quantile regression), then use this in the simulations to get climate uncertainty (monte carlo by sampling from prediction would be a quick and dirty way of implementing this, although it would make the simulation quite slow)
 
 
 \section{Related Work}
 todo
 \citep{cabauw_preds} predicts ustar, fluxes, wind speed etc., would be interesting to compute phim with their predictions and compare
 
-\citep{predict_micro_from_macro_sim} predicts abl parameters (ustar, fluxes etc) from macro parameters obtained from simulations. quite cool we should also try to predict using only inputs from simulations
+\citep{predict_micro_from_macro_sim} predicts abl parameters (ustar, fluxes etc) from macro parameters obtained from simulations. argues that grids in simulations are too coarse
 
 \citep{ustar_from_profile} predicts ustar from profiles (choose ustar that minimizes difference between measured and predicted profile), give only r=0.84, r=0.9 and r=0.89 for different wind directions, very similar to our sqrt(r), but they needed to use z0. they also give a method to compute confidence intervals (we can do that too!!!)
 
@@ -1605,9 +1614,9 @@ even though we predicted phim, the actual interest is in u*. we predict phim to 
 
 \citep{flux_prof_measure_issues} argues that 
 
+
 \section{Future Work}
-todo
-future work: see appendix, also test on other dataset, try inside simulations similarly to \citep{predict_micro_from_macro_sim}
+The path ahead is quite clear: by using more datasets, the models can be made general and applicable in a wider range of conditions, making them suitable to completely replace the component that predicts the turbulent fluxes in GCMs. Trying different machine learning techniques could also be important, since they can bring further performance improvements (see e.g. neural networks in appendix \ref{apx:deep_learning} and hyper-parameter optimization in appendix \ref{apx:hyperopt}). Although we focused on the momentum flux-profile relationship, the similarity theory predicts similar relationships for temperature and moisture, as well: they need to be predicted, too, in order to produce a complete replacement. We tested the estimators on their predictive power, but the real test is to actually assess their impact when used in a GCM; this will pose a further challenge, since the samples will come from imperfect and approximate simulations instead of measurement instruments.
 
 \appendix
 \chapter{Detailed Results}
@@ -1825,6 +1834,7 @@ Instead of restricting ourselves to the five feature sets, we use all the quanti
 
 
 \chapter{More Hyper-parameter Optimization}
+\label{apx:hyperopt}
 By foregoing nested cross-validation and focusing on a particular dataset (MOST) and set of features (table \ref{tbl:col_summary} without $H$ and $\lambda E$), we can reduce the computational resources needed for more involved hyper-parameter tuning procedures.
 
 \paragraph{Methods:} We optimized the hyper-parameters of extreme gradient boosted trees \citep{xgboost} using both HyperBand \citep{hyperband} and the Python library GPyOpt\footnote{\url{http://github.com/SheffieldML/GPyOpt}}. For Hyperband, we use the default parameters suggested in the paper, i.e. $\eta=3$ and $R=81$, with each unit of budget corresponding to 15 trees. The Bayesian optimization procedure is based on Gaussian Processes with the RBF kernel, using the integrated expected improvement as acquisition function. Integration is performed over the posterior of the hyper-parameters, approximated with MCMC sampling \citep{practical_gphypopt}, in order to improve the accuracy of the proposed hyper-parameters. The dataset was randomly split in three smaller sets: a training set of 162 months, a validation set of 20 months, and a test set of 20 months. The training set was used to train the models, and the hyper-parameter optimization procedure optimized the scores on the validation set; the test set is used at the end to evaluate the optimal configuration. Table \ref{tbl:hypopt_distr} shows the distribution of the hyper-parameters used in the search, and the optimal values found by the two methods.
@@ -1854,7 +1864,7 @@ Loss & Uniform & MSE or MAE & MAE & MAE \\
 
 
 
-\paragraph{Results:} The MSEs of the best configuration found by Hyperband, after 200 steps, were 0.08250, 0.1613, and 0.1676 on the training set, validation set, and test set respectively. The scores of best configuration found by GPyOpt, after 18 steps, were 0.04756, 0.1606, and 0.1670. These results are very similar to what was obtained with random search and nested cross validation.
+\paragraph{Results:} The MSEs of the best configuration found by Hyperband, after 200 steps, were 0.08250, 0.1613, and 0.1676 on the training set, validation set, and test set respectively. The scores of best configuration found by GPyOpt, after 18 steps, were 0.04756, 0.1606, and 0.1670. These results are very similar to what was obtained with random search and nested cross validation. Informal experiments show that these parameters also yield comparable performance on the full dataset.
 
 
 %\bibliographystyle{unsrt}
