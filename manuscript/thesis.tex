@@ -115,7 +115,7 @@ Finally, I cannot thank my family enough for supporting me in everything I did, 
 \pagestyle{newchap}
 
 \chapter{Introduction}
-This chapter briefly introduces the area for this project, and formally defines and motivates the problem that is tackled. Section \ref{sec:intro_bg} introduces Climate Science, Machine Learning and Data Mining, then section \ref{sec:problem} formally defines the research questions that is work sets to answer, and sections \ref{sec:goals} and \ref{sec:purpose} explain why these questions are relevant and which benefits a successful answer would bring. Next, section \ref{sec:ethics} discusses potential ethical issues and sustainability aspects of this project, then section \ref{sec:research_methodology} explains the research methodology followed to answer the research questions, and, finally, section \ref{sec:outline} describes how the remainder of the report is organized.
+This chapter briefly introduces the area for this project, and formally defines and motivates the problem that is tackled. Section \ref{sec:intro_bg} introduces Climate Science, Machine Learning and Data Mining, then section \ref{sec:problem} formally defines the research questions that is work sets to answer and why it is relevant, and section \ref{sec:goals} explains how the research questions will be answered. Next, section \ref{sec:ethics} discusses potential ethical issues and sustainability aspects of this project, then section \ref{sec:research_methodology} explains the research methodology followed to answer the research questions, and, finally, section \ref{sec:outline} describes how the remainder of the report is organized.
 
 \section{Background}
 \label{sec:intro_bg}
@@ -1513,7 +1513,7 @@ The first research question asked \emph{how can the from the Cesar database be u
 
 Table \ref{tbl:baseline_comparison} shows descriptive statistics of the MSE obtained by the best combination of features and trend, for each estimator and for each datasets, as well as the effect size comparing it with the MOST baseline. The scores were obtained with the nested cross validation procedure, and are also shown in figure \ref{fig:baseline_comparison}. Gradient boosted trees always perform significantly better than the MOST estimator, obtaining roughly half of its MSE in both datasets. Moreover, even the simple Ridge estimator managed to obtain significantly lower MSE in the MOST dataset. Table \ref{tbl:gbt_metrics} shows the values of all the evaluation metrics computed on the outer validation folds on both datasets.
 
-Figure \ref{fig:residuals} shows the predictions obtained with the GBT estimator on one of the outer validation folds, and a probability plot of the residuals. It is clear that the error is largely determined by outliers: the mean squared error of these predictions is 0.155, but only 17\% of the squared errors is larger than that, and the median is 0.028. Moreover, in figure \ref{fig:residuals_scatter} we see a tendency to overestimate small values of $\phi_m$ and underestimate large ones.
+Figure \ref{fig:residuals} shows the predictions obtained with the GBT estimator on one of the outer validation folds, and a probability plot of the residuals. It is clear that the error is largely determined by outliers: the mean squared error of these predictions is 0.155, but only 17\% of the squared errors is larger than that, and the median is 0.028. Moreover, in figure \ref{fig:residuals_scatter} we see a tendency to overestimate small values of $\phi_m$ and underestimate large ones. Appendix \ref{apx:hyps} reports the optimal hyper-parameters found during nested CV for the MOST estimator and the estimators that beat it.
 
 \begin{table}
 \caption{Descriptive statistics of the MSE achieved by each estimator with nested CV, and effect size comparing it with the MOST baseline (control). Gradient boosted trees perform better in both datasets, and Ridge regression beat the MOST estimator on the MOST dataset.}
@@ -1646,7 +1646,7 @@ As mentioned earlier, having training samples from multiple sites would certainl
 
 
 \subsection{Deployment}
-As mentioned in section \ref{sec:purpose}, the estimators produced in this project will form the basis of a new component in GCMs that predicts the momentum flux-profile relationship more accurately than the current state of the art. It is therefore very important to develop models that can be easily integrated with simulations.
+As mentioned in section \ref{sec:problem}, the estimators produced in this project will form the basis of a new component in GCMs that predicts the momentum flux-profile relationship more accurately than the current state of the art. It is therefore very important to develop models that can be easily integrated with simulations.
 
 \subsubsection{Technology:} The technologies (programming language, libraries and frameworks) used in this project are not necessarily the same that are used to develop in GCMs. Additional development effort is therefore needed to embed the predictors shown in this project in the simulators. To verify that this re-implementation is correct, the developers can run the same analyses that were performed in this project, and ensure they get the same results.
 
@@ -1680,14 +1680,58 @@ Most works are focused on the friction velocity, rather than the full momentum f
 
 \section{Future Work}
 \label{sec:future_work}
-The path ahead is quite clear: by using more datasets, the models can be made general and applicable in a wider range of conditions, making them suitable to completely replace the component that predicts the turbulent fluxes in GCMs. Trying different machine learning techniques could also be important, since they can bring further performance improvements (see e.g. neural networks in appendix \ref{apx:deep_learning} and hyper-parameter optimization in appendix \ref{apx:hyperopt}). Although we focused on the momentum flux-profile relationship, the similarity theory predicts similar relationships for temperature and moisture, as well: they need to be predicted, too, in order to produce a complete replacement. We tested the estimators on their predictive power, but the real test is to actually assess their impact when used in a GCM; this will pose a further challenge, since the samples will come from imperfect and approximate simulations instead of measurement instruments.
+The path ahead is quite clear: by using more datasets, the models can be made general and applicable in a wider range of conditions, making them suitable to completely replace the component that predicts the turbulent fluxes in GCMs. Trying different machine learning techniques could also be important, since they can bring further performance improvements. Although we focused on the momentum flux-profile relationship, the similarity theory predicts similar relationships for temperature and moisture, as well: they need to be predicted, too, in order to produce a complete replacement. We tested the estimators on their predictive power, but the real test is to actually assess their impact when used in a GCM; this will pose a further challenge, since the samples will come from imperfect and approximate simulations instead of measurement instruments.
 
-In the appendixes, we outline some experiments that were performed, and could form the basis for a more advanced application of Machine Learning to the prediction of the momentum flux-profile relationship. Appendix \ref{apx:deep_learning} approaches the problem using deep neural networks, appendix \ref{apx:linear_ensemble} uses an ensemble of linear models, and appendix \ref{apx:hyperopt} uses more advanced hyper-parameters optimization techniques.
+In appendix \ref{apx:moar}, we outline some experiments that were performed, and could form the basis for a more advanced application of Machine Learning to the prediction of the momentum flux-profile relationship.
 
 \appendix
 \addappheadtotoc
 
-\chapter{Prediction with Deep Neural Networks}
+\chapter{Hyper-Parameters}
+\label{apx:hyps}
+
+This appendix lists the hyper-parameters that were found in the nested CV procedure, as well as the MSE on the corresponding validation fold, for the MOST estimator (tables \ref{tbl:params_most_most} and \ref{tbl:params_most_full}) and those estimators that performed better than it, specifically the Ridge estimator on the MOST dataset (table \ref{tbl:params_ridge_most}) and the GBT estimator on both datasets (tables \ref{tbl:params_gbt_most} and \ref{tbl:params_gbt_full}).
+
+Regularization for the MOST estimator is always very low, in the order of $10^{-4}$ and $10^{-5}$. This is not surprising, considering its high bias. We remind the reader that the primary purpose of nested CV is \emph{not} to identify the optimal hyper-parameters; however, inspecting their values can give useful indications on possible improvements and fallacies of the algorithms.
+
+\begin{table}
+\caption{Optimized hyper-parameters and validation MSE for the MOST estimator on the MOST dataset for each outer fold of nested CV.}
+\label{tbl:params_most_most}
+\input{include/params_most_most}
+\end{table}
+
+\begin{table}
+\caption{Optimized hyper-parameters and validation MSE for the MOST estimator on the full dataset for each outer fold of nested CV.}
+\label{tbl:params_most_full}
+\input{include/params_most_full}
+\end{table}
+
+
+\begin{table}
+\caption{Optimized hyper-parameters and validation MSE for the Ridge estimator on the MOST dataset for each outer fold of nested CV.}
+\label{tbl:params_ridge_most}
+\input{include/params_ridge_most}
+\end{table}
+
+
+\begin{table}
+\caption{Optimized hyper-parameters and validation MSE for the GBT estimator on the MOST dataset for each outer fold of nested CV.}
+\label{tbl:params_gbt_most}
+\input{include/params_gbt_most}
+\end{table}
+
+\begin{table}
+\caption{Optimized hyper-parameters and validation MSE for the GBT estimator on the full dataset for each outer fold of nested CV.}
+\label{tbl:params_gbt_full}
+\input{include/params_gbt_full}
+\end{table}
+
+
+\chapter{Further Experiments}
+\label{apx:moar}
+In this appendix, we briefly describe some experiments that approach the problem using more advanced Machine Learning techniques. In section\ref{apx:deep_learning} we use deep neural networks, section \ref{apx:linear_ensemble} uses an ensemble of linear models, and section \ref{apx:hyperopt} uses more advanced hyper-parameters optimization techniques.
+
+\section{Prediction with Deep Neural Networks}
 \label{apx:deep_learning}
 The reason why this is not included in the main report is that time and resources constraint prevented a formal and thorough evaluation of these results. That said, this approach is definitely promising and worth pursuing in the future.
 
@@ -1723,7 +1767,7 @@ MOST & 0.32 & 0.18 & - & - & - & - & 0.13 \\
 
 Other experiments were performed using all the observations in the hour preceding the sample to predict, and using up to three GRU layers, followed by up to four fully connected layers, with the other parameters as detailed above. The performances were discouraging, with the network struggling to go below 0.15/0.20 training MSE and 0.7/0.8 validation MSE on F4 and full dataset.
 
-\chapter{Prediction with an Ensemble of Linear Models}
+\section{Prediction with an Ensemble of Linear Models}
 \label{apx:linear_ensemble}
 We can relax the constraints needed to answer the research questions, in particular the second one, and perform additional feature engineering. In order to minimize the computational resources needed, we apply Ridge linear regression to the MOST dataset.
 
@@ -1757,7 +1801,7 @@ Instead of restricting ourselves to the five feature sets, we use all the quanti
 
 
 
-\chapter{More Hyper-parameter Optimization}
+\section{More Hyper-parameter Optimization}
 \label{apx:hyperopt}
 By foregoing nested cross-validation and focusing on a particular dataset (MOST) and set of features (table \ref{tbl:col_summary} without $H$ and $\lambda E$), we can reduce the computational resources needed for more involved hyper-parameter tuning procedures.
 
