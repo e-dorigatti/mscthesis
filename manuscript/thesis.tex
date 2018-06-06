@@ -240,7 +240,7 @@ By definition, $\overline{a'}=0$, which means that all the effects of turbulence
 \subsection{The Boundary Layer}
 In the context of fluid dynamics, the boundary layer is the region where a fluid flows close to a solid surface. Imagine a laminar flow close to a solid surface; because of viscosity, the molecules flowing near the surface move slower, and, in the limit, the velocity of the molecules in direct contact with the surface is 0 (this is called the \emph{non-slip condition}). Thus, the velocity of the fluid increases smoothly, continuously and monotonously with the distance from the solid, until it reaches the \emph{free-flow} velocity, after which it stays constant. The region close to the surface, where the fluid moves slower, is called the \emph{boundary layer}, and is the region where the viscosity of the fluid influences its motion. Its height $\delta$ can be defined when the local velocity surpasses a certain threshold, such as 99\% of the free-flow velocity.
 
-The variation of velocity with distance from the surface, $\partial\overline{u}/\partial z$, is called \emph{shear}, and, together with viscosity, determines the materialization of turbulence in the flow. Every layer of fluid is squeezed between a faster moving layer above and a slower moving below; in high shear conditions, this causes high stress on the particles, and prevents them from moving orderly, thus leading to turbulent motion. Figure \ref{fig:bl} shows turbulence forming close to the wall in a canal, where the water flows from right to left. Viscosity and the no-slip condition prevent this phenomenon to arise in a region very close to the solid surface, called the \emph{laminar (or viscuous) sub-layer}, where we still find laminar motion.
+The variation of velocity with distance from the surface, $\partial\overline{u}/\partial z$, is called \emph{shear}, and, together with viscosity, determines the materialization of turbulence in the flow. Every layer of fluid is squeezed between a faster moving layer above and a slower moving below; in high shear conditions, this causes high stress on the particles, and prevents them from moving orderly, thus leading to turbulent motion. Figure \ref{fig:bl} shows turbulence forming close to the wall in a canal, where the water flows from right to left. Viscosity and the no-slip condition prevent this phenomenon to arise in a region very close to the solid surface, called the \emph{laminar (or viscous) sub-layer}, where we still find laminar motion.
 
 The strength of the turbulence is proportional to $u_{rms}=(\overline{u'^2})^{1/2}$, which is, in turn, proportional to the shear. Again, because of the no-slip condition, $u_{rms}$ is zero at $z=0$, increases in the laminar sub-layer, and decreases to 0 at the end of the boundary layer, assuming laminar flow outside of it. Higher free-stream velocity generates higher shear, more turbulence, and a thinner laminar sub-layer. The strength of turbulence can be written in units of velocity, resulting in the \emph{friction velocity}, computed as $u_*=(\tau/\rho)^{1/2}=(\nu\cdot\partial\overline{u}/\partial z)^{1/2}$, where $\tau$ is the shear stress, $\rho$ is the density of the fluid, $\nu=\mu/\rho$ is the kinematic viscosity, and $\mu$ the dynamic viscosity. Therefore, the friction velocity increases with shear and viscosity, and decreases with density; it is proportional to the free-stream velocity and the turbulence strength, and inversely proportional to the height of the laminar sub-layer. Expressing the shear $\tau$ in terms of the horizontal kinematic momentum fluxes $\overline{u'w'}$ and $\overline{v'w'}$, we obtain an equivalent formulation of $u_*$:
 
@@ -269,7 +269,7 @@ The height of the ABL typically varies between 100 and 1000 meters, highly depen
 \item Rayleigh-Bernard (also known as buoyancy driven) instability: is caused by the decrease of potential density\footnote{The potential density is the density that a parcel of air would attain if brought at a standard reference pressure adiabatically, i.e. disallowing exchanges of heat with its surroundings. Potential density is useful to compare densities irrespectively of pressure, i.e. altitude.} with height, or, in other words, when warm fluid is below cold fluid; the warm fluid will rise, and the cold fluid will drop, a phenomenon called \emph{convection}. During hot Summer days, the surface is much warmer than the air, thus the air close to the surface will heat and tend to rise.
 \end{itemize}
 
-Turbulence has the very important role of transport and mix of air properties, such as heat, moisture, particles, aerosols, etc. This is especially true in \emph{unstable} conditions, when the air moving upwards (e.g. because it is warmer) is less dense than the air moving downwards; when the contrary happens, the ABL is called \emph{stable}.
+Turbulence has the very important role of transport and mix of air properties, such as heat, moisture, particles, aerosols, etc. This is especially true in \emph{unstable} conditions, when the air moving upward (e.g. because it is warmer) is less dense than the air moving downward; when the contrary happens, the ABL is called \emph{stable}.
 
 The ABL can be divided in two main sub-layers: the inner surface layer and the outer Ekmann layer. This distinction is mainly done based on the scale of the dominating turbulent eddies: they are much smaller than the height of the ABL in the surface layer, and of comparable size in the outer layer.
 
@@ -302,7 +302,7 @@ Kinetic energy is energy stored in form of movement: faster or heavier objects h
 
 From now on, we will use a coordinate system with the $x$ axis aligned to the average horizontal wind direction, the $y$ axis perpendicular to it, and the $z$ axis pointing away from the surface. Then, we will use the letters $u$, $v$ and $w$ to denote the components of the wind along the axes $x$, $y$ and $z$ respectively; clearly, $\overline{v}=0$. Eddy fluxes can then be described in terms of covariances: let $\theta$ denote the potential temperature,\footnote{The potential temperature is final temperature after bringing a parcel of air to a standard pressure adiabatically, i.e. not allowing exchange of temperature with the surroundings. It is a useful mean to compare temperatures irrespectively of pressure, i.e. altitude.} then $\overline{w'\theta'}$ is the turbulent heat flux, i.e. the sensible heat flux in the vertical due to turbulence. Usually the ABL is studied assuming homogeneous horizontal conditions, because they vary on a length scale larger than the height of the ABL. Because of this, the horizontal eddy correlations $\partial\overline{u'a'}/\partial x$ and $\partial\overline{v'a'}/\partial y$ are usually of negligible intensity, and are thus ignored; this is to say that the vertical fluxes are assumed to be horizontally constant. Note that this is not necessarily true when clouds are involved.
 
-It is important to notice that turbulence is dissipative in nature. Consider a hot Summer day, where air is warmer close to the surface, and a circular eddy moving some air up and some down, so that the average motion is zero. The parcel of air moving up ($w'>0$) ends up being warmer than its surroundings ($\theta'>0$), while the one moving down ($w'<0$) will be colder ($\theta'<0$); the result is a net transport of heat through the eddy: $\overline{w'\theta'}>0$. On the contrary, imagine a cold night, where the air close to the surface is colder; the same eddy would transport a colder parcel of air upwards, and a warmer one downwards. In both cases, the end result would be a net transport of heat without transport of mass; the eddy must lose energy, and thus dissipate over time.
+It is important to notice that turbulence is dissipative in nature. Consider a hot Summer day, where air is warmer close to the surface, and a circular eddy moving some air up and some down, so that the average motion is zero. The parcel of air moving up ($w'>0$) ends up being warmer than its surroundings ($\theta'>0$), while the one moving down ($w'<0$) will be colder ($\theta'<0$); the result is a net transport of heat through the eddy: $\overline{w'\theta'}>0$. On the contrary, imagine a cold night, where the air close to the surface is colder; the same eddy would transport a colder parcel of air upward, and a warmer one downward. In both cases, the end result would be a net transport of heat without transport of mass; the eddy must lose energy, and thus dissipate over time.
 
 Since turbulence changes over time, we are more interested in the change of kinetic energy, the \emph{turbulent kinetic energy budget}. A full derivation is out of the scope of this work, but its final form \citep{basicatm} can be derived from prime physical principles, resulting in
 
@@ -317,7 +317,7 @@ Since turbulence changes over time, we are more interested in the change of kine
 
 \noindent where ${e'}^2={u'}^2+{v'}^2+{w'}^2$. The $P$ term is the production due to shear, $B$ is the production due to buoyancy, $T_t$ is the turbulent transport of TKE by large-scale eddies, $T_p$ is the transport due to pressure, and $\epsilon$ is molecular dissipation due to viscosity. $P$ and $B$ are the most prominent terms, and the transport terms are close to zero in neutral conditions \citep{basicatm}.
 
-The $P$ term is always positive, as energy is taken from the mean flow to the turbulent one (in other words, turbulence can only generate kinetic energy). The contribution from buoyancy $B$ can be either positive or negative, depending on the difference of temperature between a parcel of air moved by the turbulence and the surrounding air. When $\overline{w^\prime\theta^\prime}$ is negative, the turbulence is moving cold air upwards and warm air downwards; these parcels of air will try to undo the effect of turbulence, thereby increasing the overall kinetic energy. A similar reasoning goes for when the heat flux is positive.
+The $P$ term is always positive, as energy is taken from the mean flow to the turbulent one (in other words, turbulence can only generate kinetic energy). The contribution from buoyancy $B$ can be either positive or negative, depending on the difference of temperature between a parcel of air moved by the turbulence and the surrounding air. When $\overline{w^\prime\theta^\prime}$ is negative, the turbulence is moving cold air upward and warm air downward; these parcels of air will try to undo the effect of turbulence, thereby increasing the overall kinetic energy. A similar reasoning goes for when the heat flux is positive.
 
 \subsection{Monin-Obukhov Similarity Theory}
 \label{sec:most}
@@ -504,7 +504,7 @@ The solution to this problem is to repeatedly perform this partitioning procedur
 \end{algorithmic}
 \end{algorithm}
 
-Regardless of the method used, the final estimate of the performance is the average of the estimates obtained from the individual trials. Every method has different properties regarding both the bias and the variance of the estimates, and there is considerable controversy on which method should be used in which situation. For example, \cite{cv_bootstrap} recommends using 10-fold CV for comparing models, because, although its estimate of the performance is biased, it has lower variance compared to bootstrapping; however, \cite{no_unbiased_cv} show that it is not possible to obtain an universal unbiased estimate of the variance of $k$-fold CV. \cite{cvmyths} further discusses this issue, and debunks some myths and commonly held misconceptions about CV, including the belief, consequent \cite{cv_bootstrap}, that 10-fold cross validation is always the best choice. Generally, there is a tradeoff in choosing the value of $k$, as high values yield estimates with lower bias, but higher variance \citep{cv_survey}, and are more computationally intensive.
+Regardless of the method used, the final estimate of the performance is the average of the estimates obtained from the individual trials. Every method has different properties regarding both the bias and the variance of the estimates, and there is considerable controversy on which method should be used in which situation. For example, \cite{cv_bootstrap} recommends using 10-fold CV for comparing models, because, although its estimate of the performance is biased, it has lower variance compared to bootstrapping; however, \cite{no_unbiased_cv} show that it is not possible to obtain an universal unbiased estimate of the variance of $k$-fold CV. \cite{cvmyths} further discusses this issue, and debunks some myths and commonly held misconceptions about CV, including the belief, consequent \cite{cv_bootstrap}, that 10-fold cross validation is always the best choice. Generally, there is a trade-off in choosing the value of $k$, as high values yield estimates with lower bias, but higher variance \citep{cv_survey}, and are more computationally intensive.
 
 Cross validation can be used to perform two distinct tasks: \emph{estimation} and \emph{identification}. The goal of the former is to accurately estimate the best performance attainable on a prediction problem, whereas the goal of the latter is to identify the parameters and hyper-parameters that give rise to the best possible estimators. Consequently, when the goal is estimation we want to eliminate bias, whereas in identification we need low variance. Estimation is best performed with nested CV\citep{nested_cv_stone,nested_cv_varma}, in which there is an inner CV loop done on every training fold of the outer CV loop. This procedure is formalized in algorithm \ref{alg:nested_cv}, where random hyper-parameter search \citep{random_search} is used in the inner CV loop to find good values for the hyper-parameters. \cite{cv_pitfalls} advocates for repeating nested CV, since plain nested CV produces estimates with fairly high variance, but the computational cost of such procedure can be prohibitively high.
 
@@ -599,7 +599,7 @@ In some cases, the gradient and the Hessian can be approximated using a random s
 \subsection{Hyper-parameters Optimization}
 The previous section discussed some methods to find the best parameters for a model. The behavior of most model, though, is governed by other \emph{hyper-parameters}, such as $\lambda$ in equation \ref{eq:least_squares}. In practice, finding good values for the hyper-parameters is often as important as fitting the model, since these hyper-parameters often control the learning process itself. As mentioned in section \ref{sec:regression_fit}, one possibility is to introduce a non-informative hyper-prior for the hyper-parameters, such that the hyper-prior does not have parameters itself, or is invariant to their values; this road is only followed by the brave, though. The others are left with simpler approaches.
 
-An unspohisticated solution to this problem is to choose some possible values for each hyper-parameter, try all the possible combinations, and pick the one that works best. Alternatively, one can sample each hyper-parameter from a probability distribution, and try many random combinations of values; \cite{random_search} showed that this latter method is surprisingly effective at this task, and scales much better than the former. Unfortunately, this procedure can overfit, too, so it has to be paired with some resampling technique such as cross validation. The procedure is simply to test every hyper-parameter combination on every fold, so that 50 combinations tested with 10-fold cross validation require to fit the model 500 times.
+An unsophisticated solution to this problem is to choose some possible values for each hyper-parameter, try all the possible combinations, and pick the one that works best. Alternatively, one can sample each hyper-parameter from a probability distribution, and try many random combinations of values; \cite{random_search} showed that this latter method is surprisingly effective at this task, and scales much better than the former. Unfortunately, this procedure can overfit, too, so it has to be paired with some resampling technique such as cross validation. The procedure is simply to test every hyper-parameter combination on every fold, so that 50 combinations tested with 10-fold cross validation require to fit the model 500 times.
 
 More sophisticated techniques treat hyper-parameter optimization as a regression problem, and use supervised machine learning to predict the performance of a given hyper-parameter combination, and to guide the search accordingly \citep{hyperopt}. Clearly, one should use models that are not sensitive to their own hyper-parameter setting, or the problem is just moved! For this reason, popular algorithms that are used for this are evolutionary algorithms and Bayesian non-parametric models.
 
@@ -723,7 +723,7 @@ In general, we can use any function $k$ to compute the covariance between two in
 k(\bm x, \bm x^\prime)=\exp\left(-\frac{\Vert\bm x-\bm x^\prime\Vert^2}{2\sigma^2}\right)
 \end{equation}
 
-\noindent where $\Vert\bm x-\bm x^\prime\Vert^2=\sum_d(\bm x_d-\bm x_d^\prime)^2$ is the squared Euclidean distance, and which incidentally corresponds to an infinite dimentional basis function, and the linear kernel:
+\noindent where $\Vert\bm x-\bm x^\prime\Vert^2=\sum_d(\bm x_d-\bm x_d^\prime)^2$ is the squared Euclidean distance, and which incidentally corresponds to an infinite dimensional basis function, and the linear kernel:
 
 \begin{equation}
 k(\bm x, \bm x^\prime)=\sigma^2\bm x^\intercal\bm x^\prime
@@ -1048,7 +1048,7 @@ k(z_1,z_2)=\exp\left(-\frac{(z_1-z_2)^2}{2\sigma_0^2}\right)+\sqrt{\sigma_1^2+ z
     \begin{subfigure}[t]{0.45\textwidth}
         \centering
         \includegraphics[width=\textwidth]{images/profile_kernel_prior}
-        \caption{Prior distribution and some samples; the grey area is the 95\% CI.}
+        \caption{Prior distribution and some samples; the gray area is the 95\% CI.}
         \label{fig:kernel_prior}
     \end{subfigure}
     \hfill
@@ -1392,74 +1392,24 @@ Talking about speed of wind, figure \ref{fig:ustar_wind} shows some measurements
 Figure \ref{fig:tsne} shows the result of the t-SNE dimensionality reduction algorithm \citep{tsne} applied to 250,000 samples (19.2\% of the total), using the same features of table \ref{tbl:col_summary}, plus $z$, $L$, $\xi$, the wind and virtual temperature gradients, $\phi_m$, the month of the year and hour of day. The 250,000 samples were chosen uniformly at random and standardized with equation \ref{eq:standardization} before fitting, but the colors were computed using the raw features on a perceptually uniform color scale, after excluding the top and bottom 1\% values. Overall, the points cluster in a relatively uniform blob, which is not surprising once you consider that the measurements were taken continuously, meaning that all physical quantities change smoothly, thus all points close in time are also close in feature space. The colors reveal some structure, though: the left-hand side of the blob contain measurements taken in the Summer, and the right-hand side contains measurement in Winter (see the air temperature in figure \ref{fig:tsne_temp} and month in figure \ref{fig:tsne_month}). Moreover, unstable conditions are clustered in a stripe, centered vertically, that runs from left to right (see the fluxes of figures \cref{fig:tsne_H,fig:tsne_LE,fig:tsne_soilheat}, the radiation in figure \ref{fig:tsne_netrad}, and the hour of day in figure \ref{fig:tsne_hday}). In figure \ref{fig:tsne_z} we also a see cluster on the top with all the observations at 40 meters, whereas the two lower levels are mixed somewhat uniformly in the bottom part of the plot. Finally, figure \ref{fig:tsne_clus} shows the result of k-means clustering in the standardized feature space, using $k=2$ (blue/orange) and $k=4$ (the four shades). This clustering is consistent with the qualitative division above, with the dark orange and blue clusters corresponding to Summer and Winter respectively, light orange corresponding to unstable conditions with considerable vertical movement of air, and light blue corresponding to strong horizontal winds with little movement in the vertical. Stably stratified conditions seem to occur at the boundary of the blob, where $\phi_m$ takes the highest values (see figure \ref{fig:tsne_phi_m}). This is also not surprising, since stable stratification tend to happen at night throughout the year, unlike free convection or z-less scaling, which only happen in specific conditions.
 
 
-\begin{table}[]
-\centering
-\caption{Pearson correlation coefficient between the gradients predicted by the different methods, divided by level. The FD gradient is poorly correlated with the other two methods at the 10 meters level, but is very well correlated with the LG gradient at the other levels. The LG and GP gradients disagree on the lower levels, but it appears their predictions converge as altitude increases.}
-\label{tbl:gradients_corr}
-\begin{tabular}{c|c|c|c}
-\toprule
-\textbf{z} & \textbf{FD / GP} & \textbf{LG / FD} & \textbf{LG / GP} \\ \midrule
- 	10 & 	0.192 & 0.480 &	0.317 \\
- 	20 &	0.645 	& 0.991 &	0.640 \\
- 	40 &	0.863 & 0.981 &	0.835 \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-
 \section{Gradient Computation}
 \label{sec:res_gradient}
-Section \ref{sec:gradients} introduced three different ways to compute the gradient, but we need to choose one to compute the universal functions. In this section, we refer to the finite differences method in equation \ref{eq:fd_gradient} as \emph{FD}, the logarithm-based model of equation \ref{eq:log_gradient} as \emph{LG} and the Gaussian Process-based model of equation \ref{eq:gp_gradient} as \emph{GP}. Table \ref{tbl:gradients_corr} shows the Pearson correlation coefficient between the three methods, separately for every altitude level. It is clear that the FD gradient is inadequate at the lowest level; this can be explained by considering that equation \ref{eq:fd_gradient} with $z=10$ reduces to the wind speed at 20 meters divided by 20. This method appears to be too naive, especially since it does not take the roughness length into consideration, but, as \cite{cabauw_z0} showed, finding a value for $z_0$ is far from trivial. In spite of this, the FD and the LG gradients strongly agree on all levels, and are quite different from the gradients by GP
+Section \ref{sec:gradients} introduced three different ways to compute the gradient, but we need to choose one to compute the universal functions. In this section, we refer to the finite differences method in equation \ref{eq:fd_gradient} as \emph{FD}, the logarithm-based model of equation \ref{eq:log_gradient} as \emph{LG} and the Gaussian Process-based model of equation \ref{eq:gp_gradient} as \emph{GP}.
 
-Since LG and GP. predict the wind speed too, we can compare their predictions to the measured wind speed. Notice that these methods are fitted on the wind speed at all levels, from 10 to 200 meters, but we evaluate them only on the three lowest levels, since that is where we compute the universal functions. Table \ref{tbl:model_wind_errors} shows the squared error between the modeled wind and the true wind speed at the three levels for both models. It is interesting to see that both models are quite accurate at all levels; this allows us to conclude that the difference observed in table \ref{tbl:gradients_corr} is because FD is not reliable at 10 meters.
+By analyzing the Pearson correlation between the three methods at each altitude level, we see that the FD gradient is poorly correlated with the other two methods at the 10 meters level, but is very well correlated with the LG gradient at the other levels. The LG and GP gradients disagree on the lower levels, but it appears their predictions converge as altitude increases. It is clear that the FD gradient is inadequate at the lowest level, which can be explained by considering that equation \ref{eq:fd_gradient} with $z=10$ reduces to the wind speed at 20 meters divided by 20.
 
-\begin{table}[]
-\centering
-\caption{Absolute percent error of the wind speed modeled by the LG and GP methods at each altitude level. The altitude does not affect the error, and the GP wind speed is closer to the true wind speed than the LG model in the vast majority of cases, although the difference is negligible, often less than a few percents.}
-\label{tbl:model_wind_errors}
-\begin{tabular*}{\textwidth}{l |@{\extracolsep{\fill}} cc|cc|cc}
-\toprule
-& \multicolumn{2}{c|}{ \textbf{z=10} } & \multicolumn{2}{c|}{ \textbf{z=20 }} & \multicolumn{2}{c}{ \textbf{z=40} } \\
-& \textbf{LG} & \textbf{GP} & \textbf{LG} & \textbf{GP} & \textbf{LG} & \textbf{GP} \\
-\midrule 
-\textbf{Mean} & 1.23 & 1.03 & 2.26 & 1.42 & 1.39 & 1.04 \\
-\textbf{Std.} & 1.40 & 1.12 & 2.34 & 1.47 & 1.48 & 1.12 \\
-\textbf{Min.} & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 \\
-\textbf{25\%} & 0.37 & 0.32 & 0.74 & 0.46 & 0.47 & 0.3  \\
-\textbf{50\%} & 0.82 & 0.76 & 1.62 & 1.06 & 1.03 & 0.73 \\
-\textbf{75\%} & 1.55 & 1.42 & 2.96 & 1.97 & 1.84 & 1.41 \\
-\textbf{Max.} & 53.75 & 212.4 & 106.56 & 192.94 & 80.35 & 43.47 \\
-\bottomrule
-\end{tabular*} 
-\end{table}
+The error that LG and GP incur in predicting the wind speed is independent of the altitude level, and the predictions from GP are closer to the true wind speed, except for a few large outliers. Therefore, it is reasonable to conclude that FD predictions of the gradient at \SI{10}{\meter} are wrong. If we examine the prediction error as a function of the wind speed, we see that GP becomes more and more reliable as the wind speed increases; not only does its error decrease, so does the variance of the error. LG's error, however, decreases until a certain wind speed, after which it stabilizes to 1\%. This can be explained by considering that the measurement error of the wind speed is the maximum between \SI{0.1}{\meter\per\second} and 1\%, therefore the error of LG can be attributed almost entirely to uncertainty in the data, whereas GP is overfitting high wind speeds.
 
-
-If we examine the prediction error as a function of the wind speed, we see that GP becomes more and more reliable as the wind speed increases; not only does its error decrease, so does the variance of the error. LG's error, however, decreases until a certain wind speed, after which it stabilizes to 1\%. This can be explained by considering that the measurement error of the wind speed is the maximum between \SI{0.1}{\meter\per\second} and 1\%, therefore the error of LG can be attributed almost entirely to uncertainty in the data, whereas GP is overfitting high wind speeds.
-
-Given that the final goal of finding the gradient is to compute the universal functions, for which we already have more or less agreed upon expressions (equation \ref{eq:phi_m_coeff}), it makes sense to compare the error of these expressions when predicting the universal functions (equation \ref{eq:phi_m}) computed with the gradients coming from the three different methods; the best method is, then, the one with the smallest error. Table \ref{tbl:gradient_errors} contains these errors, both with all the data, and by considering only $-12\leq\xi\leq 1$. FD is slightly better than LG if we do not consider the \SI{10}{\meter} level, but way worse if we include it. GP is significantly worse than FD in the MOST validity region, but only slightly worse on the whole dataset; this suggests that GP is weak when $\vert\xi\vert$ is small. 
-
-\begin{table}[]
-\centering
-\caption{MSE obtained on two datasets when predicting $\phi_m$ using the commonly accepted momentum flux-profile relationship (equation \ref{eq:phi_m_coeff}) for the three methods of computing the gradient. The errors in the second line were computed after discarding the data at the 10 meters level, because we argued the FD method is not reliable in that situation.}
-\label{tbl:gradient_errors}
-\begin{tabular}{l|r|r}
-\toprule
-& \textbf{MSE (MOST Dataset) } &\textbf{ MSE (Full dataset) }\\
-\midrule
-\textbf{FD} & 1.994 & 9.322 \\
-\textbf{FD (z is 20/40) } & 0.627  & 11.832 \\
-\textbf{LG } & 0.660 & 8.498 \\
-\textbf{GP} & 1.213 & 8.899 \\
-\bottomrule
-\end{tabular}
-\end{table}
+Finally, we can compare the error when predicting $\phi_m$ with the similarity theory (equation \ref{eq:phi_m_coeff}), using the three methods of computing the gradient. FD is slightly better than LG if we do not consider the \SI{10}{\meter} level, but way worse if we include it. GP is significantly worse than FD in the MOST validity region, but only slightly worse on the whole dataset; this suggests that GP is weak when $\vert\xi\vert$ is small. 
 
 To conclude, although FD (equation \ref{eq:fd_gradient}) is the most accurate way of computing the profile gradient, it does not allow us to use data at the \SI{10}{\meter} level. Considering that LG (equation \ref{eq:log_gradient}) is just slightly worse, but allows us to include that level (increasing the data available by 50\%!), all the results presented from now on make use of it.
+
+Appendix \ref{apx:gradient} contains detailed tables and charts supporting the arguments made in this section.
 
 
 \section{Flux-Profile Relationship}
 \label{sec:most_res}
-Figure \ref{fig:most_scatter} shows the wind shear versus the instability parameter, together with the commonly accepted flux-profile relationship in green and the relationship fitted on our dataset in red. Qualitatively, the scatter plot looks as expected, going to zero as $\xi$ decreases, linearly increasing in the $0\leq\xi\leq1$ interval, and leveling after that, possibly approaching the $\xi^{1/3}$ form proposed by \cite{sheba_phim}.
+Figure \ref{fig:most_scatter} shows the wind shear versus the instability parameter, together with the commonly accepted flux-profile relationship in green and the relationship fitted on our dataset in red. Qualitatively, the scatter plot looks as expected, going to zero as $\xi$ decreases, linearly increasing in the $0\leq\xi\leq1$ interval, and leveling after that, possibly approaching the $\xi^{1/3}$ form proposed by \cite{sheba_phim}. There seem to be a lot of scatter, but more than half of the data is enclosed in the box $-0.5<\xi<0.5$, $0<\phi_m<2$.
 
 \begin{figure}
     \centering
@@ -1473,7 +1423,7 @@ Figure \ref{fig:most_scatter} shows the wind shear versus the instability parame
     \begin{subfigure}[t]{0.49\textwidth}
         \centering
         \includegraphics[width=\textwidth]{images/most_zoom}
-        \caption{MOST Dataset}
+        \caption{MOST Dataset; the contours enclose 90\%, 50\% and 10\% of the data.}
         \label{fig:most_zoom}
     \end{subfigure}
     \caption{Wind shear $\phi_m$ versus the instability parameter $\xi$, with the prediction according to equation \ref{eq:phi_m_coeff} in green, and our predictions, following equation \ref{eq:phi_general} with the coefficients being the median values in table \ref{tbl:most_coeffs}, in red.}
@@ -1508,7 +1458,7 @@ $d$ & -0.30 & 0.11 & -0.60 & -0.26 & -0.26 & -0.26 & -0.25 \\
 
  \section{Performance of the Models}
 \label{sec:model_perf}
-The first research question asked \emph{how can the from the Cesar database be used to predicthe momentum flux-profile relationship more accurately than the Monin-Obukhov similarity theory, by using only macro weather parameters?}
+The first research question asked \emph{how can the from the Cesar database be used to predict the momentum flux-profile relationship more accurately than the Monin-Obukhov similarity theory, by using only macro weather parameters?}
 
 Table \ref{tbl:baseline_comparison} shows descriptive statistics of the MSE obtained by the best combination of features and trend, for each estimator and for each datasets, as well as the effect size comparing it with the MOST baseline. The scores were obtained with the nested cross validation procedure, and are also shown in figure \ref{fig:baseline_comparison}. Gradient Boosted Trees always perform significantly better than the MOST estimator, obtaining roughly half of its MSE in both datasets. Moreover, even the simple Ridge estimator managed to obtain significantly lower MSE in the MOST dataset. Table \ref{tbl:gbt_metrics} shows the values of all the evaluation metrics computed on the outer validation folds on both datasets. Figure \ref{fig:predictions} shows the predictions obtained with the GBT estimator on one of the outer validation folds of the MOST dataset, and the squared error as a function of the instability parameter. Its behavior is consistent with what is widely known in the literature, and is caused by imprecision in the measurement and in the eddy correlation technique used to compute the turbulent fluxes (see section \ref{sec:eddy_correlation}).
 
@@ -1541,7 +1491,7 @@ Appendix \ref{apx:hyps} reports the optimal hyper-parameters found during nested
     \begin{subfigure}[t]{0.49\textwidth}
         \centering
         \includegraphics[width=\textwidth]{images/error_by_xi}
-        \caption{Squared error versus $\xi$, with bins of width $10^{-1}$. The dashed red line is the MSE on the whole validation set. The error is smallest during neutral stratification, and grows larger as conditions stabilize.}
+        \caption{Squared error versus $\xi$. The error is smallest during neutral stratification, and grows larger as conditions stabilize.}
         \label{fig:error_by_wind}
     \end{subfigure}
     \caption{Behavior of the GBT estimators on one of the outer validation folds of the MOST dataset, containing 107,932 samples. }
@@ -1643,7 +1593,7 @@ Even though we showed that the dew point and the soil heat flux are not importan
 
 \subsubsection{Micro parameters} One of the biggest obstacles in applying the similarity theory lies in accurately measuring the quantities it relies on. Examples are the von Karman's constant $\kappa$, the roughness length $z_0$, the turbulent fluxes $H$ and $\lambda E$, the friction velocity $u_*$, and so on. The advantage of using only macro parameters to predict $\phi_m$ is that accurately measuring these quantities becomes less important, in the sense that we can force models to find explanations that do not rely on them.
 
-A downside of not using micro parameters is that the resulting models do not generalize well in conditions that are different to those presented in the training set, especially if it contains measures coming from a single location, such as in our case. Training with data coming from different locations would certainly produce more general models, as long as the data contains features that are informative and general enough to allow the model to differentiate between the different conditions. For example, the properties of the surface, such as its roughness, have a large impact on turbulence: what our model thinks is the normal behavior of turbulence might in fact be largely determined by the surface around the measurement site. But our model is completely unaware of the effect of the surface, so it might not be able to give accurate predictions at sites with different surface characteristics. See \cite{cabauw_surface} and \cite{cabauw_z0} for a discussion on how the obstacles around the Cabauw tower affect the flux-profile relationships measured there; in particular, the turbulence behaves differently depending on the wind direction. A training set with relevant features and diverse samples can alleviate this problem. For example, features could be extracted from satellite images of the surroundings; a very crude approach would be to classify the surface into one of several categories, and use a lookup table with pre-computed roughness lengths.
+A downside of not using micro parameters is that the resulting models do not generalize well in conditions that are different to those presented in the training set, especially if it contains measures coming from a single location, such as in our case. Training with data coming from different locations would certainly produce more general models, as long as the data contains features that are informative and general enough to allow the model to differentiate between the different conditions. For example, the properties of the surface, such as its roughness, have a large impact on turbulence: what our model thinks is the normal behavior of turbulence might in fact be largely determined by the surface around the measurement site. But our model is completely unaware of the effect of the surface, so it might not be able to give accurate predictions at sites with different surface characteristics. See \cite{cabauw_surface} and \cite{cabauw_z0} for a discussion on how the obstacles around the Cabauw tower affect the flux-profile relationships measured there; in particular, the turbulence behaves differently depending on the wind direction. A training set with relevant features and diverse samples can alleviate this problem. For example, features could be extracted from satellite images of the surroundings; a very crude approach would be to classify the surface into one of several categories, and use a lookup table with precomputed roughness lengths.
 
 
 \subsection{Training Samples}
@@ -1656,7 +1606,7 @@ As mentioned earlier, having training samples from multiple sites would certainl
 \begin{figure}
     \centering
     \includegraphics[width=\textwidth]{images/jeanett_error}
-    \caption{Wind speed and squared error during cyclone Jeanett (light green is the average of the three altitude levels, solid green is a smoothed time average of that). Throughout the storm, the error is larger than the median, and many peaks are larger than the mean.}
+    \caption{Wind speed and squared error during cyclone Jeanett (light green is the average of the three altitude levels, solid green is a smoothed time average of that). Throughout the storm, the error is larger than the median, and many peaks are larger than the mean. Moreover, the variations in the prediction seem to be larger, indicating that the model is less confident about its predictions.}
     \label{fig:jeanett_error}
 \end{figure}
 
@@ -1711,6 +1661,100 @@ In appendix \ref{apx:moar}, we outline some experiments that were performed, and
 
 \appendix
 \addappheadtotoc
+
+\chapter{Gradient Computation}
+\label{apx:gradient}
+
+Tables and charts supporting the arguments in section \ref{sec:res_gradient}.
+
+
+\begin{table}[h]
+\centering
+\caption{Pearson correlation coefficient between the gradients predicted by the different methods, divided by level. The FD gradient is poorly correlated with the other two methods at the 10 meters level, but is very well correlated with the LG gradient at the other levels. The LG and GP gradients disagree on the lower levels, but it appears their predictions converge as altitude increases.}
+\label{tbl:gradients_corr}
+\begin{tabular}{c|c|c|c}
+\toprule
+\textbf{z} & \textbf{FD / GP} & \textbf{LG / FD} & \textbf{LG / GP} \\ \midrule
+ 	10 & 	0.192 & 0.480 &	0.317 \\
+ 	20 &	0.645 	& 0.991 &	0.640 \\
+ 	40 &	0.863 & 0.981 &	0.835 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[h]
+    \centering
+	\includegraphics[width=0.6\textwidth]{images/gp_log_perc_err_wind_speed}
+	\caption{Mean absolute percent error of the wind modeled by the LG and GP models as a function of the true wind speed; the shaded regions enclose the average plus or minus the standard deviation. Also see figure \ref{fig:gp_profile}.}
+	\label{fig:gp_log_perc_err_wind_speed}
+\end{figure}
+
+
+\begin{figure}
+    \centering
+    \begin{subfigure}[t]{0.32\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/gp_profile_good}
+        \caption{Low wind}
+        \label{fig:gp_profile_good}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.32\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/gp_profile_med}
+        \caption{Medium wind}
+        \label{fig:gp_profile_med}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.32\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/gp_strong_wind}
+        \caption{Strong wind}
+        \label{fig:gp_strong_wind}
+    \end{subfigure}
+    \caption{Profile predicted by GP as the wind speed increases.}
+	\label{fig:gp_profile}
+\end{figure}
+
+
+\begin{table}[]
+\centering
+\caption{MSE obtained on two datasets when predicting $\phi_m$ using the commonly accepted momentum flux-profile relationship (equation \ref{eq:phi_m_coeff}) for the three methods of computing the gradient. The errors in the second line were computed after discarding the data at the 10 meters level, because we argued the FD method is not reliable in that situation.}
+\label{tbl:gradient_errors}
+\begin{tabular}{l|r|r}
+\toprule
+& \textbf{MSE (MOST Dataset) } &\textbf{ MSE (Full dataset) }\\
+\midrule
+\textbf{FD} & 1.994 & 9.322 \\
+\textbf{FD (z is 20/40) } & 0.627  & 11.832 \\
+\textbf{LG } & 0.660 & 8.498 \\
+\textbf{GP} & 1.213 & 8.899 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+\begin{table}[]
+\centering
+\caption{Absolute percent error of the wind speed modeled by the LG and GP methods at each altitude level. The altitude does not affect the error, and the GP wind speed is closer to the true wind speed than the LG model in the vast majority of cases, although the difference is negligible, often less than a few percents.}
+\label{tbl:model_wind_errors}
+\begin{tabular*}{\textwidth}{l |@{\extracolsep{\fill}} cc|cc|cc}
+\toprule
+& \multicolumn{2}{c|}{ \textbf{z=10} } & \multicolumn{2}{c|}{ \textbf{z=20 }} & \multicolumn{2}{c}{ \textbf{z=40} } \\
+& \textbf{LG} & \textbf{GP} & \textbf{LG} & \textbf{GP} & \textbf{LG} & \textbf{GP} \\
+\midrule 
+\textbf{Mean} & 1.23 & 1.03 & 2.26 & 1.42 & 1.39 & 1.04 \\
+\textbf{Std.} & 1.40 & 1.12 & 2.34 & 1.47 & 1.48 & 1.12 \\
+\textbf{Min.} & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 \\
+\textbf{25\%} & 0.37 & 0.32 & 0.74 & 0.46 & 0.47 & 0.3  \\
+\textbf{50\%} & 0.82 & 0.76 & 1.62 & 1.06 & 1.03 & 0.73 \\
+\textbf{75\%} & 1.55 & 1.42 & 2.96 & 1.97 & 1.84 & 1.41 \\
+\textbf{Max.} & 53.75 & 212.4 & 106.56 & 192.94 & 80.35 & 43.47 \\
+\bottomrule
+\end{tabular*} 
+\end{table}
+
+
 
 \chapter{Hyper-Parameters}
 \label{apx:hyps}
@@ -1767,7 +1811,7 @@ The features were obtained in the same way as for the other estimators discussed
 \item \textbf{Architecture:} Fully connected layers only, number of neurons halved at every layer. The first layer with 1 neuron was the output layer, and the first hidden layer had either 128, 256 or 512 neurons, resulting in 7 to 9 hidden layers;
 \item \textbf{Activation Function:} linear for the output layer, PReLU \citep{prelu} for the hidden layers;
 \item \textbf{Regularization:} Dropout ($p=0.5$, only when the first layer had 256 neurons or more);
-\item \textbf{Optimizer:} Adam \citep{adam} with inital learning rate $10^{-3}$;
+\item \textbf{Optimizer:} Adam \citep{adam} with initial learning rate $10^{-3}$;
 \item \textbf{Batch Size:} 1024 (1165 batches per epoch);
 \item \textbf{Learning Rate Schedule:} Divide by 10 if the validation loss had not decreased by at least $10^{-4}$ in the last 10 epochs;
 \item \textbf{Early Stopping:} if the validation error did not improve in the last 25 epochs, or if the learning rate was reduced below $10^{-6}$.
