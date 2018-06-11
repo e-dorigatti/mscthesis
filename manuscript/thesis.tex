@@ -70,7 +70,11 @@ Results show that even the simplest linear models are able to compete with the s
 \end{abstract}
 \clearpage
 \begin{foreignabstract}{swedish}
-todo
+Klimatstudier är till stor del beroende av simulationer. Av effektivitetsskäl så kan många betydande fenomen inte simuleras och måste parametriseras, exempelvis beskrivs då fenomenets effekt baserat på makroparametrar. Turbulensen som resulterar i interaktionen mellan atmosfären och jordytan är ett exempel på ett sådant fenomen. En av de mängder av möjliga intressanta simulationer som uppstår av turbulens är Flux-Profile förhålladen som sätter i relation transport av momentum (flux) och ändringar i vindhastighet i relation med höjden (profile). Denna mängd kan beräknas med Monin-Obukhov likhetsteori  \citep{mostayyyy}. Denna teori kräver vissa parametrar som är svåra att mäta både i verkligheten och i simulationer. Teorin är endast applicerbar i ett begränsat antal situationer och resulterar i förutsägelser med endast 20-30\% träffsäkerhet \citep{50years}.
+
+Målet med denna uppsats är att beräkna Flux-Profile förhållandet enbart med makroväder parametrar som är tillgängliga i klimatsimulationer; detta görs med informationsutvinning på 17 års väderdata insamlat från Cabauw väderstation i Nederländerna. Olika kombinationer av egenskaper kommer att användas för att utvärdera felet på förutsägelserna.
+
+Resultaten visar att även de enklaste linjära modellerna är jämförbara med likhetsteorin, och komplexa metoder såsom gradient boosted trees kan reducera medel-kvadratfel med nästan 50\%. Dessutom är dessa metoder applicerbara på en större mängd av villkor jämfört med likhetsteorin, samtidigt som de ger liknande träffsäkerhet som likhetsteorin i dess validitetsintervall. Dessa resultat erhölls genom att använda vindhastighet och lufttemperatur på olika höjder, jordtemperatur, nettostrålningen på jordytan, förbättringen genom att använda värmeflöden är markant, men har låg magnitud. Jordens värmeflöden, daggpunkten och den timvisa trenden över egenskaperna hade inte en märkbar påverkan på prestandan.
 \end{foreignabstract}
 \clearpage
 
@@ -319,7 +323,7 @@ Since turbulence changes over time, we are more interested in the change of kine
 
 The $P$ term is always positive, as energy is taken from the mean flow to the turbulent one (in other words, turbulence can only generate kinetic energy). The contribution from buoyancy $B$ can be either positive or negative, depending on the difference of temperature between a parcel of air moved by the turbulence and the surrounding air. When $\overline{w^\prime\theta^\prime}$ is negative, the turbulence is moving cold air upward and warm air downward; these parcels of air will try to undo the effect of turbulence, thereby increasing the overall kinetic energy. A similar reasoning goes for when the heat flux is positive.
 
-\subsection{Monin-Obukhov Similarity Theory}
+ \subsection{Monin-Obukhov Similarity Theory}
 \label{sec:most}
 One of the quantities of interest is the momentum flux-profile relationship, computed as follows:
 
@@ -335,7 +339,6 @@ One of the factors to distinguish laminar from turbulent flow is the length scal
 \begin{equation}
 \label{eq:most_l}
 L=-\frac{u_*^3}{\kappa\frac{g}{\theta_v}\frac{Q}{\rho c_\rho}}
-=-\frac{u_*^3 T_v}{\kappa g \overline{w'\theta^\prime_v}}
 \end{equation}
 
 \noindent where
@@ -352,7 +355,7 @@ L=-\frac{u_*^3}{\kappa\frac{g}{\theta_v}\frac{Q}{\rho c_\rho}}
 
 \noindent where $\theta$ is the air temperature, $r_v$ is the mixing ratio, $q=r_v/(1+r_v)$ the specific humidity, and $\epsilon$ is the ratio of the gas constants of dry air and water vapor, roughly 0.622.
 
-\item $T_v=\theta_v/g$ is the buoyancy parameter;
+\item $Q$ the buoyancy flux, approximated by $H+0.07\lambda E$ and measured in \si{\watt\per\square\meter}
 
 \item $\rho$ the air density, computed from the pressure $P$ and the specific gas constant for dry air $R=\SI{287.058}{\joule\per\kilo\gram\kelvin}$ as
 
@@ -362,8 +365,6 @@ $$
 
 
 \item $c_\rho$ specific heat of dry air, \SI{1005}{\joule\per\kilo\gram\per\kelvin} at \SI{300}{\kelvin}
-\item $Q$ the buoyancy flux, approximated by $H+0.07\lambda E$ and measured in \si{\watt\per\square\meter}
-\item $\overline{w'\theta^\prime_v}=Q/\rho c_\rho$ the flux of virtual potential temperature, measured in \si{\kelvin\meter\per\second}
 \end{itemize}
 
 The stability parameter $\xi$ is positive for stable conditions, where wind shear dominates the production of TKE, and negative for unstable conditions, where buoyancy is the main contributor to turbulence. It approaches 0 in the limit of neutral stratification (i.e. $\partial\overline{\theta}/\partial z=0$), because the temperature flux goes to 0 causing $L$ go to infinity.
@@ -980,7 +981,7 @@ Since the turbulent fluxes and the friction velocity are measured at the surface
 The Obukhov length is computed as in equation \ref{eq:most_l}, reported here:
 
 $$
-L=-\frac{u_*^3 T_v}{\kappa g \overline{w'\theta^\prime_v}}
+L=-\frac{u_*^3}{\kappa\frac{g}{\theta_v}\frac{Q}{\rho c_\rho}}
 $$
 
 The flux of virtual potential temperature can be computed following the formulas in section \ref{sec:most}, as the data contains all the necessary quantities; $u_*$ is given, as well as the specific humidity and the pressure. The Obukhov length is computed at each height level using the corresponding air temperature measurement, and the fluxes measured at the surface.
